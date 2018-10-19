@@ -15,7 +15,6 @@ docker create \
     --name=query-runner \
     --network=sourcegraph \
     -e SOURCEGRAPH_CONFIG_FILE=/etc/sourcegraph/config.json \
-    -e DEPLOY_TYPE=datacenter \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     sourcegraph/query-runner:2.12.0@sha256:966a3766394888fdbede584944b032dad86032489637fa15ef0fa84bf120e00b
