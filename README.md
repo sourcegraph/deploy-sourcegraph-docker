@@ -1,3 +1,9 @@
+# WIP
+
+This project is a work in progress, it is not yet ready for use. If you are interested in this project, please open an issue to get in touch! :)
+
+Remaining work: see [issue tracker](https://github.com/sourcegraph/deploy-sourcegraph-docker/issues)
+
 # deploy-sourcegraph-docker
 
 This project contains scripts to deploy Sourcegraph Data Center on pure Docker, rather than e.g. Kubernetes.
@@ -21,10 +27,3 @@ Visit http://localhost:3080 to visit the running Sourcegraph Data Center instanc
 ```bash
 ./teardown.sh
 ```
-
-## Known issues
-
-- Code intelligence language support is not yet working here. We are improving/changing how language support is deployed in data center instances, so this project does not yet try to deploy language servers.
-- `zoekt-indexserver`, `repo-updater`, and `indexer` all require `--priviledged` or else DNS fails to resolve on Docker for Mac. It is unclear yet why this is, but this is a bug.
-- Some services are more complex than they need to be, we are actively simplifying / removing env vars / configuration files that are needed.
-- This project does not try to deploy e.g. prometheus metrics / monitoring yet.
