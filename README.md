@@ -6,11 +6,14 @@ Remaining work: see [issue tracker](https://github.com/sourcegraph/deploy-source
 
 # deploy-sourcegraph-docker
 
-This project contains scripts to deploy Sourcegraph Data Center on pure Docker, rather than e.g. Kubernetes.
+There are two recommended ways to deploy Sourcegraph:
 
-**The point of this project is to make Sourcegraph easy to deploy into any container-based environment.**
+- [Single-machine Docker deployment](https://docs.sourcegraph.com/admin/install/docker)
+- [Multi-machine Kubernetes deployment](https://docs.sourcegraph.com/admin/install/kubernetes_cluster)
 
-It is not expected that anyone would actually run Sourcegraph Data Center on bare Docker in production.
+But what if your organization wants a multi-machine deployment without using Kubernetes? What if you use a different container management platform, for example? This project aims to solve that, by providing a pure-Docker deployment option.
+
+The goal is that anyone using a container management platform other than Kubernetes ([Netflix's Titus](https://netflix.github.io/titus/), Apache's [Mesos](http://mesos.apache.org/documentation/latest/docker-containerizer/), etc.) would be able to use this repository as a reference for how to deploy Sourcegraph.
 
 ## Deploying
 
