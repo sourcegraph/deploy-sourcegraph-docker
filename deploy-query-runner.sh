@@ -14,6 +14,7 @@ set -e
 docker create \
     --name=query-runner \
     --network=sourcegraph \
+    --privileged \
     -e SOURCEGRAPH_CONFIG_FILE=/etc/sourcegraph/config.json \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
