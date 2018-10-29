@@ -15,11 +15,7 @@ docker run --detach \
     --name=indexer \
     --network=sourcegraph \
     --restart=always \
-    -e PGDATABASE=sg \
     -e PGHOST=pgsql \
-    -e PGPORT=5432 \
-    -e PGSSLMODE=disable \
-    -e PGUSER=sg \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     sourcegraph/indexer:2.12.0@sha256:69232170b551fe438cfef619c02c1b679c43365411518e19f279930586d07027
