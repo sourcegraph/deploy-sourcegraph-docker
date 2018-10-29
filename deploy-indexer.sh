@@ -11,10 +11,9 @@ set -e
 # Ports exposed to other Sourcegraph services: 3179/TCP
 # Ports exposed to the public internet: none
 #
-docker create \
+docker run --detach \
     --name=indexer \
     --network=sourcegraph \
-    -e SOURCEGRAPH_CONFIG_FILE=/etc/sourcegraph/config.json \
     -e LSP_PROXY=lsp-proxy:4388 \
     -e PGDATABASE=sg \
     -e PGHOST=pgsql \
@@ -25,8 +24,4 @@ docker create \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     sourcegraph/indexer:2.12.0@sha256:69232170b551fe438cfef619c02c1b679c43365411518e19f279930586d07027
 
-# Create /etc/sourcegraph/config.json
-docker cp ./sourcegraph indexer:/etc/
-
-docker start indexer
 echo "Deployed indexer service"
