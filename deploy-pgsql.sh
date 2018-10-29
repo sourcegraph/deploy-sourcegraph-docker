@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=pgsql \
     --network=sourcegraph \
+    --restart=always \
     -e PGDATA=/data/pgdata \
     -e POSTGRES_USER=sg \
     -v ~/sourcegraph-docker/pgsql-disk:/data/pgdata \

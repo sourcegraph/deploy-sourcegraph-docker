@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=redis-store \
     --network=sourcegraph \
+    --restart=always \
     -v ~/sourcegraph-docker/redis-store-disk:/redis-data \
     sourcegraph/redis-store:18-10-28_e45f6d82@sha256:1fe101e1f04a8e267fda85c342cd3b974ab4a9e47718b864752f14f1da51579c \
 
