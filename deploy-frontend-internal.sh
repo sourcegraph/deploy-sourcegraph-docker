@@ -16,7 +16,6 @@ docker create \
     --network=sourcegraph \
     --restart=always \
     -e PGHOST=pgsql \
-    -e PUBLIC_REPO_REDIRECTS=true \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SEARCHER_URL=http://searcher:3181 \
     -e SYMBOLS_URL=http://symbols:3184 \
