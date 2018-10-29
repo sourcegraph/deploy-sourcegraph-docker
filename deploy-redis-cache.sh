@@ -11,15 +11,10 @@ set -e
 # Ports exposed to other Sourcegraph services: 6379/TCP
 # Ports exposed to the public internet: none
 #
-docker create \
+docker run --detach \
     --name=redis-cache \
     --network=sourcegraph \
     -v ~/sourcegraph-docker/redis-cache-disk:/redis-data \
-    sourcegraph/redis:18-02-07_8205764_3.2-alpine@sha256:f2957e0973ef16968d4bfacfae5ab08da985257aa7ce358a85152275e3da78e8 \
-    redis-server /etc/redis/redis.conf # command
+    sourcegraph/redis-cache:18-10-28_ba610fdf@sha256:10a4430cb8bb9c0ad2b96eac40882509fb1b11cbd77cffd0900f74a58a4014d2
 
-# Create /etc/redis/redis.conf
-docker cp ./redis-cache/redis redis-cache:/etc/
-
-docker start redis-cache
 echo "Deployed redis-cache service"
