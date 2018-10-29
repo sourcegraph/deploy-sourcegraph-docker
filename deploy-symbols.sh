@@ -11,11 +11,10 @@ set -e
 # Ports exposed to other Sourcegraph services: 3184/TCP
 # Ports exposed to the public internet: none
 #
-docker create \
+docker run --detach \
     --name=symbols \
     --network=sourcegraph \
     --expose=3184 \
-    -e SOURCEGRAPH_CONFIG_FILE=/etc/sourcegraph/config.json \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SYMBOLS_CACHE_SIZE_MB=100000 \
     -e POD_NAME=symbols \
@@ -23,8 +22,4 @@ docker create \
     -v ~/sourcegraph-docker/symbols-disk:/mnt/cache \
     sourcegraph/symbols:2.12.0@sha256:c19c072bdebc21f11393a80322a529e043cf3c41a68e37a1dc119e00fde54a7c
 
-# Create /etc/sourcegraph/config.json
-docker cp ./sourcegraph symbols:/etc/
-
-docker start symbols
 echo "Deployed symbols service"
