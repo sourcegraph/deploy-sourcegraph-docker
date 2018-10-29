@@ -8,7 +8,6 @@ docker network create sourcegraph &> /dev/null || true
 ./deploy-github-proxy.sh
 ./deploy-gitserver.sh
 ./deploy-indexer.sh
-./deploy-lsp-proxy.sh
 ./deploy-pgsql.sh
 ./deploy-query-runner.sh
 ./deploy-redis-cache.sh
