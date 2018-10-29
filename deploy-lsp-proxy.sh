@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=lsp-proxy \
     --network=sourcegraph \
+    --restart=always \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e POD_NAME=lsp-proxy \
     -e CACHE_DIR=/mnt/cache/lsp-proxy \

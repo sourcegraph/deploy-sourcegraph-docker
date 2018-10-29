@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=repo-updater \
     --network=sourcegraph \
+    --restart=always \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/repo-updater-disk:/mnt/cache \

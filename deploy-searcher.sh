@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=searcher \
     --network=sourcegraph \
+    --restart=always \
     -e SEARCHER_CACHE_SIZE_MB=100000 \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e POD_NAME=searcher \

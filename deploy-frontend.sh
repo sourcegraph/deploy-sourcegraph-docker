@@ -14,6 +14,7 @@ set -e
 docker create \
     --name=sourcegraph-frontend \
     --network=sourcegraph \
+    --restart=always \
     -e LSP_PROXY=lsp-proxy:4388 \
     -e PGDATABASE=sg \
     -e PGHOST=pgsql \

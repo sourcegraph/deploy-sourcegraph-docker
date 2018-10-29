@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=indexer \
     --network=sourcegraph \
+    --restart=always \
     -e LSP_PROXY=lsp-proxy:4388 \
     -e PGDATABASE=sg \
     -e PGHOST=pgsql \

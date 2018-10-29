@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=zoekt-webserver \
     --network=sourcegraph \
+    --restart=always \
     sourcegraph/zoekt:18-09-14_2f4b0f2@sha256:c51363fc9c8ad8fee2909593bb37475afb04f5ddb5fa67a580b260ab7abcd377 \
     zoekt-webserver -index /data/index -pprof -rpc # command
 

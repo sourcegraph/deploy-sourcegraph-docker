@@ -14,6 +14,7 @@ set -e
 docker run --detach \
     --name=symbols \
     --network=sourcegraph \
+    --restart=always \
     --expose=3184 \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SYMBOLS_CACHE_SIZE_MB=100000 \
