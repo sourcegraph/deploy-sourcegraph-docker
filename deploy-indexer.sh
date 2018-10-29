@@ -14,7 +14,6 @@ set -e
 docker create \
     --name=indexer \
     --network=sourcegraph \
-    --privileged \
     -e SOURCEGRAPH_CONFIG_FILE=/etc/sourcegraph/config.json \
     -e LSP_PROXY=lsp-proxy:4388 \
     -e PGDATABASE=sg \
