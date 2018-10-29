@@ -15,7 +15,6 @@ docker run --detach \
     --name=github-proxy \
     --network=sourcegraph \
     --restart=always \
-    -e LOG_REQUESTS=true \
     sourcegraph/github-proxy:2.12.0@sha256:9f02da855dc5bef22d367033a5d28c1c19bb573b1eb048195684dda5cacc45dd
 
 echo "Deployed github-proxy service"
