@@ -15,8 +15,6 @@ docker run --detach \
     --name=pgsql \
     --network=sourcegraph \
     --restart=always \
-    -e PGDATA=/data/pgdata \
-    -e POSTGRES_USER=sg \
     -v ~/sourcegraph-docker/pgsql-disk:/data/pgdata \
     sourcegraph/postgres:9.4@sha256:eccea696a68cf9c7ff668398e80ecfadcac990d5f0b9aef15a107aa94128b632
 
