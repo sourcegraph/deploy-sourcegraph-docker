@@ -12,7 +12,7 @@ set -e
 # Ports exposed to the public internet: none
 #
 docker run --detach \
-    --name=searcher \
+    --name=searcher-0 \
     --network=sourcegraph \
     --restart=always \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \

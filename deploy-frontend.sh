@@ -17,8 +17,8 @@ docker create \
     --restart=always \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
-    -e SEARCHER_URL=http://searcher:3181 \
-    -e SYMBOLS_URL=http://symbols:3184 \
+    -e SEARCHER_URL=http://searcher-0:3181 \
+    -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -p 127.0.0.1:3080:3080 \
     sourcegraph/frontend:2.12.0@sha256:8a766780718fea828f7360d92f7077b0bb342253611edebb37b7ae8688c38fdc \
