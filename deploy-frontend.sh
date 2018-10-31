@@ -16,6 +16,11 @@ docker create \
     --network=sourcegraph \
     --restart=always \
     -e PGHOST=pgsql \
+    # Note: These are space-seperated lists, so you can add more gitservers,
+    # searchers, or symbols container instances for scaling purposes.
+    #
+    # Be sure to update SRC_GIT_SERVERS in other all other services, too. And
+    # apply the same change to both frontend and frontend-internal services.
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
