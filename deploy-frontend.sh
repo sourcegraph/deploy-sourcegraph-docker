@@ -16,10 +16,6 @@ docker create \
     --network=sourcegraph \
     --restart=always \
     -e PGHOST=pgsql \
-    # Note: These are space-seperated lists, so you can add more gitservers,
-    # searchers, or symbols container instances for scaling purposes.
-    #
-    # Be sure to apply changes here to both frontend and frontend-internal services.
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
@@ -32,6 +28,11 @@ docker create \
 # -p 127.0.0.1:3443:3443 \
 # -e TLS_CERT=$MY_SECRET_TLS_CERT \
 # -e TLS_KEY=$MY_SECRET_TLS_KEY \
+
+# Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-seperated
+# lists which each allow you to specify more container instances for scaling
+# purposes. Be sure to also apply such a change here to the frontend-internal
+# service.
 
 # Create /etc/sourcegraph/config.json
 docker cp ./sourcegraph sourcegraph-frontend:/etc/
