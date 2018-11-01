@@ -15,7 +15,7 @@ docker run --detach \
     --name=symbols-0 \
     --network=sourcegraph \
     --restart=always \
-    -e SRC_GIT_SERVERS=gitserver-0:3178 \
+    -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/symbols-disk:/mnt/cache \
     sourcegraph/symbols:2.12.0@sha256:c19c072bdebc21f11393a80322a529e043cf3c41a68e37a1dc119e00fde54a7c
 
