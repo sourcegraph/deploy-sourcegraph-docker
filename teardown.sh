@@ -11,8 +11,8 @@ docker rm -f query-runner &> /dev/null || true
 docker rm -f redis-cache &> /dev/null || true
 docker rm -f redis-store &> /dev/null || true
 docker rm -f repo-updater &> /dev/null || true
-docker rm -f searcher &> /dev/null || true
-docker rm -f symbols &> /dev/null || true
+docker rm -f searcher-0 &> /dev/null || true
+docker rm -f symbols-0 &> /dev/null || true
 docker rm -f syntect-server &> /dev/null || true
 docker rm -f zoekt-indexserver &> /dev/null || true
 docker rm -f zoekt-webserver &> /dev/null || true
