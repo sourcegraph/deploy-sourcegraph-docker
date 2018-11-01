@@ -25,7 +25,7 @@ docker create \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -p 127.0.0.1:3080:3080 \
-    sourcegraph/frontend:2.12.0@sha256:8a766780718fea828f7360d92f7077b0bb342253611edebb37b7ae8688c38fdc \
+    sourcegraph/frontend:3.0.0-alpha.2 \
     serve # command
 
 # For HTTPS instead of HTTP (3080), add the following to 'docker create' above:

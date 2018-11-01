@@ -15,6 +15,6 @@ docker run --detach \
     --name=gitserver-0 \
     --network=sourcegraph \
     --restart=always \
-    sourcegraph/gitserver:2.12.0@sha256:0fde51ee93b0cdf06ffb0a06ee321f5014b2fe7f9bdc0572dc00bfaaaac4c9b5
+    sourcegraph/gitserver:3.0.0-alpha.2
 
 echo "Deployed gitserver service"

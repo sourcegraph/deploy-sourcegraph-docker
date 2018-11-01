@@ -17,6 +17,6 @@ docker run --detach \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/repo-updater-disk:/mnt/cache \
-    sourcegraph/repo-updater:2.12.0@sha256:adcf960f9f39bff85eaf08a89112cffcbc335e1ddfba00bfd01c0dea4d01a800
+    sourcegraph/repo-updater:3.0.0-alpha.2
 
 echo "Deployed repo-updater service"
