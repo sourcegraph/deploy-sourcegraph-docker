@@ -17,6 +17,6 @@ docker run --detach \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/symbols-disk:/mnt/cache \
-    sourcegraph/symbols:2.12.0@sha256:c19c072bdebc21f11393a80322a529e043cf3c41a68e37a1dc119e00fde54a7c
+    sourcegraph/symbols:3.0.0-alpha.2
 
 echo "Deployed symbols service"
