@@ -11,6 +11,12 @@ But what if your organization wants a multi-machine deployment without using Kub
 
 The goal is that anyone using a container management platform other than Kubernetes (Netflix's [Titus](https://netflix.github.io/titus/), Apache's [Mesos](http://mesos.apache.org/documentation/latest/docker-containerizer/), etc.) would be able to use this repository as a reference for how to deploy Sourcegraph.
 
+## ⚠️ Alpha release
+
+This project is using an alpha release of Sourcegraph v3.0.0. It is not yet heavily tested, and there may be major bugs or regressions. [Code intelligence does not yet work with this deployment method](https://github.com/sourcegraph/deploy-sourcegraph-docker/issues/2).
+
+When Sourcegraph v3.0.0 preview is released, this repository will be updated and code intelligence will work.
+
 ## Deploying
 
 First clone the repository, then:
