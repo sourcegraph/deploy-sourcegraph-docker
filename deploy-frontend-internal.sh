@@ -20,8 +20,7 @@ docker create \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/frontend:3.0.0-alpha.2 \
-    serve # command
+    sourcegraph/frontend:3.0.0-alpha.4
 
 # Create /etc/sourcegraph/config.json
 docker cp ./sourcegraph sourcegraph-frontend-internal:/etc/
