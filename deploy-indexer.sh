@@ -17,6 +17,6 @@ docker run --detach \
     --restart=always \
     -e PGHOST=pgsql \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/indexer:3.0.0-alpha.2
+    sourcegraph/indexer:3.0.0-alpha.4
 
 echo "Deployed indexer service"

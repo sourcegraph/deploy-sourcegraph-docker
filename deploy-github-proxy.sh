@@ -15,6 +15,6 @@ docker run --detach \
     --name=github-proxy \
     --network=sourcegraph \
     --restart=always \
-    sourcegraph/github-proxy:3.0.0-alpha.2
+    sourcegraph/github-proxy:3.0.0-alpha.4
 
 echo "Deployed github-proxy service"

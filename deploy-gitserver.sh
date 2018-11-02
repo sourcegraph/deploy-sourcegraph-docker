@@ -16,6 +16,6 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/gitserver:3.0.0-alpha.2
+    sourcegraph/gitserver:3.0.0-alpha.4
 
 echo "Deployed gitserver service"
