@@ -25,7 +25,7 @@ First clone the repository, then:
 ./deploy.sh
 ```
 
-Visit http://localhost:3080 to visit the running Sourcegraph Data Center instance!
+Visit http://localhost:3080 to visit the running Sourcegraph instance!
 
 ## Tearing down the deployment
 
