@@ -16,6 +16,6 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -v ~/sourcegraph-docker/pgsql-disk:/data/pgdata \
-    sourcegraph/postgres:18-10-30_9.4_23cea01a@sha256:1eb62bcd0bee6038e1621f12cf26e4f5ca433f225a002fb615c81fd5ddbf8184
+    sourcegraph/postgres:18-11-26_9.4_a9463ecc@sha256:ca9964a200beb9756704279f82f13caea39eaee8ee9e9e13eba57f2de4952f71
 
 echo "Deployed pgsql service"
