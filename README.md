@@ -39,9 +39,9 @@ To understand the system topology:
 
 1. Look at `deploy.sh` to get an overview of services.
 2. Every service (`deploy-*.sh`) has documentation inline indicating:
-  - What the service does / provides.
-  - What ports the service exposes.
-  - What other services it talks to (see environment variables).
+    - What the service does / provides.
+    - What ports the service exposes.
+    - What other services it talks to (see environment variables).
 
 ## Service system requirements
 
