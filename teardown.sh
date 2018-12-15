@@ -5,7 +5,7 @@ docker rm -f sourcegraph-frontend-internal &> /dev/null || true
 docker rm -f sourcegraph-frontend &> /dev/null || true
 docker rm -f github-proxy &> /dev/null || true
 docker rm -f gitserver-0 &> /dev/null || true
-docker rm -f indexer &> /dev/null || true
+docker rm -f management-console &> /dev/null || true
 docker rm -f pgsql &> /dev/null || true
 docker rm -f query-runner &> /dev/null || true
 docker rm -f redis-cache &> /dev/null || true

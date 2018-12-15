@@ -11,7 +11,7 @@ set -e
 # Ports exposed to other Sourcegraph services: none
 # Ports exposed to the public internet: 3080 (HTTP) and/or 3443 (HTTPS)
 #
-docker create \
+docker run --detach \
     --name=sourcegraph-frontend \
     --network=sourcegraph \
     --restart=always \
@@ -21,7 +21,7 @@ docker create \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -p 127.0.0.1:3080:3080 \
-    sourcegraph/frontend:3.0.0-alpha.4
+    sourcegraph/frontend:3.0.0-alpha.6
 
 # For HTTPS instead of HTTP (3080), add the following to 'docker create' above:
 # -p 127.0.0.1:3443:3443 \
@@ -33,8 +33,4 @@ docker create \
 # purposes. Be sure to also apply such a change here to the frontend-internal
 # service.
 
-# Create /etc/sourcegraph/config.json
-docker cp ./sourcegraph sourcegraph-frontend:/etc/
-
-docker start sourcegraph-frontend
 echo "Deployed sourcegraph-frontend service"

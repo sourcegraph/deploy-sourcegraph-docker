@@ -11,7 +11,7 @@ set -e
 # Ports exposed to other Sourcegraph services: 3090
 # Ports exposed to the public internet: none
 #
-docker create \
+docker run --detach \
     --name=sourcegraph-frontend-internal \
     --network=sourcegraph \
     --restart=always \
@@ -20,10 +20,6 @@ docker create \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/frontend:3.0.0-alpha.4
+    sourcegraph/frontend:3.0.0-alpha.6
 
-# Create /etc/sourcegraph/config.json
-docker cp ./sourcegraph sourcegraph-frontend-internal:/etc/
-
-docker start sourcegraph-frontend-internal
 echo "Deployed sourcegraph-frontend-internal service"
