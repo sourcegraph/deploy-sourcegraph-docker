@@ -28,7 +28,7 @@ docker run --detach \
 # -e TLS_CERT=$MY_SECRET_TLS_CERT \
 # -e TLS_KEY=$MY_SECRET_TLS_KEY \
 
-# Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-seperated
+# Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
 # purposes. Be sure to also apply such a change here to the frontend-internal
 # service.
