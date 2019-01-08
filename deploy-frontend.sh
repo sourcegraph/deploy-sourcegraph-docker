@@ -22,7 +22,7 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e ZOEKT_HOST=http://zoekt-webserver:6070 \
     -p 127.0.0.1:3080:3080 \
-    sourcegraph/frontend:3.0.0-alpha.8
+    sourcegraph/frontend:3.0.0-alpha.9
 
 # For HTTPS instead of HTTP (3080), add the following to 'docker create' above:
 # -p 127.0.0.1:3443:3443 \
