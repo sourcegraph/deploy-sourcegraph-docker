@@ -21,7 +21,7 @@ docker run --detach \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -p 127.0.0.1:3080:3080 \
-    sourcegraph/frontend:3.0.0-alpha.6
+    sourcegraph/frontend:3.0.0-alpha.8
 
 # For HTTPS instead of HTTP (3080), add the following to 'docker create' above:
 # -p 127.0.0.1:3443:3443 \

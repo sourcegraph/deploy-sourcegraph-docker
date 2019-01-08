@@ -20,6 +20,6 @@ docker run --detach \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/frontend:3.0.0-alpha.6
+    sourcegraph/frontend:3.0.0-alpha.8
 
 echo "Deployed sourcegraph-frontend-internal service"
