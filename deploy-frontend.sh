@@ -20,7 +20,7 @@ docker run --detach \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    -e ZOEKT_HOST=http://zoekt-webserver:6070 \
+    -e ZOEKT_HOST=zoekt-webserver:6070 \
     -p 127.0.0.1:3080:3080 \
     sourcegraph/frontend:3.0.0-alpha.9
 
