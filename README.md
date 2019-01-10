@@ -59,6 +59,18 @@ To scale the cluster deployment, you will need to:
 
 See documentation [inline here](https://github.com/sourcegraph/deploy-sourcegraph-docker/blob/f01b97a397138dd76e5f5ed45b2574b9a2e70cd1/deploy-frontend.sh#L26-L29).
 
+## Configuring SSH cloning
+
+First, ensure your **Site admin** > **External services** code host configuration is configured to use SSH. For example, by setting the [`gitURLType`](https://docs.sourcegraph.com/admin/site_config/all#giturltype-string-enum) field to `"ssh"`.
+
+Second, provide your `gitserver` instances with your SSH `config`, `known_hosts`, netrc configuration, etc. by mounting it into `/root/.ssh` of the `gitserver` containers. For example, by adding the following flag:
+
+```
+-v ~/my-sourcegraph-ssh-config/.ssh:/root/.ssh 
+```
+
+Restart the `gitserver` containers and all future Git cloning operations will use the credentials configured there.
+
 ## Questions
 
 [Open an issue](https://github.com/sourcegraph/deploy-sourcegraph-docker/issues/new) or contact us (support@sourcegraph.com), we are happy to answer any questions!
