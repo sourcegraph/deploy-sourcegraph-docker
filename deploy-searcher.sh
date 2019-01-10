@@ -16,7 +16,7 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    -v ~/sourcegraph-docker/searcher-disk:/mnt/cache \
+    -v ~/sourcegraph-docker/searcher-0-disk:/mnt/cache \
     sourcegraph/searcher:3.0.0-alpha.9
 
 echo "Deployed searcher service"
