@@ -13,7 +13,7 @@ The goal is that anyone using a container management platform other than Kuberne
 
 ## ⚠️ Alpha release
 
-This project is using an alpha release of Sourcegraph v3.0.0. It is not yet heavily tested, and there may be major bugs or regressions. [Code intelligence does not yet work with this deployment method](https://github.com/sourcegraph/deploy-sourcegraph-docker/issues/2).
+This project is using an alpha release of Sourcegraph v3.0.0. It is not yet heavily tested, and there may be major bugs or regressions.
 
 When Sourcegraph v3.0.0 preview is released, this repository will be updated and code intelligence will work.
 
@@ -57,7 +57,7 @@ To scale the cluster deployment, you will need to:
 
 ## Configuring HTTPS
 
-See documentation [inline here](https://github.com/sourcegraph/deploy-sourcegraph-docker/blob/f01b97a397138dd76e5f5ed45b2574b9a2e70cd1/deploy-frontend.sh#L26-L29).
+See https://docs.sourcegraph.com/admin/nginx#nginx-for-other-sourcegraph-clusters-e-g-pure-docker
 
 ## Configuring SSH cloning
 
