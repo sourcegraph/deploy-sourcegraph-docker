@@ -39,9 +39,9 @@ To understand the system topology:
 
 1. Look at `deploy.sh` to get an overview of services.
 2. Every service (`deploy-*.sh`) has documentation inline indicating:
-    - What the service does / provides.
-    - What ports the service exposes.
-    - What other services it talks to (see environment variables).
+   - What the service does / provides.
+   - What ports the service exposes.
+   - What other services it talks to (see environment variables).
 
 ## Service system requirements
 
@@ -66,7 +66,7 @@ First, ensure your **Site admin** > **External services** code host configuratio
 Second, provide your `gitserver` instances with your SSH `config`, `known_hosts`, netrc configuration, etc. by mounting it into `/root/.ssh` of the `gitserver` containers. For example, by adding the following flag:
 
 ```
--v ~/my-sourcegraph-ssh-config/.ssh:/root/.ssh 
+-v ~/my-sourcegraph-ssh-config/.ssh:/root/.ssh
 ```
 
 Restart the `gitserver` containers and all future Git cloning operations will use the credentials configured there.
