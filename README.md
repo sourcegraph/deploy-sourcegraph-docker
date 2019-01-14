@@ -61,15 +61,29 @@ See documentation [inline here](https://github.com/sourcegraph/deploy-sourcegrap
 
 ## Configuring SSH cloning
 
-First, ensure your **Site admin** > **External services** code host configuration is configured to use SSH. For example, by setting the [`gitURLType`](https://docs.sourcegraph.com/admin/site_config/all#giturltype-string-enum) field to `"ssh"`.
+1. Ensure your **Site admin** > **External services** code host configuration is configured to use SSH. For example, by setting the [`gitURLType`](https://docs.sourcegraph.com/admin/site_config/all#giturltype-string-enum) field to `"ssh"`. You may still need to configure an access token or other codehost authentication method in order for Sourcegraph to discover your repositories.
 
-Second, provide your `gitserver` instances with your SSH `config`, `known_hosts`, netrc configuration, etc. by mounting it into `/root/.ssh` of the `gitserver` containers. For example, by adding the following flag:
+Alternatively, you may use the `OTHER` codehost type under **External services**, which allows you to directly specify Git repository URLs for cloning.
+
+2. Provide your `gitserver` instances with your SSH / Git configuration (usually just `.ssh/id_rsa`, `.ssh/id_rsa.pub`, and `.ssh/known_hosts` -- but you can also provide other files like `.netrc`, `.gitconfig`, etc. if needed) by mounting it into the `sourcegraph` users home directory in the `gitserver` containers. For example, by adding the following flag:
 
 ```
--v ~/my-sourcegraph-ssh-config/.ssh:/root/.ssh
+-v ~/my-sourcegraph-ssh-config/.ssh:/home/sourcegraph/.ssh
 ```
 
-Restart the `gitserver` containers and all future Git cloning operations will use the credentials configured there.
+All future Git cloning operations will use the credentials configured there.
+
+If you wish, you can test that cloning with your configuration is working by performing the clone in a gitserver container shell, e.g. first acquire shell access:
+
+```
+$ docker exec -it gitserver-0 sh
+```
+
+Then try cloning the repository:
+
+```
+$ git clone ssh://git@myhost.com/my/repo /tmp/my-repo
+```
 
 ## Questions
 
