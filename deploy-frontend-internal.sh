@@ -22,6 +22,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
-    sourcegraph/frontend:3.0.0-alpha.9
+    sourcegraph/frontend:3.0.0-alpha.11
 
 echo "Deployed sourcegraph-frontend-internal service"
