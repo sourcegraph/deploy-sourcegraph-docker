@@ -23,7 +23,7 @@ docker run --detach \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
     -p 127.0.0.1:3080:3080 \
-    sourcegraph/frontend:3.0.0-alpha.11
+    sourcegraph/frontend:3.0.0-beta.2
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
