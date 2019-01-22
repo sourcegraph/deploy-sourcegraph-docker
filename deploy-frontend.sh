@@ -5,7 +5,7 @@ set -e
 #
 # CPU: 2
 # Memory: 4GB
-# Disk: 1GB / non-persistent SSD (only for read-only config file)
+# Disk: 128GB / non-persistent SSD
 # Network: 100mbps
 # Liveness probe: HTTP GET http://sourcegraph-frontend:3080/healthz
 # Ports exposed to other Sourcegraph services: none
@@ -22,6 +22,7 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
+    -v ~/sourcegraph-docker/sourcegraph-frontend-disk:/mnt/cache \
     -p 127.0.0.1:3080:3080 \
     sourcegraph/frontend:3.0.0-beta.2
 
