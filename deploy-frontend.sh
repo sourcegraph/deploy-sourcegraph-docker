@@ -23,7 +23,7 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
-    -v ~/sourcegraph-docker/sourcegraph-frontend-disk:/mnt/cache \
+    -v ~/sourcegraph-docker/sourcegraph-frontend-0-disk:/mnt/cache \
     -p 127.0.0.1:3080:3080 \
     sourcegraph/frontend:3.0.0-beta.2
 
