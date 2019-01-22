@@ -17,6 +17,7 @@ docker run --detach \
     --restart=always \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
+    -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
     -e SEARCHER_URL=http://searcher-0:3181 \
     -e SYMBOLS_URL=http://symbols-0:3184 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
