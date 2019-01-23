@@ -7,7 +7,7 @@ set -e
 # Memory: 2GB
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
-# Liveness probe: none
+# Liveness probe: HTTP GET http://symbols:3184/healthz
 # Ports exposed to other Sourcegraph services: 3184/TCP
 # Ports exposed to the public internet: none
 #
