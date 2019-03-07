@@ -15,6 +15,6 @@ docker run --detach \
     --name=syntect-server \
     --network=sourcegraph \
     --restart=always \
-    sourcegraph/syntect_server:393a538@sha256:8e689829d2e3e774c811efc89524238e4c1957e52756ba8cc3c07c1fb3a81cb6
+    sourcegraph/syntect_server:056c730@sha256:2f7489ebddfbbe92bef3e72af3840d24f45d387baa0da1edabf06fa732195ae6
 
 echo "Deployed syntect-server service"
