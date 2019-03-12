@@ -16,6 +16,6 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/github-proxy:3.1.1
+    sourcegraph/github-proxy:3.1.2
 
 echo "Deployed github-proxy service"
