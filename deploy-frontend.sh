@@ -25,7 +25,7 @@ docker run --detach \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-0-disk:/mnt/cache \
     -p 0.0.0.0:3080:3080 \
-    sourcegraph/frontend:3.1.2
+    sourcegraph/frontend:3.2.0
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling

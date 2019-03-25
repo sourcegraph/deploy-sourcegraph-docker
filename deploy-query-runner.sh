@@ -16,6 +16,6 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/query-runner:3.1.2
+    sourcegraph/query-runner:3.2.0
 
 echo "Deployed query-runner service"
