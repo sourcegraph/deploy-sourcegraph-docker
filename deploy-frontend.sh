@@ -15,6 +15,7 @@ docker run --detach \
     --name=sourcegraph-frontend \
     --network=sourcegraph \
     --restart=always \
+    -e JAEGER_AGENT_HOST='jaeger-agent' \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
