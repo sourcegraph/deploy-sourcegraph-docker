@@ -8,7 +8,7 @@ set -e
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
 # Liveness probe: HTTP GET http://sourcegraph-frontend:3080/healthz
-# Ports exposed to other Sourcegraph services: none
+# Ports exposed to other Sourcegraph services: 6060/TCP
 # Ports exposed to the public internet: 3080 (HTTP) and/or 3443 (HTTPS)
 #
 docker run --detach \

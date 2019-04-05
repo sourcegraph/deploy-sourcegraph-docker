@@ -8,7 +8,7 @@ set -e
 # Disk: 1GB / non-persistent SSD (only for read-only config file)
 # Network: 100mbps
 # Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: 3183/TCP
+# Ports exposed to other Sourcegraph services: 3183/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \

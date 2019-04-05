@@ -8,7 +8,7 @@ set -e
 # Disk: 1GB / persistent (can be discarded, only contains self-signed TLS cert)
 # Network: 100mbps
 # Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: none
+# Ports exposed to other Sourcegraph services: 6060/TCP
 # Ports exposed to the public internet: 2633 (HTTPS); optionally behind a firewall for extra security
 #
 docker run --detach \
