@@ -49,6 +49,10 @@ To scale the cluster deployment, you will need to:
 2. [Configure the `frontend` and `frontend-internal` to communicate with the new instances.](https://github.com/sourcegraph/deploy-sourcegraph-docker/blob/f01b97a397138dd76e5f5ed45b2574b9a2e70cd1/deploy-frontend.sh#L31-L34)
 3. You're done! You do not need to configure or restart any other services.
 
+## Metrics and Tracing
+
+This deployment comes with metrics and tracing built-in. See [metrics and tracing](metrics-and-tracing.md) for details.
+
 ## Configuring HTTPS
 
 See https://docs.sourcegraph.com/admin/nginx#nginx-for-other-sourcegraph-clusters-e-g-pure-docker
