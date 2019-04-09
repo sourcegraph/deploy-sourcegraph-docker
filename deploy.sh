@@ -7,6 +7,7 @@ docker network create sourcegraph &> /dev/null || true
 
 ./deploy-github-proxy.sh
 ./deploy-gitserver.sh
+./deploy-grafana.sh
 ./deploy-jaeger-agent.sh
 ./deploy-jaeger-cassandra.sh
 ./deploy-jaeger-collector.sh

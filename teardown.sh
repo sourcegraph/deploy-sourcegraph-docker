@@ -5,6 +5,7 @@ docker rm -f sourcegraph-frontend-internal &> /dev/null || true
 docker rm -f sourcegraph-frontend &> /dev/null || true
 docker rm -f github-proxy &> /dev/null || true
 docker rm -f gitserver-0 &> /dev/null || true
+docker rm -f grafana &> /dev/null || true
 docker rm -f jaeger-agent &> /dev/null || true
 docker rm -f jaeger-cassandra &> /dev/null || true
 docker rm -f jaeger-collector &> /dev/null || true
