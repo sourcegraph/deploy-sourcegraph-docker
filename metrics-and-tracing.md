@@ -69,7 +69,18 @@ If there are specific dashboards or metrics you'd like to see, please [file an i
 
 The `Containers` dashboard metrics come from Docker itself. In order to expose these metrics to Prometheus, you will need to:
 
-1. Flip a bit in the Docker config to expose its Prometheus metrics exporter: https://docs.docker.com/config/thirdparty/prometheus/#configure-docker
+1. Flip the bit in the Docker config to expose its Prometheus metrics exporter: https://docs.docker.com/config/thirdparty/prometheus/#configure-docker
 2. Uncomment the relevant `job_name: docker` line at the end of `prometheus/prometheus_targets.yml` for your OS.
 3. `docker restart prometheus` to make the changes take effect.
 4. To confirm the above worked, you can run a Prometheus query [like this](http://localhost:9090/graph?g0.range_input=1h&g0.expr=process_resident_memory_bytes&g0.tab=0) or visit the `Containers` dashboard in Grafana.
+
+## Minimal downtime steps
+
+Assuming you want to deploy all of the above with minimal downtime, the best approach is to:
+
+1. First, in the Sourcegraph management console, set `"useJaeger": true`. This is harmless to do even if not using Jaeger (will just spam logs with errors).
+1. Flip the bit in the Docker config to expose its Prometheus metrics exporter: https://docs.docker.com/config/thirdparty/prometheus/#configure-docker
+1. As part of flipping the bit above, restart Docker which inherently restarts all Sourcegraph containers thus causing the `useJaeger` setting to update.
+1. Follow the rest of the steps in this document for configuring Jaeger/Grafana (this will require restarting Jaeger/Grafana, but will allow you to skip any step that would require restarting core Sourcegraph services).
+
+The above will cause minimal downtime such that when you go through step 4 you are only restarting Jaeger/Grafana services, not other core Sourcegraph services.
