@@ -8,7 +8,7 @@ set -e
 # Disk: 1GB / non-persistent SSD (only for read-only config file)
 # Network: 100mbps
 # Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: 3180/TCP
+# Ports exposed to other Sourcegraph services: 3180/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \
@@ -16,6 +16,7 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    sourcegraph/github-proxy:3.2.0
+    -e JAEGER_AGENT_HOST='jaeger-agent' \
+    sourcegraph/github-proxy:3.2.1
 
 echo "Deployed github-proxy service"

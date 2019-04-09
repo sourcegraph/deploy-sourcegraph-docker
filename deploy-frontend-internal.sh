@@ -8,7 +8,7 @@ set -e
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: 3090
+# Ports exposed to other Sourcegraph services: 3090/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \
@@ -24,6 +24,6 @@ docker run --detach \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
-    sourcegraph/frontend:3.2.0
+    sourcegraph/frontend:3.2.1
 
 echo "Deployed sourcegraph-frontend-internal service"

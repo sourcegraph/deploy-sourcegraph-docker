@@ -8,7 +8,7 @@ set -e
 # Disk: 200GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: 3182/TCP
+# Ports exposed to other Sourcegraph services: 3182/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \
@@ -16,7 +16,8 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
+    -e JAEGER_AGENT_HOST='jaeger-agent' \
     -v ~/sourcegraph-docker/gitserver-0-disk:/data/repos \
-    sourcegraph/gitserver:3.2.0
+    sourcegraph/gitserver:3.2.1
 
 echo "Deployed gitserver service"

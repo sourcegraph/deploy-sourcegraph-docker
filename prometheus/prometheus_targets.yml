@@ -1,0 +1,20 @@
+---
+- labels:
+    job: node
+  targets:
+    # Uncomment these if you want to monitor PostgreSQL / Redis via Prometheus.
+    #- pgsql:9187
+    #- redis-cache:9121
+    #- redis-store:9121
+    - sourcegraph-frontend:6060
+    - sourcegraph-frontend-internal:6060
+    - github-proxy:6060
+    - management-console:6060
+    - query-runner:6060
+    - repo-updater:6060
+    # Add new entries here for every searcher/symbol/gitserver replica.
+    - gitserver-0:6060
+    - searcher-0:6060
+    - searcher-1:6060
+    - searcher-2:6060
+    - symbols-0:6060

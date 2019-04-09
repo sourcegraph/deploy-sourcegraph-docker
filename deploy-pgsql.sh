@@ -8,7 +8,7 @@ set -e
 # Disk: 128GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: 5432/TCP
-# Ports exposed to other Sourcegraph services: 5432/TCP
+# Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \

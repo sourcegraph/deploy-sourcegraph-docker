@@ -8,7 +8,7 @@ set -e
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: 3182/TCP
+# Ports exposed to other Sourcegraph services: 3182/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \
@@ -16,8 +16,9 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
+    -e JAEGER_AGENT_HOST='jaeger-agent' \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v ~/sourcegraph-docker/repo-updater-disk:/mnt/cache \
-    sourcegraph/repo-updater:3.2.0
+    sourcegraph/repo-updater:3.2.1
 
 echo "Deployed repo-updater service"

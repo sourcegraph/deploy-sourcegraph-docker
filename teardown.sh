@@ -5,8 +5,15 @@ docker rm -f sourcegraph-frontend-internal &> /dev/null || true
 docker rm -f sourcegraph-frontend &> /dev/null || true
 docker rm -f github-proxy &> /dev/null || true
 docker rm -f gitserver-0 &> /dev/null || true
+docker rm -f grafana &> /dev/null || true
+docker rm -f jaeger-agent &> /dev/null || true
+docker rm -f jaeger-cassandra &> /dev/null || true
+docker rm -f jaeger-collector &> /dev/null || true
+docker rm -f jaeger-query &> /dev/null || true
+docker rm -f jaeger-cassandra-schema &> /dev/null || true
 docker rm -f management-console &> /dev/null || true
 docker rm -f pgsql &> /dev/null || true
+docker rm -f prometheus &> /dev/null || true
 docker rm -f query-runner &> /dev/null || true
 docker rm -f redis-cache &> /dev/null || true
 docker rm -f redis-store &> /dev/null || true
