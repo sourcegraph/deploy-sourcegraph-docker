@@ -3,8 +3,6 @@ set -e
 
 # Description: Jaeger frontend for querying traces.
 #
-# CPU: 1
-# Memory: 1GB
 # Disk: none
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=jaeger-query \
     --network=sourcegraph \
     --restart=always \
+    --cpus=1 \
+    --memory=1g \
     -p 0.0.0.0:16686:16686 \
     -e SPAN_STORAGE_TYPE=cassandra \
     -e CASSANDRA_SERVERS=jaeger-cassandra \

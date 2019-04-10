@@ -3,8 +3,6 @@ set -e
 
 # Description: Serves the frontend of Sourcegraph via HTTP(S).
 #
-# CPU: 2
-# Memory: 4GB
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
 # Liveness probe: HTTP GET http://sourcegraph-frontend:3080/healthz
@@ -15,6 +13,8 @@ docker run --detach \
     --name=sourcegraph-frontend \
     --network=sourcegraph \
     --restart=always \
+    --cpus=2 \
+    --memory=4g \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \

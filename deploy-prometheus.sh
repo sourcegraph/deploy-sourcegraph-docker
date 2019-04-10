@@ -3,8 +3,6 @@ set -e
 
 # Description: Prometheus collects metrics and aggregates them into graphs.
 #
-# CPU: 4
-# Memory: 8GB
 # Disk: 200GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=prometheus \
     --network=sourcegraph \
     --restart=always \
+    --cpus=4 \
+    --memory=8g \
     -p 0.0.0.0:9090:9090 \
     -v ~/sourcegraph-docker/prometheus-disk:/prometheus-data \
     -v $(pwd)/prometheus:/etc/prometheus \

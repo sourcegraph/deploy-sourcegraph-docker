@@ -3,8 +3,6 @@ set -e
 
 # Description: Serves the internal Sourcegraph frontend API.
 #
-# CPU: 2
-# Memory: 4GB
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=sourcegraph-frontend-internal \
     --network=sourcegraph \
     --restart=always \
+    --cpus=2 \
+    --memory=4g \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \

@@ -3,8 +3,6 @@ set -e
 
 # Description: Receives traces from Jaeger agents.
 #
-# CPU: 1
-# Memory: 1GB
 # Disk: none
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=jaeger-collector \
     --network=sourcegraph \
     --restart=always \
+    --cpus=1 \
+    --memory=1g \
     -e SPAN_STORAGE_TYPE=cassandra \
     -e CASSANDRA_SERVERS=jaeger-cassandra \
     -e CASSANDRA_KEYSPACE=jaeger_v1_sourcegraph \
