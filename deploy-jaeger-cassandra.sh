@@ -3,8 +3,6 @@ set -e
 
 # Description: Jaeger's Cassandra database for storing traces.
 #
-# CPU: 4
-# Memory: 8GB
 # Disk: 128GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=jaeger-cassandra \
     --network=sourcegraph \
     --restart=always \
+    --cpus=4 \
+    --memory=8g \
     -e HEAP_NEWSIZE='1G' \
     -e MAX_HEAP_SIZE='6G' \
     -e CASSANDRA_DC='sourcegraph' \

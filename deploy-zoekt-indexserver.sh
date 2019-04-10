@@ -3,8 +3,6 @@ set -e
 
 # Description: Backend for indexed text search operations.
 #
-# CPU: 4
-# Memory: 4GB
 # Disk: 200GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=zoekt-indexserver \
     --network=sourcegraph \
     --restart=always \
+    --cpus=4 \
+    --memory=4g \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/zoekt-shared-disk:/data/index \
     sourcegraph/zoekt-indexserver:18-10-30_faca01d@sha256:36c1309d935b7faf5ec69277444a6c0eefa510a6eb20deb651cdb7ce3de3913f

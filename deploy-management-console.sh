@@ -3,8 +3,6 @@ set -e
 
 # Description: Serves the frontend of Sourcegraph via HTTP(S).
 #
-# CPU: 1
-# Memory: 512MB
 # Disk: 1GB / persistent (can be discarded, only contains self-signed TLS cert)
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=management-console \
     --network=sourcegraph \
     --restart=always \
+    --cpus=1 \
+    --memory=512m \
     -v ~/sourcegraph-docker/management-console-disk:/etc/sourcegraph \
     -e PGHOST=pgsql \
     -p 0.0.0.0:2633:2633 \

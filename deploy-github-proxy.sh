@@ -15,6 +15,8 @@ docker run --detach \
     --name=github-proxy \
     --network=sourcegraph \
     --restart=always \
+    --cpus=1 \
+    --memory=1g \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     sourcegraph/github-proxy:3.2.1

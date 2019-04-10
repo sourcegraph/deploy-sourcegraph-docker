@@ -3,8 +3,6 @@ set -e
 
 # Description: Dashboards and graphs for Prometheus metrics.
 #
-# CPU: 1
-# Memory: 1GB
 # Disk: 100GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
@@ -15,6 +13,8 @@ docker run --detach \
     --name=grafana \
     --network=sourcegraph \
     --restart=always \
+    --cpus=1 \
+    --memory=1g \
     -p 0.0.0.0:3000:3000 \
     -v ~/sourcegraph-docker/grafana-disk:/var/lib/grafana \
     -v $(pwd)/grafana:/etc/grafana \
