@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1554776827076,
+  "iteration": 1554922150434,
   "links": [],
   "panels": [
     {
@@ -448,7 +448,6 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "All",
           "value": ["$__all"]
         },
@@ -459,20 +458,34 @@
         "label": null,
         "multi": true,
         "name": "gitserver",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "gitserver-0:6060",
-            "value": "gitserver-0:6060"
-          }
-        ],
+        "options": [],
         "query": "label_values(src_gitserver_exec_duration_seconds_bucket, instance)",
-        "refresh": 0,
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": ["$__all"]
+        },
+        "datasource": "Prometheus",
+        "definition": "label_values(src_gitserver_exec_duration_seconds_bucket, cmd)",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": true,
+        "name": "command",
+        "options": [],
+        "query": "label_values(src_gitserver_exec_duration_seconds_bucket, cmd)",
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -518,63 +531,6 @@
         "query": ".90, .95, .98, .99",
         "skipUrlSync": false,
         "type": "custom"
-      },
-      {
-        "allValue": null,
-        "current": {
-          "tags": [],
-          "text": "All",
-          "value": ["$__all"]
-        },
-        "datasource": "Prometheus",
-        "definition": "label_values(src_gitserver_exec_duration_seconds_bucket, cmd)",
-        "hide": 0,
-        "includeAll": true,
-        "label": null,
-        "multi": true,
-        "name": "command",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "ls-tree",
-            "value": "ls-tree"
-          },
-          {
-            "selected": false,
-            "text": "rev-parse",
-            "value": "rev-parse"
-          },
-          {
-            "selected": false,
-            "text": "archive",
-            "value": "archive"
-          },
-          {
-            "selected": false,
-            "text": "show",
-            "value": "show"
-          },
-          {
-            "selected": false,
-            "text": "log",
-            "value": "log"
-          }
-        ],
-        "query": "label_values(src_gitserver_exec_duration_seconds_bucket, cmd)",
-        "refresh": 0,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
       }
     ]
   },
@@ -600,5 +556,5 @@
   "timezone": "",
   "title": "Gitserver",
   "uid": "_r6vamgWk",
-  "version": 4
+  "version": 1
 }

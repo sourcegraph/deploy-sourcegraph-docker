@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1554776868052,
+  "iteration": 1554922090765,
   "links": [],
   "panels": [
     {
@@ -452,7 +452,6 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "All",
           "value": ["$__all"]
         },
@@ -463,80 +462,9 @@
         "label": null,
         "multi": true,
         "name": "container",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "searcher-0:6060",
-            "value": "searcher-0:6060"
-          },
-          {
-            "selected": false,
-            "text": "searcher-1:6060",
-            "value": "searcher-1:6060"
-          },
-          {
-            "selected": false,
-            "text": "repo-updater:6060",
-            "value": "repo-updater:6060"
-          },
-          {
-            "selected": false,
-            "text": "gitserver-0:6060",
-            "value": "gitserver-0:6060"
-          },
-          {
-            "selected": false,
-            "text": "localhost:9090",
-            "value": "localhost:9090"
-          },
-          {
-            "selected": false,
-            "text": "sourcegraph-frontend:6060",
-            "value": "sourcegraph-frontend:6060"
-          },
-          {
-            "selected": false,
-            "text": "searcher-2:6060",
-            "value": "searcher-2:6060"
-          },
-          {
-            "selected": false,
-            "text": "query-runner:6060",
-            "value": "query-runner:6060"
-          },
-          {
-            "selected": false,
-            "text": "management-console:6060",
-            "value": "management-console:6060"
-          },
-          {
-            "selected": false,
-            "text": "symbols-0:6060",
-            "value": "symbols-0:6060"
-          },
-          {
-            "selected": false,
-            "text": "github-proxy:6060",
-            "value": "github-proxy:6060"
-          },
-          {
-            "selected": false,
-            "text": "docker.for.mac.host.internal:9323",
-            "value": "docker.for.mac.host.internal:9323"
-          },
-          {
-            "selected": false,
-            "text": "sourcegraph-frontend-internal:6060",
-            "value": "sourcegraph-frontend-internal:6060"
-          }
-        ],
+        "options": [],
         "query": "label_values(process_start_time_seconds, instance)",
-        "refresh": 0,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -570,5 +498,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "EnHi1iRZz",
-  "version": 3
+  "version": 1
 }

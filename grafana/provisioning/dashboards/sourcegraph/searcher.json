@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1554776781222,
+  "iteration": 1554922119123,
   "links": [],
   "panels": [
     {
@@ -797,7 +797,6 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "All",
           "value": ["$__all"]
         },
@@ -808,30 +807,9 @@
         "label": null,
         "multi": true,
         "name": "searcher",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "searcher-0:6060",
-            "value": "searcher-0:6060"
-          },
-          {
-            "selected": false,
-            "text": "searcher-1:6060",
-            "value": "searcher-1:6060"
-          },
-          {
-            "selected": false,
-            "text": "searcher-2:6060",
-            "value": "searcher-2:6060"
-          }
-        ],
+        "options": [],
         "query": "label_values(searcher_service_running, instance)",
-        "refresh": 0,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -865,5 +843,5 @@
   "timezone": "",
   "title": "Searcher",
   "uid": "0ZBSEmRWk",
-  "version": 3
+  "version": 1
 }
