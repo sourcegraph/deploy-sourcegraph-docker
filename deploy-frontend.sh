@@ -13,8 +13,8 @@ docker run --detach \
     --name=sourcegraph-frontend \
     --network=sourcegraph \
     --restart=always \
-    --cpus=4 \
-    --memory=4g \
+    --cpus=12 \
+    --memory=12g \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \
