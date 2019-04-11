@@ -13,7 +13,7 @@ docker run --detach \
     --name=sourcegraph-frontend-internal \
     --network=sourcegraph \
     --restart=always \
-    --cpus=2 \
+    --cpus=4 \
     --memory=4g \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS=gitserver-0:3178 \

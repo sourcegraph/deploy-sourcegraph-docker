@@ -13,8 +13,8 @@ docker run --detach \
     --name=pgsql \
     --network=sourcegraph \
     --restart=always \
-    --cpus=2 \
-    --memory=1g \
+    --cpus=4 \
+    --memory=2g \
     -v ~/sourcegraph-docker/pgsql-disk:/data/pgdata \
     sourcegraph/postgres:18-11-26_9.4_a9463ecc@sha256:ca9964a200beb9756704279f82f13caea39eaee8ee9e9e13eba57f2de4952f71
 
