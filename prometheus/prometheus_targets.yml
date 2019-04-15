@@ -14,6 +14,43 @@
     - repo-updater:6060
     # Add new entries here for every searcher/symbol/gitserver replica.
     - sourcegraph-frontend-0:6060
+    - sourcegraph-frontend-1:6060
+    - sourcegraph-frontend-2:6060
     - gitserver-0:6060
+    - gitserver-1:6060
+    - gitserver-2:6060
+    - gitserver-3:6060
+    - gitserver-4:6060
+    - gitserver-5:6060
+    - gitserver-6:6060
+    - gitserver-7:6060
+    - gitserver-8:6060
+    - gitserver-9:6060
+    - gitserver-10:6060
+    - gitserver-11:6060
+    - gitserver-12:6060
+    - gitserver-13:6060
+    - gitserver-14:6060
+    - gitserver-15:6060
+    - gitserver-16:6060
+    - gitserver-17:6060
     - searcher-0:6060
+    - searcher-1:6060
+    - searcher-2:6060
+    - searcher-3:6060
+    - searcher-4:6060
+    - searcher-5:6060
+    - searcher-6:6060
+    - searcher-7:6060
+    - searcher-8:6060
+    - searcher-9:6060
+    - searcher-10:6060
+    - searcher-11:6060
+    - searcher-12:6060
+    - searcher-13:6060
+    - searcher-14:6060
+    - searcher-15:6060
     - symbols-0:6060
+    - symbols-1:6060
+    - symbols-2:6060
+    - symbols-3:6060
