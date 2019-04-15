@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+source ./replicas.sh
 
 # Description: Rate-limiting proxy for the GitHub API.
 #

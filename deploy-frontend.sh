@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+source ./replicas.sh
 
 # Description: Serves the frontend of Sourcegraph via HTTP(S).
 #
@@ -10,22 +11,22 @@ set -e
 # Ports exposed to the public internet: 3080 (HTTP) and/or 3443 (HTTPS)
 #
 docker run --detach \
-    --name=sourcegraph-frontend \
+    --name=sourcegraph-frontend-$1 \
     --network=sourcegraph \
     --restart=always \
     --cpus=12 \
     --memory=12g \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     -e PGHOST=pgsql \
-    -e SRC_GIT_SERVERS=gitserver-0:3178 \
+    -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
-    -e SEARCHER_URL=http://searcher-0:3181 \
-    -e SYMBOLS_URL=http://symbols-0:3184 \
+    -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
+    -e SYMBOLS_URL="$(addresses "http://symbols-" $NUM_SYMBOLS ":3184")" \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
-    -v ~/sourcegraph-docker/sourcegraph-frontend-0-disk:/mnt/cache \
-    -p 0.0.0.0:3080:3080 \
+    -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
+    -p 0.0.0.0:$((3080 + $1)):3080 \
     sourcegraph/frontend:3.2.1
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
@@ -33,4 +34,4 @@ docker run --detach \
 # purposes. Be sure to also apply such a change here to the frontend-internal
 # service.
 
-echo "Deployed sourcegraph-frontend service"
+echo "Deployed sourcegraph-frontend $1 service"
