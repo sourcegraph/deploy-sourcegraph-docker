@@ -1,31 +1,33 @@
 #!/usr/bin/env bash
 set -e
+source ./replicas.sh
 
 ./teardown.sh
 
 docker network create sourcegraph &> /dev/null || true
 
-./deploy-github-proxy.sh
-./deploy-gitserver.sh
+./deploy-github-proxy.sh &
+for i in $(seq 0 $(($NUM_GITSERVER - 1))); do (./deploy-gitserver.sh $i &); done
 ./deploy-grafana.sh
 ./deploy-jaeger-agent.sh
 ./deploy-jaeger-cassandra.sh
 ./deploy-jaeger-collector.sh
 ./deploy-jaeger-query.sh
 ./init-jaeger-cassandra-schema.sh
-./deploy-management-console.sh
-./deploy-pgsql.sh
+./deploy-management-console.sh &
+./deploy-pgsql.sh &
 ./deploy-prometheus.sh
-./deploy-query-runner.sh
-./deploy-redis-cache.sh
-./deploy-redis-store.sh
-./deploy-repo-updater.sh
-./deploy-searcher.sh
-./deploy-symbols.sh
-./deploy-syntect-server.sh
-./deploy-zoekt-indexserver.sh
-./deploy-zoekt-webserver.sh
+./deploy-query-runner.sh &
+./deploy-redis-cache.sh &
+./deploy-redis-store.sh &
+./deploy-repo-updater.sh &
+for i in $(seq 0 $(($NUM_SEARCHER - 1))); do (./deploy-searcher.sh $i &); done
+for i in $(seq 0 $(($NUM_SYMBOLS - 1))); do (./deploy-symbols.sh $i &); done
+./deploy-syntect-server.sh &
+./deploy-zoekt-indexserver.sh &
+./deploy-zoekt-webserver.sh &
 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
-./deploy-frontend.sh
+for i in $(seq 0 $(($NUM_FRONTEND - 1))); do (./deploy-frontend.sh $i &); done
+wait

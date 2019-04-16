@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+source ./replicas.sh
 
 # Description: Handles repository metadata (not Git data) lookups and updates from external code hosts and other similar services.
 #

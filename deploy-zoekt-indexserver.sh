@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+source ./replicas.sh
 
 # Description: Backend for indexed text search operations.
 #
