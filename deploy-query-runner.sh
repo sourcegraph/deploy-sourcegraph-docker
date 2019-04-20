@@ -17,6 +17,6 @@ docker run --detach \
     --memory=1g \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
-    sourcegraph/query-runner:3.2.1
+    sourcegraph/query-runner:3.3.0
 
 echo "Deployed query-runner service"
