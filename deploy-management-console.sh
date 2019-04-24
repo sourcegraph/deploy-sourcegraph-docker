@@ -15,6 +15,7 @@ docker run --detach \
     --restart=always \
     --cpus=1 \
     --memory=512m \
+    -e GOMAXPROCS=1 \
     -v ~/sourcegraph-docker/management-console-disk:/etc/sourcegraph \
     -e PGHOST=pgsql \
     -p 0.0.0.0:2633:2633 \

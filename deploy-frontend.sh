@@ -16,6 +16,7 @@ docker run --detach \
     --restart=always \
     --cpus=12 \
     --memory=12g \
+    -e GOMAXPROCS=12 \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \

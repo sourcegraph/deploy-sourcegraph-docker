@@ -16,6 +16,7 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=4g \
+    -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \

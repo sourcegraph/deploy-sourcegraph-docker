@@ -16,6 +16,7 @@ docker run --detach \
     --restart=always \
     --cpus=2 \
     --memory=2g \
+    -e GOMAXPROCS=2 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     -v ~/sourcegraph-docker/searcher-$1-disk:/mnt/cache \
