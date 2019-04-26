@@ -19,6 +19,6 @@ docker run --detach \
     -v ~/sourcegraph-docker/management-console-disk:/etc/sourcegraph \
     -e PGHOST=pgsql \
     -p 0.0.0.0:2633:2633 \
-    sourcegraph/management-console:3.3.0
+    sourcegraph/management-console:debug-oa-fd82b7bd31d0af33bfcb86360a1c93eecbdb3469
 
 echo "Deployed management-console service"
