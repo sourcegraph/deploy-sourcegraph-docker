@@ -14,8 +14,8 @@ docker run --detach \
     --name=repo-updater \
     --network=sourcegraph \
     --restart=always \
-    --cpus=1 \
-    --memory=1g \
+    --cpus=2 \
+    --memory=4g \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
