@@ -15,7 +15,7 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     --cpus=4 \
-    --memory=4g \
+    --memory=8g \
     -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
