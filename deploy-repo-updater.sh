@@ -14,7 +14,7 @@ docker run --detach \
     --name=repo-updater \
     --network=sourcegraph \
     --restart=always \
-    --cpus=2 \
+    --cpus=4 \
     --memory=4g \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
