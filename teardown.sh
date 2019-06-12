@@ -2,6 +2,7 @@
 set -e
 source ./replicas.sh
 
+docker rm -f apache &> /dev/null || true &
 docker rm -f cadvisor &> /dev/null || true &
 docker rm -f sourcegraph-frontend-internal &> /dev/null || true &
 docker rm -f $(addresses "sourcegraph-frontend-" $NUM_FRONTEND "") &> /dev/null || true &
