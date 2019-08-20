@@ -12,6 +12,7 @@ docker rm -f jaeger-cassandra &> /dev/null || true
 docker rm -f jaeger-collector &> /dev/null || true
 docker rm -f jaeger-query &> /dev/null || true
 docker rm -f jaeger-cassandra-schema &> /dev/null || true
+docker rm -f lsif-server &> /dev/null || true
 docker rm -f management-console &> /dev/null || true &
 docker rm -f pgsql &> /dev/null || true &
 docker rm -f prometheus &> /dev/null || true

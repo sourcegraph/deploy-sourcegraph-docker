@@ -25,6 +25,7 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
+    -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
     sourcegraph/frontend:3.5.2
 
