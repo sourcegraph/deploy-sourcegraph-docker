@@ -29,7 +29,7 @@ docker run --detach \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    sourcegraph/frontend:3.5.2
+    sourcegraph/frontend:3.7.0
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
