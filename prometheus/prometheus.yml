@@ -32,7 +32,7 @@ scrape_configs:
   - job_name: "docker"
     static_configs:
       # Host monitoring, this is the IP of the docker bridge network shown in top of `ifconfig`
-      targets: ["172.18.0.1:9323"]
+      - targets: ["172.18.0.1:9323"]
       # For Linux, use this line:
       #- targets: ["localhost:9323"]
       #
