@@ -6,6 +6,7 @@
     #- pgsql:9187
     #- redis-cache:9121
     #- redis-store:9121
+    - cadvisor:8080
     - sourcegraph-frontend-internal:6060
     - github-proxy:6060
     - management-console:6060
