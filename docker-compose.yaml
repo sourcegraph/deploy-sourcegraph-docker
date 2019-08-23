@@ -362,6 +362,5 @@ services:
     networks:
       - sourcegraph
     restart: always
-  create:
-    image: create
-    command: sourcegraph
+networks:
+  sourcegraph:
