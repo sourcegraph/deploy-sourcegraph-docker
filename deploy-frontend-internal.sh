@@ -27,6 +27,6 @@ docker run --detach \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
-    sourcegraph/frontend:3.7.0
+    sourcegraph/frontend:3.7.1
 
 echo "Deployed sourcegraph-frontend-internal service"

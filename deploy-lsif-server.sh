@@ -19,6 +19,6 @@ docker run --detach \
     -e GOMAXPROCS=1 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
-    sourcegraph/lsif-server:3.7.0
+    sourcegraph/lsif-server:3.7.1
 
 echo "Deployed lsif-server service"
