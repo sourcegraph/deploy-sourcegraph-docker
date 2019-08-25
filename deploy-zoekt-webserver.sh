@@ -13,9 +13,9 @@ docker run --detach \
     --name=zoekt-webserver \
     --network=sourcegraph \
     --restart=always \
-    --cpus=8 \
-    --memory=80g \
-    -e GOMAXPROCS=8 \
+    --cpus=16 \
+    --memory=100g \
+    -e GOMAXPROCS=16 \
     -v ~/sourcegraph-docker/zoekt-shared-disk:/data/index \
     sourcegraph/zoekt-webserver:2019.08.21-4e4eef5
 
