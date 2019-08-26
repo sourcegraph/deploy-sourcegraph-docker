@@ -10,11 +10,12 @@ docker network create sourcegraph &> /dev/null || true
 ./deploy-github-proxy.sh &
 for i in $(seq 0 $(($NUM_GITSERVER - 1))); do (./deploy-gitserver.sh $i &); done
 ./deploy-grafana.sh
-./deploy-jaeger-agent.sh
-./deploy-jaeger-cassandra.sh
-./deploy-jaeger-collector.sh
-./deploy-jaeger-query.sh
-./init-jaeger-cassandra-schema.sh
+# Disabled for now, see https://github.com/sourcegraph/sourcegraph/issues/5363
+#./deploy-jaeger-agent.sh
+#./deploy-jaeger-cassandra.sh
+#./deploy-jaeger-collector.sh
+#./deploy-jaeger-query.sh
+#./init-jaeger-cassandra-schema.sh
 ./deploy-lsif-server.sh &
 ./deploy-management-console.sh &
 ./deploy-pgsql.sh &
