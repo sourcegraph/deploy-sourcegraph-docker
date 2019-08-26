@@ -16,7 +16,7 @@ docker run --detach \
     --restart=always \
     --cpus=2 \
     --memory=2g \
-    -e GOMAXPROCS=1 \
+    -e GOMAXPROCS=2 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
     sourcegraph/lsif-server:3.7.1
