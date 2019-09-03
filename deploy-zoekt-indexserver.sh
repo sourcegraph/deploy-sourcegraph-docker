@@ -19,6 +19,6 @@ docker run --detach \
     -e GOMAXPROCS=8 \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/zoekt-shared-disk:/data/index \
-    sourcegraph/zoekt-indexserver:19-07-18_9cdf2d3@sha256:0c7c4f59281e45c54882a3f6755d4842565ed3e01b9a95e5a63efbe638b8bcec
- 
+    sourcegraph/zoekt-indexserver:2019.08.21-4e4eef5
+
 echo "Deployed zoekt-indexserver service"
