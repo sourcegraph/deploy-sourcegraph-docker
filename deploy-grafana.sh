@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -euf -o pipefail
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+set -e
 
 # Description: Dashboards and graphs for Prometheus metrics.
 #
@@ -20,14 +18,14 @@ docker run --detach \
     --memory=1g \
     -p 0.0.0.0:3000:3000 \
     -v ~/sourcegraph-docker/grafana-disk:/var/lib/grafana \
-    -v ${DIR}/grafana:/sg_config_grafana/provisioning/datasources \
+    -v $(pwd)/grafana:/sg_config_grafana/provisioning/datasources \
     -e GF_AUTH_ANONYMOUS_ENABLED=true \
     -e GF_AUTH_ANONYMOUS_ORG_NAME=Sourcegraph \
     -e GF_AUTH_ANONYMOUS_ORG_ROLE=Editor \
     -e GF_USERS_ALLOW_SIGN_UP='false' \
     -e GF_USERS_AUTO_ASSIGN_ORG='true' \
     -e GF_USERS_AUTO_ASSIGN_ORG_ROLE=Editor \
-    sourcegraph/grafana:3.8
+    sourcegraph/grafana:6.3.3@sha256:2f68b9b1542e7d75459d983b606d2fdd1c11a75610464e3d7a6ced4f3ac474bf
 
 # Add the following lines above if you wish to use an auth proxy with Grafana:
 #

@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-set -euf -o pipefail
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
+set -e
 
 # Description: Prometheus collects metrics and aggregates them into graphs.
 #
@@ -21,5 +18,5 @@ docker run --detach \
     --memory=8g \
     -p 0.0.0.0:9090:9090 \
     -v ~/sourcegraph-docker/prometheus-disk:/prometheus \
-    -v ${DIR}/prometheus:/sg_prometheus_add_ons \
-    sourcegraph/prometheus:3.8
+    -v $(pwd)/prometheus:/sg_prometheus_add_ons \
+    sourcegraph/prometheus:v2.12.0@sha256:aca8cf12d41cbf5d8885ed675fa017b83ad73af96d86bbe5bcead45ca8e958f3

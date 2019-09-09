@@ -7,3 +7,32 @@ simply `docker restart prometheus` for your changes to take effect (depending on
 may respond to it as soon as you save the file).
 
 You can add `_rules.yml` and `_targets.yml` files to this directory and they will be picked up automatically.
+For example see below on how to add a target for docker itself.
+
+### Docker metrics scraping
+ 
+To scrape Docker itself for metrics, add the following file depending on your host machine OS:
+
+#### Linux
+
+Create `prometheus/docker_targets.yml`:
+
+#### Linux
+
+```yaml
+- labels:
+    job: docker
+  targets:
+    - localhost:9323
+ ```
+
+#### Mac & Windows
+
+Create `prometheus/docker_targets.yml`:
+
+```yaml
+- labels:
+    job: docker
+  targets:
+    - host.docker.internal:9323
+```
