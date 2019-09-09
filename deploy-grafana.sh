@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -e
 
 # Description: Dashboards and graphs for Prometheus metrics.
@@ -17,14 +18,14 @@ docker run --detach \
     --memory=1g \
     -p 0.0.0.0:3000:3000 \
     -v ~/sourcegraph-docker/grafana-disk:/var/lib/grafana \
-    -v $(pwd)/grafana:/etc/grafana \
+    -v $(pwd)/grafana:/sg_config_grafana/provisioning/datasources \
     -e GF_AUTH_ANONYMOUS_ENABLED=true \
     -e GF_AUTH_ANONYMOUS_ORG_NAME=Sourcegraph \
     -e GF_AUTH_ANONYMOUS_ORG_ROLE=Editor \
     -e GF_USERS_ALLOW_SIGN_UP='false' \
     -e GF_USERS_AUTO_ASSIGN_ORG='true' \
     -e GF_USERS_AUTO_ASSIGN_ORG_ROLE=Editor \
-    grafana/grafana:6.1.1@sha256:e7a513bf7f33ef9681b2d35a799136e1ce9330f9055f75dfa2101d812946184b
+    sourcegraph/grafana:6.3.3@sha256:2f68b9b1542e7d75459d983b606d2fdd1c11a75610464e3d7a6ced4f3ac474bf
 
 # Add the following lines above if you wish to use an auth proxy with Grafana:
 #
