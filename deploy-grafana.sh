@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -e
 
 # Description: Dashboards and graphs for Prometheus metrics.

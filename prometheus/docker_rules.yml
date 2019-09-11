@@ -1,0 +1,13 @@
+# Docker container monitoring rules
+
+groups:
+  - name: docker.rules
+    rules:
+      - record: container:process_cpu_seconds_total:ratio_rate5m
+        expr: sum by (instance) (rate(process_cpu_seconds_total[5m])) / engine_daemon_engine_cpus_cpus
+      - record: container:process_cpu_seconds_total:sum
+        expr: sum by (instance) (irate(process_cpu_seconds_total[1m]))
+      - record: container:process_resident_memory_bytes:max
+        expr: max by (instance) (process_resident_memory_bytes)
+      - record: container:process_virtual_memory_bytes:max
+        expr: max by (instance) (process_virtual_memory_bytes)
