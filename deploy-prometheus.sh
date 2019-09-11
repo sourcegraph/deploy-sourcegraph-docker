@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -e
 
 # Description: Prometheus collects metrics and aggregates them into graphs.
