@@ -24,7 +24,7 @@ docker run --detach \
     -e GF_USERS_ALLOW_SIGN_UP='false' \
     -e GF_USERS_AUTO_ASSIGN_ORG='true' \
     -e GF_USERS_AUTO_ASSIGN_ORG_ROLE=Editor \
-    sourcegraph/grafana:6.3.3-1-internal-uwe
+    sourcegraph/grafana:6.3.3-1@sha256:bbfa5565f3755ac961c8560e94c323cc588fc241364c4c6839376ccdb7c756db
 
 # Add the following lines above if you wish to use an auth proxy with Grafana:
 #
