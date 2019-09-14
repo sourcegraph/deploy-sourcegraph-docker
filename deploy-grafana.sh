@@ -18,13 +18,7 @@ docker run --detach \
     -p 0.0.0.0:3000:3000 \
     -v ~/sourcegraph-docker/grafana-disk:/var/lib/grafana \
     -v $(pwd)/grafana:/sg_config_grafana/provisioning/datasources \
-    -e GF_AUTH_ANONYMOUS_ENABLED=true \
-    -e GF_AUTH_ANONYMOUS_ORG_NAME='Main Org.' \
-    -e GF_AUTH_ANONYMOUS_ORG_ROLE=Editor \
-    -e GF_USERS_ALLOW_SIGN_UP='false' \
-    -e GF_USERS_AUTO_ASSIGN_ORG='true' \
-    -e GF_USERS_AUTO_ASSIGN_ORG_ROLE=Editor \
-    sourcegraph/grafana:6.3.3-1@sha256:bbfa5565f3755ac961c8560e94c323cc588fc241364c4c6839376ccdb7c756db
+    sourcegraph/grafana:6.3.3-2@sha256:4bc97accb0c0b08ab48294ff6b94def09414e2b01dc90f8747a667213d91343b
 
 # Add the following lines above if you wish to use an auth proxy with Grafana:
 #
