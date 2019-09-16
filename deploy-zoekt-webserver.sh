@@ -17,6 +17,6 @@ docker run --detach \
     --memory=100g \
     -e GOMAXPROCS=16 \
     -v ~/sourcegraph-docker/zoekt-shared-disk:/data/index \
-    sourcegraph/zoekt-webserver:0.0.20190913054542-b3e888a@sha256:edaecdf68d2b9ce0171112508fe67c3e321d647ca8358a8f3fafc61c611d9c42
+    sourcegraph/zoekt-webserver:0.0.20190915225718-2890d2b@sha256:699117225f9b7ca207c926e2bdd9375f28149241a75a805d8f6e1ef6e792ef18
 
 echo "Deployed zoekt-webserver service"
