@@ -15,7 +15,7 @@ docker run --detach \
     --network=sourcegraph \
     --restart=always \
     --cpus=8 \
-    --memory=8g \
+    --memory=16g \
     -e GOMAXPROCS=8 \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/zoekt-shared-disk:/data/index \
