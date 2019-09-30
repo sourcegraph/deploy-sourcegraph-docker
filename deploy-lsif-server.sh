@@ -18,6 +18,8 @@ docker run --detach \
     --memory=2g \
     -e GOMAXPROCS=2 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
+    -e PGHOST=pgsql \
+    -e PGDATABASE=lsif \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
     sourcegraph/lsif-server:3.7.2
 
