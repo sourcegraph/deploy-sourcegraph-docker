@@ -18,6 +18,6 @@ docker run --detach \
     --memory=512m \
     -e GOMAXPROCS=1 \
     -v ~/sourcegraph-docker/replacer-disk:/mnt/cache \
-    sourcegraph/replacer:3.7.2
+    sourcegraph/replacer:3.8.1
 
 echo "Deployed replacer service"

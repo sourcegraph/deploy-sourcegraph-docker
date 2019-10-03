@@ -1,6 +1,0 @@
-# Docker container monitoring rules
-
-container:process_cpu_seconds_total:ratio_rate5m = sum by (instance) (rate(process_cpu_seconds_total[5m])) / engine_daemon_engine_cpus_cpus
-container:process_cpu_seconds_total:sum = sum by (instance) (irate(process_cpu_seconds_total[1m]))
-container:process_resident_memory_bytes:max = max by (instance) (process_resident_memory_bytes)
-container:process_virtual_memory_bytes:max = max by (instance) (process_virtual_memory_bytes)
