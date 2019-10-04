@@ -13,6 +13,7 @@
     - query-runner:6060
     - repo-updater:6060
     - zoekt-indexserver:6072
+    - syntect-server:6060
     # Add new entries here for every searcher/symbol/gitserver replica.
     - sourcegraph-frontend-0:6060
     - sourcegraph-frontend-1:6060
