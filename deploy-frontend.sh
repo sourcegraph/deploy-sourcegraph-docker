@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 source ./replicas.sh
+source ./a8n.sh
 
 # Description: Serves the frontend of Sourcegraph via HTTP(S).
 #
@@ -31,7 +32,7 @@ docker run --detach \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    sourcegraph/frontend:3.8.2
+    sourcegraph/frontend@$FRONTEND_IMAGE_HASH
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
