@@ -15,6 +15,6 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=6g \
-    sourcegraph/syntect_server:96e3f14@sha256:f2b5eb5ef162f349e98d2d772955724b8f2b0bf2925797a049d3752953474a88
+    sourcegraph/syntect_server:cacdc21@sha256:75dedb05589b3b6d3c3f15f86e5c35172f1c0460e71633ef95b9d4c294b51b4f
 
 echo "Deployed syntect-server service"
