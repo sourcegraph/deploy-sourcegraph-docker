@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 source ./replicas.sh
+source ./a8n.sh
 
 # Description: Serves the internal Sourcegraph frontend API.
 #
@@ -29,6 +30,6 @@ docker run --detach \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
-    sourcegraph/frontend:3.8.2
+    sourcegraph/frontend@$FRONTEND_IMAGE_HASH
 
 echo "Deployed sourcegraph-frontend-internal service"
