@@ -46,6 +46,7 @@ Grafana queries Prometheus to provide dashboards with high-level insight into So
 To use Grafana and Prometheus after running `deploy.sh`:
 
 1. If running on a Linux host, you may need to `sudo chown -R 472:472 ~/sourcegraph-docker/grafana-disk` in order to correct the permissions of the Grafana disk so that it starts.
+1. (Sourcegraph 3.8+) On a Linux host, you may need to `sudo chown -R 100:101 ~/sourcegraph-docker/prometheus-v2-disk` in order to correct the permissions of the Prometheus disk so that it starts.
 1. If you have multiple replicas of searcher/gitserver/etc, open `prometheus/prometheus_targets.yml` in an editor and duplicate lines as needed so that Prometheus knows to scrape those services for metrics. Save the file, then `docker restart prometheus` to apply the changes.
 1. Visit grafana in a browser (e.g. at http://localhost:3000) and sign in using the default credentials `admin` > `admin`.
 1. Add Prometheus as a data source: **Gear icon** > **Data sources** > **Add data source** > **Prometheus** > enter the Prometheus URL `http://prometheus:9090`.
