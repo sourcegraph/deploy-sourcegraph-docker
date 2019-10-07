@@ -31,6 +31,7 @@ for i in $(seq 0 $(($NUM_SYMBOLS - 1))); do (./deploy-symbols.sh $i &); done
 ./deploy-syntect-server.sh &
 ./deploy-zoekt-indexserver.sh &
 ./deploy-zoekt-webserver.sh &
+./deploy-a8n-ruby-bundler-exec.sh &
 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
