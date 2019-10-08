@@ -19,7 +19,7 @@ docker run --detach \
     --name=a8n-yarn-exec \
     --network=sourcegraph \
     --restart=always \
-    --cpus=1 \
+    --cpus=4 \
     --memory=4g \
 	--env PORT=5153 \
     sourcegraph/a8n-yarn-exec:yarn1.19.0@sha256:0d2fdded7940973780a9fe9020beedbe6652f541882317ee1c5f7adda27ba712

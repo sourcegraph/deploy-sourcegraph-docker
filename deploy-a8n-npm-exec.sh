@@ -19,7 +19,7 @@ docker run --detach \
        --name=a8n-npm-exec \
        --network=sourcegraph \
        --restart=always \
-       --cpus=1 \
+       --cpus=4 \
        --memory=4g \
 	   --env PORT=5152 \
        sourcegraph/a8n-npm-exec:npm6.9.0@sha256:768d31025acb4536492060531be40afe35aca9d2526c559cc589562d84b330af
