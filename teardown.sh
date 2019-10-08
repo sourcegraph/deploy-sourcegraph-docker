@@ -28,7 +28,8 @@ docker rm -f $(addresses "symbols-" $NUM_SYMBOLS "") &> /dev/null || true &
 docker rm -f syntect-server &> /dev/null || true &
 docker rm -f zoekt-indexserver &> /dev/null || true &
 docker rm -f zoekt-webserver &> /dev/null || true &
-docker rm -f a8n-ruby-bundler-exec &> /dev/null || true &
+docker rm -f a8n-npm-exec &> /dev/null || true &
+docker rm -f a8n-yarn-exec &> /dev/null || true &
 
 docker network rm sourcegraph &> /dev/null || true &
 wait
