@@ -16,7 +16,6 @@ docker run --detach \
     --cpus=1 \
     --memory=1g \
     -p 0.0.0.0:3370:3370 \
-    -e GF_SERVER_SERVE_FROM_SUB_PATH=true \
     -v ~/sourcegraph-docker/grafana-disk:/var/lib/grafana \
     -v $(pwd)/grafana/datasources:/sg_config_grafana/provisioning/datasources \
     -v $(pwd)/grafana/dashboards:/sg_grafana_additional_dashboards \
