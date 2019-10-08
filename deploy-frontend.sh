@@ -28,7 +28,7 @@ docker run --detach \
     -e REPLACER_URL=http://replacer:3185 \
     -e ZOEKT_HOST=zoekt-webserver:6070 \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
-    -e GRAFANA_SERVER_URL=http://grafana:3000 \
+    -e GRAFANA_SERVER_URL=http://grafana:3370 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
     sourcegraph/frontend:3.8.2
