@@ -21,7 +21,7 @@ docker run --detach \
        --restart=always \
        --cpus=4 \
        --memory=4g \
-	-e PORT=5152 \
+       -e PORT=5152 \
        sourcegraph/a8n-npm-exec:npm6.9.0@sha256:768d31025acb4536492060531be40afe35aca9d2526c559cc589562d84b330af
 
 echo "Deployed a8n-npm-exec service"
