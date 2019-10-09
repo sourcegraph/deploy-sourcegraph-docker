@@ -17,6 +17,7 @@ docker run --detach \
     --cpus=1 \
     --memory=512m \
     -e GOMAXPROCS=1 \
+    -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/replacer-disk:/mnt/cache \
     sourcegraph/replacer:3.8.2
 
