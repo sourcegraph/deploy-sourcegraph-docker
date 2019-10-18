@@ -33,6 +33,7 @@ for i in $(seq 0 $(($NUM_SYMBOLS - 1))); do (./deploy-symbols.sh $i &); done
 ./deploy-zoekt-webserver.sh &
 ./deploy-a8n-npm-exec.sh &
 ./deploy-a8n-yarn-exec.sh &
+./deploy-a8n-java-gradle-exec.sh &
 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
