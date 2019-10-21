@@ -32,7 +32,7 @@ docker run --detach \
     -e ALLOW_CREATE_EXTERNAL_THREADS=1 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    sourcegraph/frontend@sha256:c4d1eb3523618b46adf204112feb14ec8ef2ea494e07b5b34fdcae435c3a748c
+    sourcegraph/frontend@sha256:482ced8a96a731bdce4c9658cbd29be4206e00be49a290ae4cf76e5c0f61c858
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling

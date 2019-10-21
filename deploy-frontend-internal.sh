@@ -29,6 +29,6 @@ docker run --detach \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
-    sourcegraph/frontend@sha256:c4d1eb3523618b46adf204112feb14ec8ef2ea494e07b5b34fdcae435c3a748c
+    sourcegraph/frontend@sha256:482ced8a96a731bdce4c9658cbd29be4206e00be49a290ae4cf76e5c0f61c858
 
 echo "Deployed sourcegraph-frontend-internal service"
