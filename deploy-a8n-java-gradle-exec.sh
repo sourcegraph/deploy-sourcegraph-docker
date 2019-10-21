@@ -12,7 +12,7 @@ set -e
 # To use, add the following entry to Sourcegraph site configuration:
 #
 #   "extensions.containers": [
-#     { "from": "/.api/extension-containers/a8n-java-gradle-exec", "to": "http://a8n-java-gradle-exec:5153" },
+#     { "from": "/.api/extension-containers/a8n-java-gradle-exec", "to": "http://a8n-java-gradle-exec:5154" },
 #   ],
 #
 docker run --detach \
