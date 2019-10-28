@@ -14,6 +14,8 @@
     - repo-updater:6060
     - zoekt-indexserver:6072
     - syntect-server:6060
+    - lsif-server:3186
+    - lsif-server:3187
     # Add new entries here for every searcher/symbol/gitserver replica.
     - sourcegraph-frontend-0:6060
     - gitserver-0:6060
