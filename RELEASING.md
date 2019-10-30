@@ -14,7 +14,7 @@ Then for smoke testing & customer replication please also:
 - `git merge 3.9` -> fix conflicts manually -> `git commit && git push --set-upstream origin 3.9-customer-replica`
 - `git tag customer-replica-v3.9.2 && git push origin customer-replica-v3.9.2`
 - Proceed with testing on customer replica environment: https://github.com/sourcegraph/infrastructure
-- Check diff before sending it to customers as it is often applied by hand: https://github.com/sourcegraph/deploy-sourcegraph/compare/customer-replica-v3.8.2..customer-replica-v3.9.2
+- Check diff before sending it to customers as it is often applied by hand: https://github.com/sourcegraph/deploy-sourcegraph-docker/compare/customer-replica-v3.8.2..customer-replica-v3.9.2
 
 ## Branches & tags
 
