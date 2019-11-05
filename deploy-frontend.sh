@@ -31,7 +31,7 @@ docker run --detach \
     -e GRAFANA_SERVER_URL=http://grafana:3370 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    sourcegraph/frontend:3.9.2@sha256:529eac3a82f14f72f15dca49d440c5656ac53f7cf2238587f3c9e36f1529b3db
+    sourcegraph/frontend:3.9.4@sha256:d89dba42f47dfb0ef7c0f1ead132ab53e841ff395ee9fb4aeadf2b1149230c9a
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
