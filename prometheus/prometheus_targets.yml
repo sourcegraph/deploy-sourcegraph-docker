@@ -21,3 +21,5 @@
     - gitserver-0:6060
     - searcher-0:6060
     - symbols-0:6060
+    - postgres-exporter:9187
+
