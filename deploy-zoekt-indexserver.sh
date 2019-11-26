@@ -2,6 +2,12 @@
 set -e
 source ./replicas.sh
 
+# Rename the old ~/sourcegraph-docker/zoekt-shared-disk -> ~/sourcegraph-docker/zoekt-$1-shared-disk
+# if it exists. This ensures we don't have to rebuild the search index from scratch.
+if [ -f ~/sourcegraph-docker/zoekt-shared-disk ] 
+then mv ~/sourcegraph-docker/zoekt-shared-disk ~/sourcegraph-docker/zoekt-$1-shared-disk
+fi
+
 # Description: Backend for indexed text search operations.
 #
 # Disk: 200GB / persistent SSD
