@@ -22,13 +22,13 @@ docker run --detach \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
     -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
     -e SYMBOLS_URL="$(addresses "http://symbols-" $NUM_SYMBOLS ":3184")" \
+    -e INDEXED_SEARCH_SERVERS="$(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH ":6070")" \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e REPLACER_URL=http://replacer:3185 \
-    -e ZOEKT_HOST=zoekt-webserver:6070 \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
-    sourcegraph/frontend:3.9.4@sha256:d89dba42f47dfb0ef7c0f1ead132ab53e841ff395ee9fb4aeadf2b1149230c9a
+    sourcegraph/frontend:3.10.0@sha256:52fe56a11cfbd10eb2a0597d6206ccb3f348aaebe0d09fad4423ef12df51d4ce
 
 echo "Deployed sourcegraph-frontend-internal service"
