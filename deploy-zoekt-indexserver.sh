@@ -24,6 +24,7 @@ docker run --detach \
     --cpus=8 \
     --memory=16g \
     -e GOMAXPROCS=8 \
+    -e HOSTNAME=zoekt-webserver-$1:6070 \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/zoekt-$1-shared-disk:/data/index \
     sourcegraph/zoekt-indexserver:0.0.20191031121923-5bd7e84@sha256:43eac5fddcc32f84f097e1466918ec9ac2fe54fe34649b8399de93963d9e4916
