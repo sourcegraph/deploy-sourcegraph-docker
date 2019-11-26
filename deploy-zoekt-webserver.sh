@@ -6,7 +6,7 @@ source ./replicas.sh
 #
 # Disk: 200GB / persistent SSD
 # Network: 100mbps
-# Liveness probe: HTTP GET http://zoekt-webserver:6070/healthz
+# Liveness probe: HTTP GET http://zoekt-webserver-$1:6070/healthz
 # Ports exposed to other Sourcegraph services: 6070/TCP
 # Ports exposed to the public internet: none
 #
