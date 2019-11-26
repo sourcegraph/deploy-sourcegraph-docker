@@ -19,6 +19,6 @@ docker run --detach \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/replacer-disk:/mnt/cache \
-    sourcegraph/replacer:3.9.4@sha256:e35a392a63e21d5be556676791e80b9547f8a05d8031ca4a21e982dfd9c8ebeb
+    sourcegraph/replacer:3.10.0@sha256:a62148e9818fbb539de4343d55f00dbdef2538b9963bdc505b9ea98e40cdd1a2
 
 echo "Deployed replacer service"
