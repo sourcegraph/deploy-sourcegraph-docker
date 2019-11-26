@@ -26,8 +26,8 @@ docker rm -f repo-updater &> /dev/null || true &
 docker rm -f $(addresses "searcher-" $NUM_SEARCHER "") &> /dev/null || true &
 docker rm -f $(addresses "symbols-" $NUM_SYMBOLS "") &> /dev/null || true &
 docker rm -f syntect-server &> /dev/null || true &
-docker rm -f zoekt-indexserver &> /dev/null || true &
-docker rm -f zoekt-webserver &> /dev/null || true &
+docker rm -f $(addresses "zoekt-indexserver-" $NUM_INDEXED_SEARCH "") &> /dev/null || true &
+docker rm -f $(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH "") &> /dev/null || true &
 
 docker network rm sourcegraph &> /dev/null || true &
 wait
