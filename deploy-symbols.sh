@@ -20,6 +20,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST='jaeger-agent' \
     -v ~/sourcegraph-docker/symbols-$1-disk:/mnt/cache \
-    sourcegraph/symbols:3.10.3@sha256:2b74f430c38ec6143773bc834466d790b43c0515e7c9198082bc25f575c352a9
+    sourcegraph/symbols:3.10.4@sha256:7ef128b652fe554de4ae38bb4ee592568b315c84b122a577980042d89cd6e40f
 
 echo "Deployed symbols $1 service"
