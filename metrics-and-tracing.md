@@ -31,7 +31,7 @@ To use Jaeger after running `deploy.sh`:
 1. Visit jaeger-query in a browser (e.g. at http://localhost:16686) and confirm there are no errors displayed on the home page (you should just see a stern-looking Gopher with a hat).
    - If there are errors, you may need to wait a few minutes for Jaeger's Cassandra database to initialize if it is the first time you are running this. It can take around 5 minutes.
    - Consult `docker ps | grep jaeger` until all containers have started.
-2. In the Sourcegraph management console, set `"useJaeger": true`, then restart all Sourcegraph services. This will cause Sourcegraph's services to begin sending tracing information to Jaeger. It is safe (and highly recommended) to run this in production.
+2. In the Sourcegraph site configuration, set `"useJaeger": true`, then restart all Sourcegraph services. This will cause Sourcegraph's services to begin sending tracing information to Jaeger. It is safe (and highly recommended) to run this in production.
 
 ### Acquiring traces
 
@@ -79,7 +79,7 @@ The `Containers` dashboard metrics come from Docker itself. In order to expose t
 
 Assuming you want to deploy all of the above with minimal downtime, the best approach is to:
 
-1. First, in the Sourcegraph management console, set `"useJaeger": true`. This is harmless to do even if not using Jaeger (will just spam logs with errors).
+1. First, in the Sourcegraph site configuration, set `"useJaeger": true`. This is harmless to do even if not using Jaeger (will just spam logs with errors).
 1. Flip the bit in the Docker config to expose its Prometheus metrics exporter: https://docs.docker.com/config/thirdparty/prometheus/#configure-docker
 1. As part of flipping the bit above, restart Docker which inherently restarts all Sourcegraph containers thus causing the `useJaeger` setting to update.
 1. Follow the rest of the steps in this document for configuring Jaeger/Grafana (this will require restarting Jaeger/Grafana, but will allow you to skip any step that would require restarting core Sourcegraph services).
