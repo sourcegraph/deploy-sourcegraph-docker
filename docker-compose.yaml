@@ -14,8 +14,7 @@ services:
     restart: always
   github-proxy:
     container_name: github-proxy
-    image: >-
-      sourcegraph/github-proxy:3.10.4@sha256:562596fa07a1842e37777cc2f14c6beefa561306f40bf66dbf4d10257fa14646
+    image: 'sourcegraph/github-proxy:3.10.4@sha256:562596fa07a1842e37777cc2f14c6beefa561306f40bf66dbf4d10257fa14646'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -25,8 +24,7 @@ services:
     restart: always
   gitserver-0:
     container_name: gitserver-0
-    image: >-
-      sourcegraph/gitserver:3.10.4@sha256:d8373d3635dae86b70acd889b93b93fb56651b87b69fd0bfe03247ec4b87ba86
+    image: 'sourcegraph/gitserver:3.10.4@sha256:d8373d3635dae86b70acd889b93b93fb56651b87b69fd0bfe03247ec4b87ba86'
     environment:
       - GOMAXPROCS=4
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -38,14 +36,11 @@ services:
     restart: always
   grafana:
     container_name: grafana
-    image: >-
-      sourcegraph/grafana:10.0.7@sha256:c171332bccb1e01a54411f669b31e7c46d2a5568eac075bf05e4be0229ec262a
+    image: 'sourcegraph/grafana:10.0.7@sha256:c171332bccb1e01a54411f669b31e7c46d2a5568eac075bf05e4be0229ec262a'
     volumes:
       - '~/sourcegraph-docker/grafana-disk:/var/lib/grafana'
-      - >-
-        ./grafana/datasources:/sg_config_grafana/provisioning/datasources
-      - >-
-        ./grafana/dashboards:/sg_grafana_additional_dashboards
+      - ./grafana/datasources:/sg_config_grafana/provisioning/datasources'
+      - './grafana/dashboards:/sg_grafana_additional_dashboards'
     ports:
       - '0.0.0.0:3370:3370'
     networks:
@@ -53,8 +48,7 @@ services:
     restart: always
   pgsql:
     container_name: pgsql
-    image: >-
-      sourcegraph/postgres-11.4:19-11-14_b084311b@sha256:072481559d559cfd9a53ad77c3688b5cf583117457fd452ae238a20405923297
+    image: 'sourcegraph/postgres-11.4:19-11-14_b084311b@sha256:072481559d559cfd9a53ad77c3688b5cf583117457fd452ae238a20405923297'
     volumes:
       - '~/sourcegraph-docker/pgsql-disk:/data/pgdata'
     networks:
@@ -62,8 +56,7 @@ services:
     restart: always
   lsif-server:
     container_name: lsif-server
-    image: >-
-      sourcegraph/lsif-server:3.10.4@sha256:28184888ee456759fca19deefebfca4ecd24ca0f99daa6072645615a8a70d54c
+    image: 'sourcegraph/lsif-server:3.10.4@sha256:28184888ee456759fca19deefebfca4ecd24ca0f99daa6072645615a8a70d54c'
     environment:
       - GOMAXPROCS=2
       - LSIF_STORAGE_ROOT=/lsif-storage
@@ -75,12 +68,10 @@ services:
     restart: always
   prometheus:
     container_name: prometheus
-    image: >-
-      sourcegraph/prometheus:10.0.4@sha256:03af446c1c1d49e6ac395c06a29a207e8c7b59e6aa1fcf156c0bff63ad88d829
+    image: 'sourcegraph/prometheus:10.0.4@sha256:03af446c1c1d49e6ac395c06a29a207e8c7b59e6aa1fcf156c0bff63ad88d829'
     volumes:
       - '~/sourcegraph-docker/prometheus-v2-disk:/prometheus'
-      - >-
-        ./prometheus:/sg_prometheus_add_ons
+      - './prometheus:/sg_prometheus_add_ons'
     ports:
       - '0.0.0.0:9090:9090'
     networks:
@@ -88,8 +79,7 @@ services:
     restart: always
   redis-cache:
     container_name: redis-cache
-    image: >-
-      sourcegraph/redis-cache:19-04-16_6891de82@sha256:4cbfac8af0abb673899250d4fd859cc477d6426de519e9deb71e454e18322499
+    image: sourcegraph/redis-cache:19-04-16_6891de82@sha256:4cbfac8af0abb673899250d4fd859cc477d6426de519e9deb71e454e18322499
     volumes:
       - '~/sourcegraph-docker/redis-cache-disk:/redis-data'
     networks:
@@ -97,8 +87,7 @@ services:
     restart: always
   query-runner:
     container_name: query-runner
-    image: >-
-      sourcegraph/query-runner:3.10.4@sha256:da864a7ca1593ef5fb8c7d93ef768ec9cf5de5a77dd67d471b3459899233db0d
+    image: 'sourcegraph/query-runner:3.10.4@sha256:da864a7ca1593ef5fb8c7d93ef768ec9cf5de5a77dd67d471b3459899233db0d'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -108,8 +97,7 @@ services:
     restart: always
   redis-store:
     container_name: redis-store
-    image: >-
-      sourcegraph/redis-store:19-04-16_6891de821@sha256:56426d601ce1f6d63088fea1cefa61f69a2e809c7d90fc1d157cca63cf81b277
+    image: 'sourcegraph/redis-store:19-04-16_6891de821@sha256:56426d601ce1f6d63088fea1cefa61f69a2e809c7d90fc1d157cca63cf81b277'
     volumes:
       - '~/sourcegraph-docker/redis-store-disk:/redis-data'
     networks:
@@ -117,8 +105,7 @@ services:
     restart: always
   replacer:
     container_name: replacer
-    image: >-
-      sourcegraph/replacer:3.10.4@sha256:e0641c60987765cce3e1670562f6f98834600763bf1f10c3e379b28154b6d772
+    image: 'sourcegraph/replacer:3.10.4@sha256:e0641c60987765cce3e1670562f6f98834600763bf1f10c3e379b28154b6d772'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -129,8 +116,7 @@ services:
     restart: always
   repo-updater:
     container_name: repo-updater
-    image: >-
-      sourcegraph/repo-updater:3.10.4@sha256:f50c26acd5259a19ef984e04edbf6aac66a3d09e20f73162e4feeb656f4ec181
+    image: 'sourcegraph/repo-updater:3.10.4@sha256:f50c26acd5259a19ef984e04edbf6aac66a3d09e20f73162e4feeb656f4ec181'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -143,8 +129,7 @@ services:
     restart: always
   searcher-0:
     container_name: searcher-0
-    image: >-
-      sourcegraph/searcher:3.10.4@sha256:fb741ec01e0a762da633a701621ce251cc50161e08916f60b4aad92d76c0932f
+    image: 'sourcegraph/searcher:3.10.4@sha256:fb741ec01e0a762da633a701621ce251cc50161e08916f60b4aad92d76c0932f'
     environment:
       - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -156,15 +141,13 @@ services:
     restart: always
   syntect-server:
     container_name: syntect-server
-    image: >-
-      sourcegraph/syntect_server:2b5a3fb@sha256:ef5529cafdc68d5a21edea472ee8ad966878b173044aa5c3db93bc3d84765b1f
+    image: 'sourcegraph/syntect_server:2b5a3fb@sha256:ef5529cafdc68d5a21edea472ee8ad966878b173044aa5c3db93bc3d84765b1f'
     networks:
       - sourcegraph
     restart: always
   symbols-0:
     container_name: symbols-0
-    image: >-
-      sourcegraph/symbols:3.10.4@sha256:7ef128b652fe554de4ae38bb4ee592568b315c84b122a577980042d89cd6e40f
+    image: 'sourcegraph/symbols:3.10.4@sha256:7ef128b652fe554de4ae38bb4ee592568b315c84b122a577980042d89cd6e40f'
     environment:
       - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -176,8 +159,7 @@ services:
     restart: always
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: >-
-      sourcegraph/zoekt-indexserver:0.0.20191031121923-5bd7e84@sha256:43eac5fddcc32f84f097e1466918ec9ac2fe54fe34649b8399de93963d9e4916
+    image: 'sourcegraph/zoekt-indexserver:0.0.20191031121923-5bd7e84@sha256:43eac5fddcc32f84f097e1466918ec9ac2fe54fe34649b8399de93963d9e4916'
     environment:
       - GOMAXPROCS=8
       - 'HOSTNAME=zoekt-webserver-0:6070'
@@ -190,8 +172,7 @@ services:
     hostname: zoekt-indexserver-0
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: >-
-      sourcegraph/zoekt-webserver:0.0.20191031121751-5bd7e84@sha256:1afbfb746a3d43a7532693093d2f993dac5b5536037b31d3ab305ceef5687380
+    image: 'sourcegraph/zoekt-webserver:0.0.20191031121751-5bd7e84@sha256:1afbfb746a3d43a7532693093d2f993dac5b5536037b31d3ab305ceef5687380'
     environment:
       - GOMAXPROCS=16
       - 'HOSTNAME=zoekt-webserver-0:6070'
@@ -203,8 +184,7 @@ services:
     hostname: zoekt-webserver-0
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: >-
-      sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f
+    image: 'sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f'
     environment:
       - GOMAXPROCS=4
       - PGHOST=pgsql
@@ -219,15 +199,13 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
     volumes:
-      - >-
-        ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache
+      - ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache
     networks:
       - sourcegraph
     restart: always
   sourcegraph-frontend-2:
     container_name: sourcegraph-frontend-2
-    image: >-
-      sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f
+    image: 'sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f'
     environment:
       - GOMAXPROCS=12
       - JAEGER_AGENT_HOST=jaeger-agent
@@ -243,8 +221,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
     volumes:
-      - >-
-        ~/sourcegraph-docker/sourcegraph-frontend-2-disk:/mnt/cache
+      - ~/sourcegraph-docker/sourcegraph-frontend-2-disk:/mnt/cache
     ports:
       - '0.0.0.0:3082:3080'
     networks:
@@ -252,8 +229,7 @@ services:
     restart: always
   sourcegraph-frontend-1:
     container_name: sourcegraph-frontend-1
-    image: >-
-      sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f
+    image: 'sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f'
     environment:
       - GOMAXPROCS=12
       - JAEGER_AGENT_HOST=jaeger-agent
@@ -269,8 +245,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
     volumes:
-      - >-
-        ~/sourcegraph-docker/sourcegraph-frontend-1-disk:/mnt/cache
+      - ~/sourcegraph-docker/sourcegraph-frontend-1-disk:/mnt/cache
     ports:
       - '0.0.0.0:3081:3080'
     networks:
@@ -278,8 +253,7 @@ services:
     restart: always
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: >-
-      sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f
+    image: 'sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f'
     environment:
       - GOMAXPROCS=12
       - JAEGER_AGENT_HOST=jaeger-agent
@@ -295,8 +269,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
     volumes:
-      - >-
-        ~/sourcegraph-docker/sourcegraph-frontend-0-disk:/mnt/cache
+      - '~/sourcegraph-docker/sourcegraph-frontend-0-disk:/mnt/cache'
     ports:
       - '0.0.0.0:3080:3080'
     networks:
