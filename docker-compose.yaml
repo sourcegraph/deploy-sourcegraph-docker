@@ -54,7 +54,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
     volumes:
-      - ~/sourcegraph-docker/sourcegraph-frontend-1-disk:/mnt/cache
+      - '~/sourcegraph-docker/sourcegraph-frontend-1-disk:/mnt/cache'
     ports:
       - '0.0.0.0:3081:3080'
     networks:
@@ -78,7 +78,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
     volumes:
-      - ~/sourcegraph-docker/sourcegraph-frontend-2-disk:/mnt/cache
+      - '~/sourcegraph-docker/sourcegraph-frontend-2-disk:/mnt/cache'
     ports:
       - '0.0.0.0:3082:3080'
     networks:
@@ -110,7 +110,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
     volumes:
-      - ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache
+      - '~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -375,7 +375,7 @@ services:
     image: 'index.docker.io/sourcegraph/grafana:10.0.7@sha256:c171332bccb1e01a54411f669b31e7c46d2a5568eac075bf05e4be0229ec262a'
     volumes:
       - '~/sourcegraph-docker/grafana-disk:/var/lib/grafana'
-      - ./grafana/datasources:/sg_config_grafana/provisioning/datasources'
+      - './grafana/datasources:/sg_config_grafana/provisioning/datasources'
       - './grafana/dashboards:/sg_grafana_additional_dashboards'
     ports:
       - '0.0.0.0:3370:3370'
