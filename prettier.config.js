@@ -1,1 +1,1 @@
-module.exports = require("@sourcegraph/prettierrc");
+module.exports = require('@sourcegraph/prettierrc')

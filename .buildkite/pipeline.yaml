@@ -2,3 +2,5 @@ $schema: 'http://json.schemastore.org/buildkite'
 steps:
   - label: ':docker:'
     command: .buildkite/validate-docker-compose.sh
+  - label: ':lipstick:'
+    command: .buildkite/prettier-check.sh
