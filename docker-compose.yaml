@@ -45,50 +45,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-  sourcegraph-frontend-1:
-    container_name: sourcegraph-frontend-1
-    image: 'index.docker.io/sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f'
-    environment:
-      - GOMAXPROCS=12
-      - JAEGER_AGENT_HOST=jaeger-agent
-      - PGHOST=pgsql
-      - 'SRC_GIT_SERVERS=gitserver-0:3178'
-      - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
-      - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
-      - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'REPLACER_URL=http://replacer:3185'
-      - 'LSIF_SERVER_URL=http://lsif-server:3186'
-      - 'GRAFANA_SERVER_URL=http://grafana:3370'
-    volumes:
-      - '~/sourcegraph-docker/sourcegraph-frontend-1-disk:/mnt/cache'
-    networks:
-      - sourcegraph
-    restart: always
-  sourcegraph-frontend-2:
-    container_name: sourcegraph-frontend-2
-    image: 'index.docker.io/sourcegraph/frontend:3.10.4@sha256:5791fb16a1a2828f14c227160104eba3a251c876359e0cb33c48f832e3d2a53f'
-    environment:
-      - GOMAXPROCS=12
-      - JAEGER_AGENT_HOST=jaeger-agent
-      - PGHOST=pgsql
-      - 'SRC_GIT_SERVERS=gitserver-0:3178'
-      - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
-      - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
-      - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'REPLACER_URL=http://replacer:3185'
-      - 'LSIF_SERVER_URL=http://lsif-server:3186'
-      - 'GRAFANA_SERVER_URL=http://grafana:3370'
-    volumes:
-      - '~/sourcegraph-docker/sourcegraph-frontend-2-disk:/mnt/cache'
-    networks:
-      - sourcegraph
-    restart: always
 
   # Description: Serves the internal Sourcegraph frontend API.
   #
