@@ -376,6 +376,80 @@ services:
       - sourcegraph
     restart: always
 
+  # # Description: Jaeger agent which is local to the host machine (containers on
+  # # the machine send trace information to it and it relays to the collector).
+  # #
+  # # Disk: none
+  # # Ports exposed to other Sourcegraph services: 5775/UDP 6831/UDP 6832/UDP (on the same host machine)
+  # # Ports exposed to the public internet: none
+  # #
+  # jaeger-agent:
+  #   container_name: jaeger-agent
+  #   image: 'index.docker.io/jaegertracing/jaeger-agent@sha256:7ad33c19fd66307f2a3c07c95eb07c335ddce1b487f6b6128faa75d042c496cb'
+  #   environment:
+  #     - "COLLECTOR_HOST_PORT='jaeger-collector:14267'"
+  #   networks:
+  #     - sourcegraph
+  #   restart: always
+
+  # # Description: Jaeger's Cassandra database for storing traces.
+  # #
+  # # Disk: 128GB / persistent SSD
+  # # Ports exposed to other Sourcegraph services: 9042/TCP
+  # # Ports exposed to the public internet: none
+  # #
+  # jaeger-cassandra:
+  #   container_name: jaeger-cassandra
+  #   image: 'index.docker.io/library/cassandra:3.11.4@sha256:9f1d47fd23261c49f226546fe0134e6d4ad0570b7ea3a169c521005cb8369a32'
+  #   environment:
+  #     - HEAP_NEWSIZE='1G'
+  #     - MAX_HEAP_SIZE='6G'
+  #     - CASSANDRA_DC='sourcegraph'
+  #     - CASSANDRA_RACK='rack1'
+  #     - CASSANDRA_ENDPOINT_SNITCH='GossipingPropertyFileSnitch'
+  #   volumes:
+  #     - '${SOURCEGRAPH_HOME}/jaeger-cassandra-disk/:/var/lib/cassandra'
+  #   networks:
+  #     - sourcegraph
+  #   restart: always
+
+  # # Description: Receives traces from Jaeger agents.
+  # #
+  # # Disk: none
+  # # Ports exposed to other Sourcegraph services: 14267/TCP
+  # # Ports exposed to the public internet: none
+  # #
+  # jaeger-collector:
+  #   container_name: jaeger-collector
+  #   image: 'index.docker.io/jaegertracing/jaeger-collector:1.11@sha256:0b6d28bb52410f7b50c0f0fc16d7ee391e2e3eca47b713ac88d0891ca8a63cb9'
+  #   environment:
+  #     - SPAN_STORAGE_TYPE=cassandra
+  #     - CASSANDRA_SERVERS=jaeger-cassandra
+  #     - CASSANDRA_KEYSPACE=jaeger_v1_sourcegraph
+  #   networks:
+  #     - sourcegraph
+  #   restart: always
+
+  # # Description: Jaeger frontend for querying traces.
+  # #
+  # # Disk: none
+  # # Ports exposed to other Sourcegraph services: none
+  # # Ports exposed to the public internet: none (HTTP 16686 should be exposed to admins only)
+  # #
+  # jaeger-query:
+  #   container_name: jaeger-query
+  #   image: 'index.docker.io/jaegertracing/jaeger-query:1.11@sha256:cddc521d0166c868931282685a863368ae2c14c4de0c1be38e388ece3080439e'
+  #   environment:
+  #     - SPAN_STORAGE_TYPE=cassandra
+  #     - CASSANDRA_SERVERS=jaeger-cassandra
+  #     - CASSANDRA_KEYSPACE=jaeger_v1_sourcegraph
+  #     - CASSANDRA_LOCAL_DC=sourcegraph
+  #   ports:
+  #     - '0.0.0.0:16686:16686'
+  #   networks:
+  #     - sourcegraph
+  #   restart: always
+
   # Description: PostgreSQL database for various data.
   #
   # Disk: 128GB / persistent SSD
