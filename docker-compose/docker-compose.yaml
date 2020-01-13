@@ -16,7 +16,7 @@ services:
     cpus: 1
     mem_limit: '1g'
     volumes:
-      - './nginx:/etc/nginx'
+      - '../nginx:/etc/nginx'
     ports:
       - '0.0.0.0:7080:7080'
     networks:
@@ -366,7 +366,7 @@ services:
     mem_limit: '8g'
     volumes:
       - '${SOURCEGRAPH_HOME}/prometheus-v2-disk:/prometheus'
-      - './prometheus:/sg_prometheus_add_ons'
+      - '../prometheus:/sg_prometheus_add_ons'
     ports:
       - '0.0.0.0:9090:9090'
     networks:
@@ -391,8 +391,8 @@ services:
     mem_limit: '1g'
     volumes:
       - '${SOURCEGRAPH_HOME}/grafana-disk:/var/lib/grafana'
-      - './grafana/datasources:/sg_config_grafana/provisioning/datasources'
-      - './grafana/dashboards:/sg_grafana_additional_dashboards'
+      - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
+      - '../grafana/dashboards:/sg_grafana_additional_dashboards'
     ports:
       - '0.0.0.0:3370:3370'
     networks:
