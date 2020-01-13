@@ -517,7 +517,7 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 1
+      retries: 3
       start_period: 15s
     volumes:
       - '${SOURCEGRAPH_HOME}/pgsql-disk:/data/pgdata'
