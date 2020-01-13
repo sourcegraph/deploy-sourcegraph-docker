@@ -3,4 +3,4 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-docker-compose -f docker-compose.yaml config -q
+docker-compose -f docker-compose/docker-compose.yaml config -q
