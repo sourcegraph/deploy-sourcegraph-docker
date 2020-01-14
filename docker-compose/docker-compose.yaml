@@ -326,6 +326,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+
   # Description: Backend for symbols operations.
   #
   # Disk: 128GB / non-persistent SSD
