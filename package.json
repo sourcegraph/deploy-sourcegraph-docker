@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "prettier": "prettier '**/{*.{js?(on),ts?(x),graphql,md,scss},.*.js?(on)}' --write --list-different --config prettier.config.js",
+    "prettier-check": "yarn -s run prettier --write=false"
+  },
+  "devDependencies": {
+    "@sourcegraph/prettierrc": "3.0.1",
+    "prettier": "1.19.1"
+  }
+}
