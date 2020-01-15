@@ -11,6 +11,7 @@ Simply clone the repository and `docker-compose up -d` to deploy Sourcegraph:
 ```sh
 git clone https://github.com/sourcegraph/deploy-sourcegraph-docker
 cd deploy-sourcegraph-docker/docker-compose/
+git checkout v3.11.4
 docker-compose up -d
 ```
 
@@ -29,7 +30,7 @@ When a new version of Sourcegraph is released, you will simply checkout that ver
 ```sh
 cd deploy-sourcegraph-docker/docker-compose
 git pull
-git checkout v3.10.4
+git checkout v3.11.4
 docker-compose down
 docker-compose up -d
 ```
