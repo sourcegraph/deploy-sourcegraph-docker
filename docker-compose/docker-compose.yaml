@@ -12,7 +12,7 @@ services:
   # replicas.
   nginx:
     container_name: nginx
-    image: 'index.docker.io/library/nginx:1.17.7@sha256:8aa7f6a9585d908a63e5e418dc5d14ae7467d2e36e1ab4f0d8f9d059a3d071ce'
+    image: 'index.docker.io/library/nginx:1.17.7@sha256:89a42c3ba15f09a3fbe39856bddacdf9e94cd03df7403cad4fc105088e268fc9'
     cpus: 1
     mem_limit: '1g'
     volumes:
