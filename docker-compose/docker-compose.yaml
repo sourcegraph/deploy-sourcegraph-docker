@@ -18,6 +18,12 @@ services:
     volumes:
       - '../nginx:/etc/nginx'
     ports:
+      # The syntax for the port mapping is 'HOST_ADDRESS:CONTAINER_PORT'.
+      # By default, all traffic on the host's 7080 port is forwarded to the
+      # Nginx's container's 7080 port.
+      #
+      # You can forward all traffic from the host's 80 port to the
+      # container's 7080 port by replacing the following line with '0.0.0.0:80:7080'.
       - '0.0.0.0:7080:7080'
     networks:
       - sourcegraph
@@ -36,7 +42,7 @@ services:
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
     image: 'index.docker.io/sourcegraph/frontend:3.11.4@sha256:d5a01d4824b1fe77b8873af8a4a30ef7edec210b51480285735c7de6f1faa1c0'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=12
@@ -73,7 +79,7 @@ services:
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
     image: 'index.docker.io/sourcegraph/frontend:3.11.4@sha256:d5a01d4824b1fe77b8873af8a4a30ef7edec210b51480285735c7de6f1faa1c0'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=4
@@ -103,7 +109,7 @@ services:
   gitserver-0:
     container_name: gitserver-0
     image: 'index.docker.io/sourcegraph/gitserver:3.11.4@sha256:2596fe9dba5cb2072ad6fc25249a3012695d7dc0efc1a27c105792c11a1fb94a'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=4
@@ -126,7 +132,7 @@ services:
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
     image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20191204145522-b470e5f@sha256:84e9de8be269277d6e4711a61d0c9675a44d409a4bf7f7dd1b90a22175095fa7'
-    cpus: 8
+    cpus: 1
     mem_limit: '16g'
     environment:
       - GOMAXPROCS=8
@@ -147,7 +153,7 @@ services:
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20191204145231-b470e5f@sha256:fc3bfa69fc60b7a049a6646b71e45896cfae8adf3484602d140965c3781463a0'
-    cpus: 8
+    cpus: 1
     mem_limit: '50g'
     environment:
       - GOMAXPROCS=8
@@ -173,7 +179,7 @@ services:
   searcher-0:
     container_name: searcher-0
     image: 'index.docker.io/sourcegraph/searcher:3.11.4@sha256:200803c7f10b13a018f4efe4b5cd543f8f9f28a2b052226aa477f11daf76ccab'
-    cpus: 2
+    cpus: 1
     mem_limit: '2g'
     environment:
       - GOMAXPROCS=2
@@ -220,7 +226,7 @@ services:
   lsif-server:
     container_name: lsif-server
     image: 'index.docker.io/sourcegraph/lsif-server:3.11.4@sha256:b6b84c1f552a11a445bf74bf2d8059ba2ad5527d01961d953f86f4596dafc91a'
-    cpus: 2
+    cpus: 1
     mem_limit: '2g'
     environment:
       - GOMAXPROCS=2
@@ -293,7 +299,7 @@ services:
   repo-updater:
     container_name: repo-updater
     image: 'index.docker.io/sourcegraph/repo-updater:3.11.4@sha256:dd3640fd655809e8913760a05bb371dc95e48e7389ef22dc96a9386c52906398'
-    cpus: 4
+    cpus: 1
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=1
@@ -315,7 +321,7 @@ services:
   syntect-server:
     container_name: syntect-server
     image: 'index.docker.io/sourcegraph/syntect_server:2b5a3fb@sha256:ef5529cafdc68d5a21edea472ee8ad966878b173044aa5c3db93bc3d84765b1f'
-    cpus: 4
+    cpus: 1
     mem_limit: '6g'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
@@ -336,7 +342,7 @@ services:
   symbols-0:
     container_name: symbols-0
     image: 'index.docker.io/sourcegraph/symbols:3.11.4@sha256:9654f2a524800b18588b1697787beff5625f4d5f71d7caed70c24e319d5e8502'
-    cpus: 2
+    cpus: 1
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=2
@@ -363,7 +369,7 @@ services:
   prometheus:
     container_name: prometheus
     image: 'index.docker.io/sourcegraph/prometheus:10.0.6@sha256:f681ceb9400f0d546601cbf827ac9c3db16acd37e810da0860cf05d4f42305d1'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     volumes:
       - '${DATA_ROOT}/prometheus-v2-disk:/prometheus'
@@ -448,7 +454,7 @@ services:
   # jaeger-cassandra:
   #   container_name: jaeger-cassandra
   #   image: 'index.docker.io/library/cassandra:3.11.4@sha256:9f1d47fd23261c49f226546fe0134e6d4ad0570b7ea3a169c521005cb8369a32'
-  #   cpus: 4
+  #   cpus: 1
   #   mem_limit: '8g'
   #   environment:
   #     - 'HEAP_NEWSIZE=1G'
@@ -512,7 +518,7 @@ services:
   pgsql:
     container_name: pgsql
     image: 'index.docker.io/sourcegraph/postgres-11.4:19-11-14_b084311b@sha256:072481559d559cfd9a53ad77c3688b5cf583117457fd452ae238a20405923297'
-    cpus: 4
+    cpus: 1
     mem_limit: '2g'
     healthcheck:
       test: '/liveness.sh'
