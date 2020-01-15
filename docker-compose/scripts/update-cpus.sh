@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
-set -euxo pipefail
+set -exo pipefail
 
-yq w -i docker-compose.yaml services.*.cpus 1
+yq w -i docker-compose.yaml services.*.cpus ${1:-1}
 yarn run prettier
