@@ -18,7 +18,8 @@ services:
     volumes:
       - '../nginx:/etc/nginx'
     ports:
-      # The syntax for the port mapping is 'HOST_ADDRESS:CONTAINER_PORT'.
+      # The syntax for port mappings is 'HOST_ADDRESS:CONTAINER_PORT'.
+      #
       # By default, all traffic on the host's 7080 port is forwarded to the
       # Nginx's container's 7080 port.
       #
