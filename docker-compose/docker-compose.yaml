@@ -18,7 +18,7 @@ services:
     volumes:
       - '../nginx:/etc/nginx'
     ports:
-      - '0.0.0.0:7080:7080'
+      - '0.0.0.0:80:7080'
     networks:
       - sourcegraph
     restart: always
