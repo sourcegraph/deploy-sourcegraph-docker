@@ -147,10 +147,10 @@ services:
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20191031121751-5bd7e84@sha256:1afbfb746a3d43a7532693093d2f993dac5b5536037b31d3ab305ceef5687380'
-    cpus: 16
-    mem_limit: '100g'
+    cpus: 8
+    mem_limit: '50g'
     environment:
-      - GOMAXPROCS=16
+      - GOMAXPROCS=8
       - 'HOSTNAME=zoekt-webserver-0:6070'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:6070/healthz' -O /dev/null || exit 1"
