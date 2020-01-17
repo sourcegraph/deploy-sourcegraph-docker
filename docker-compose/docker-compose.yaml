@@ -52,6 +52,9 @@ services:
       - 'REPLACER_URL=http://replacer:3185'
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
+      # Workaround until https://github.com/sourcegraph/sourcegraph/issues/7873
+      # is addressed.
+      - 'SITE_CONFIG_ESCAPE_HATCH_PATH=/mnt/cache/site-config.json'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
