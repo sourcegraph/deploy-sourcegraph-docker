@@ -59,7 +59,7 @@ services:
       retries: 3
       start_period: 300s
     volumes:
-      - '${DATA_ROOT}/sourcegraph-frontend-0-disk:/mnt/cache'
+      - 'sourcegraph-frontend-0:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -89,7 +89,7 @@ services:
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
     volumes:
-      - '${DATA_ROOT}/sourcegraph-frontend-internal-0-disk:/mnt/cache'
+      - 'sourcegraph-frontend-internal:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -110,7 +110,7 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger-agent
     volumes:
-      - '${DATA_ROOT}/gitserver-0-disk:/data/repos'
+      - 'gitserver-0:/data/repos'
     networks:
       - sourcegraph
     restart: always
@@ -133,7 +133,7 @@ services:
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
     volumes:
-      - '${DATA_ROOT}/zoekt-0-shared-disk:/data/index'
+      - 'zoekt-0:/data/index'
     networks:
       - sourcegraph
     restart: always
@@ -158,7 +158,7 @@ services:
       timeout: 10s
       retries: 1
     volumes:
-      - '${DATA_ROOT}/zoekt-0-shared-disk:/data/index'
+      - 'zoekt-0:/data/index'
     networks:
       - sourcegraph
     restart: always
@@ -185,7 +185,7 @@ services:
       timeout: 10s
       retries: 1
     volumes:
-      - '${DATA_ROOT}/searcher-0-disk:/mnt/cache'
+      - 'searcher-0:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -233,7 +233,7 @@ services:
       retries: 1
       start_period: 60s
     volumes:
-      - '${DATA_ROOT}/lsif-server-disk:/lsif-storage'
+      - 'lsif-server:/lsif-storage'
     networks:
       - sourcegraph
     restart: always
@@ -279,7 +279,7 @@ services:
       timeout: 10s
       retries: 1
     volumes:
-      - '${DATA_ROOT}/replacer-disk:/mnt/cache'
+      - 'replacer:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -301,7 +301,7 @@ services:
       - JAEGER_AGENT_HOST=jaeger-agent
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
-      - '${DATA_ROOT}/repo-updater-disk:/mnt/cache'
+      - 'repo-updater:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -349,7 +349,7 @@ services:
       retries: 1
       start_period: 60s
     volumes:
-      - '${DATA_ROOT}/symbols-0-disk:/mnt/cache'
+      - 'symbols-0:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -366,7 +366,7 @@ services:
     cpus: 4
     mem_limit: '8g'
     volumes:
-      - '${DATA_ROOT}/prometheus-v2-disk:/prometheus'
+      - 'prometheus:/prometheus'
       - '../prometheus:/sg_prometheus_add_ons'
     ports:
       - '0.0.0.0:9090:9090'
@@ -391,7 +391,7 @@ services:
     cpus: 1
     mem_limit: '1g'
     volumes:
-      - '${DATA_ROOT}/grafana-disk:/var/lib/grafana'
+      - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
       - '../grafana/dashboards:/sg_grafana_additional_dashboards'
     ports:
@@ -521,7 +521,7 @@ services:
       retries: 3
       start_period: 15s
     volumes:
-      - '${DATA_ROOT}/pgsql-disk:/data/pgdata'
+      - 'pgsql:/data/pgdata'
     networks:
       - sourcegraph
     restart: always
@@ -538,7 +538,7 @@ services:
     cpus: 1
     mem_limit: '6g'
     volumes:
-      - '${DATA_ROOT}/redis-cache-disk:/redis-data'
+      - 'redis-cache:/redis-data'
     networks:
       - sourcegraph
     restart: always
@@ -554,10 +554,26 @@ services:
     cpus: 1
     mem_limit: '6g'
     volumes:
-      - '${DATA_ROOT}/redis-store-disk:/redis-data'
+      - 'redis-store:/redis-data'
     networks:
       - sourcegraph
     restart: always
+
+volumes:
+  sourcegraph-frontend-0:
+  sourcegraph-frontend-internal:
+  gitserver-0:
+  zoekt-0:
+  searcher-0:
+  lsif-server:
+  replacer:
+  repo-updater:
+  symbols-0:
+  prometheus:
+  grafana:
+  pgsql:
+  redis-cache:
+  redis-store:
 
 networks:
   sourcegraph:
