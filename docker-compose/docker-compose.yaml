@@ -35,7 +35,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.11.4@sha256:d5a01d4824b1fe77b8873af8a4a30ef7edec210b51480285735c7de6f1faa1c0'
+    image: 'index.docker.io/sourcegraph/frontend:54232_2020-01-20_187cf6d'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -75,7 +75,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.11.4@sha256:d5a01d4824b1fe77b8873af8a4a30ef7edec210b51480285735c7de6f1faa1c0'
+    image: 'index.docker.io/sourcegraph/frontend:54232_2020-01-20_187cf6d'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -105,7 +105,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:3.11.4@sha256:2596fe9dba5cb2072ad6fc25249a3012695d7dc0efc1a27c105792c11a1fb94a'
+    image: 'index.docker.io/sourcegraph/gitserver:54232_2020-01-20_187cf6d'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -175,7 +175,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.11.4@sha256:200803c7f10b13a018f4efe4b5cd543f8f9f28a2b052226aa477f11daf76ccab'
+    image: 'index.docker.io/sourcegraph/searcher:54232_2020-01-20_187cf6d'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -203,7 +203,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.11.4@sha256:61e88beee0ec61943dac13710d00fe7a387c484207ad42e618ad6a4da926d012'
+    image: 'index.docker.io/sourcegraph/github-proxy:54232_2020-01-20_187cf6d'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -222,7 +222,7 @@ services:
   #
   lsif-server:
     container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.11.4@sha256:b6b84c1f552a11a445bf74bf2d8059ba2ad5527d01961d953f86f4596dafc91a'
+    image: 'index.docker.io/sourcegraph/lsif-server:54232_2020-01-20_187cf6d'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -251,7 +251,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.11.4@sha256:7b5d14e61eadcd8ac279e56d0fb37258e0efc0bb152159b8bf4416215f3ab8a5'
+    image: 'index.docker.io/sourcegraph/query-runner:54232_2020-01-20_187cf6d'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -270,7 +270,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.11.4@sha256:efed9d844a2bf00aed61100bcdc0307fc68e58e890d9e5039b0abae8b659d375'
+    image: 'index.docker.io/sourcegraph/replacer:54232_2020-01-20_187cf6d'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -295,7 +295,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.11.4@sha256:dd3640fd655809e8913760a05bb371dc95e48e7389ef22dc96a9386c52906398'
+    image: 'index.docker.io/sourcegraph/repo-updater:54232_2020-01-20_187cf6d'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -338,7 +338,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.11.4@sha256:9654f2a524800b18588b1697787beff5625f4d5f71d7caed70c24e319d5e8502'
+    image: 'index.docker.io/sourcegraph/symbols:54232_2020-01-20_187cf6d'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -450,7 +450,7 @@ services:
   # #
   # jaeger-cassandra:
   #   container_name: jaeger-cassandra
-  #   image: 'index.docker.io/library/cassandra:3.11.4@sha256:9f1d47fd23261c49f226546fe0134e6d4ad0570b7ea3a169c521005cb8369a32'
+  #   image: 'index.docker.io/library/cassandra:54232_2020-01-20_187cf6d'
   #   cpus: 4
   #   mem_limit: '8g'
   #   environment:
