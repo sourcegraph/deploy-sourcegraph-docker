@@ -54,7 +54,7 @@ services:
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       # Workaround until https://github.com/sourcegraph/sourcegraph/issues/7873
       # is addressed.
-      - 'SITE_CONFIG_ESCAPE_HATCH_PATH=/mnt/cache/frontsite-config.json'
+      - 'SITE_CONFIG_ESCAPE_HATCH_PATH=/mnt/cache/frontend/site-config.json'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -93,7 +93,7 @@ services:
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       # Workaround until https://github.com/sourcegraph/sourcegraph/issues/7873
       # is addressed.
-      - 'SITE_CONFIG_ESCAPE_HATCH_PATH=/mnt/cache/frontsite-config.json'
+      - 'SITE_CONFIG_ESCAPE_HATCH_PATH=/mnt/cache/frontend/site-config.json'
     volumes:
       - 'sourcegraph-frontend-internal:/mnt/cache'
     networks:
