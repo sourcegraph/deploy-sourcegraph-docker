@@ -131,7 +131,7 @@ services:
   #
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20191204145522-b470e5f@sha256:84e9de8be269277d6e4711a61d0c9675a44d409a4bf7f7dd1b90a22175095fa7'
+    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200120202745-2f3fa2c'
     cpus: 8
     mem_limit: '16g'
     environment:
@@ -152,7 +152,7 @@ services:
   #
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20191204145231-b470e5f@sha256:fc3bfa69fc60b7a049a6646b71e45896cfae8adf3484602d140965c3781463a0'
+    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200120202640-2f3fa2c'
     cpus: 8
     mem_limit: '50g'
     environment:
