@@ -368,7 +368,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:187cf6dc0d'
+    image: 'index.docker.io/sourcegraph/prometheus:364cfb5dbf'
     cpus: 4
     mem_limit: '8g'
     volumes:
