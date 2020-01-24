@@ -1,0 +1,16 @@
+[Unit]
+Description=Sourcegraph expose service (src-expose)
+Requires=sourcegraph.service
+After=sourcegraph.service
+
+[Service]
+Restart=always
+
+User=ec2-user
+
+WorkingDirectory=/home/ec2-user/export
+
+ExecStart=/usr/local/bin/src-expose -addr :3434 dir1 dir2 dir3
+
+[Install]
+WantedBy=multi-user.target
