@@ -1,0 +1,29 @@
+### Installation
+#
+# 1. Replace "ec2-user" with your username.
+# 2. Update WorkingDirectory to where the docker-compose.yaml file is located
+# 3. Copy to /etc/systemd/system/sourcegraph.service
+# 4. sudo systemctl start sourcegraph
+# 5. sudo systemctl enable sourcegraph
+
+[Unit]
+Description=Sourcegraph service with docker compose
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+User=ec2-user
+
+WorkingDirectory=/home/ec2-user/deploy-sourcegraph-docker/docker-compose
+
+# TODO remove once permission problems are solved
+ExecStartPre=-/bin/bash -c 'for volume in prometheus-v2-disk redis-store-disk gitserver-0-disk grafana-disk; do mkdir -p $volume; sudo chown -R 100:101 /home/ec2-user/sourcegraph-docker/$volume; done; sudo chown -R 472:472 /home/ec2-user/sourcegraph-docker/grafana-disk'
+
+ExecStart=/usr/local/bin/docker-compose up
+
+ExecStop=/usr/local/bin/docker-compose down -v
+
+[Install]
+WantedBy=multi-user.target
