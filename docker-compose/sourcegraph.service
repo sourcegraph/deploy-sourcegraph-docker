@@ -18,9 +18,6 @@ User=ec2-user
 
 WorkingDirectory=/home/ec2-user/deploy-sourcegraph-docker/docker-compose
 
-# TODO remove once permission problems are solved
-ExecStartPre=-/bin/bash -c 'for volume in prometheus-v2-disk redis-store-disk gitserver-0-disk grafana-disk; do mkdir -p $volume; sudo chown -R 100:101 /home/ec2-user/sourcegraph-docker/$volume; done; sudo chown -R 472:472 /home/ec2-user/sourcegraph-docker/grafana-disk'
-
 ExecStart=/usr/local/bin/docker-compose up
 
 ExecStop=/usr/local/bin/docker-compose down -v
