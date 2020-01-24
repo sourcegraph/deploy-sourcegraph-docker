@@ -35,7 +35,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.12.3-rc.1@sha256:465cb903eaae33951e7245bac81fbc72eb578d4a4a5ed977ac99f95f52c9cf85'
+    image: 'index.docker.io/sourcegraph/frontend:3.12.3@sha256:d5c1d50ce370b3c730f33efe60f46b5106b39551c4771fb036fd89e5bba3a16d'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -72,7 +72,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.12.3-rc.1@sha256:465cb903eaae33951e7245bac81fbc72eb578d4a4a5ed977ac99f95f52c9cf85'
+    image: 'index.docker.io/sourcegraph/frontend:3.12.3@sha256:d5c1d50ce370b3c730f33efe60f46b5106b39551c4771fb036fd89e5bba3a16d'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -102,7 +102,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:3.12.3-rc.1@sha256:d2070db5d77e234f9b1c503e02a368ffd775dceb6d4110378e8bd69b240b0be3'
+    image: 'index.docker.io/sourcegraph/gitserver:3.12.3@sha256:46de0ef5d67888ad7c7c883f46f9c537a1e2efd5cc8bc3e1bfda5c37b7ddb0e7'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -171,7 +171,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.12.3-rc.1@sha256:9ed2b41dcae1b11d8c97c33169fefcdad008abb2661c49e643438ed064db867c'
+    image: 'index.docker.io/sourcegraph/searcher:3.12.3@sha256:c31deb621158d1fc0f7d19ca50cca8b2c0aba957736437f485e206fb10367bf7'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -199,7 +199,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.12.3-rc.1@sha256:5acd12110d005a0539362ee0f82ea6d794b29a28e076eabe854f20173c7a1ee3'
+    image: 'index.docker.io/sourcegraph/github-proxy:3.12.3@sha256:969d5107c7314e196c7e1ac223b7c65d6bfcfe1e4ccb4a08da67432827b670b2'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -218,7 +218,7 @@ services:
   #
   lsif-server:
     container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.12.3-rc.1@sha256:76a6959b808a5a9db22608f7ad8c314dbc793436d496dfbdb29487b2f25d74a1'
+    image: 'index.docker.io/sourcegraph/lsif-server:3.12.3@sha256:078ed33647571a21d6ae3393faf46b976a08aa3c1312b6f5272ec6812b1f0f6e'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -247,7 +247,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.12.3-rc.1@sha256:e89acb882e96cc398389b95dcc435faeff3e60d566c5323b748985becb9c873a'
+    image: 'index.docker.io/sourcegraph/query-runner:3.12.3@sha256:f0fc1c1b8b19937708687eed6bb2456fcc8433083127f9f9f5ce531edcf39e2b'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -266,7 +266,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.12.3-rc.1@sha256:433802e8c4716319b3cd5f653ff4c6fda42f939ccc013779076b12d6ff4f828d'
+    image: 'index.docker.io/sourcegraph/replacer:3.12.3@sha256:f5a40b66614cbb72602e7c31f46232c16919477800a965f5bc5a568c235e7578'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -291,7 +291,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.12.3-rc.1@sha256:9733f1f9c05ec3b9c7a67ee21cba2e0ab3f9405a134a0324325259659dc3924f'
+    image: 'index.docker.io/sourcegraph/repo-updater:3.12.3@sha256:1a7a29bebd1d142401051c3c0e8d9b0763d0c7d10df776f8ff342cad66af1d88'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -334,7 +334,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.12.3-rc.1@sha256:e3d53ce60608bc46be8b27ffc45d7a0ec8667ae5be7cfca88aef0bf8c65abcf6'
+    image: 'index.docker.io/sourcegraph/symbols:3.12.3@sha256:29861594850db42724443e4c58a824696314d7566ec508f6ea85e38f693bf0fb'
     cpus: 2
     mem_limit: '4g'
     environment:
