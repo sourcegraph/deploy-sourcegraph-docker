@@ -520,7 +520,7 @@ services:
       retries: 3
       start_period: 15s
     volumes:
-      - '${DATA_ROOT}/pgsql-disk:/data/pgdata'
+      - '${DATA_ROOT}/pgsql-disk:/data/'
     networks:
       - sourcegraph
     restart: always
