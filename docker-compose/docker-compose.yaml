@@ -533,11 +533,9 @@ services:
   #
   redis-cache:
     container_name: redis-cache
-    image: index.docker.io/sourcegraph/redis-cache:19-04-16_6891de82@sha256:4cbfac8af0abb673899250d4fd859cc477d6426de519e9deb71e454e18322499
+    image: index.docker.io/sourcegraph/redis-cache:20-01-30_c903717e@sha256:c069a4589420bc6d18a7d09ebaf5416fa6407666770cf650566dfd450bba65cf
     cpus: 1
     mem_limit: '6g'
-    volumes:
-      - 'redis-cache:/redis-data'
     networks:
       - sourcegraph
     restart: always
@@ -549,7 +547,7 @@ services:
   #
   redis-store:
     container_name: redis-store
-    image: 'index.docker.io/sourcegraph/redis-store:19-04-16_6891de821@sha256:56426d601ce1f6d63088fea1cefa61f69a2e809c7d90fc1d157cca63cf81b277'
+    image: index.docker.io/sourcegraph/redis-store:21-01-30_c903717e@sha256:e8467a8279832207559bdfbc4a89b68916ecd5b44ab5cf7620c995461c005168
     cpus: 1
     mem_limit: '6g'
     volumes:
