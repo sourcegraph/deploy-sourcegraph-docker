@@ -35,7 +35,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.12.3@sha256:d5c1d50ce370b3c730f33efe60f46b5106b39551c4771fb036fd89e5bba3a16d'
+    image: 'index.docker.io/sourcegraph/frontend:3.12.5@sha256:12f6a461b56847213ccf5a659376949c3a420b08b07015a8c4e8b6c12d8f5a7c'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -72,7 +72,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.12.3@sha256:d5c1d50ce370b3c730f33efe60f46b5106b39551c4771fb036fd89e5bba3a16d'
+    image: 'index.docker.io/sourcegraph/frontend:3.12.5@sha256:12f6a461b56847213ccf5a659376949c3a420b08b07015a8c4e8b6c12d8f5a7c'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -102,7 +102,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:3.12.3@sha256:46de0ef5d67888ad7c7c883f46f9c537a1e2efd5cc8bc3e1bfda5c37b7ddb0e7'
+    image: 'index.docker.io/sourcegraph/gitserver:3.12.5@sha256:7e9b37cc7802c8e7a7dbadf2489b57c5d2e3d0869cb73ef732294e36e4aede31'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -171,7 +171,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.12.3@sha256:c31deb621158d1fc0f7d19ca50cca8b2c0aba957736437f485e206fb10367bf7'
+    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -199,7 +199,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.12.3@sha256:969d5107c7314e196c7e1ac223b7c65d6bfcfe1e4ccb4a08da67432827b670b2'
+    image: 'index.docker.io/sourcegraph/github-proxy:3.12.5@sha256:5476e3b6da6818f7ed851dc87ce43bbc6a21fb96694ed6ee97c5dba58622fea3'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -218,7 +218,7 @@ services:
   #
   lsif-server:
     container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.12.3@sha256:078ed33647571a21d6ae3393faf46b976a08aa3c1312b6f5272ec6812b1f0f6e'
+    image: 'index.docker.io/sourcegraph/lsif-server:3.12.5@sha256:3a37053e9e4eb5d506e164608e40bd39afef8cb097605f2bfb0960c46dff7ed0'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -247,7 +247,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.12.3@sha256:f0fc1c1b8b19937708687eed6bb2456fcc8433083127f9f9f5ce531edcf39e2b'
+    image: 'index.docker.io/sourcegraph/query-runner:3.12.5@sha256:141a8e72cd42470f410a7df33fe989cf0f61f44aa0511b9946b355ebf6741ec6'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -266,7 +266,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.12.3@sha256:f5a40b66614cbb72602e7c31f46232c16919477800a965f5bc5a568c235e7578'
+    image: 'index.docker.io/sourcegraph/replacer:3.12.5@sha256:700ced7a64038d8ac47567bc141e9e08b45d98f945bf5e6983212ec37a64995f'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -291,7 +291,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.12.3@sha256:1a7a29bebd1d142401051c3c0e8d9b0763d0c7d10df776f8ff342cad66af1d88'
+    image: 'index.docker.io/sourcegraph/repo-updater:3.12.5@sha256:988f43f9c465c6264027d08d01158a22add4dc3a04272a20ce4a7fdc77a4859c'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -334,7 +334,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.12.3@sha256:29861594850db42724443e4c58a824696314d7566ec508f6ea85e38f693bf0fb'
+    image: 'index.docker.io/sourcegraph/symbols:3.12.5@sha256:cd45dee51865dd7a35ef1596e7f879fcba2ec868a7d85115d287443aaa1a56d7'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -527,7 +527,6 @@ services:
 
   # Description: Redis for storing short-lived caches.
   #
-  # Disk: 128GB / persistent SSD
   # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
   # Ports exposed to the public internet: none
   #
@@ -563,7 +562,6 @@ volumes:
   lsif-server:
   pgsql:
   prometheus-v2:
-  redis-cache:
   redis-store:
   replacer:
   repo-updater:

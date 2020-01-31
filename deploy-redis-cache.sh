@@ -3,7 +3,6 @@ set -e
 
 # Description: Redis for storing short-lived caches.
 #
-# Disk: 128GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: 6379/TCP
 # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
