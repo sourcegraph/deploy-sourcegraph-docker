@@ -532,7 +532,7 @@ services:
   #
   redis-cache:
     container_name: redis-cache
-    image: index.docker.io/sourcegraph/redis-cache:20-01-30_c903717e@sha256:c069a4589420bc6d18a7d09ebaf5416fa6407666770cf650566dfd450bba65cf
+    image: 'index.docker.io/sourcegraph/redis-cache:20-01-30_c903717e@sha256:c069a4589420bc6d18a7d09ebaf5416fa6407666770cf650566dfd450bba65cf'
     cpus: 1
     mem_limit: '6g'
     networks:
