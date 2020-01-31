@@ -18,7 +18,6 @@ for i in $(seq 0 $(($NUM_GITSERVER - 1))); do (./deploy-gitserver.sh $i &); done
 #./deploy-jaeger-query.sh
 #./init-jaeger-cassandra-schema.sh
 ./deploy-lsif-server.sh &
-./deploy-management-console.sh &
 ./deploy-pgsql.sh &
 ./deploy-prometheus.sh
 ./deploy-query-runner.sh &

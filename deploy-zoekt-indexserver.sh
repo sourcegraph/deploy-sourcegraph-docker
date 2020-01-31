@@ -27,6 +27,6 @@ docker run --detach \
     -e HOSTNAME=zoekt-webserver-$1:6070 \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/zoekt-$1-shared-disk:/data/index \
-    sourcegraph/zoekt-indexserver:0.0.20191031121923-5bd7e84@sha256:43eac5fddcc32f84f097e1466918ec9ac2fe54fe34649b8399de93963d9e4916
+    index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200124185115-83b89a5@sha256:efd1fb37fc62bfab963f12e95f69778b0e2e6a253caed5be9025840072ea85b5
 
 echo "Deployed zoekt-indexserver $1 service"

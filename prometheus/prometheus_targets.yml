@@ -9,7 +9,6 @@
     - cadvisor:8080
     - sourcegraph-frontend-internal:6060
     - github-proxy:6060
-    - management-console:6060
     - query-runner:6060
     - repo-updater:6060
     - syntect-server:6060
