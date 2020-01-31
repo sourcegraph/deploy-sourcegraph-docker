@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json.schemastore.org/renovate",
+  "extends": ["config:base"],
+  "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "packagePatterns": ["^index.docker.io/sourcegraph/"],
+      "groupName": "Sourcegraph Docker images",
+      "versionScheme": "semver",
+      "ignoreUnstable": false,
+      "semanticCommits": false,
+      "automerge": false
+    }
+  ],
+  "masterIssue": true,
+  "pinDigests": true
+}
