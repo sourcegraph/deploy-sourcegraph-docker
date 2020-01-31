@@ -3,7 +3,6 @@ set -e
 
 # Description: Redis for storing short-lived caches.
 #
-# Disk: 128GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: 6379/TCP
 # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
@@ -15,7 +14,6 @@ docker run --detach \
     --restart=always \
     --cpus=1 \
     --memory=6g \
-    -v ~/sourcegraph-docker/redis-cache-disk:/redis-data \
     index.docker.io/sourcegraph/redis-cache:19-04-16_6891de82@sha256:4cbfac8af0abb673899250d4fd859cc477d6426de519e9deb71e454e18322499
 
 echo "Deployed redis-cache service"
