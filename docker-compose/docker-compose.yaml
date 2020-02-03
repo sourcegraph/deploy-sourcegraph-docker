@@ -527,14 +527,17 @@ services:
 
   # Description: Redis for storing short-lived caches.
   #
+  # Disk: 128GB / persistent SSD
   # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
   # Ports exposed to the public internet: none
   #
   redis-cache:
     container_name: redis-cache
-    image: 'index.docker.io/sourcegraph/redis-cache:20-01-30_c903717e@sha256:c069a4589420bc6d18a7d09ebaf5416fa6407666770cf650566dfd450bba65cf'
+    image: 'index.docker.io/sourcegraph/redis-cache:20-02-03_da9d71ca@sha256:7820219195ab3e8fdae5875cd690fed1b2a01fd1063bd94210c0e9d529c38e56'
     cpus: 1
     mem_limit: '6g'
+    volumes:
+      - 'redis-cache:/redis-data'
     networks:
       - sourcegraph
     restart: always
@@ -562,6 +565,7 @@ volumes:
   lsif-server:
   pgsql:
   prometheus-v2:
+  redis-cache:
   redis-store:
   replacer:
   repo-updater:
