@@ -13,8 +13,8 @@ services:
   nginx:
     container_name: nginx
     image: 'index.docker.io/library/nginx:1.17.7@sha256:8aa7f6a9585d908a63e5e418dc5d14ae7467d2e36e1ab4f0d8f9d059a3d071ce'
-    cpus: 1
-    mem_limit: '1g'
+    cpus: 4
+    mem_limit: '4g'
     volumes:
       - '../nginx:/etc/nginx'
     ports:
@@ -39,13 +39,13 @@ services:
     cpus: 4
     mem_limit: '8g'
     environment:
-      - GOMAXPROCS=12
+      - GOMAXPROCS=4
       - JAEGER_AGENT_HOST=jaeger-agent
       - PGHOST=pgsql
-      - 'SRC_GIT_SERVERS=gitserver-0:3178'
+      - 'SRC_GIT_SERVERS=gitserver-0:3178 gitserver-1:3178 gitserver-2:3178 gitserver-3:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
-      - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
+      - 'SEARCHER_URL=http://searcher-0:3181 http://searcher-1:3181 http://searcher-2:3181 http://searcher-3:3181 http://searcher-4:3181 http://searcher-5:3181'
+      - 'SYMBOLS_URL=http://symbols-0:3184 http://symbols-1:3184 http://symbols-2:3184 http://symbols-3:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
@@ -60,6 +60,36 @@ services:
       start_period: 300s
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  sourcegraph-frontend-1:
+    container_name: sourcegraph-frontend-1
+    image: 'index.docker.io/sourcegraph/frontend:3.12.5@sha256:12f6a461b56847213ccf5a659376949c3a420b08b07015a8c4e8b6c12d8f5a7c'
+    cpus: 4
+    mem_limit: '8g'
+    environment:
+      - GOMAXPROCS=4
+      - JAEGER_AGENT_HOST=jaeger-agent
+      - PGHOST=pgsql
+      - 'SRC_GIT_SERVERS=gitserver-0:3178 gitserver-1:3178 gitserver-2:3178 gitserver-3:3178'
+      - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
+      - 'SEARCHER_URL=http://searcher-0:3181 http://searcher-1:3181 http://searcher-2:3181 http://searcher-3:3181 http://searcher-4:3181 http://searcher-5:3181'
+      - 'SYMBOLS_URL=http://symbols-0:3184 http://symbols-1:3184 http://symbols-2:3184 http://symbols-3:3184'
+      - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - 'REPO_UPDATER_URL=http://repo-updater:3182'
+      - 'REPLACER_URL=http://replacer:3185'
+      - 'LSIF_SERVER_URL=http://lsif-server:3186'
+      - 'GRAFANA_SERVER_URL=http://grafana:3370'
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+    volumes:
+      - 'sourcegraph-frontend-1:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -78,10 +108,10 @@ services:
     environment:
       - GOMAXPROCS=4
       - PGHOST=pgsql
-      - 'SRC_GIT_SERVERS=gitserver-0:3178'
+      - 'SRC_GIT_SERVERS=gitserver-0:3178 gitserver-1:3178 gitserver-2:3178 gitserver-3:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
-      - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
+      - 'SEARCHER_URL=http://searcher-0:3181 http://searcher-1:3181 http://searcher-2:3181 http://searcher-3:3181 http://searcher-4:3181 http://searcher-5:3181'
+      - 'SYMBOLS_URL=http://symbols-0:3184 http://symbols-1:3184 http://symbols-2:3184 http://symbols-3:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
@@ -100,17 +130,60 @@ services:
   # Ports exposed to other Sourcegraph services: 3178/TCP 6060/TCP
   # Ports exposed to the public internet: none
   #
+  # 72 CPU 144G memory
   gitserver-0:
     container_name: gitserver-0
     image: 'index.docker.io/sourcegraph/gitserver:3.12.5@sha256:7e9b37cc7802c8e7a7dbadf2489b57c5d2e3d0869cb73ef732294e36e4aede31'
-    cpus: 4
-    mem_limit: '8g'
+    cpus: 8
+    mem_limit: '16g'
     environment:
       - GOMAXPROCS=4
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger-agent
     volumes:
       - 'gitserver-0:/data/repos'
+    networks:
+      - sourcegraph
+    restart: always
+  gitserver-1:
+    container_name: gitserver-1
+    image: 'index.docker.io/sourcegraph/gitserver:3.12.5@sha256:7e9b37cc7802c8e7a7dbadf2489b57c5d2e3d0869cb73ef732294e36e4aede31'
+    cpus: 8
+    mem_limit: '16g'
+    environment:
+      - GOMAXPROCS=4
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    volumes:
+      - 'gitserver-1:/data/repos'
+    networks:
+      - sourcegraph
+    restart: always
+  gitserver-2:
+    container_name: gitserver-2
+    image: 'index.docker.io/sourcegraph/gitserver:3.12.5@sha256:7e9b37cc7802c8e7a7dbadf2489b57c5d2e3d0869cb73ef732294e36e4aede31'
+    cpus: 8
+    mem_limit: '16g'
+    environment:
+      - GOMAXPROCS=4
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    volumes:
+      - 'gitserver-2:/data/repos'
+    networks:
+      - sourcegraph
+    restart: always
+  gitserver-3:
+    container_name: gitserver-3
+    image: 'index.docker.io/sourcegraph/gitserver:3.12.5@sha256:7e9b37cc7802c8e7a7dbadf2489b57c5d2e3d0869cb73ef732294e36e4aede31'
+    cpus: 8
+    mem_limit: '16g'
+    environment:
+      - GOMAXPROCS=4
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    volumes:
+      - 'gitserver-3:/data/repos'
     networks:
       - sourcegraph
     restart: always
@@ -126,6 +199,7 @@ services:
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
     image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200124185115-83b89a5@sha256:efd1fb37fc62bfab963f12e95f69778b0e2e6a253caed5be9025840072ea85b5'
+    cpus: 8
     mem_limit: '16g'
     environment:
       - GOMAXPROCS=8
@@ -146,8 +220,8 @@ services:
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200124185328-83b89a5@sha256:cde27ee7db0fe6c293a8c9df47b529fb01b5a898e6cbeea4c18d80fe218563db'
-    cpus: 8
-    mem_limit: '50g'
+    cpus: 16
+    mem_limit: '100g'
     environment:
       - GOMAXPROCS=8
       - 'HOSTNAME=zoekt-webserver-0:6070'
@@ -185,6 +259,101 @@ services:
       retries: 1
     volumes:
       - 'searcher-0:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  searcher-1:
+    container_name: searcher-1
+    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - 'searcher-1:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  searcher-2:
+    container_name: searcher-2
+    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - 'searcher-2:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  searcher-3:
+    container_name: searcher-3
+    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - 'searcher-3:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  searcher-4:
+    container_name: searcher-4
+    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - 'searcher-4:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  searcher-5:
+    container_name: searcher-5
+    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - 'searcher-5:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -349,6 +518,66 @@ services:
       start_period: 60s
     volumes:
       - 'symbols-0:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  symbols-1:
+    container_name: symbols-1
+    image: 'index.docker.io/sourcegraph/symbols:3.12.5@sha256:cd45dee51865dd7a35ef1596e7f879fcba2ec868a7d85115d287443aaa1a56d7'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
+    volumes:
+      - 'symbols-1:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  symbols-2:
+    container_name: symbols-2
+    image: 'index.docker.io/sourcegraph/symbols:3.12.5@sha256:cd45dee51865dd7a35ef1596e7f879fcba2ec868a7d85115d287443aaa1a56d7'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
+    volumes:
+      - 'symbols-2:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+  symbols-3:
+    container_name: symbols-3
+    image: 'index.docker.io/sourcegraph/symbols:3.12.5@sha256:cd45dee51865dd7a35ef1596e7f879fcba2ec868a7d85115d287443aaa1a56d7'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger-agent
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
+    volumes:
+      - 'symbols-3:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -560,6 +789,9 @@ services:
 
 volumes:
   gitserver-0:
+  gitserver-1:
+  gitserver-2:
+  gitserver-3:
   grafana:
   #jaeger-cassandra:
   lsif-server:
@@ -570,9 +802,18 @@ volumes:
   replacer:
   repo-updater:
   searcher-0:
+  searcher-1:
+  searcher-2:
+  searcher-3:
+  searcher-4:
+  searcher-5:
   sourcegraph-frontend-0:
+  sourcegraph-frontend-1:
   sourcegraph-frontend-internal-0:
   symbols-0:
+  symbols-1:
+  symbols-2:
+  symbols-3:
   zoekt-0-shared:
 networks:
   sourcegraph:
