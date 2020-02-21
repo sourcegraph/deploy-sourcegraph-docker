@@ -1,0 +1,32 @@
+# Serves Sourcegraph over HTTPS, using a custom SSL certificate/key specified
+# by the "SRC_CERT_PATH" and "SRC_KEY_PATH" environment variables.
+#
+# Caddyfile documentation: https://caddyserver.com/docs/caddyfile
+
+# The externally accessible URL for Sourcegraph (i.e. what you type in to your browser), 
+# provided via the "SRC_SITE_ADDRESS" environment variable.
+#
+# Example: sourcegraph.example.com
+{$SRC_SITE_ADDRESS}
+
+# Redirect all http traffic to https. Needed since using custom SSL certificates
+# disables automatic HTTPS feature: https://caddyserver.com/docs/automatic-https
+@http {
+   protocol http
+}
+redir @http https://{host}{uri}
+
+# Specify the paths to the custom SSL certficate/key that Caddy should use via
+# their respective environment variables.
+#
+# Caddy TLS directive documentation: https://caddyserver.com/docs/caddyfile/directives/tls
+tls {$SRC_CERT_PATH} {$SRC_KEY_PATH}
+
+# Do not modify.
+#
+# Contains the reverse proxy definition which tells Caddy to randomly
+# route requests between all frontend instances (specified by the 
+# SRC_FRONTEND_ADDRESSES environment variable.) 
+#
+# Reverse proxy directive documentation: https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
+reverse_proxy {$SRC_FRONTEND_ADDRESSES}

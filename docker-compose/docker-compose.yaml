@@ -2,23 +2,75 @@ version: '2.4'
 services:
   # Description: Acts as a reverse proxy for all of the sourcegraph-frontend instances
   #
-  # Disk: none
+  # Disk: 1GB / persistent SSD
   # Ports exposed to other Sourcegraph services: none
-  # Ports exposed to the public internet: 7080 (HTTP) and/or 7443 (HTTPS)
+  # Ports exposed to the public internet: 80 (HTTP) and 443 (HTTPS)
   #
-  # Note: nginx/nginx/sourcegraph_backend.conf lists all of the sourcegraph-frontend
-  # network addresses that Nginx should proxy. nginx/nginx/sourcegraph_backend.conf
-  # needs to be updated with new addresses when scaling the number of soucegraph-frontend
-  # replicas.
-  nginx:
-    container_name: nginx
-    image: 'index.docker.io/library/nginx:1.17.7@sha256:8aa7f6a9585d908a63e5e418dc5d14ae7467d2e36e1ab4f0d8f9d059a3d071ce'
+  # Notes:
+  #
+  # 1. The "SRC_FRONTEND_ADDRESSES" environment variable is a space-delimited list of network addresses
+  # for all the frontend addresses that Caddy should proxy. This evironment variable must be updated when
+  # scaling the number of sourcegraph-frontend replicas.
+  #
+  # 2. Sourcegraph ships with a few builtin templates that cover many common HTTP/HTTPS configurations:
+  #
+  # http.Caddyfile (default): Serves Sourcegraph over port 80. Suitable for local testing.
+  #
+  # https.lets-encrypt.Caddyfile: Serves Sourcegraph over HTTPS using Caddy's built-in Let's Encrypt
+  #                               feature. See https://caddyserver.com/docs/automatic-https for more information
+  #                               about how this feature works, caveats, and warnings.
+  #                               This configuration requires that the following environment variable(s)
+  #                               are set:
+  #                               - "SRC_SITE_ADDRESS": The externally accessible URL for Sourcegraph
+  #                                                     (i.e. what you type in to your browser). Example:
+  #                                                     "sourcegraph.example.com"
+  #
+  # https.custom-cert.Caddyfile: Serves Sourcegraph over HTTPS using a custom SSL certficate / key that
+  #                              you provide.
+  #                              This configuration requires that the following environment
+  #                              variable(s) are set:
+  #                              - "SRC_SITE_ADDRESS": The externally accessible URL for Sourcegraph
+  #                                                    (i.e. what you type in to your browser). Example:
+  #                                                    "sourcegraph.example.com"
+  #                              - "SRC_CERT_PATH":    The absolute path (inside the docker container) to your
+  #                                                    custom SSL certficate. Example: "/sourcegraph.pem"
+  #                                                    Note: The certficate must be bind mounted from the host machine
+  #                                                    to the Docker container.
+  #                              - "SRC_KEY_PATH":     The absolute path (inside the docker container) to your
+  #                                                    custom SSL certficate's key. Example: "/sourcegraph.key"
+  #                                                    Note: The key must be bind mounted from the host machine
+  #                                                    to the Docker container.
+  #
+  # You can swap between these configurations by setting their corresponding environment variables and
+  # editing the volume mount that mounts one of the above files into the container's /etc/caddy/Caddyfile.
+  # For example, if you wanted to use a custom certificate for https (https.custom-cert.Caddyfile) you'd do the following:
+  #   1) Set the "SRC_SITE_ADDRESS", "SRC_CERT_PATH", and "SRC_KEY_PATH" enviroment variables (and mount the local cert/key into the container).
+  #   2) Change the Caddyfile volume mount
+  #      from "- ../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile"
+  #      to "- ../caddy/builtins/https.lets-encrypt.Caddyfile:/etc/caddy/Caddyfile"
+  #
+  # If none of these built-in configurations suit your needs, then you can create your own Caddyfile by referencing
+  # the official documentation: https://caddyserver.com/docs/caddyfile
+  caddy:
+    container_name: caddy
+    image: 'index.docker.io/caddy/caddy:alpine@sha256:b0f0a763527ca11a555bc5b5f942fa2d84ae0c90b0b60e47d0426ff884dd10ad'
     cpus: 1
     mem_limit: '1g'
+    environment:
+      - 'XDG_DATA_HOME=/caddy-storage/data'
+      - 'XDG_CONFIG_HOME=/caddy-storage/config'
+      - 'SRC_FRONTEND_ADDRESSES="sourcegraph-frontend-0:3080"'
+      # - 'SRC_SITE_ADDRESS="sourcegraph.example.com"'
+      # - 'SRC_CERT_PATH=/sourcegraph.pem'
+      # - 'SRC_KEY_PATH=/sourcegraph.key'
     volumes:
-      - '../nginx:/etc/nginx'
+      - 'caddy:/caddy-storage'
+      - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
+      # - '/LOCAL/CERT/PATH.pem:/sourcegraph.pem'
+      # - '/LOCAL/KEY/PATH.pem:/sourcegraph.key'
     ports:
-      - '0.0.0.0:80:7080'
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
     networks:
       - sourcegraph
     restart: always
@@ -559,6 +611,7 @@ services:
     restart: always
 
 volumes:
+  caddy:
   gitserver-0:
   grafana:
   #jaeger-cassandra:

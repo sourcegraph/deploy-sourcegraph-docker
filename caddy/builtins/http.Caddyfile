@@ -1,0 +1,15 @@
+# Routes all plain http requests to sourcegraph-frontend - suitable for local testing.
+#
+# Caddyfile documentation: https://caddyserver.com/docs/caddyfile
+
+# Serve all requests on port 80.
+:80
+
+# Do not modify.
+#
+# Contains the reverse proxy definition which tells Caddy to randomly
+# route requests between all frontend instances (specified by the 
+# SRC_FRONTEND_ADDRESSES environment variable.) 
+#
+# Reverse proxy directive documentation: https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
+reverse_proxy {$SRC_FRONTEND_ADDRESSES}
