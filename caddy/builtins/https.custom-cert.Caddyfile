@@ -1,5 +1,5 @@
-# Serves Sourcegraph over HTTPS, using a custom SSL certificate/key specified
-# by the "SRC_CERT_PATH" and "SRC_KEY_PATH" environment variables.
+# Serves Sourcegraph over HTTPS, using a custom SSL certificate/key pair 
+# that's bind mounted from the host to /sourcegraph.pem and /sourcegraph.key.
 #
 # Caddyfile documentation: https://caddyserver.com/docs/caddyfile
 
@@ -11,6 +11,6 @@
 }
 redir @http https://{host}{uri}
 
-tls {$SRC_CERT_PATH} {$SRC_KEY_PATH}
+tls /sourcegraph.pem /sourcegraph.key
 
 reverse_proxy {$SRC_FRONTEND_ADDRESSES}
