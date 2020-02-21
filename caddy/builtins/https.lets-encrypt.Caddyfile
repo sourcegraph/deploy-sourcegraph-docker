@@ -1,20 +1,14 @@
-# Serves Sourcegraph over HTTPS, using automatically provisioned certficates 
-# provided by Caddy. See https://caddyserver.com/docs/automatic-https for more information 
-# about how this feature works, caveats, and warnings. 
+# Serves Sourcegraph over HTTPS, using Caddy's automatic HTTPS certificate feature:
+# https://caddyserver.com/docs/automatic-https
+#
+# 🚨 Warning: If your DNS and Caddy configuration aren't properly configured (as 
+#             specified in https://caddyserver.com/docs/automatic-https), you can 
+#             Let's Encrypt rate limits which can block your certfificates for up to
+#             a week. 
 #
 # Caddyfile documentation: https://caddyserver.com/docs/caddyfile
-
-# The externally accessible URL for Sourcegraph (i.e. what you type in to your browser), 
-# provided via the "SRC_SITE_ADDRESS" environment variable.
 #
-# Example: sourcegraph.example.com
+
 {$SRC_SITE_ADDRESS}
 
-# Contains the reverse proxy definition which tells Caddy to randomly
-# route requests between all frontend instances (specified by the 
-# SRC_FRONTEND_ADDRESSES environment variable.)
-#
-# Do not modify.
-#
-# Reverse proxy directive documentation: https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
 reverse_proxy {$SRC_FRONTEND_ADDRESSES}
