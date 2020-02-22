@@ -7,7 +7,7 @@
 #             for up to a week. 
 #             It's strongly recommened that you use the staging Caddyfile 
 #             (https.lets-encrypt-staging.Caddyfile) to test your
-#             configuration before swithching to this production one. 
+#             configuration before switching to this production one. 
 #
 # Caddyfile documentation: https://caddyserver.com/docs/caddyfile
 #
