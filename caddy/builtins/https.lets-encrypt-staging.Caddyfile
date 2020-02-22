@@ -11,7 +11,7 @@
 #             run into Let's Encrypt rate limits which can block your certfificates 
 #             for up to a week. 
 #             It's strongly recommened that you use this Caddyfile to test your
-#             configuration before swithching to the production one. 
+#             configuration before switching to the production one. 
 #
 # Caddyfile documentation: https://caddyserver.com/docs/caddyfile
 #
