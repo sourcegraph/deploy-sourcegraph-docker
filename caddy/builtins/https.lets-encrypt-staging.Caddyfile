@@ -8,7 +8,7 @@
 #
 # 🚨 Warning: If your DNS and Caddy configuration aren't properly configured (as 
 #             specified in https://caddyserver.com/docs/automatic-https), you can 
-#             run into Let's Encrypt rate limits which can block your certfificates 
+#             run into Let's Encrypt rate limits which can block your certificates 
 #             for up to a week. 
 #             It's strongly recommened that you use this Caddyfile to test your
 #             configuration before switching to the production one. 
