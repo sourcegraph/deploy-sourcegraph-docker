@@ -9,7 +9,6 @@ services:
   # Sourcegraph ships with a few builtin templates that cover common HTTP/HTTPS configurations:
   # - HTTP only (default)
   # - HTTPS with Let's Encrypt (staging/production - strongly recommended that you test with the staging
-  #                            configuration first, see caddy/builtins/https.lets-encrypt-staging.Caddyfile
   #                            for more info)
   # - HTTPS with custom certificates
   #
