@@ -26,7 +26,7 @@ services:
       - 'XDG_DATA_HOME=/caddy-storage/data'
       - 'XDG_CONFIG_HOME=/caddy-storage/config'
       - 'SRC_FRONTEND_ADDRESSES="sourcegraph-frontend-0:3080"'
-      # Uncomment / update the following line when using HTTPS with either Let's Encrypt or custom certficates
+      # Uncomment & update this line when using Let's Encrypt or custom HTTPS certificates:
       # - 'SRC_SITE_ADDRESS="sourcegraph.example.com"'
       # Uncomment / update the following line when using HTTPS with Let's Encrypt
       # - 'SRC_ACME_EMAIL=admin@example.com'
