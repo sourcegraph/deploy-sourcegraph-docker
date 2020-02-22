@@ -20,8 +20,8 @@ services:
   caddy:
     container_name: caddy
     image: 'index.docker.io/caddy/caddy:alpine@sha256:b0f0a763527ca11a555bc5b5f942fa2d84ae0c90b0b60e47d0426ff884dd10ad'
-    cpus: 1
-    mem_limit: '1g'
+    cpus: 4
+    mem_limit: '4g'
     environment:
       - 'XDG_DATA_HOME=/caddy-storage/data'
       - 'XDG_CONFIG_HOME=/caddy-storage/config'
