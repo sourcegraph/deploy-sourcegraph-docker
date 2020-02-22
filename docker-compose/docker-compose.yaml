@@ -15,7 +15,7 @@ services:
   #
   # Follow the directions in the comments below to swap between these configurations.
   #
-  # If none of these built-in configurations suit your needs, then you can create your own Caddyfile by referencing
+  # If none of these built-in configurations suit your needs, then you can create your own Caddyfile, see:
   # https://caddyserver.com/docs/caddyfile
   caddy:
     container_name: caddy
