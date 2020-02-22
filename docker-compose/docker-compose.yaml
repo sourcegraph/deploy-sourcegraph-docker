@@ -8,7 +8,7 @@ services:
   #
   # Sourcegraph ships with a few builtin templates that cover common HTTP/HTTPS configurations:
   # - HTTP only (default)
-  # - HTTPS with Let's Encrypt (staging/production - strongly recommended that you test with the staging
+  # - HTTPS with Let's Encrypt
   # - HTTPS with custom certificates
   #
   # Follow the directions in the comments below to swap between these configurations.
@@ -26,6 +26,7 @@ services:
       - 'SRC_FRONTEND_ADDRESSES="sourcegraph-frontend-0:3080"'
       # Uncomment & update this line when using Let's Encrypt or custom HTTPS certificates:
       # - 'SRC_SITE_ADDRESS="sourcegraph.example.com"'
+      #
       # Uncomment & update the following line when using HTTPS with Let's Encrypt
       # - 'SRC_ACME_EMAIL=admin@example.com'
     volumes:
