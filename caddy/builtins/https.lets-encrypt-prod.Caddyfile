@@ -1,0 +1,21 @@
+# Serves Sourcegraph over HTTPS, using Caddy's automatic HTTPS certificate feature:
+# https://caddyserver.com/docs/automatic-https
+#
+# 🚨 Warning: If your DNS and Caddy configuration aren't properly configured (as 
+#             specified in https://caddyserver.com/docs/automatic-https), you can 
+#             run into Let's Encrypt rate limits which can block your certificates 
+#             for up to a week. 
+#             It's strongly recommened that you use the staging Caddyfile 
+#             (https.lets-encrypt-staging.Caddyfile) to test your
+#             configuration before switching to this production one. 
+#
+# Caddyfile documentation: https://caddyserver.com/docs/caddyfile
+#
+
+{
+    email {$SRC_ACME_EMAIL}
+}
+
+{$SRC_SITE_ADDRESS}
+
+reverse_proxy {$SRC_FRONTEND_ADDRESSES}

@@ -1,0 +1,7 @@
+# Routes all plain http requests to sourcegraph-frontend - suitable for local testing.
+#
+# Caddyfile documentation: https://caddyserver.com/docs/caddyfile
+
+:80
+
+reverse_proxy {$SRC_FRONTEND_ADDRESSES}
