@@ -6,7 +6,7 @@ services:
   # Ports exposed to other Sourcegraph services: none
   # Ports exposed to the public internet: 80 (HTTP) and 443 (HTTPS)
   #
-  # Sourcegraph ships with a few builtin templates that cover some common HTTP/HTTPS configurations:
+  # Sourcegraph ships with a few builtin templates that cover common HTTP/HTTPS configurations:
   # - HTTP only (default)
   # - HTTPS with Let's Encrypt (staging/production - strongly recommended that you test with the staging
   #                            configuration first, see caddy/builtins/https.lets-encrypt-staging.Caddyfile
