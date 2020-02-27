@@ -20,6 +20,6 @@ docker run --detach \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
-    index.docker.io/sourcegraph/lsif-server:3.11.4@sha256:b6b84c1f552a11a445bf74bf2d8059ba2ad5527d01961d953f86f4596dafc91a
+    index.docker.io/sourcegraph/lsif-server:3.12.5@sha256:3a37053e9e4eb5d506e164608e40bd39afef8cb097605f2bfb0960c46dff7ed0
 
 echo "Deployed lsif-server service"
