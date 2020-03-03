@@ -441,7 +441,7 @@ services:
   #
   cadvisor:
     container_name: cadvisor
-    image: 'google/cadvisor:v0.33.0'
+    image: 'google/cadvisor:v0.33.0@sha256:47f1f8c02a3acfab77e74e2ec7acc0d475adc180ddff428503a4ce63f3d6061b'
     cpus: 1
     mem_limit: '1g'
     volumes:
