@@ -20,7 +20,7 @@ WorkingDirectory=/home/ec2-user/deploy-sourcegraph-docker/docker-compose
 
 ExecStart=/usr/local/bin/docker-compose up
 
-ExecStop=/usr/local/bin/docker-compose down -v
+ExecStop=/usr/local/bin/docker-compose down
 
 [Install]
 WantedBy=multi-user.target
