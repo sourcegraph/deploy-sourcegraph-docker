@@ -1,0 +1,32 @@
+# This file contains only the pgsql service definition, and is used during
+# the sourcegraph/server -> docker-compose migration process. 
+# 
+# 🚨This file MUST be kept in sync with the pgsql definition in docker-compose/docker-compose.yaml
+version: '2.4'
+services:
+  # Description: PostgreSQL database for various data.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  pgsql:
+    container_name: pgsql
+    image: 'index.docker.io/sourcegraph/postgres-11.4:19-11-14_b084311b@sha256:072481559d559cfd9a53ad77c3688b5cf583117457fd452ae238a20405923297'
+    cpus: 4
+    mem_limit: '2g'
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - 'pgsql:/data/'
+    networks:
+      - sourcegraph
+    restart: always
+volumes:
+  pgsql:
+networks:
+  sourcegraph:

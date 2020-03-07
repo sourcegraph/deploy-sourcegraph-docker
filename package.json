@@ -4,7 +4,7 @@
     "prettier-check": "yarn -s run prettier --write=false"
   },
   "devDependencies": {
-    "@sourcegraph/prettierrc": "3.0.1",
+    "@sourcegraph/prettierrc": "3.0.2",
     "prettier": "1.19.1"
   }
 }
