@@ -28,6 +28,7 @@ docker run --detach \
     -e REPLACER_URL=http://replacer:3185 \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
+    -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
     index.docker.io/sourcegraph/frontend:3.12.5@sha256:12f6a461b56847213ccf5a659376949c3a420b08b07015a8c4e8b6c12d8f5a7c
 
