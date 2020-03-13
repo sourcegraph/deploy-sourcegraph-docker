@@ -2,23 +2,57 @@ version: '2.4'
 services:
   # Description: Acts as a reverse proxy for all of the sourcegraph-frontend instances
   #
-  # Disk: none
+  # Disk: 1GB / persistent SSD
   # Ports exposed to other Sourcegraph services: none
-  # Ports exposed to the public internet: 7080 (HTTP) and/or 7443 (HTTPS)
+  # Ports exposed to the public internet: 80 (HTTP) and 443 (HTTPS)
   #
-  # Note: nginx/nginx/sourcegraph_backend.conf lists all of the sourcegraph-frontend
-  # network addresses that Nginx should proxy. nginx/nginx/sourcegraph_backend.conf
-  # needs to be updated with new addresses when scaling the number of soucegraph-frontend
-  # replicas.
-  nginx:
-    container_name: nginx
-    image: 'index.docker.io/library/nginx:1.17.7@sha256:8aa7f6a9585d908a63e5e418dc5d14ae7467d2e36e1ab4f0d8f9d059a3d071ce'
-    cpus: 1
-    mem_limit: '1g'
+  # Sourcegraph ships with a few builtin templates that cover common HTTP/HTTPS configurations:
+  # - HTTP only (default)
+  # - HTTPS with Let's Encrypt
+  # - HTTPS with custom certificates
+  #
+  # Follow the directions in the comments below to swap between these configurations.
+  #
+  # If none of these built-in configurations suit your needs, then you can create your own Caddyfile, see:
+  # https://caddyserver.com/docs/caddyfile
+  caddy:
+    container_name: caddy
+    image: 'index.docker.io/caddy/caddy:alpine@sha256:ef2f47730caa12cb7d0ba944c048b8e48f029d5e0ff861840fa2b8f1868e1966'
+    cpus: 4
+    mem_limit: '4g'
+    environment:
+      - 'XDG_DATA_HOME=/caddy-storage/data'
+      - 'XDG_CONFIG_HOME=/caddy-storage/config'
+      - 'SRC_FRONTEND_ADDRESSES="sourcegraph-frontend-0:3080"'
+      # Uncomment & update this line when using Let's Encrypt or custom HTTPS certificates:
+      # - 'SRC_SITE_ADDRESS="sourcegraph.example.com"'
+      #
+      # Uncomment & update the following line when using HTTPS with Let's Encrypt
+      # - 'SRC_ACME_EMAIL=admin@example.com'
     volumes:
-      - '../nginx:/etc/nginx'
+      - 'caddy:/caddy-storage'
+      #
+      # Comment out the following line when using HTTPS with either Let's Encrypt or custom certficates
+      - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
+      #
+      # Uncomment the following line when using HTTPS with Let's Encrypt's staging environment
+      # - '../caddy/builtins/https.lets-encrypt-staging.Caddyfile:/etc/caddy/Caddyfile'
+      #
+      # Uncomment the following line when using HTTPS with Let's Encrypt's production environment
+      # IMPORTANT: Strongly recommended to test with the staging configuration above first, see that file for details. 
+      # - '../caddy/builtins/https.lets-encrypt-prod.Caddyfile:/etc/caddy/Caddyfile'
+      #
+      # Uncomment the following line when using HTTPS with custom certificates
+      # - '../caddy/builtins/https.custom-cert.Caddyfile:/etc/caddy/Caddyfile'
+      #
+      # Uncomment / update the following line when using HTTPS with custom certficates
+      # - '/LOCAL/CERT/PATH.pem:/sourcegraph.pem'
+      #
+      # Uncomment / update the following line when using HTTPS with custom certficates
+      # - '/LOCAL/KEY/PATH.pem:/sourcegraph.key'
     ports:
-      - '0.0.0.0:80:7080'
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
     networks:
       - sourcegraph
     restart: always
@@ -35,7 +69,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.12.5@sha256:12f6a461b56847213ccf5a659376949c3a420b08b07015a8c4e8b6c12d8f5a7c'
+    image: 'index.docker.io/sourcegraph/frontend:3.13.2@sha256:189c714c6a3881760db4c9df28696a50745af1b1f8051e0105f0ec9252ba2381'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -52,6 +86,7 @@ services:
       - 'REPLACER_URL=http://replacer:3185'
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
+      - 'GITHUB_BASE_URL=http://github-proxy:3180'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -72,7 +107,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.12.5@sha256:12f6a461b56847213ccf5a659376949c3a420b08b07015a8c4e8b6c12d8f5a7c'
+    image: 'index.docker.io/sourcegraph/frontend:3.13.2@sha256:189c714c6a3881760db4c9df28696a50745af1b1f8051e0105f0ec9252ba2381'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -88,6 +123,7 @@ services:
       - 'REPLACER_URL=http://replacer:3185'
       - 'LSIF_SERVER_URL=http://lsif-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
+      - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     networks:
@@ -102,7 +138,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:3.12.5@sha256:7e9b37cc7802c8e7a7dbadf2489b57c5d2e3d0869cb73ef732294e36e4aede31'
+    image: 'index.docker.io/sourcegraph/gitserver:3.13.2@sha256:95ea2520763f51bf0888c70333e043a40a9a7a31f141fffc03ac19671513c324'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -125,7 +161,7 @@ services:
   #
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200124185115-83b89a5@sha256:efd1fb37fc62bfab963f12e95f69778b0e2e6a253caed5be9025840072ea85b5'
+    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200302121716-13dbd22@sha256:91643d83223bb72f4aa2b5031ceb774c8e604a227c58ed54375bd341f25e2ef3
     mem_limit: '16g'
     environment:
       - GOMAXPROCS=8
@@ -145,7 +181,7 @@ services:
   #
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200124185328-83b89a5@sha256:cde27ee7db0fe6c293a8c9df47b529fb01b5a898e6cbeea4c18d80fe218563db'
+    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200302121635-13dbd22@sha256:0183bd676fe1ba774edcca29f042d8d3594e833e08b6d603af98f74c575eaf69'
     cpus: 8
     mem_limit: '50g'
     environment:
@@ -171,7 +207,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.12.5@sha256:38682826d81e93066c6358befcb47650b9d8dfc1b3f15cc7384111e6c26c398c'
+    image: 'index.docker.io/sourcegraph/searcher:3.13.2@sha256:f46ba5d23d64b2d6616b510af71ff4354b8602602a24f45aaee6743208538f4e'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -199,7 +235,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.12.5@sha256:5476e3b6da6818f7ed851dc87ce43bbc6a21fb96694ed6ee97c5dba58622fea3'
+    image: 'index.docker.io/sourcegraph/github-proxy:3.13.2@sha256:f570cfceda0302aa7f6ffea8fb1baa68d1213ffe794254d03f01031667983107'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -218,7 +254,7 @@ services:
   #
   lsif-server:
     container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.12.5@sha256:3a37053e9e4eb5d506e164608e40bd39afef8cb097605f2bfb0960c46dff7ed0'
+    image: 'index.docker.io/sourcegraph/lsif-server:3.13.2@sha256:27d6f82702cd770d02de57a8a74b8b1f338ee3de53eb3979bd2a06f12216bf7e'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -247,7 +283,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.12.5@sha256:141a8e72cd42470f410a7df33fe989cf0f61f44aa0511b9946b355ebf6741ec6'
+    image: 'index.docker.io/sourcegraph/query-runner:3.13.2@sha256:8a714e4d88545ed0f9330e5c2b07fcfc7d60b102656509054bba8bba2ea9d53a'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -266,7 +302,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.12.5@sha256:700ced7a64038d8ac47567bc141e9e08b45d98f945bf5e6983212ec37a64995f'
+    image: 'index.docker.io/sourcegraph/replacer:3.13.2@sha256:4bffbb9af71d742edc8ae1a4e1aaa9395f70816df0e2b076bd324fde483967f3'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -291,7 +327,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.12.5@sha256:988f43f9c465c6264027d08d01158a22add4dc3a04272a20ce4a7fdc77a4859c'
+    image: 'index.docker.io/sourcegraph/repo-updater:3.13.2@sha256:09b206354027eefafc9f441feb02db4aa84c4ff65f6158e67b2ffca696264034'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -313,7 +349,7 @@ services:
   #
   syntect-server:
     container_name: syntect-server
-    image: 'index.docker.io/sourcegraph/syntect_server:2b5a3fb@sha256:ef5529cafdc68d5a21edea472ee8ad966878b173044aa5c3db93bc3d84765b1f'
+    image: 'index.docker.io/sourcegraph/syntect_server:c0297a1@sha256:333abb45cfaae9c9d37e576c3853843b00eca33a40a7c71f6b93211ed96528df'
     cpus: 4
     mem_limit: '6g'
     healthcheck:
@@ -334,7 +370,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.12.5@sha256:cd45dee51865dd7a35ef1596e7f879fcba2ec868a7d85115d287443aaa1a56d7'
+    image: 'index.docker.io/sourcegraph/symbols:3.13.2@sha256:09e634e60fb5c963d31e0a53fd864b395b8567658e0057d9d653be4ced370ac2'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -361,7 +397,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:10.0.7@sha256:22d54f27c7df8733a06c7ae8c2e851b61b1ed42f1f5621d493ef58ebd8d815e0'
+    image: 'index.docker.io/sourcegraph/prometheus:10.0.8@sha256:75efaada5a335cda9895f337d8f31b6abb7a082ef3092b7bb24bf31fb78eafe6'
     cpus: 4
     mem_limit: '8g'
     volumes:
@@ -386,7 +422,7 @@ services:
   # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
   grafana:
     container_name: grafana
-    image: 'index.docker.io/sourcegraph/grafana:10.0.9@sha256:0132e5602030145803753468497a2d17640164b9c34df4ce2532dd93e4b1f6fc'
+    image: 'index.docker.io/sourcegraph/grafana:10.0.10@sha256:a6f9816346c3e38478f4b855eeee199fc91a4f69311f5dd57760bf74c3234715'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -407,7 +443,7 @@ services:
   #
   cadvisor:
     container_name: cadvisor
-    image: 'google/cadvisor:v0.33.0'
+    image: 'google/cadvisor:v0.33.0@sha256:47f1f8c02a3acfab77e74e2ec7acc0d475adc180ddff428503a4ce63f3d6061b'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -533,7 +569,7 @@ services:
   #
   redis-cache:
     container_name: redis-cache
-    image: index.docker.io/sourcegraph/redis-cache:19-04-16_6891de82@sha256:4cbfac8af0abb673899250d4fd859cc477d6426de519e9deb71e454e18322499
+    image: 'index.docker.io/sourcegraph/redis-cache:20-02-03_da9d71ca@sha256:7820219195ab3e8fdae5875cd690fed1b2a01fd1063bd94210c0e9d529c38e56'
     cpus: 1
     mem_limit: '6g'
     volumes:
@@ -549,7 +585,7 @@ services:
   #
   redis-store:
     container_name: redis-store
-    image: 'index.docker.io/sourcegraph/redis-store:19-04-16_6891de821@sha256:56426d601ce1f6d63088fea1cefa61f69a2e809c7d90fc1d157cca63cf81b277'
+    image: 'index.docker.io/sourcegraph/redis-store:20-01-30_c903717e@sha256:e8467a8279832207559bdfbc4a89b68916ecd5b44ab5cf7620c995461c005168'
     cpus: 1
     mem_limit: '6g'
     volumes:
@@ -559,6 +595,7 @@ services:
     restart: always
 
 volumes:
+  caddy:
   gitserver-0:
   grafana:
   #jaeger-cassandra:
