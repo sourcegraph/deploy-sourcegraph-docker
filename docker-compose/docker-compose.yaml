@@ -249,7 +249,7 @@ services:
   # Description: LSIF HTTP server for code intelligence.
   #
   # Disk: 200GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 3186/TCP (server) 3187/TCP (worker)
+  # Ports exposed to other Sourcegraph services: 3186/TCP (server) 9090/TCP (prometheus)
   # Ports exposed to the public internet: none
   #
   lsif-server:
@@ -259,6 +259,8 @@ services:
     mem_limit: '2g'
     environment:
       - GOMAXPROCS=2
+      - LSIF_NUM_SERVERS=1
+      - LSIF_NUM_WORKERS=1
       - LSIF_STORAGE_ROOT=/lsif-storage
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:

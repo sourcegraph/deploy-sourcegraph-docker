@@ -6,8 +6,8 @@ source ./replicas.sh
 #
 # Disk: 200GB / persistent SSD
 # Network: 100mbps
-# Liveness probe: n/a
-# Ports exposed to other Sourcegraph services: 3186/TCP (server) 3187/TCP (worker)
+# Liveness probe: HTTP GET http://lsif-server:3186/healthz
+# Ports exposed to other Sourcegraph services: 3186/TCP (server) 9090/TCP (prometheus)
 # Ports exposed to the public internet: none
 #
 docker run --detach \
@@ -17,6 +17,8 @@ docker run --detach \
     --cpus=2 \
     --memory=2g \
     -e GOMAXPROCS=2 \
+    -e LSIF_NUM_SERVERS=1 \
+    -e LSIF_NUM_WORKERS=1 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
