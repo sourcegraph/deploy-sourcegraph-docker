@@ -69,7 +69,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.13.1@sha256:d03bada46d4885febf113efb1056aca6cc5899b97abfa92c6f39446247ca14a0'
+    image: 'index.docker.io/sourcegraph/frontend:3.13.2@sha256:189c714c6a3881760db4c9df28696a50745af1b1f8051e0105f0ec9252ba2381'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -106,7 +106,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.13.1@sha256:d03bada46d4885febf113efb1056aca6cc5899b97abfa92c6f39446247ca14a0'
+    image: 'index.docker.io/sourcegraph/frontend:3.13.2@sha256:189c714c6a3881760db4c9df28696a50745af1b1f8051e0105f0ec9252ba2381'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -136,7 +136,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:3.13.1@sha256:de44da255e6aa8d7771b4e91f64d6be996289e9436fdd5b7809582366826b43e'
+    image: 'index.docker.io/sourcegraph/gitserver:3.13.2@sha256:95ea2520763f51bf0888c70333e043a40a9a7a31f141fffc03ac19671513c324'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -159,7 +159,7 @@ services:
   #
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200221095506-2880d98@sha256:91643d83223bb72f4aa2b5031ceb774c8e604a227c58ed54375bd341f25e2ef3'
+    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200302121716-13dbd22@sha256:91643d83223bb72f4aa2b5031ceb774c8e604a227c58ed54375bd341f25e2ef3'
     mem_limit: '16g'
     environment:
       - GOMAXPROCS=8
@@ -179,7 +179,7 @@ services:
   #
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200221095346-2880d98@sha256:0183bd676fe1ba774edcca29f042d8d3594e833e08b6d603af98f74c575eaf69'
+    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200302121635-13dbd22@sha256:0183bd676fe1ba774edcca29f042d8d3594e833e08b6d603af98f74c575eaf69'
     cpus: 8
     mem_limit: '50g'
     environment:
@@ -205,7 +205,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.13.1@sha256:086b4404b9cbb0e0cdafa9359e8f88de4ee0f99ce8231776e40e375fe0d9eba4'
+    image: 'index.docker.io/sourcegraph/searcher:3.13.2@sha256:f46ba5d23d64b2d6616b510af71ff4354b8602602a24f45aaee6743208538f4e'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -233,7 +233,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.13.1@sha256:5ae601bdb681dca2f9481021400c41fc5d0c05f89f2f083c04669ad4174a485f'
+    image: 'index.docker.io/sourcegraph/github-proxy:3.13.2@sha256:f570cfceda0302aa7f6ffea8fb1baa68d1213ffe794254d03f01031667983107'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -252,7 +252,7 @@ services:
   #
   lsif-server:
     container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.13.1@sha256:5da2ce470450294d155bd1edc86b37296faef81565ec226795261a7dc8fd5682'
+    image: 'index.docker.io/sourcegraph/lsif-server:3.13.2@sha256:27d6f82702cd770d02de57a8a74b8b1f338ee3de53eb3979bd2a06f12216bf7e'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -281,7 +281,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.13.1@sha256:af666c0b7a6110a74b89337e57a7d175da81424cbb2e5ff9950e7d6968fca308'
+    image: 'index.docker.io/sourcegraph/query-runner:3.13.2@sha256:8a714e4d88545ed0f9330e5c2b07fcfc7d60b102656509054bba8bba2ea9d53a'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -300,7 +300,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.13.1@sha256:082472b9c5974deb38b5c540711c58066cfe903a4e079a4e90ceb79ba44fcf62'
+    image: 'index.docker.io/sourcegraph/replacer:3.13.2@sha256:4bffbb9af71d742edc8ae1a4e1aaa9395f70816df0e2b076bd324fde483967f3'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -325,7 +325,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.13.1@sha256:f619d8ebdfb3c166d1f99543c562ebe700886f0f42f55385fa244622683458d5'
+    image: 'index.docker.io/sourcegraph/repo-updater:3.13.2@sha256:09b206354027eefafc9f441feb02db4aa84c4ff65f6158e67b2ffca696264034'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -368,7 +368,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.13.1@sha256:0b1eaf60ffe75182f3c097125b02c291626de18cc5bfddae167189573814ed88'
+    image: 'index.docker.io/sourcegraph/symbols:3.13.2@sha256:09e634e60fb5c963d31e0a53fd864b395b8567658e0057d9d653be4ced370ac2'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -395,7 +395,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:10.0.7@sha256:22d54f27c7df8733a06c7ae8c2e851b61b1ed42f1f5621d493ef58ebd8d815e0'
+    image: 'index.docker.io/sourcegraph/prometheus:10.0.8@sha256:75efaada5a335cda9895f337d8f31b6abb7a082ef3092b7bb24bf31fb78eafe6'
     cpus: 4
     mem_limit: '8g'
     volumes:
