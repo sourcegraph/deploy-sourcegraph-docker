@@ -260,7 +260,8 @@ services:
     environment:
       - GOMAXPROCS=2
       - LSIF_NUM_SERVERS=1
-      - LSIF_NUM_WORKERS=1
+      - LSIF_NUM_DUMP_MANAGERS=1
+      - LSIF_NUM_DUMP_PROCESSORS=1
       - LSIF_STORAGE_ROOT=/lsif-storage
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
