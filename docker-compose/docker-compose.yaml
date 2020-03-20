@@ -330,7 +330,7 @@ services:
     image: 'index.docker.io/sourcegraph/repo-updater:3.14.0@sha256:8417839e12336e3e5dfc45ce5aae01a2e1527d8c721eeec87c78395c74f236cc'
     cpus: 4
     mem_limit: '4g'
-  environment:
+    environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger-agent
