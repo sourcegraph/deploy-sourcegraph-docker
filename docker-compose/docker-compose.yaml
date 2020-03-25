@@ -452,6 +452,7 @@ services:
       - '/sys:/sys:ro'
       - '/var/lib/docker/:/var/lib/docker:ro'
       - '/dev/disk/:/dev/disk:ro'
+      - '/cgroup:/sys/fs/cgroup:ro' # Amazon Linux (non-v2) support
     networks:
       - sourcegraph
     restart: always
