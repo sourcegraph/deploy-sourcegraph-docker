@@ -21,6 +21,7 @@ sudo docker run --detach \
     --volume=/sys:/sys:ro \
     --volume=/var/lib/docker/:/var/lib/docker:ro \
     --volume=/dev/disk/:/dev/disk:ro \
+    --volume=/cgroup:/sys/fs/cgroup:ro \
     google/cadvisor:v0.33.0
 
 echo "Deployed cadvisor"
