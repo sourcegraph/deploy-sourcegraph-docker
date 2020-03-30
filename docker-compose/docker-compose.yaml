@@ -268,6 +268,8 @@ services:
       - NUM_APIS=1
       - NUM_BUNDLE_MANAGERS=1
       - NUM_WORKERS=1
+      - PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://localhost:3187
+      - PRECISE_CODE_INTEL_API_SERVER_URL=http://localhost:3186
       - LSIF_STORAGE_ROOT=/lsif-storage
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:

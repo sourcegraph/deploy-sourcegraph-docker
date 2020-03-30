@@ -20,6 +20,8 @@ docker run --detach \
     -e NUM_APIS=1 \
     -e NUM_BUNDLE_MANAGERS=1 \
     -e NUM_WORKERS=1 \
+    -e PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://localhost:3187 \
+    -e PRECISE_CODE_INTEL_API_SERVER_URL=http://localhost:3186 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
