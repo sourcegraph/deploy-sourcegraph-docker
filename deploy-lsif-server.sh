@@ -17,9 +17,9 @@ docker run --detach \
     --cpus=2 \
     --memory=2g \
     -e GOMAXPROCS=2 \
-    -e LSIF_NUM_SERVERS=1 \
-    -e LSIF_NUM_DUMP_MANAGERS=1 \
-    -e LSIF_NUM_DUMP_PROCESSORS=1 \
+    -e NUM_APIS=1 \
+    -e NUM_BUNDLE_MANAGERS=1 \
+    -e NUM_WORKERS=1 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
