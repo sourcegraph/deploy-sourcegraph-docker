@@ -253,7 +253,7 @@ services:
   #
   precise-code-intel-api-server:
     container_name: precise-code-intel-api-server
-    image: 'index.docker.io/sourcegraph/precise-code-intel-api-server:insiders'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-api-server:59913_2020-04-02_5ae630c'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -277,7 +277,7 @@ services:
   #
   precise-code-intel-bundle-manager:
     container_name: precise-code-intel-bundle-manager
-    image: 'index.docker.io/sourcegraph/precise-code-intel-bundle-manager:insiders'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-bundle-manager:59913_2020-04-02_5ae630c'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -303,7 +303,7 @@ services:
   #
   precise-code-intel-worker:
     container_name: precise-code-intel-worker
-    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:59913_2020-04-02_5ae630c'
     cpus: 2
     mem_limit: '4g'
     environment:
