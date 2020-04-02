@@ -69,7 +69,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.14.0@sha256:fd10d228461581e65fcc39e0fc4481be5a19f4b5aa1a1b19f0ad90fcc4a5ff88'
+    image: 'index.docker.io/sourcegraph/frontend:59913_2020-04-02_5ae630c'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -107,7 +107,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.14.0@sha256:fd10d228461581e65fcc39e0fc4481be5a19f4b5aa1a1b19f0ad90fcc4a5ff88'
+    image: 'index.docker.io/sourcegraph/frontend:59913_2020-04-02_5ae630c'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -207,7 +207,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.14.0@sha256:904b0755d65bfaf467d7da36927798400204d603357ad32baa7a525863d54a78'
+    image: 'index.docker.io/sourcegraph/searcher:59913_2020-04-02_5ae630c'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -235,7 +235,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.14.0@sha256:5679eaafbfb5687900d5a379c8941d2650b6c9cfecf359b53921223b07e16e6c'
+    image: 'index.docker.io/sourcegraph/github-proxy:59913_2020-04-02_5ae630c'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -330,7 +330,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.14.0@sha256:1c1e2799d2679e278c16daff1a7160497fa8922fce16b9e27a7bf278455d4aba'
+    image: 'index.docker.io/sourcegraph/query-runner:59913_2020-04-02_5ae630c'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -349,7 +349,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.14.0@sha256:8843d25125b8309623642fe22d9f4412e1c692ce3823b0bd2b5d924c4004808e'
+    image: 'index.docker.io/sourcegraph/replacer:59913_2020-04-02_5ae630c'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -374,7 +374,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.14.0@sha256:8417839e12336e3e5dfc45ce5aae01a2e1527d8c721eeec87c78395c74f236cc'
+    image: 'index.docker.io/sourcegraph/repo-updater:59913_2020-04-02_5ae630c'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -417,7 +417,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.14.0@sha256:7c21f0d3c711745bda36bb131cba5a47c53cb02fd2db08544718874d10212bdc'
+    image: 'index.docker.io/sourcegraph/symbols:59913_2020-04-02_5ae630c'
     cpus: 2
     mem_limit: '4g'
     environment:
