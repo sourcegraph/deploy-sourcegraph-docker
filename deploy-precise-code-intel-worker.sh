@@ -13,7 +13,7 @@ docker run --detach \
     --restart=always \
     --cpus=2 \
     --memory=4g \
-    -e 'NUM_WORKERS=4' \
+    -e 'NUM_WORKERS=2' \
     -e 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187' \
     -e 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090' \
     index.docker.io/sourcegraph/precise-code-intel-worker:insiders
