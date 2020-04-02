@@ -257,7 +257,7 @@ services:
     cpus: 2
     mem_limit: '2g'
     environment:
-      - PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187
+      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3186/ping' -O /dev/null || exit 1"
@@ -281,9 +281,9 @@ services:
     cpus: 2
     mem_limit: '2g'
     environment:
-      - PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186
+      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - LSIF_STORAGE_ROOT=/lsif-storage
+      - 'LSIF_STORAGE_ROOT=/lsif-storage'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3187/ping' -O /dev/null || exit 1"
       interval: 5s
@@ -307,7 +307,7 @@ services:
     cpus: 2
     mem_limit: '4g'
     environment:
-      - PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187
+      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3188/ping' -O /dev/null || exit 1"
