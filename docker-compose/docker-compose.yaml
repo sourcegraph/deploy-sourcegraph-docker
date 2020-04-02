@@ -84,10 +84,7 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'REPLACER_URL=http://replacer:3185'
-      # remove after 3.15
-      - 'LSIF_SERVER_URL=http://lsif-server:3186'
-      # used after 3.15
-      - 'LSIF_API_SERVER_URL=http://lsif-server:3186'
+      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     healthcheck:
@@ -124,10 +121,7 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'REPLACER_URL=http://replacer:3185'
-      # remove after 3.15
-      - 'LSIF_SERVER_URL=http://lsif-server:3186'
-      # used after 3.15
-      - 'LSIF_API_SERVER_URL=http://lsif-server:3186'
+      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
@@ -252,20 +246,18 @@ services:
       - sourcegraph
     restart: always
 
-  # Description: LSIF HTTP server for code intelligence.
+  # Description: Serves precise code intelligence requests.
   #
-  # Disk: 200GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 3186/TCP (server) 3187/TCP (worker)
+  # Ports exposed to other Sourcegraph services: 3186/TCP (server)
   # Ports exposed to the public internet: none
   #
-  lsif-server:
-    container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.14.0-1@sha256:ed683d2579d807458a892eab2f88fa5618b82a1ae7af02d5e7de1af3f6eea4a7'
+  precise-code-intel-api-server:
+    container_name: precise-code-intel
+    image: 'index.docker.io/sourcegraph/precise-code-intel-api-server:insiders'
     cpus: 2
     mem_limit: '2g'
     environment:
-      - GOMAXPROCS=2
-      - LSIF_STORAGE_ROOT=/lsif-storage
+      - PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3186/ping' -O /dev/null || exit 1"
@@ -273,8 +265,57 @@ services:
       timeout: 5s
       retries: 1
       start_period: 60s
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Stores and manages precise code intelligence bundles.
+  #
+  # Disk: 200GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 3187/TCP (manager)
+  # Ports exposed to the public internet: none
+  #
+  precise-code-intel-bundle-manager:
+    container_name: precise-code-intel
+    image: 'index.docker.io/sourcegraph/precise-code-intel-bundle-manager:insiders'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - LSIF_STORAGE_ROOT=/lsif-storage
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3186/ping' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
     volumes:
-      - 'lsif-server:/lsif-storage'
+      - 'precise-code-intel-bundle-manager:/lsif-storage'
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Handles conversion of uploaded precise code intelligence bundles.
+  #
+  # Ports exposed to other Sourcegraph services: 3188/TCP (first worker), 9090 (prometheus)
+  # Ports exposed to the public internet: none
+  #
+  precise-code-intel-worker:
+    container_name: precise-code-intel
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - NUM_WORKERS=4
+      - PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3186/ping' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
     networks:
       - sourcegraph
     restart: always
@@ -605,7 +646,7 @@ volumes:
   gitserver-0:
   grafana:
   #jaeger-cassandra:
-  lsif-server:
+  precise-code-intel-bundle-manager:
   pgsql:
   prometheus-v2:
   redis-cache:
