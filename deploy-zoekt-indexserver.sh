@@ -21,7 +21,7 @@ docker run --detach \
     --hostname=zoekt-indexserver-$1 \
     --network=sourcegraph \
     --restart=always \
-    --cpus=4 \
+    --cpus=8 \
     --memory=16g \
     -e GOMAXPROCS=8 \
     -e HOSTNAME=zoekt-webserver-$1:6070 \
