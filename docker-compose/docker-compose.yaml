@@ -307,7 +307,6 @@ services:
     cpus: 2
     mem_limit: '4g'
     environment:
-      - NUM_WORKERS=2
       - PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
