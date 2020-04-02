@@ -283,7 +283,6 @@ services:
     environment:
       - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'LSIF_STORAGE_ROOT=/lsif-storage'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3187/ping' -O /dev/null || exit 1"
       interval: 5s
