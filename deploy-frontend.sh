@@ -32,7 +32,7 @@ docker run --detach \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.13.2@sha256:189c714c6a3881760db4c9df28696a50745af1b1f8051e0105f0ec9252ba2381
+    index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling

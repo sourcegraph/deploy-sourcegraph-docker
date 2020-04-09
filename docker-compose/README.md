@@ -2,8 +2,6 @@
 
 This folder contains a Sourcegraph docker-compose deployment.
 
-**NOTE:** This is early access and slated for release in Sourcegraph v3.12; the missing components today are primarily documentation. Please contact us (support@sourcegraph.com) if you are looking at using this in production so we can assist you.
-
 ## Deploying
 
 Simply clone the repository and `docker-compose up -d` to deploy Sourcegraph:
@@ -25,12 +23,4 @@ Notes:
 
 ## Upgrading
 
-When a new version of Sourcegraph is released, you will simply checkout that version in this repository and redeploy:
-
-```sh
-cd deploy-sourcegraph-docker/docker-compose
-git pull
-git checkout NEW_VERSION
-docker-compose down
-docker-compose up -d
-```
+Always refer to https://docs.sourcegraph.com/admin/updates/docker_compose prior to upgrading, as it will document any manual steps you may need to take in order to upgrade smoothly.
