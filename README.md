@@ -83,6 +83,6 @@ Then try cloning the repository:
 $ git clone ssh://git@myhost.com/my/repo /tmp/my-repo
 ```
 
-## Questions
+## Questions & Issues
 
-[Open an issue](https://github.com/sourcegraph/deploy-sourcegraph-docker/issues/new) or contact us (support@sourcegraph.com), we are happy to answer any questions!
+[Open an issue in our main repository](https://github.com/sourcegraph/sourcegraph/issues/new) or contact us (support@sourcegraph.com), we are happy to help!
