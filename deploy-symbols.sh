@@ -18,7 +18,7 @@ docker run --detach \
     --memory=4g \
     -e GOMAXPROCS=2 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    -e JAEGER_AGENT_HOST='jaeger-agent' \
+    -e JAEGER_AGENT_HOST=jaeger \
     -v ~/sourcegraph-docker/symbols-$1-disk:/mnt/cache \
     index.docker.io/sourcegraph/symbols:3.14.2@sha256:654d15355a34dcfa610fb05f44f2e1c389571b7534d295fa389f63ba958c7df4
 

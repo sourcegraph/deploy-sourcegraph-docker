@@ -17,7 +17,7 @@ docker run --detach \
     --cpus=4 \
     --memory=8g \
     -e GOMAXPROCS=12 \
-    -e JAEGER_AGENT_HOST='jaeger-agent' \
+    -e JAEGER_AGENT_HOST=jaeger \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
