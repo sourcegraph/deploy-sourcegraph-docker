@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 3090/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
+VOLUME="$HOME/sourcegraph-docker/sourcegraph-frontend-internal-0-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=sourcegraph-frontend-internal \
     --network=sourcegraph \
@@ -26,13 +28,13 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e REPLACER_URL=http://replacer:3185 \
-    # remove after 3.15
+    `# remove after 3.15` \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
-    # used after 3.15
+    `# used after 3.15` \
     -e LSIF_API_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
-    -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
+    -v $VOLUME:/mnt/cache \
     index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6
 
 echo "Deployed sourcegraph-frontend-internal service"

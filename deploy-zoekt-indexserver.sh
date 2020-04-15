@@ -16,6 +16,8 @@ fi
 # Ports exposed to other Sourcegraph services: 6072/TCP
 # Ports exposed to the public internet: none
 #
+VOLUME="$HOME/sourcegraph-docker/zoekt-$1-shared-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=zoekt-indexserver-$1 \
     --hostname=zoekt-indexserver-$1 \
@@ -26,7 +28,7 @@ docker run --detach \
     -e GOMAXPROCS=8 \
     -e HOSTNAME=zoekt-webserver-$1:6070 \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
-    -v ~/sourcegraph-docker/zoekt-$1-shared-disk:/data/index \
+    -v $VOLUME:/data/index \
     index.docker.io/sourcegraph/search-indexer:insiders@sha256:354ed968e62a7d011b647476a63116813aea23bdada0a2fc4322df5381acb6b3
 
 echo "Deployed zoekt-indexserver $1 service"
