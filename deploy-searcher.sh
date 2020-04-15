@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 3181/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
+VOLUME="$HOME/sourcegraph-docker/searcher-$1-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=searcher-$1 \
     --network=sourcegraph \
@@ -19,7 +21,7 @@ docker run --detach \
     -e GOMAXPROCS=2 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
-    -v ~/sourcegraph-docker/searcher-$1-disk:/mnt/cache \
+    -v $VOLUME:/mnt/cache \
     index.docker.io/sourcegraph/searcher:3.14.2@sha256:a698d805219e715c87cec8fadc37a50ad6c1b7c41e47589b3a162dbe3d45ac97
 
 echo "Deployed searcher $1 service"

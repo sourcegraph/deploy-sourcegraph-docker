@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 3186/TCP (server) 3187/TCP (worker)
 # Ports exposed to the public internet: none
 #
+VOLUME="$HOME/sourcegraph-docker/lsif-server-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=lsif-server \
     --network=sourcegraph \
@@ -19,7 +21,7 @@ docker run --detach \
     -e GOMAXPROCS=2 \
     -e LSIF_STORAGE_ROOT=/lsif-storage \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
+    -v $VOLUME:/lsif-storage \
     index.docker.io/sourcegraph/lsif-server:3.14.2@sha256:2d6f63203c5f7fa542fe4deb6424e502cd0ca94dec9c76e40ef63b769c391367
 
 echo "Deployed lsif-server service"

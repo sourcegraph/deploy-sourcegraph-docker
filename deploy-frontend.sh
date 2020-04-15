@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 6060/TCP
 # Ports exposed to the public internet: 3080 (HTTP) and/or 3443 (HTTPS)
 #
+VOLUME="$HOME/sourcegraph-docker/sourcegraph-frontend-$1-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=sourcegraph-frontend-$1 \
     --network=sourcegraph \
@@ -33,7 +35,7 @@ docker run --detach \
     -e LSIF_API_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3370 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
-    -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
+    -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
     index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6
 
