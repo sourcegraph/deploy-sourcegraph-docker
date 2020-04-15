@@ -26,9 +26,9 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e REPLACER_URL=http://replacer:3185 \
-    # remove after 3.15
+    `# remove after 3.15` \
     -e LSIF_SERVER_URL=http://lsif-server:3186 \
-    # used after 3.15
+    `# used after 3.15` \
     -e LSIF_API_SERVER_URL=http://lsif-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
