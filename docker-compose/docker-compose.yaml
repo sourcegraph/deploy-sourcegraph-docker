@@ -487,6 +487,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    command: ['--memory.max-traces=20000']
 
   # Description: PostgreSQL database for various data.
   #
