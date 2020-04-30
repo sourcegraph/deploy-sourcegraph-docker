@@ -3,7 +3,7 @@ set -e
 
 # Description: Dashboards and graphs for Prometheus metrics.
 #
-# Disk: 100GB / persistent SSD
+# Disk: 2GB / persistent SSD
 # Network: 100mbps
 # Liveness probe: n/a
 # Ports exposed to other Sourcegraph services: none
@@ -21,7 +21,7 @@ docker run --detach \
     -v $VOLUME:/var/lib/grafana \
     -v $(pwd)/grafana/datasources:/sg_config_grafana/provisioning/datasources \
     -v $(pwd)/grafana/dashboards:/sg_grafana_additional_dashboards \
-    index.docker.io/sourcegraph/grafana:insiders@sha256:08f61290b90aee11eb8b4fe8d4f9258622971d0695400d0839eefaca175c4979
+    index.docker.io/sourcegraph/grafana:3.15.1@sha256:5af40ae6b3a2c4187ad5d57c462684026823231f8efda46fbaa607940d2886ff
 
 # Add the following lines above if you wish to use an auth proxy with Grafana:
 #

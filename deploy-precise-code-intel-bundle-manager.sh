@@ -17,6 +17,6 @@ docker run --detach \
     -e 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186' \
     -e 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090' \
     -v ~/sourcegraph-docker/lsif-server-disk:/lsif-storage \
-    index.docker.io/sourcegraph/precise-code-intel-bundle-manager:59913_2020-04-02_5ae630c
+    index.docker.io/sourcegraph/precise-code-intel-bundle-manager:3.15.1@sha256:73ea3f5995e745be2b1918943e02038ca4528feed848b969d1f5f6376417600a
 
 echo "Deployed precise-code-intel-bundle-manager service"
