@@ -445,8 +445,6 @@ services:
     image: 'index.docker.io/sourcegraph/prometheus:3.15.1@sha256:18c0faddbddb8007e3120a2926b970119ceb031ab3eaa9632c2f481e4cc3f2bb'
     cpus: 4
     mem_limit: '8g'
-    environment:
-      - 'PURE_DOCKER=true'
     volumes:
       - 'prometheus-v2:/prometheus'
       - '../prometheus:/sg_prometheus_add_ons'
