@@ -30,6 +30,6 @@ docker run --detach \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
-    index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6
+    index.docker.io/sourcegraph/frontend:3.14.4@sha256:e7d4dc404aa179fc205c439ece41d0c7c7a54c1d6e898d74b00bb292993b990d
 
 echo "Deployed sourcegraph-frontend-internal service"
