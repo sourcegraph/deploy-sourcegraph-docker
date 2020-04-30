@@ -8,11 +8,7 @@ docker rm -f $(addresses "sourcegraph-frontend-" $NUM_FRONTEND "") &> /dev/null 
 docker rm -f github-proxy &> /dev/null || true &
 docker rm -f $(addresses "gitserver-" $NUM_GITSERVER "") &> /dev/null || true &
 docker rm -f grafana &> /dev/null || true
-docker rm -f jaeger-agent &> /dev/null || true
-docker rm -f jaeger-cassandra &> /dev/null || true
-docker rm -f jaeger-collector &> /dev/null || true
-docker rm -f jaeger-query &> /dev/null || true
-docker rm -f jaeger-cassandra-schema &> /dev/null || true
+docker rm -f jaeger &> /dev/null || true
 docker rm -f precise-code-intel-api-server &> /dev/null || true
 docker rm -f precise-code-intel-bundle-manager &> /dev/null || true
 docker rm -f precise-code-intel-worker &> /dev/null || true

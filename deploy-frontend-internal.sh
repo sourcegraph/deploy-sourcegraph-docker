@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 3090/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
+VOLUME="$HOME/sourcegraph-docker/sourcegraph-frontend-internal-0-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=sourcegraph-frontend-internal \
     --network=sourcegraph \
@@ -29,7 +31,7 @@ docker run --detach \
     -e PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
-    -v ~/sourcegraph-docker/sourcegraph-frontend-internal-0-disk:/mnt/cache \
+    -v $VOLUME:/mnt/cache \
     index.docker.io/sourcegraph/frontend:59913_2020-04-02_5ae630c
 
 echo "Deployed sourcegraph-frontend-internal service"

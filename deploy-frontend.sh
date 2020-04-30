@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 6060/TCP
 # Ports exposed to the public internet: 3080 (HTTP) and/or 3443 (HTTPS)
 #
+VOLUME="$HOME/sourcegraph-docker/sourcegraph-frontend-$1-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=sourcegraph-frontend-$1 \
     --network=sourcegraph \
@@ -17,7 +19,7 @@ docker run --detach \
     --cpus=4 \
     --memory=8g \
     -e GOMAXPROCS=12 \
-    -e JAEGER_AGENT_HOST='jaeger-agent' \
+    -e JAEGER_AGENT_HOST=jaeger \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
@@ -30,7 +32,7 @@ docker run --detach \
     -e PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3370 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
-    -v ~/sourcegraph-docker/sourcegraph-frontend-$1-disk:/mnt/cache \
+    -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
     index.docker.io/sourcegraph/frontend:59913_2020-04-02_5ae630c
 
