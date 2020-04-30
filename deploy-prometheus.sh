@@ -17,6 +17,7 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=8g \
+    -e PURE_DOCKER=true \
     -p 0.0.0.0:9090:9090 \
     -v $VOLUME:/prometheus \
     -v $(pwd)/prometheus:/sg_prometheus_add_ons \

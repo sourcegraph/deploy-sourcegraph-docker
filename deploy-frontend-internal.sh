@@ -28,13 +28,10 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
     -e REPLACER_URL=http://replacer:3185 \
-    `# remove after 3.15` \
-    -e LSIF_SERVER_URL=http://lsif-server:3186 \
-    `# used after 3.15` \
-    -e LSIF_API_SERVER_URL=http://lsif-server:3186 \
+    -e PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6
+    index.docker.io/sourcegraph/frontend:59913_2020-04-02_5ae630c
 
 echo "Deployed sourcegraph-frontend-internal service"
