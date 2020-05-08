@@ -12,8 +12,8 @@
     - query-runner:6060
     - repo-updater:6060
     - syntect-server:6060
-    - lsif-server:3186
-    - lsif-server:3187
+    - precise-code-intel-api-server:3186
+    - precise-code-intel-bundle-manager:3187
     # Add new entries here for every searcher/symbol/gitserver replica.
     - zoekt-indexserver-0:6072
     - replacer-0:6060

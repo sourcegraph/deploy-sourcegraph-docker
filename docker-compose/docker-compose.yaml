@@ -69,12 +69,12 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6'
+    image: 'index.docker.io/sourcegraph/frontend:3.15.1@sha256:d6a2253ef0f1b40acb5a6dab7ea785302214c47ae27c4738ad1f9d67f8453ff8'
     cpus: 4
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=12
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
       - PGHOST=pgsql
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
@@ -84,7 +84,7 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'REPLACER_URL=http://replacer:3185'
-      - 'LSIF_SERVER_URL=http://lsif-server:3186'
+      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     healthcheck:
@@ -107,7 +107,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.14.2@sha256:44b0221dd9ee60393b3c7273b1214b7ae64cbbb4a8e2b5bcf9d06e521557f0c6'
+    image: 'index.docker.io/sourcegraph/frontend:3.15.1@sha256:d6a2253ef0f1b40acb5a6dab7ea785302214c47ae27c4738ad1f9d67f8453ff8'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -121,7 +121,7 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'REPLACER_URL=http://replacer:3185'
-      - 'LSIF_SERVER_URL=http://lsif-server:3186'
+      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel:3186'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
@@ -138,13 +138,13 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:3.14.2@sha256:9374262a86f62931856d44912f035467e58b03fcfec82081ba5e486dad5be677'
+    image: 'index.docker.io/sourcegraph/gitserver:3.15.1@sha256:d2e5c67a5005342421326e22ed1d8a8d4e9699e75d294860f3c7ea209528a8f3'
     cpus: 4
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=4
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
     volumes:
       - 'gitserver-0:/data/repos'
     networks:
@@ -161,7 +161,7 @@ services:
   #
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-indexserver:0.0.20200318141948-0b140b7@sha256:b022fd7e4884a71786acae32e0ec8baf785c18350ebf5d574d52335a346364f9'
+    image: 'index.docker.io/sourcegraph/search-indexer:3.15.1@sha256:354ed968e62a7d011b647476a63116813aea23bdada0a2fc4322df5381acb6b3'
     mem_limit: '16g'
     environment:
       - GOMAXPROCS=8
@@ -181,7 +181,7 @@ services:
   #
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: 'index.docker.io/sourcegraph/zoekt-webserver:0.0.20200318141342-0b140b7@sha256:0d0fbce55b51ec7bdd37927539f50459cd0f207b7cf219ca5122d07792012fb1'
+    image: 'index.docker.io/sourcegraph/indexed-searcher:3.15.1@sha256:d48de388d28899fd0c3ad0d6f84d466b3a1f533f6b967a713918d438ab8bc63c'
     cpus: 8
     mem_limit: '50g'
     environment:
@@ -207,13 +207,13 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:3.14.2@sha256:a698d805219e715c87cec8fadc37a50ad6c1b7c41e47589b3a162dbe3d45ac97'
+    image: 'index.docker.io/sourcegraph/searcher:3.15.1@sha256:de5601ae6446c37b7f49adf3de8de25475c700a77f31dee8d28139fef0dc6584'
     cpus: 2
     mem_limit: '2g'
     environment:
       - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
       interval: 1s
@@ -235,31 +235,29 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:3.14.2@sha256:0369a42645db81b4211cec54ca685daf365c785e8e213473505df3193ccacccc'
+    image: 'index.docker.io/sourcegraph/github-proxy:3.15.1@sha256:61d1a71d42a2f6feb71bd44a642afaeb388ef763f6e5d8c71056cd651479eed4'
     cpus: 1
     mem_limit: '1g'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
     networks:
       - sourcegraph
     restart: always
 
-  # Description: LSIF HTTP server for code intelligence.
+  # Description: Serves precise code intelligence requests.
   #
-  # Disk: 200GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 3186/TCP (server) 3187/TCP (worker)
+  # Ports exposed to other Sourcegraph services: 3186/TCP (server)
   # Ports exposed to the public internet: none
   #
-  lsif-server:
-    container_name: lsif-server
-    image: 'index.docker.io/sourcegraph/lsif-server:3.14.2@sha256:2d6f63203c5f7fa542fe4deb6424e502cd0ca94dec9c76e40ef63b769c391367'
+  precise-code-intel-api-server:
+    container_name: precise-code-intel-api-server
+    image: 'index.docker.io/sourcegraph/precise-code-intel-api-server:3.15.1@sha256:ee80ffbd8b2d50c9cd8a38ed2e02f4e4be0886557089d56525d71e601d3a74e7'
     cpus: 2
     mem_limit: '2g'
     environment:
-      - GOMAXPROCS=2
-      - LSIF_STORAGE_ROOT=/lsif-storage
+      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3186/ping' -O /dev/null || exit 1"
@@ -267,8 +265,55 @@ services:
       timeout: 5s
       retries: 1
       start_period: 60s
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Stores and manages precise code intelligence bundles.
+  #
+  # Disk: 200GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 3187/TCP (manager)
+  # Ports exposed to the public internet: none
+  #
+  precise-code-intel-bundle-manager:
+    container_name: precise-code-intel-bundle-manager
+    image: 'index.docker.io/sourcegraph/precise-code-intel-bundle-manager:3.15.1@sha256:73ea3f5995e745be2b1918943e02038ca4528feed848b969d1f5f6376417600a'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3187/ping' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
     volumes:
-      - 'lsif-server:/lsif-storage'
+      - 'precise-code-intel-bundle-manager:/lsif-storage'
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Handles conversion of uploaded precise code intelligence bundles.
+  #
+  # Ports exposed to other Sourcegraph services: 3188/TCP (first worker), 9090 (prometheus)
+  # Ports exposed to the public internet: none
+  #
+  precise-code-intel-worker:
+    container_name: precise-code-intel-worker
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:3.15.1@sha256:00642b4bd6f37ff3e80b4b94a5699cef5ededae6875a5010c4202fd91ad0dfaf'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3188/ping' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
     networks:
       - sourcegraph
     restart: always
@@ -283,13 +328,13 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:3.14.2@sha256:8a22d88a96435755fdcd25aac6b0f395e054c85b863adbfc5f78314b1c0c91a7'
+    image: 'index.docker.io/sourcegraph/query-runner:3.15.1@sha256:02df83ebcb0ee8ecc3728ba3904170755b2561d6402278df78dca122c03c34c3'
     cpus: 1
     mem_limit: '1g'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
     networks:
       - sourcegraph
     restart: always
@@ -302,7 +347,7 @@ services:
   #
   replacer:
     container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.14.2@sha256:b1c68f27a5b0e9ca9924aab9ac77242617d0a523f6c06a4d6de45cca48f0cde1'
+    image: 'index.docker.io/sourcegraph/replacer:3.15.1@sha256:23c84161980bf3231bb62e48eb5a3db381b774903d462755b94c2653a4c1b333'
     cpus: 1
     mem_limit: '512m'
     environment:
@@ -327,13 +372,13 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:3.14.2@sha256:f7de73c60553f102c8b1d51afc47a3b95bad331c02513cb3d143bfc39b54fff8'
+    image: 'index.docker.io/sourcegraph/repo-updater:3.15.1@sha256:8ef40206b30f24c9b671d924a287bff17bf803688447d9afcad0517870d5174b'
     cpus: 4
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'repo-updater:/mnt/cache'
@@ -349,7 +394,7 @@ services:
   #
   syntect-server:
     container_name: syntect-server
-    image: 'index.docker.io/sourcegraph/syntect_server:c0297a1@sha256:333abb45cfaae9c9d37e576c3853843b00eca33a40a7c71f6b93211ed96528df'
+    image: 'index.docker.io/sourcegraph/syntax-highlighter:3.15.1@sha256:333abb45cfaae9c9d37e576c3853843b00eca33a40a7c71f6b93211ed96528df'
     cpus: 4
     mem_limit: '6g'
     healthcheck:
@@ -370,13 +415,13 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:3.14.2@sha256:654d15355a34dcfa610fb05f44f2e1c389571b7534d295fa389f63ba958c7df4'
+    image: 'index.docker.io/sourcegraph/symbols:3.15.1@sha256:8db073ad787c7c509247a6d97e38a733271b118464742037b32d678a27796a52'
     cpus: 2
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger-agent
+      - JAEGER_AGENT_HOST=jaeger
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -397,7 +442,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:10.0.10@sha256:4d73d99f3b18d8e4e09f63671c51eabcba956e357ab33d682de8cf1540e3b863'
+    image: 'index.docker.io/sourcegraph/prometheus:3.15.1@sha256:18c0faddbddb8007e3120a2926b970119ceb031ab3eaa9632c2f481e4cc3f2bb'
     cpus: 4
     mem_limit: '8g'
     volumes:
@@ -411,9 +456,9 @@ services:
 
   # Description: Dashboards and graphs for Prometheus metrics.
   #
-  # Disk: 100GB / persistent SSD
+  # Disk: 2GB / persistent SSD
   # Ports exposed to other Sourcegraph services: none
-  # Ports exposed to the public internet: none (HTTP 3000 should be exposed to admins only)
+  # Ports exposed to the public internet: none (HTTP 3370 should be exposed to admins only)
   #
   # Add the following environment variables if you wish to use an auth proxy with Grafana:
   #
@@ -422,7 +467,7 @@ services:
   # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
   grafana:
     container_name: grafana
-    image: 'index.docker.io/sourcegraph/grafana:10.0.12@sha256:2cde7e16fa56e81237fb05e228018015385f6498c4642d4ae073799a02b2b68c'
+    image: 'index.docker.io/sourcegraph/grafana:3.15.1@sha256:5af40ae6b3a2c4187ad5d57c462684026823231f8efda46fbaa607940d2886ff'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -456,87 +501,32 @@ services:
       - sourcegraph
     restart: always
 
-  # # Description: Jaeger agent which is local to the host machine (containers on
-  # # the machine send trace information to it and it relays to the collector).
-  # #
-  # # Disk: none
-  # # Ports exposed to other Sourcegraph services: 5775/UDP 6831/UDP 6832/UDP (on the same host machine)
-  # # Ports exposed to the public internet: none
-  # #
-  # jaeger-agent:
-  #   container_name: jaeger-agent
-  #   image: 'index.docker.io/jaegertracing/jaeger-agent@sha256:7ad33c19fd66307f2a3c07c95eb07c335ddce1b487f6b6128faa75d042c496cb'
-  #   cpus: 1
-  #   mem_limit: '1g'
-  #   environment:
-  #     - "COLLECTOR_HOST_PORT='jaeger-collector:14267'"
-  #   networks:
-  #     - sourcegraph
-  #   restart: always
-
-  # # Description: Jaeger's Cassandra database for storing traces.
-  # #
-  # # Disk: 128GB / persistent SSD
-  # # Ports exposed to other Sourcegraph services: 9042/TCP
-  # # Ports exposed to the public internet: none
-  # #
-  # jaeger-cassandra:
-  #   container_name: jaeger-cassandra
-  #   image: 'index.docker.io/library/cassandra:3.11.4@sha256:9f1d47fd23261c49f226546fe0134e6d4ad0570b7ea3a169c521005cb8369a32'
-  #   cpus: 4
-  #   mem_limit: '8g'
-  #   environment:
-  #     - 'HEAP_NEWSIZE=1G'
-  #     - 'MAX_HEAP_SIZE=6G'
-  #     - 'CASSANDRA_DC=sourcegraph'
-  #     - 'CASSANDRA_RACK=rack1'
-  #     - 'CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch'
-  #   volumes:
-  #     - 'jaeger-cassandra:/var/lib/cassandra'
-  #   networks:
-  #     - sourcegraph
-  #   restart: always
-
-  # # Description: Receives traces from Jaeger agents.
-  # #
-  # # Disk: none
-  # # Ports exposed to other Sourcegraph services: 14267/TCP
-  # # Ports exposed to the public internet: none
-  # #
-  # jaeger-collector:
-  #   container_name: jaeger-collector
-  #   image: 'index.docker.io/jaegertracing/jaeger-collector:1.11@sha256:0b6d28bb52410f7b50c0f0fc16d7ee391e2e3eca47b713ac88d0891ca8a63cb9'
-  #   cpus: 1
-  #   mem_limit: '1g'
-  #   environment:
-  #     - SPAN_STORAGE_TYPE=cassandra
-  #     - CASSANDRA_SERVERS=jaeger-cassandra
-  #     - CASSANDRA_KEYSPACE=jaeger_v1_sourcegraph
-  #   networks:
-  #     - sourcegraph
-  #   restart: always
-
-  # # Description: Jaeger frontend for querying traces.
-  # #
-  # # Disk: none
-  # # Ports exposed to other Sourcegraph services: none
-  # # Ports exposed to the public internet: none (HTTP 16686 should be exposed to admins only)
-  # #
-  # jaeger-query:
-  #   container_name: jaeger-query
-  #   image: 'index.docker.io/jaegertracing/jaeger-query:1.11@sha256:cddc521d0166c868931282685a863368ae2c14c4de0c1be38e388ece3080439e'
-  #   cpus: 1
-  #   mem_limit: '1g'
-  #   environment:
-  #     - SPAN_STORAGE_TYPE=cassandra
-  #     - CASSANDRA_SERVERS=jaeger-cassandra
-  #     - CASSANDRA_KEYSPACE=jaeger_v1_sourcegraph
-  #     - CASSANDRA_LOCAL_DC=sourcegraph
-  #   ports:
-  #     - '0.0.0.0:16686:16686'
-  #   networks:
-  #     - sourcegraph
-  #   restart: always
+  # Description: Jaeger all-in-one instance
+  # (https://www.jaegertracing.io/docs/1.17/getting-started/#all-in-one) for distributed tracing.
+  #
+  # Disk: none
+  # Ports exposed to other Sourcegraph services: 5778/TCP 6831/UDP 6832/UDP 14250/TCP
+  # Ports exposed to the public internet: none
+  # Ports exposed to site admins only: 16686/HTTP
+  #
+  jaeger:
+    container_name: jaeger
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:3.15.1@sha256:9b3c67d77937669145fc667c1e9045c4050ee10faed1edcf73bb66f7a730c29b'
+    cpus: 0.5
+    mem_limit: '512m'
+    ports:
+      # Query port
+      - '0.0.0.0:16686:16686'
+      # Collector port
+      - '0.0.0.0:14250:14250'
+      # Agent ports
+      - '0.0.0.0:5778:5778'
+      - '0.0.0.0:6831:6831'
+      - '0.0.0.0:6832:6832'
+    networks:
+      - sourcegraph
+    restart: always
+    command: ['--memory.max-traces=20000']
 
   # Description: PostgreSQL database for various data.
   #
@@ -546,7 +536,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-11.4:19-11-14_b084311b@sha256:072481559d559cfd9a53ad77c3688b5cf583117457fd452ae238a20405923297'
+    image: 'index.docker.io/sourcegraph/postgres-11.4:3.15.1@sha256:63090799b34b3115a387d96fe2227a37999d432b774a1d9b7966b8c5d81b56ad'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
@@ -569,7 +559,7 @@ services:
   #
   redis-cache:
     container_name: redis-cache
-    image: 'index.docker.io/sourcegraph/redis-cache:20-02-03_da9d71ca@sha256:7820219195ab3e8fdae5875cd690fed1b2a01fd1063bd94210c0e9d529c38e56'
+    image: 'index.docker.io/sourcegraph/redis-cache:3.15.1@sha256:7820219195ab3e8fdae5875cd690fed1b2a01fd1063bd94210c0e9d529c38e56'
     cpus: 1
     mem_limit: '6g'
     volumes:
@@ -585,7 +575,7 @@ services:
   #
   redis-store:
     container_name: redis-store
-    image: 'index.docker.io/sourcegraph/redis-store:20-01-30_c903717e@sha256:e8467a8279832207559bdfbc4a89b68916ecd5b44ab5cf7620c995461c005168'
+    image: 'index.docker.io/sourcegraph/redis-store:3.15.1@sha256:e8467a8279832207559bdfbc4a89b68916ecd5b44ab5cf7620c995461c005168'
     cpus: 1
     mem_limit: '6g'
     volumes:
@@ -598,8 +588,7 @@ volumes:
   caddy:
   gitserver-0:
   grafana:
-  #jaeger-cassandra:
-  lsif-server:
+  precise-code-intel-bundle-manager:
   pgsql:
   prometheus-v2:
   redis-cache:

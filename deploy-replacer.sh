@@ -10,6 +10,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 3185/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
+VOLUME="$HOME/sourcegraph-docker/replacer-disk"
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=replacer \
     --network=sourcegraph \
@@ -18,7 +20,7 @@ docker run --detach \
     --memory=512m \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    -v ~/sourcegraph-docker/replacer-disk:/mnt/cache \
-    index.docker.io/sourcegraph/replacer:3.14.2@sha256:b1c68f27a5b0e9ca9924aab9ac77242617d0a523f6c06a4d6de45cca48f0cde1
+    -v $VOLUME:/mnt/cache \
+    index.docker.io/sourcegraph/replacer:3.15.1@sha256:23c84161980bf3231bb62e48eb5a3db381b774903d462755b94c2653a4c1b333
 
 echo "Deployed replacer service"
