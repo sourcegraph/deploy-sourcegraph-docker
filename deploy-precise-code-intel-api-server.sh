@@ -4,7 +4,7 @@ source ./replicas.sh
 
 # Description: Serves precise code intelligence requests.
 #
-# Ports exposed to other Sourcegraph services: 3186/TCP (server)
+# Ports exposed to other Sourcegraph services: 3186/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \
