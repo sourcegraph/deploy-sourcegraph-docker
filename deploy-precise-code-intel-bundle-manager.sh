@@ -5,7 +5,7 @@ source ./replicas.sh
 # Description: Stores and manages precise code intelligence bundles.
 #
 # Disk: 200GB / persistent SSD
-# Ports exposed to other Sourcegraph services: 3187/TCP (manager)
+# Ports exposed to other Sourcegraph services: 3187/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \

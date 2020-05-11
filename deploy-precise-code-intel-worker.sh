@@ -4,7 +4,7 @@ source ./replicas.sh
 
 # Description: Handles conversion of uploaded precise code intelligence bundles.
 #
-# Ports exposed to other Sourcegraph services: 3188/TCP (first worker), 9090 (prometheus)
+# Ports exposed to other Sourcegraph services: 3188/TCP
 # Ports exposed to the public internet: none
 #
 docker run --detach \
