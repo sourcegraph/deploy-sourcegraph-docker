@@ -248,7 +248,7 @@ services:
 
   # Description: Serves precise code intelligence requests.
   #
-  # Ports exposed to other Sourcegraph services: 3186/TCP (server)
+  # Ports exposed to other Sourcegraph services: 3186/TCP
   # Ports exposed to the public internet: none
   #
   precise-code-intel-api-server:
@@ -272,7 +272,7 @@ services:
   # Description: Stores and manages precise code intelligence bundles.
   #
   # Disk: 200GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 3187/TCP (manager)
+  # Ports exposed to other Sourcegraph services: 3187/TCP
   # Ports exposed to the public internet: none
   #
   precise-code-intel-bundle-manager:
@@ -297,7 +297,7 @@ services:
 
   # Description: Handles conversion of uploaded precise code intelligence bundles.
   #
-  # Ports exposed to other Sourcegraph services: 3188/TCP (first worker), 9090 (prometheus)
+  # Ports exposed to other Sourcegraph services: 3188/TCP
   # Ports exposed to the public internet: none
   #
   precise-code-intel-worker:
@@ -308,6 +308,12 @@ services:
     environment:
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
     networks:
       - sourcegraph
     restart: always
