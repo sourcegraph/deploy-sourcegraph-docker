@@ -209,7 +209,7 @@ services:
     container_name: searcher-0
     image: 'index.docker.io/sourcegraph/searcher:3.15.1@sha256:de5601ae6446c37b7f49adf3de8de25475c700a77f31dee8d28139fef0dc6584'
     cpus: 2
-    mem_limit: '2g'
+    mem_limit: '6g'
     environment:
       - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
