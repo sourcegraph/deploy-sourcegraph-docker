@@ -18,7 +18,7 @@ services:
   caddy:
     container_name: caddy
     image: 'index.docker.io/caddy/caddy:alpine@sha256:ef2f47730caa12cb7d0ba944c048b8e48f029d5e0ff861840fa2b8f1868e1966'
-    cpus: 4
+    cpus: 2
     mem_limit: '4g'
     environment:
       - 'XDG_DATA_HOME=/caddy-storage/data'
@@ -70,7 +70,7 @@ services:
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
     image: 'index.docker.io/sourcegraph/frontend:3.15.1@sha256:d6a2253ef0f1b40acb5a6dab7ea785302214c47ae27c4738ad1f9d67f8453ff8'
-    cpus: 4
+    cpus: 2
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=12
@@ -108,7 +108,7 @@ services:
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
     image: 'index.docker.io/sourcegraph/frontend:3.15.1@sha256:d6a2253ef0f1b40acb5a6dab7ea785302214c47ae27c4738ad1f9d67f8453ff8'
-    cpus: 4
+    cpus: 2
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=4
@@ -139,7 +139,7 @@ services:
   gitserver-0:
     container_name: gitserver-0
     image: 'index.docker.io/sourcegraph/gitserver:3.15.1@sha256:d2e5c67a5005342421326e22ed1d8a8d4e9699e75d294860f3c7ea209528a8f3'
-    cpus: 4
+    cpus: 2
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=4
@@ -182,7 +182,7 @@ services:
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/indexed-searcher:3.15.1@sha256:d48de388d28899fd0c3ad0d6f84d466b3a1f533f6b967a713918d438ab8bc63c'
-    cpus: 8
+    cpus: 2
     mem_limit: '50g'
     environment:
       - GOMAXPROCS=8
@@ -373,7 +373,7 @@ services:
   repo-updater:
     container_name: repo-updater
     image: 'index.docker.io/sourcegraph/repo-updater:3.15.1@sha256:8ef40206b30f24c9b671d924a287bff17bf803688447d9afcad0517870d5174b'
-    cpus: 4
+    cpus: 2
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=1
@@ -395,7 +395,7 @@ services:
   syntect-server:
     container_name: syntect-server
     image: 'index.docker.io/sourcegraph/syntax-highlighter:3.15.1@sha256:333abb45cfaae9c9d37e576c3853843b00eca33a40a7c71f6b93211ed96528df'
-    cpus: 4
+    cpus: 2
     mem_limit: '6g'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
@@ -443,7 +443,7 @@ services:
   prometheus:
     container_name: prometheus
     image: 'index.docker.io/sourcegraph/prometheus:3.15.1@sha256:18c0faddbddb8007e3120a2926b970119ceb031ab3eaa9632c2f481e4cc3f2bb'
-    cpus: 4
+    cpus: 2
     mem_limit: '8g'
     volumes:
       - 'prometheus-v2:/prometheus'
@@ -537,7 +537,7 @@ services:
   pgsql:
     container_name: pgsql
     image: 'index.docker.io/sourcegraph/postgres-11.4:3.15.1@sha256:63090799b34b3115a387d96fe2227a37999d432b774a1d9b7966b8c5d81b56ad'
-    cpus: 4
+    cpus: 2
     mem_limit: '2g'
     healthcheck:
       test: '/liveness.sh'
