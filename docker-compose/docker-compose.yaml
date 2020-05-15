@@ -25,22 +25,22 @@ services:
       - 'XDG_CONFIG_HOME=/caddy-storage/config'
       - 'SRC_FRONTEND_ADDRESSES="sourcegraph-frontend-0:3080"'
       # Uncomment & update this line when using Let's Encrypt or custom HTTPS certificates:
-      # - 'SRC_SITE_ADDRESS="guildsourcegraph.com"'
+      - 'SRC_SITE_ADDRESS="guildsourcegraph.com"'
       #
       # Uncomment & update the following line when using HTTPS with Let's Encrypt
-      # - 'SRC_ACME_EMAIL=ian@guildcredit.com'
+      - 'SRC_ACME_EMAIL=ian@guildcredit.com'
     volumes:
       - 'caddy:/caddy-storage'
       #
       # Comment out the following line when using HTTPS with either Let's Encrypt or custom certficates
-      - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
+      # - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
       #
       # Uncomment the following line when using HTTPS with Let's Encrypt's staging environment
       # - '../caddy/builtins/https.lets-encrypt-staging.Caddyfile:/etc/caddy/Caddyfile'
       #
       # Uncomment the following line when using HTTPS with Let's Encrypt's production environment
       # IMPORTANT: Strongly recommended to test with the staging configuration above first, see that file for details. 
-      # - '../caddy/builtins/https.lets-encrypt-prod.Caddyfile:/etc/caddy/Caddyfile'
+      - '../caddy/builtins/https.lets-encrypt-prod.Caddyfile:/etc/caddy/Caddyfile'
       #
       # Uncomment the following line when using HTTPS with custom certificates
       # - '../caddy/builtins/https.custom-cert.Caddyfile:/etc/caddy/Caddyfile'
