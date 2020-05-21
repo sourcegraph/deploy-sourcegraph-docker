@@ -84,7 +84,6 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'REPLACER_URL=http://replacer:3185'
-      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
@@ -123,7 +122,6 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'REPLACER_URL=http://replacer:3185'
-      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
@@ -250,29 +248,6 @@ services:
       - sourcegraph
     restart: always
 
-  # Description: Serves precise code intelligence requests.
-  #
-  # Ports exposed to other Sourcegraph services: 3186/TCP
-  # Ports exposed to the public internet: none
-  #
-  precise-code-intel-api-server:
-    container_name: precise-code-intel-api-server
-    image: 'index.docker.io/sourcegraph/precise-code-intel-api-server:3.15.1@sha256:ee80ffbd8b2d50c9cd8a38ed2e02f4e4be0886557089d56525d71e601d3a74e7'
-    cpus: 2
-    mem_limit: '2g'
-    environment:
-      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-    healthcheck:
-      test: "wget -q 'http://127.0.0.1:3186/healthz' -O /dev/null || exit 1"
-      interval: 5s
-      timeout: 5s
-      retries: 1
-      start_period: 60s
-    networks:
-      - sourcegraph
-    restart: always
-
   # Description: Stores and manages precise code intelligence bundles.
   #
   # Disk: 200GB / persistent SSD
@@ -285,7 +260,6 @@ services:
     cpus: 2
     mem_limit: '2g'
     environment:
-      - 'PRECISE_CODE_INTEL_API_SERVER_URL=http://precise-code-intel-api-server:3186'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3187/healthz' -O /dev/null || exit 1"
