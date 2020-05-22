@@ -466,7 +466,7 @@ services:
   #
   cadvisor:
     container_name: cadvisor
-    image: 'google/cadvisor:v0.33.0@sha256:47f1f8c02a3acfab77e74e2ec7acc0d475adc180ddff428503a4ce63f3d6061b'
+    image: 'index.docker.io/sourcegraph/cadvisor:insiders@sha256:4074c8bc608b78af3ca3d6e60b3794369a190ab2efd992e31b3079b075401efa'
     cpus: 1
     mem_limit: '1g'
     volumes:
