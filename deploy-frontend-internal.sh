@@ -18,6 +18,7 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=8g \
+    -e DEPLOY_TYPE='pure-docker' \
     -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
