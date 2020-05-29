@@ -73,6 +73,7 @@ services:
     cpus: 4
     mem_limit: '8g'
     environment:
+      - DEPLOY_TYPE='docker-compose'
       - GOMAXPROCS=12
       - JAEGER_AGENT_HOST=jaeger
       - PGHOST=pgsql
@@ -112,6 +113,7 @@ services:
     cpus: 4
     mem_limit: '8g'
     environment:
+      - DEPLOY_TYPE='docker-compose'
       - GOMAXPROCS=4
       - PGHOST=pgsql
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
