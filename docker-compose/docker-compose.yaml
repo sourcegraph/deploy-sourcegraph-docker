@@ -69,7 +69,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:3.16.0@sha256:055560401f9c06f0d56fdad9b9233a99770c573a48bd84d27b16609ac1c9658d'
+    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:a5b2eadbab0c0d2fda9bccddcad4e62d6816a9aff6898dedd93e8a65c8e4f26b'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -86,6 +86,7 @@ services:
       - 'REPLACER_URL=http://replacer:3185'
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
+      - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
     healthcheck:
@@ -108,7 +109,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:3.16.0@sha256:055560401f9c06f0d56fdad9b9233a99770c573a48bd84d27b16609ac1c9658d'
+    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:a5b2eadbab0c0d2fda9bccddcad4e62d6816a9aff6898dedd93e8a65c8e4f26b'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -124,6 +125,7 @@ services:
       - 'REPLACER_URL=http://replacer:3185'
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
+      - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
     volumes:
@@ -489,7 +491,7 @@ services:
   #
   jaeger:
     container_name: jaeger
-    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:3.16.0@sha256:5dc2e970804028fc945abffc6c961d755df3b1d7b0b6f6516e9f67cb218ed249'
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:insiders@sha256:7b3d2f619ef8d15a62d25ab42688251baeb16dbe3a5924a7cf2a9699adf8d8ab'
     cpus: 0.5
     mem_limit: '512m'
     ports:
