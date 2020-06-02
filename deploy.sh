@@ -29,4 +29,5 @@ for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do (./deploy-zoekt-webserver.sh 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do (./deploy-frontend.sh $i &); done
+./deploy-caddy.sh
 wait
