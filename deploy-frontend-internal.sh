@@ -31,9 +31,10 @@ docker run --detach \
     -e REPLACER_URL=http://replacer:3185 \
     -e PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187 \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
+    -e JAEGER_SERVER_URL=http://jaeger:16686 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/frontend:3.16.0@sha256:055560401f9c06f0d56fdad9b9233a99770c573a48bd84d27b16609ac1c9658d
+    index.docker.io/sourcegraph/frontend:insiders@sha256:a5b2eadbab0c0d2fda9bccddcad4e62d6816a9aff6898dedd93e8a65c8e4f26b
 
 echo "Deployed sourcegraph-frontend-internal service"
