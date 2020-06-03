@@ -18,6 +18,7 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=8g \
+    -e DEPLOY_TYPE=pure-docker \
     -e GOMAXPROCS=12 \
     -e JAEGER_AGENT_HOST=jaeger \
     -e PGHOST=pgsql \
