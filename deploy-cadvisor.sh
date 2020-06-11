@@ -9,6 +9,7 @@ source ./replicas.sh
 # Liveness probe: none
 # Ports exposed to other Sourcegraph services: 8080/TCP
 # Ports exposed to the public internet: none
+#
 sudo docker run --detach \
     --name=cadvisor \
     --network=sourcegraph \
