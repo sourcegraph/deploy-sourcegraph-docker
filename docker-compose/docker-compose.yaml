@@ -456,6 +456,8 @@ services:
       - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
       - '../grafana/dashboards:/sg_grafana_additional_dashboards'
+    environment:
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     ports:
       - '0.0.0.0:3370:3370'
     networks:
