@@ -20,4 +20,4 @@ docker run --detach \
     -p 0.0.0.0:9090:9090 \
     -v $VOLUME:/prometheus \
     -v $(pwd)/prometheus:/sg_prometheus_add_ons \
-    index.docker.io/sourcegraph/prometheus:3.16.0@sha256:a1c1dd10d3deec10a20fef030c6fe26a7b72ccc93e9584b7b2db7fbf0ec0d311
+    index.docker.io/sourcegraph/prometheus:3.17.2@sha256:a725419a532fb17f6955e80f8a2f35efe15287c0a556e4fe7168d5fc6ff730d8
