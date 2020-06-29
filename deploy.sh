@@ -11,7 +11,6 @@ docker network create sourcegraph &> /dev/null || true
 for i in $(seq 0 $(($NUM_GITSERVER - 1))); do (./deploy-gitserver.sh $i &); done
 ./deploy-grafana.sh
 ./deploy-jaeger.sh
-./deploy-precise-code-intel-api-server.sh &
 ./deploy-precise-code-intel-bundle-manager.sh &
 ./deploy-precise-code-intel-worker.sh &
 ./deploy-pgsql.sh &
@@ -30,4 +29,5 @@ for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do (./deploy-zoekt-webserver.sh 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do (./deploy-frontend.sh $i &); done
+./deploy-caddy.sh
 wait
