@@ -1,0 +1,294 @@
+version: '2.4'
+services:
+  # Description: Stores clones of repositories to perform Git operations.
+  #
+  # Disk: 200GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 3178/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  gitserver:
+    container_name: gitserver
+    image: 'index.docker.io/sourcegraph/gitserver:3.17.2@sha256:a2dac3ed8c9bbd7f930ae8d2bb446878f43f326002774fd85647945a90535733'
+    cpus: 4
+    mem_limit: '8g'
+    environment:
+      - GOMAXPROCS=4
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+    volumes:
+      - gitserver:/data/repos
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Backend for indexed text search operations.
+  #
+  # Disk: 200GB / persistent SSD
+  # Network: 100mbps
+  # Liveness probe: n/a
+  # Ports exposed to other Sourcegraph services: 6072/TCP
+  # Ports exposed to the public internet: none
+  #
+  zoekt-indexserver:
+    container_name: zoekt-indexserver
+    image: 'index.docker.io/sourcegraph/search-indexer:3.17.2@sha256:f31ec682b907bde2975acda88ee99ac268ef32a79309a6036ef5f26e8af0dcac'
+    mem_limit: '16g'
+    environment:
+      - GOMAXPROCS=8
+      - 'HOSTNAME=zoekt-webserver:6070'
+      - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
+    volumes:
+      - zoekt-shared:/data/index
+    networks:
+      - sourcegraph
+    restart: always
+    hostname: zoekt-indexserver
+
+  # Description: Backend for indexed text search operations.
+  #
+  # Disk: 200GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 6070/TCP
+  # Ports exposed to the public internet: none
+  #
+  zoekt-webserver:
+    container_name: zoekt-webserver
+    image: 'index.docker.io/sourcegraph/indexed-searcher:3.17.2@sha256:8324943e1b52466dc2052cf82bfd22b18ad045346d2b0ea403b4674f48214602'
+    cpus: 8
+    mem_limit: '50g'
+    environment:
+      - GOMAXPROCS=8
+      - 'HOSTNAME=zoekt-webserver:6070'
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:6070/healthz' || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - zoekt-shared:/data/index
+    networks:
+      - sourcegraph
+    restart: always
+    hostname: zoekt-webserver
+
+  # Description: Backend for text search operations.
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 3181/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  searcher:
+    container_name: searcher
+    image: 'index.docker.io/sourcegraph/searcher:3.17.2@sha256:7813d44b378e6ce9f85bbe8a378a6b671f525545369fc4d8b22984cd9bffe4b1'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:3181/healthz' || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - searcher:/mnt/cache
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Rate-limiting proxy for the GitHub API.
+  #
+  # CPU: 1
+  # Memory: 1GB
+  # Disk: 1GB / non-persistent SSD (only for read-only config file)
+  # Ports exposed to other Sourcegraph services: 3180/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  github-proxy:
+    container_name: github-proxy
+    image: 'index.docker.io/sourcegraph/github-proxy:3.17.2@sha256:b54c845d7aa967791ea5f166a19df8f3abeeda408ae7ed9e1251f07e2c83a4f6'
+    cpus: 1
+    mem_limit: '1g'
+    environment:
+      - GOMAXPROCS=1
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Stores and manages precise code intelligence bundles.
+  #
+  # Disk: 200GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 3187/TCP
+  # Ports exposed to the public internet: none
+  #
+  precise-code-intel-bundle-manager:
+    container_name: precise-code-intel-bundle-manager
+    image: 'index.docker.io/sourcegraph/precise-code-intel-bundle-manager:3.17.2@sha256:7dff0e7e8c7a3451ce12cf5eb5e4073bb9502752926acf33f13eb370dc570cc8'
+    cpus: 2
+    mem_limit: '2g'
+    environment:
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:3187/healthz' || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
+    volumes:
+      - precise-code-intel-bundle-manager:/lsif-storage
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Handles conversion of uploaded precise code intelligence bundles.
+  #
+  # Ports exposed to other Sourcegraph services: 3188/TCP
+  # Ports exposed to the public internet: none
+  #
+  precise-code-intel-worker:
+    container_name: precise-code-intel-worker
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:3.17.2@sha256:123ddcab97c273599b569a76bcd2c7dd7c423c1de816fda1c35b781e004b4dde'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:3188/healthz' || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Saved search query runner / notification service.
+  #
+  # Disk: 1GB / non-persistent SSD (only for read-only config file)
+  # Network: 100mbps
+  # Liveness probe: n/a
+  # Ports exposed to other Sourcegraph services: 3183/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  query-runner:
+    container_name: query-runner
+    image: 'index.docker.io/sourcegraph/query-runner:3.17.2@sha256:73f1a1116fe12c8384c57f081bb4af50e7000e3589bcc04224c5bfb20f404afd'
+    cpus: 1
+    mem_limit: '1g'
+    environment:
+      - GOMAXPROCS=1
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Backend for replace operations.
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 3185/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  replacer:
+    container_name: replacer
+    image: 'index.docker.io/sourcegraph/replacer:3.17.2@sha256:ad4748e62fdc7ee493274706aae516bb51b3bfda81d1af421f2f94543d71a424'
+    cpus: 1
+    mem_limit: '512m'
+    environment:
+      - GOMAXPROCS=1
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:3185/healthz' || exit 1"
+      interval: 1s
+      timeout: 10s
+      retries: 1
+    volumes:
+      - replacer:/mnt/cache
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Handles repository metadata (not Git data) lookups and updates from external code hosts and other similar services.
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 3182/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  repo-updater:
+    container_name: repo-updater
+    image: 'index.docker.io/sourcegraph/repo-updater:3.17.2@sha256:1db6e1343e65a4bf8f6d0b524dcd722b1fbbe417227e6642b1de824de966ffc8'
+    cpus: 4
+    mem_limit: '4g'
+    environment:
+      - GOMAXPROCS=1
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+      - 'GITHUB_BASE_URL=http://github-proxy:3180'
+    volumes:
+      - repo-updater:/mnt/cache
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Backend for syntax highlighting operations.
+  #
+  # Disk: none
+  # Ports exposed to other Sourcegraph services: 9238/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  syntect-server:
+    container_name: syntect-server
+    image: 'index.docker.io/sourcegraph/syntax-highlighter:3.17.2@sha256:aa93514b7bc3aaf7a4e9c92e5ff52ee5052db6fb101255a69f054e5b8cdb46ff'
+    cpus: 4
+    mem_limit: '6g'
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:9238/health' || exit 1"
+      interval: 1s
+      timeout: 5s
+      retries: 1
+      start_period: 5s
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Backend for symbols operations.
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 3184/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  symbols:
+    container_name: symbols
+    image: 'index.docker.io/sourcegraph/symbols:3.17.2@sha256:224e167586f927c60faf345027452aa035eeb2d65dd6821607833d2669030e4f'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - GOMAXPROCS=2
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:3184/healthz' || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 1
+      start_period: 60s
+    volumes:
+      - symbols:/mnt/cache
+    networks:
+      - sourcegraph
+    restart: always
+
+volumes:
+  gitserver:
+  precise-code-intel-bundle-manager:
+  replacer:
+  repo-updater:
+  searcher:
+  sourcegraph-frontend:
+  symbols:
+  zoekt-shared:
+networks:
+  sourcegraph:

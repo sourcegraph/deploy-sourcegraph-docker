@@ -1,0 +1,92 @@
+version: '2.4'
+services:
+  # Description: Acts as a reverse proxy for all of the sourcegraph-frontend instances
+  #
+  # Disk: 1GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: none
+  # Ports exposed to the public internet: 80 (HTTP) and 443 (HTTPS)
+  #
+  # Sourcegraph ships with a few builtin templates that cover common HTTP/HTTPS configurations:
+  # - HTTP only (default)
+  # - HTTPS with Let's Encrypt
+  # - HTTPS with custom certificates
+  #
+  # Follow the directions in the comments below to swap between these configurations.
+  #
+  # If none of these built-in configurations suit your needs, then you can create your own Caddyfile, see:
+  # https://caddyserver.com/docs/caddyfile
+  caddy:
+    container_name: caddy
+    image: 'index.docker.io/caddy/caddy:alpine@sha256:ef2f47730caa12cb7d0ba944c048b8e48f029d5e0ff861840fa2b8f1868e1966'
+    cpus: 4
+    mem_limit: '4g'
+    environment:
+      - 'XDG_DATA_HOME=/caddy-storage/data'
+      - 'XDG_CONFIG_HOME=/caddy-storage/config'
+      - 'SRC_FRONTEND_ADDRESSES="sourcegraph-frontend:3080"'
+    volumes:
+      - caddy:/caddy-storage
+      #
+      # Comment out the following line when using HTTPS with either Let's Encrypt or custom certficates
+      - ../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Serves the frontend of Sourcegraph via HTTP(S).
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 6060/TCP, 3080 (HTTP), and/or 3443 (HTTPS)
+  # Ports exposed to the public internet: none
+  #
+  # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
+  # lists which each allow you to specify more container instances for scaling
+  # purposes. Be sure to also apply such a change here to the frontend-internal
+  # service.
+  sourcegraph-frontend:
+    container_name: sourcegraph-frontend
+    image: 'index.docker.io/sourcegraph/frontend:3.17.2@sha256:2378899365619635ce7acd983582407688d4def72a3fd62ae6fa0c23a0554fde'
+    cpus: 4
+    mem_limit: '8g'
+    environment:
+      - DEPLOY_TYPE=docker-compose
+      - GOMAXPROCS=12
+      - JAEGER_AGENT_HOST=jaeger
+      - PGHOST=pgsql
+      - 'SRC_GIT_SERVERS=gitserver:3178'
+      - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
+      - 'SEARCHER_URL=http://searcher:3181'
+      - 'SYMBOLS_URL=http://symbols:3184'
+      - 'INDEXED_SEARCH_SERVERS=zoekt-webserver:6070'
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - 'REPO_UPDATER_URL=http://repo-updater:3182'
+      - 'REPLACER_URL=http://replacer:3185'
+      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
+      - 'GRAFANA_SERVER_URL=http://grafana:3370'
+      - 'JAEGER_SERVER_URL=http://jaeger:16686'
+      - 'GITHUB_BASE_URL=http://github-proxy:3180'
+      - 'PROMETHEUS_URL=http://prometheus:9090'
+    healthcheck:
+      test: "curl -sSf 'http://127.0.0.1:3080/healthz' || exit 1"
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+    volumes:
+      - 'sourcegraph-frontend:/mnt/cache'
+    networks:
+      sourcegraph:
+        aliases:
+          - sourcegraph-frontend
+          - sourcegraph-frontend-internal
+
+    restart: always
+
+volumes:
+  caddy:
+  sourcegraph-frontend:
+networks:
+  sourcegraph:

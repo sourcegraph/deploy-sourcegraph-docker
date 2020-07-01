@@ -1,0 +1,64 @@
+version: '2.4'
+services:
+  # Description: PostgreSQL database for various data.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  pgsql:
+    container_name: pgsql
+    image: 'index.docker.io/sourcegraph/postgres-11.4:3.17.2@sha256:63090799b34b3115a387d96fe2227a37999d432b774a1d9b7966b8c5d81b56ad'
+    cpus: 4
+    mem_limit: '2g'
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - pgsql:/data/
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Redis for storing short-lived caches.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
+  # Ports exposed to the public internet: none
+  #
+  redis-cache:
+    container_name: redis-cache
+    image: 'index.docker.io/sourcegraph/redis-cache:3.17.2@sha256:7820219195ab3e8fdae5875cd690fed1b2a01fd1063bd94210c0e9d529c38e56'
+    cpus: 1
+    mem_limit: '6g'
+    volumes:
+      - redis-cache:/redis-data
+    networks:
+      - sourcegraph
+    restart: always
+  # Description: Redis for storing semi-persistent data like user sessions.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
+  # Ports exposed to the public internet: none
+  #
+  redis-store:
+    container_name: redis-store
+    image: 'index.docker.io/sourcegraph/redis-store:3.17.2@sha256:e8467a8279832207559bdfbc4a89b68916ecd5b44ab5cf7620c995461c005168'
+    cpus: 1
+    mem_limit: '6g'
+    volumes:
+      - redis-store:/redis-data
+    networks:
+      - sourcegraph
+    restart: always
+
+volumes:
+  pgsql:
+  redis-cache:
+  redis-store:
+networks:
+  sourcegraph:

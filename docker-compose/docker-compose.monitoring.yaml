@@ -1,0 +1,105 @@
+version: '2.4'
+services:
+  # Description: Prometheus collects metrics and aggregates them into graphs.
+  #
+  # Disk: 200GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: none
+  # Ports exposed to the public internet: none (HTTP 9090 should be exposed to admins only)
+  #
+  prometheus:
+    container_name: prometheus
+    image: 'index.docker.io/sourcegraph/prometheus:3.17.2@sha256:a725419a532fb17f6955e80f8a2f35efe15287c0a556e4fe7168d5fc6ff730d8'
+    cpus: 4
+    mem_limit: '8g'
+    volumes:
+      - prometheus-v2:/prometheus
+      - ../prometheus:/sg_prometheus_add_ons
+    ports:
+      - 9090:9090
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Dashboards and graphs for Prometheus metrics.
+  #
+  # Disk: 2GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: none
+  # Ports exposed to the public internet: none (HTTP 3370 should be exposed to admins only)
+  #
+  # Add the following environment variables if you wish to use an auth proxy with Grafana:
+  #
+  # 'GF_AUTH_PROXY_ENABLED=true'
+  # 'GF_AUTH_PROXY_HEADER_NAME='X-Forwarded-User'
+  # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
+  grafana:
+    container_name: grafana
+    image: 'index.docker.io/sourcegraph/grafana:3.17.2@sha256:f390384e2f57f3aba4eae41e51340a541a5b7a82ee16bdcea3cd9520423f193a'
+    cpus: 1
+    mem_limit: '1g'
+    volumes:
+      - grafana:/var/lib/grafana
+      - ../grafana/datasources:/sg_config_grafana/provisioning/datasources
+      - ../grafana/dashboards:/sg_grafana_additional_dashboards
+    environment:
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    ports:
+      - 3370:3370
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Publishes Prometheus metrics about Docker containers.
+  #
+  # Disk: none
+  # Ports exposed to other Sourcegraph services: 8080/TCP
+  # Ports exposed to the public internet: none
+  #
+  cadvisor:
+    container_name: cadvisor
+    image: 'index.docker.io/sourcegraph/cadvisor:3.17.2@sha256:9fb42b067d1f9cc84558f61b6ec42f8cfe7ad874625c7673efa9b1f047fa3ced'
+    cpus: 1
+    mem_limit: '1g'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - sourcegraph
+    restart: always
+    command:
+      - --port=8080
+
+  # Description: Jaeger all-in-one instance
+  # (https://www.jaegertracing.io/docs/1.17/getting-started/#all-in-one) for distributed tracing.
+  #
+  # Disk: none
+  # Ports exposed to other Sourcegraph services: 5778/TCP 6831/UDP 6832/UDP 14250/TCP
+  # Ports exposed to the public internet: none
+  # Ports exposed to site admins only: 16686/HTTP
+  #
+  jaeger:
+    container_name: jaeger
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:3.17.2@sha256:3d885a0dd4dd7b3abd5aebe4baa2a854230178dacf00de5664b57c895f2015fa'
+    cpus: 0.5
+    mem_limit: '512m'
+    ports:
+      # Query port
+      - 16686:16686
+      # Collector port
+      - 14250:14250
+      # Agent ports
+      - 5778:5778
+      - 6831:6831
+      - 6832:6832
+    networks:
+      - sourcegraph
+    restart: always
+    command: ['--memory.max-traces=20000']
+
+volumes:
+  grafana:
+  prometheus-v2:
+networks:
+  sourcegraph:
