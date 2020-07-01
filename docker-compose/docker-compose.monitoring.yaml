@@ -1,5 +1,13 @@
 version: '2.4'
 services:
+  # Overrides
+  sourcegraph-frontend:
+    environment:
+      - 'JAEGER_AGENT_HOST=jaeger'
+      - 'GRAFANA_SERVER_URL=http://grafana:3370'
+      - 'JAEGER_SERVER_URL=http://jaeger:16686'
+      - 'PROMETHEUS_URL=http://prometheus:9090'
+
   # Description: Prometheus collects metrics and aggregates them into graphs.
   #
   # Disk: 200GB / persistent SSD
