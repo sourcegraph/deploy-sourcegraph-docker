@@ -79,7 +79,11 @@ Visit http://localhost and confirm the app loads.
 
 ## 5) Confirm Pure-Docker works on the customer replica instance
 
-**Contact @stephen on Slack and ask him to perform this step, do not attempt it yourself.**
+**Message @stephen on Slack:**
+
+> I am releasing deploy-sourcegraph-docker, please update the customer replica as appropriate.
+
+**Continue onto the next step if you are not Stephen, you do not need to wait for him.**
 
 If for example deploy-sourcegraph-docker's last release was v3.8.2 and you are releasing v3.9.2:
 
@@ -115,8 +119,14 @@ Replace the old version with the new version in the `master` branches of the fol
 - sourcegraph/sourcegraph:
     - replace two instances: https://github.com/sourcegraph/sourcegraph/blob/master/doc/admin/install/docker-compose/index.md
     - add a new section with all relevant upgrade details: https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/docker_compose.md#updating-a-docker-compose-sourcegraph-instance
-    - ask Stephen on Slack to write an entry for https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/pure_docker.md#updating-a-pure-docker-sourcegraph-cluster
+    - **If you are Stephen**: Write an entry for https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/pure_docker.md#updating-a-pure-docker-sourcegraph-cluster
     - Update `latestReleaseDockerComposeOrPureDocker` in https://github.com/sourcegraph/sourcegraph/blob/master/cmd/frontend/internal/app/pkg/updatecheck/handler.go#L47
+
+## 8) Post that you are done.
+
+Write a message to #dev-announce:
+
+> Docker Compose v3.9.2 has been released.
 
 # This repository branching / tag scheme
 
