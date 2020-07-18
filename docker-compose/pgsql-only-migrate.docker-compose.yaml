@@ -1,6 +1,6 @@
 # This file contains only the pgsql service definition, and is used during
-# the sourcegraph/server -> docker-compose migration process. 
-# 
+# the sourcegraph/server -> docker-compose migration process.
+#
 # 🚨This file MUST be kept in sync with the pgsql definition in docker-compose/docker-compose.yaml
 version: '2.4'
 services:
@@ -12,7 +12,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-11.4:insiders@sha256:072481559d559cfd9a53ad77c3688b5cf583117457fd452ae238a20405923297'
+    image: 'index.docker.io/sourcegraph/postgres-11.4:3.18.0@sha256:63090799b34b3115a387d96fe2227a37999d432b774a1d9b7966b8c5d81b56ad'
     cpus: 4
     mem_limit: '2g'
     healthcheck:

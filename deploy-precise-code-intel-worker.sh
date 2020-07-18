@@ -15,6 +15,6 @@ docker run --detach \
     --memory=4g \
     -e 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187' \
     -e 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090' \
-    index.docker.io/sourcegraph/precise-code-intel-worker:3.17.2@sha256:123ddcab97c273599b569a76bcd2c7dd7c423c1de816fda1c35b781e004b4dde
+    index.docker.io/sourcegraph/precise-code-intel-worker:3.18.0@sha256:ef7654e839f5257661aba758ddf671383c40260e49d1675f13c456272b8ccd49
 
 echo "Deployed precise-code-intel-worker service"
