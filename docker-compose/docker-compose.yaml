@@ -435,6 +435,8 @@ services:
     networks:
       - sourcegraph
     restart: always
+    environment:
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
 
   # Description: Dashboards and graphs for Prometheus metrics.
   #
@@ -484,8 +486,6 @@ services:
     restart: always
     command:
       - --port=8080
-    environment:
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
 
   # Description: Jaeger all-in-one instance
   # (https://www.jaegertracing.io/docs/1.17/getting-started/#all-in-one) for distributed tracing.
