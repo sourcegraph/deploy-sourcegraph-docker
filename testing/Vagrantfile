@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.synced_folder "../", "/deploy-sourcegraph-docker"
+  config.vm.define "pure-docker-test"
+  config.vm.hostname = "pure-docker-test"
+
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  config.vm.provider "virtualbox" do |v|
+    # Customize the amount of memory on the VM:
+    v.memory = "8192"
+    v.cpus = 8
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    apt-get update
+
+    # Install Docker
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update -y
+    apt-cache policy docker-ce
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    # Create volume directories.
+    cd /deploy-sourcegraph-docker
+    ./deploy.sh
+    sleep 5
+    ./teardown.sh
+
+    # Set permissions on volume directories.
+    #
+    # IMPORTANT: If these change, or a new service is introduced, it must be explicitly called out in
+    # https://docs.sourcegraph.com/admin/updates/pure_docker similar to https://docs.sourcegraph.com/admin/updates/pure_docker#v3-12-5-v3-13-2-changes
+    pushd ~/sourcegraph-docker
+    chown -R 100:101 gitserver* lsif-server* prometheus-v2* replacer* repo-updater* searcher* sourcegraph-frontend* symbols* zoekt*
+    chown -R 999:1000 redis-store-disk redis-cache-disk
+    chown -R 472:472 grafana-disk
+    chown -R 999:999 pgsql-disk
+    popd
+    ./deploy.sh
+  SHELL
+end
