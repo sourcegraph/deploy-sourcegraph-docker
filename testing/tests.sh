@@ -1,6 +1,13 @@
-vagrant ssh pure-docker-test <<'ENDSSH'
+#!/usr/bin/env bash
+set -euxo pipefail
 
-expect_containers="58"
+if [ "$BRANCH" = "master" ]; then
+    # Expected number of containers on `master` branch.
+    expect_containers="23"
+else
+    # Expected number of containers on e.g. 3.18-customer-replica branch.
+    expect_containers="58"
+fi
 
 echo "TEST: Number of expected containers created"
 containers_count=$(docker ps --format '{{.Names}}' | wc -l)
@@ -33,4 +40,3 @@ curl -f http://localhost:80
 curl -f http://localhost:80/healthz
 
 echo "ALL TESTS PASSED"
-ENDSSH
