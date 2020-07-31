@@ -29,7 +29,6 @@ docker run --detach \
     -e INDEXED_SEARCH_SERVERS="$(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH ":6070")" \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
-    -e REPLACER_URL=http://replacer:3185 \
     -e PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187 \
     -e GRAFANA_SERVER_URL=http://grafana:3370 \
     -e JAEGER_SERVER_URL=http://jaeger:16686 \
