@@ -84,7 +84,6 @@ services:
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'REPLACER_URL=http://replacer:3185'
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
@@ -124,7 +123,6 @@ services:
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'REPLACER_URL=http://replacer:3185'
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
@@ -317,31 +315,6 @@ services:
       - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-    networks:
-      - sourcegraph
-    restart: always
-
-  # Description: Backend for replace operations.
-  #
-  # Disk: 128GB / non-persistent SSD
-  # Ports exposed to other Sourcegraph services: 3185/TCP 6060/TCP
-  # Ports exposed to the public internet: none
-  #
-  replacer:
-    container_name: replacer
-    image: 'index.docker.io/sourcegraph/replacer:3.18.0@sha256:bc9652f578c93b6602d109844602ef36d9460e8c9612c417f5298e839380cbc8'
-    cpus: 1
-    mem_limit: '512m'
-    environment:
-      - GOMAXPROCS=1
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-    healthcheck:
-      test: "wget -q 'http://127.0.0.1:3185/healthz' -O /dev/null || exit 1"
-      interval: 1s
-      timeout: 10s
-      retries: 1
-    volumes:
-      - 'replacer:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -579,7 +552,6 @@ volumes:
   prometheus-v2:
   redis-cache:
   redis-store:
-  replacer:
   repo-updater:
   searcher-0:
   sourcegraph-frontend-0:
