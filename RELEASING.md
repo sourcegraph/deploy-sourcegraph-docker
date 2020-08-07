@@ -82,10 +82,10 @@ Visit http://localhost and confirm the app loads.
 (this will take about ~7 minutes to run, and you must have a machine with 8 CPUs)
 
 ```sh
-cd testing/
+cd test/pure-docker/
 vagrant up
 ./smoke-test.sh
-vagrant destroy
+vagrant destroy pure-docker-test
 ```
 
 **Message @stephen on Slack:**
@@ -173,10 +173,10 @@ During this process you will run into two merge conflicts:
 Once you have performed the above, you should run a basic smoke test to ensure that `./deploy.sh` on Ubuntu 18.04 causes all services to start up OK, that the frontend is responsive, and that no container UID/GIDs/file permissions have changed (which would be a regression). You can do this with Vagrant:
 
 ```sh
-cd testing/
+cd test/pure-docker/
 vagrant up
 ./smoke-test.sh
-vagrant destroy
+vagrant destroy pure-docker-test
 ```
 
 Once you see `ALL TESTS PASSED`, then push the new pure-docker release branch up and tag the release:
