@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-if [ "$BRANCH" = "master" ]; then
-    # Expected number of containers on `master` branch.
-    expect_containers="23"
-else
+branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)
+
+if [[ "$branch_or_tag" = "*customer-replica*" ]]; then
     # Expected number of containers on e.g. 3.18-customer-replica branch.
     expect_containers="58"
+else
+    # Expected number of containers on `master` branch.
+    expect_containers="23"
 fi
 
 echo "TEST: Number of expected containers created"
