@@ -40,7 +40,7 @@ services:
       #
       # Uncomment the following line when using HTTPS with Let's Encrypt's production environment
       # IMPORTANT: Strongly recommended to test with the staging configuration above first, see that file for details.
-      # - '../caddy/builtins/https.lets-encrypt-prod.Caddyfile:/etc/caddy/Caddyfile'
+      - '../caddy/builtins/https.lets-encrypt-prod.Caddyfile:/etc/caddy/Caddyfile'
       #
       # Uncomment the following line when using HTTPS with custom certificates
       # - '../caddy/builtins/https.custom-cert.Caddyfile:/etc/caddy/Caddyfile'
