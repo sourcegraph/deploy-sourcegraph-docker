@@ -193,9 +193,9 @@ services:
       - 'HOSTNAME=zoekt-webserver-0:6070'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:6070/healthz' -O /dev/null || exit 1"
-      interval: 1s
+      interval: 5s
       timeout: 10s
-      retries: 1
+      retries: 3
     volumes:
       - 'zoekt-0-shared:/data/index'
     networks:
@@ -220,9 +220,9 @@ services:
       - JAEGER_AGENT_HOST=jaeger
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
-      interval: 1s
+      interval: 5s
       timeout: 10s
-      retries: 1
+      retries: 3
     volumes:
       - 'searcher-0:/mnt/cache'
     networks:
@@ -267,7 +267,7 @@ services:
       test: "wget -q 'http://127.0.0.1:3187/healthz' -O /dev/null || exit 1"
       interval: 5s
       timeout: 5s
-      retries: 1
+      retries: 3
       start_period: 60s
     volumes:
       - 'precise-code-intel-bundle-manager:/lsif-storage'
@@ -292,7 +292,7 @@ services:
       test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
       interval: 5s
       timeout: 5s
-      retries: 1
+      retries: 3
       start_period: 60s
     networks:
       - sourcegraph
@@ -354,9 +354,9 @@ services:
     mem_limit: '6g'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
-      interval: 1s
+      interval: 5s
       timeout: 5s
-      retries: 1
+      retries: 3
       start_period: 5s
     networks:
       - sourcegraph
@@ -381,7 +381,7 @@ services:
       test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
       interval: 5s
       timeout: 5s
-      retries: 1
+      retries: 3
       start_period: 60s
     volumes:
       - 'symbols-0:/mnt/cache'
