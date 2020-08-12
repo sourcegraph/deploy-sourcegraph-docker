@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || '')
+branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || echo '')
 
 if [[ "$branch_or_tag" = "*customer-replica*" ]]; then
     # Expected number of containers on e.g. 3.18-customer-replica branch.
