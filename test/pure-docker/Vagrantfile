@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |v|
     # Customize the amount of memory on the VM:
-    v.memory = "8192"
-    v.cpus = 8
+    v.memory = "20480"
+    v.cpus = 16
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
