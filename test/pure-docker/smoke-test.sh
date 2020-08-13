@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -eufo pipefail
 
 branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || echo '')
 
@@ -11,6 +11,9 @@ else
     expect_containers="23"
 fi
 
+echo "Giving containers 10s to start..."
+sleep 10
+
 echo "TEST: Number of expected containers created"
 containers_count=$(docker ps --format '{{.Names}}' | wc -l)
 if [ "$containers_count" -ne "$expect_containers" ]; then
@@ -19,9 +22,6 @@ if [ "$containers_count" -ne "$expect_containers" ]; then
     echo "TEST FAILURE: expected $expect_containers containers, found $containers_count"
     exit 1
 fi
-
-echo "Giving containers 10s to start..."
-sleep 10
 
 echo "TEST: Checking every 10s that containers are running for 5 minutes..."
 for i in {0..30}; do
