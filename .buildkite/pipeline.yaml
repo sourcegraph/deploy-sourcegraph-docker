@@ -4,7 +4,11 @@ steps:
     command: .buildkite/validate-docker-compose.sh
   - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
-  - label: ':rice:'
-    command: .buildkite/test-pure-docker.sh
-    agents:
-      queue: 'baremetal'
+  #
+  # TODO: re-enable this!
+  # Disabled while baremetal agents are unstable, see: https://github.com/sourcegraph/sourcegraph/issues/12996
+  #
+  #- label: ':rice:'
+  #  command: .buildkite/test-pure-docker.sh
+  #  agents:
+  #    queue: 'baremetal'
