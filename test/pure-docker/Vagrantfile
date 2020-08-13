@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-18.04"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
   config.vm.define "pure-docker-test"
   config.vm.hostname = "pure-docker-test"
