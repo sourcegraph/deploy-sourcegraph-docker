@@ -6,4 +6,4 @@ set -euxo pipefail
 cd test/pure-docker/
 vagrant up
 # ./smoke-test.sh
-vagrant destroy
+vagrant destroy -f
