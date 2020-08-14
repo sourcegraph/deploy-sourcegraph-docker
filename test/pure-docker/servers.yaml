@@ -1,0 +1,21 @@
+---
+-
+  box: bento/ubuntu-18.04
+  cpu: 1
+  ip: "172.17.10.105"
+  name: node-01
+  forward_ports: []
+  ram: 8192
+  shell_commands:
+      - { shell: 'ufw disable'}
+      - { shell: 'apt-get update -y && apt-get install -y curl'}
+      # - { shell: 'curl -fsSL get.docker.com | sh'}
+# -
+#   box: bento/ubuntu-18.04
+#   cpu: 1
+#   ip: "172.17.10.107"
+#   name: node-03
+#   forward_ports: []
+#   ram: 1024
+#   shell_commands:
+#       - { shell: 'ufw disable'}
