@@ -49,4 +49,6 @@ Vagrant.configure("2") do |config|
     popd
     ./deploy.sh
   SHELL
+
+  config.vm.provision "shell", path: smoke-test.sh
 end

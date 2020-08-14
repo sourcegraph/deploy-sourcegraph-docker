@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eufo pipefail
 
+cd /deploy-sourcegraph-docker
+sudo su
 branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || echo '')
 
 if [[ "$branch_or_tag" = "*customer-replica*" ]]; then
