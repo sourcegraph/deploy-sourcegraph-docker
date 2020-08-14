@@ -9,6 +9,6 @@ steps:
   # Disabled while baremetal agents are unstable, see: https://github.com/sourcegraph/sourcegraph/issues/12996
   #
   - label: ':rice:'
-   command: .buildkite/test-pure-docker.sh
-   agents:
-     queue: 'baremetal'
+    command: .buildkite/test-pure-docker.sh
+    agents:
+      queue: 'baremetal'
