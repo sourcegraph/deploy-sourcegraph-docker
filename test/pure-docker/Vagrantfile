@@ -50,5 +50,5 @@ Vagrant.configure("2") do |config|
     ./deploy.sh
   SHELL
 
-  config.vm.provision "shell", path: smoke-test.sh
+  config.vm.provision "shell", path: "smoke-test.sh"
 end
