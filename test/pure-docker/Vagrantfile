@@ -35,7 +35,7 @@ servers.each do |servers|
         v.memory = servers["ram"]
   end
 
-    srv.vm.synced_folder "../../../", "/home/vagrant/#{servers['name']}"
+    srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
 
     servers["shell_commands"].each do |sh|
       srv.vm.provision "shell", inline: sh["shell"]
