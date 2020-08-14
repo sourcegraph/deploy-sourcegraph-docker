@@ -6,5 +6,5 @@ nginx/sourcegraph.crt
 nginx/sourcegraph.key
 
 .vagrant
-.log
+*.log
 
