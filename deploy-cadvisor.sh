@@ -21,7 +21,7 @@ sudo docker run --detach \
     --volume=/sys:/sys:ro \
     --volume=/var/lib/docker/:/var/lib/docker:ro \
     --volume=/dev/disk/:/dev/disk:ro \
-    index.docker.io/sourcegraph/cadvisor:3.17.2@sha256:9fb42b067d1f9cc84558f61b6ec42f8cfe7ad874625c7673efa9b1f047fa3ced \
+    index.docker.io/sourcegraph/cadvisor:3.18.0@sha256:f43466dcaee7e96c82f69831f2d90977fb6b8a7eb382771544907614cbd7a79e \
     --port=8080
 
 echo "Deployed cadvisor"
