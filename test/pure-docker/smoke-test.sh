@@ -16,6 +16,7 @@ sleep 10
 
 echo "TEST: Number of expected containers created"
 containers_count=$(docker ps --format '{{.Names}}' | wc -l)
+echo "${containers_count}"
 if [ "$containers_count" -ne "$expect_containers" ]; then
     docker ps --format '{{.Names}}'
     echo
@@ -30,7 +31,7 @@ for i in {0..30}; do
     if [ "$containers_running" -ne "$expect_containers" ]; then
         docker ps
         echo
-        echo "TEST FAILURE: expected $expect_containers containers running, found $(containers_running)"
+        echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running"
         exit 1
     fi
     echo "Containers running OK.. waiting 10s"

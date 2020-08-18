@@ -17,26 +17,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
 servers.each do |servers|
 
-  config.ssh.insert_key = false
-
   config.vm.define servers["name"] do |srv|
+     srv.vm.box = servers["box"]
 
-    srv.vm.hostname = servers["name"]
+     srv.vm.provider :google do |g,o|
+        g.machine_type = servers["machine_type"]
+        g.image_family = "ubuntu-1804-lts"
+        g.google_project_id = "sourcegraph-dev"
+        g.network = "cloud"
+        g.subnetwork = "cloud-subnet"
+        g.zone = "us-central1-c"
+        o.ssh.username = "buildkite"
+        o.ssh.private_key_path = "/var/lib/buildkite-agent/.ssh/id_rsa"
 
-    srv.vm.box = servers["box"]
-
-    # srv.vm.network "private_network", ip: servers["ip"]
-
-   servers["forward_ports"].each do |port|
-     srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"]
-  end
-
-   srv.vm.provider :virtualbox do |v|
-        v.cpus = servers["cpu"]
-        v.memory = servers["ram"]
-        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-        v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-        v.customize ["modifyvm", :id, "--natsettings1","1600,1024,1024,1024,1024"]
   end
 
     srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
