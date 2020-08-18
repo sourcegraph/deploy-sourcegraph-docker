@@ -3,7 +3,6 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-/usr/bin/vagrant box add ../../sg-buildkite.box --name sg-buildkite
-/usr/bin/vagrant
+vagrant up
 # ./smoke-test.sh
-/usr/bin/vagrant destroy -f
+vagrant destroy -f
