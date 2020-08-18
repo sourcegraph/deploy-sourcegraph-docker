@@ -10,4 +10,4 @@ then
 fi
 
 echo "Installing asdf dependencies as defined in '$BUILDKITE_BUILD_CHECKOUT_PATH/.tool-versions':"
-asdf install
+# asdf install
