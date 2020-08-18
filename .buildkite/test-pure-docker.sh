@@ -3,6 +3,6 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-vagrant up
+/usr/bin/vagrant up
 # ./smoke-test.sh
-vagrant destroy -f
+/usr/bin/vagrant destroy -f
