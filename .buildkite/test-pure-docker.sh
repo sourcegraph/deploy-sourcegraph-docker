@@ -3,7 +3,7 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-pwd && ls -l
+cd test/pure-docker/
 vagrant up
 # ./smoke-test.sh
 vagrant destroy -f
