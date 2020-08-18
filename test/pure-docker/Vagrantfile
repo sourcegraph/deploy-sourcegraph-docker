@@ -17,14 +17,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
 servers.each do |servers|
 
+  config.ssh.insert_key = false
+
   config.vm.define servers["name"] do |srv|
 
     srv.vm.hostname = servers["name"]
 
     srv.vm.box = servers["box"]
 
-    srv.vm.network "private_network", ip: servers["ip"]
-
+    # srv.vm.network "private_network", ip: servers["ip"]
 
    servers["forward_ports"].each do |port|
      srv.vm.network :forwarded_port, guest: port["guest"], host: port["host"]
@@ -33,6 +34,9 @@ servers.each do |servers|
    srv.vm.provider :virtualbox do |v|
         v.cpus = servers["cpu"]
         v.memory = servers["ram"]
+        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+        v.customize ["modifyvm", :id, "--natsettings1","1600,1024,1024,1024,1024"]
   end
 
     srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"

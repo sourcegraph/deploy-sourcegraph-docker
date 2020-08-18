@@ -1,17 +1,17 @@
 ---
 -
-  box: bento/ubuntu-18.04
-  cpu: 16
-  ip: "172.17.10.105"
+  box: sg-buildkite
+  cpu: 4
+  # ip: "172.17.10.105"
   name: node-01
   forward_ports: []
-  ram: 20480
+  ram: 8192
   shell_commands:
       - { shell: 'ufw disable'}
-      - { shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'}
-      - { shell: 'DEBIAN_FRONTEND=noninteractive add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  bionic stable"'}
-      - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get update -y'}
-      - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io'}
+      # - { shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'}
+      # - { shell: 'DEBIAN_FRONTEND=noninteractive add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"'}
+      # - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get update -y'}
+      # - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io'}
       - { shell: 'cd /deploy-sourcegraph-docker && ./deploy.sh'}
 
 # -

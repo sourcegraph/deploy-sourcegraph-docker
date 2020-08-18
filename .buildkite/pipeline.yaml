@@ -4,6 +4,10 @@ steps:
     command: .buildkite/validate-docker-compose.sh
   - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
+  - label: ':pick:'
+    command: 'gsutil cp gs://buildkite_agent_sourcegraph_sourcegraph_artifacts/sg-buildkite.box .'
+  - label: ':stethoscope:'
+    command: 'vagrant box add sg-buildkite.box --name sg-buildkite'
   #
   # TODO: re-enable this!
   # Disabled while baremetal agents are unstable, see: https://github.com/sourcegraph/sourcegraph/issues/12996
