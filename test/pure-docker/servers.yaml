@@ -12,7 +12,7 @@
       - { shell: 'cd /deploy-sourcegraph-docker && ./deploy.sh'}
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
 -
-  box: ubuntu/bionic64
+  box: bento/ubuntu-18.04
   cpu: 16
   name: pure-docker-test-local
   forward_ports: []

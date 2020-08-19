@@ -4,6 +4,12 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
 cd test/pure-docker/
-vagrant plugin install vagrant-google
+
+if [ ! vagrant plugin list --no-tty | grep vagrant-google]; then
+
+	vagrant plugin install vagrant-google
+
+fi
+
 vagrant up pure-docker-test-local --provider=virtualbox
-vagrant destroy -f
+vagrant destroy -f pure-docker-test-local
