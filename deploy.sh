@@ -8,7 +8,7 @@ docker network create sourcegraph &> /dev/null || true
 
 ./deploy-cadvisor.sh
 ./deploy-github-proxy.sh
-for i in $(seq 0 $(($NUM_GITSERVER - 1))); do (./deploy-gitserver.sh $i); done
+for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
 ./deploy-grafana.sh
 ./deploy-jaeger.sh
 ./deploy-precise-code-intel-bundle-manager.sh
