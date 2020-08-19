@@ -15,6 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
           srv.vm.box = servers["box"]
           srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
+          srv.vm.boot_timeout = 600
 
           srv.vm.provider :google do |g,o|
             g.machine_type = servers["machine_type"]
@@ -24,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             g.subnetwork = "cloud-subnet"
             g.zone = "us-central1-c"
             o.ssh.username = "buildkite"
-            o.ssh.private_key_path = "/var/lib/buildkite-agent/.ssh/id_rsa"
+            o.ssh.private_key_path = "~/.ssh/id_rsa"
           end
 
           srv.vm.provider :virtualbox do |v, override|
@@ -32,6 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             v.memory = servers["ram"]
             override.vm.network "public_network", bridge: "ens4"
           end
+
 
           servers["shell_commands"].each do |sh|
             srv.vm.provision "shell", inline: sh["shell"]
