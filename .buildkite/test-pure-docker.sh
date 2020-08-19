@@ -5,7 +5,7 @@ set -euxo pipefail
 
 cd test/pure-docker/
 
-if [ ! vagrant plugin list --no-tty | grep vagrant-google ]; then
+if ! vagrant plugin list --no-tty | grep vagrant-google; then
 
 	vagrant plugin install vagrant-google
 

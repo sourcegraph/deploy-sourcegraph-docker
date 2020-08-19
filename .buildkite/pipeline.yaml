@@ -2,8 +2,12 @@ $schema: 'http://json.schemastore.org/buildkite'
 steps:
   - label: ':docker:'
     command: .buildkite/validate-docker-compose.sh
+    agents:
+      queue: 'baremetal'
   - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
+    agents:
+      queue: 'baremetal'
   #
   # TODO: re-enable this!
   # Disabled while baremetal agents are unstable, see: https://github.com/sourcegraph/sourcegraph/issues/12996
