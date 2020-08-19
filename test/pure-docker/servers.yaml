@@ -13,10 +13,10 @@
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
 -
   box: ubuntu/bionic64
-  cpu: 4
+  cpu: 16
   name: pure-docker-test-local
   forward_ports: []
-  ram: 8192
+  ram: 20480
   shell_commands:
       - { shell: 'ufw disable'}
       - { shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'}
