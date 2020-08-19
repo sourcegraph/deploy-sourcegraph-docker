@@ -1,42 +1,41 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
-
 # Specify minimum Vagrant version and Vagrant API version
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
-
 # Require YAML module
 require 'yaml'
-
 # Read YAML file with box details
 servers = YAML.load_file('servers.yaml')
-
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+		# Iterate through entries in YAML file
+	servers.each do |servers|
+        config.vm.define servers["name"] do |srv|
 
-  # Iterate through entries in YAML file
-servers.each do |servers|
+          srv.vm.box = servers["box"]
+          srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
 
-  config.vm.define servers["name"] do |srv|
-     srv.vm.box = servers["box"]
+          srv.vm.provider :google do |g,o|
+            g.machine_type = servers["machine_type"]
+            g.image_family = "ubuntu-1804-lts"
+            g.google_project_id = "sourcegraph-dev"
+            g.network = "cloud"
+            g.subnetwork = "cloud-subnet"
+            g.zone = "us-central1-c"
+            o.ssh.username = "buildkite"
+            o.ssh.private_key_path = "/var/lib/buildkite-agent/.ssh/id_rsa"
+          end
 
-     srv.vm.provider :google do |g,o|
-        g.machine_type = servers["machine_type"]
-        g.image_family = "ubuntu-1804-lts"
-        g.google_project_id = "sourcegraph-dev"
-        g.network = "cloud"
-        g.subnetwork = "cloud-subnet"
-        g.zone = "us-central1-c"
-        o.ssh.username = "buildkite"
-        o.ssh.private_key_path = "/var/lib/buildkite-agent/.ssh/id_rsa"
+          srv.vm.provider :virtualbox do |v, override|
+            v.cpus = servers["cpu"]
+            v.memory = servers["ram"]
+            override.vm.network "public_network", bridge: "ens4"
+          end
 
+          servers["shell_commands"].each do |sh|
+            srv.vm.provision "shell", inline: sh["shell"]
+			    end
+		end
   end
-
-    srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
-
-    servers["shell_commands"].each do |sh|
-      srv.vm.provision "shell", inline: sh["shell"]
-    end
-  end
-end
 end

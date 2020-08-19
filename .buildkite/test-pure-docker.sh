@@ -5,5 +5,5 @@ set -euxo pipefail
 
 cd test/pure-docker/
 vagrant plugin install vagrant-google
-vagrant up
+vagrant up pure-docker-test-local
 vagrant destroy -f

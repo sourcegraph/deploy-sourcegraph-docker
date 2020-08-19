@@ -2,7 +2,7 @@
 -
   box: google/gce
   machine_type: "custom-16-20480"
-  name: pure-docker-test
+  name: pure-docker-test-gcp
   shell_commands:
       - { shell: 'ufw disable'}
       - { shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'}
@@ -11,12 +11,17 @@
       - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io'}
       - { shell: 'cd /deploy-sourcegraph-docker && ./deploy.sh'}
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
-# -
-#   box: bento/ubuntu-18.04
-#   cpu: 1
-#   ip: "172.17.10.107"
-#   name: node-03
-#   forward_ports: []
-#   ram: 1024
-#   shell_commands:
-#       - { shell: 'ufw disable'}
+-
+  box: ubuntu/bionic64
+  cpu: 4
+  name: pure-docker-test-local
+  forward_ports: []
+  ram: 8192
+  shell_commands:
+      - { shell: 'ufw disable'}
+      - { shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'}
+      - { shell: 'DEBIAN_FRONTEND=noninteractive add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"'}
+      - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get update -y'}
+      - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io'}
+      - { shell: 'cd /deploy-sourcegraph-docker && ./deploy.sh'}
+      - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
