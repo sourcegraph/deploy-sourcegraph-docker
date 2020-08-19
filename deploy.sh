@@ -8,7 +8,7 @@ docker network create sourcegraph &> /dev/null || true
 
 ./deploy-cadvisor.sh
 ./deploy-github-proxy.sh
-for i in $(seq 0 $(($NUM_GITSERVER - 1))); do (./deploy-gitserver.sh $i); done
+for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
 ./deploy-grafana.sh
 ./deploy-jaeger.sh
 ./deploy-precise-code-intel-bundle-manager.sh
@@ -28,5 +28,6 @@ for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do ./deploy-zoekt-webserver.sh $
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do ./deploy-frontend.sh $i; done
-./deploy-caddy.sh
+# Not used in customer-replica branch.
+#./deploy-caddy.sh
 wait
