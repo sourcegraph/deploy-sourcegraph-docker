@@ -13,10 +13,10 @@
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
 -
   box: bento/ubuntu-18.04
-  cpu: 4
+  cpu: 1
   name: pure-docker-test-local
   forward_ports: []
-  ram: 20480
+  ram: 1024
   shell_commands:
       - { shell: 'ufw disable'}
       - { shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'}
