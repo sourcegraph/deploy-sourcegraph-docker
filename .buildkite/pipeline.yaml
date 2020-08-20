@@ -4,8 +4,8 @@ steps:
     command: .buildkite/validate-docker-compose.sh
     agents:
       queue: 'baremetal'
-  - label: ':lipstick:'
-    command: .buildkite/prettier-check.sh
+  # - label: ':lipstick:'
+  #   command: .buildkite/prettier-check.sh
     agents:
       queue: 'baremetal'
   #
