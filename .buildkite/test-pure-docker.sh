@@ -3,7 +3,6 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-sed -i 's/--cpu/#--cpu/g' deploy-*.sh
 cd test/pure-docker/
 
 if ! vagrant plugin list --no-tty | grep vagrant-google; then
