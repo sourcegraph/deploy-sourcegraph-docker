@@ -13,7 +13,7 @@
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
 -
   box: bento/ubuntu-18.04
-  cpu: 2
+  cpu: 4
   name: pure-docker-test-local
   forward_ports: []
   ram: 1024
