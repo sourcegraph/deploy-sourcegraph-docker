@@ -3,8 +3,6 @@
 set -eu
 cd $BUILDKITE_BUILD_CHECKOUT_PATH
 
-env
-
 if ! command -v asdf &> /dev/null
 then
     echo "skipping asdf, TODO: ask Dave to add asdf to baremetal image"
