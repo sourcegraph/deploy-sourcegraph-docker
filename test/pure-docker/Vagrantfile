@@ -32,6 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           srv.vm.provider :virtualbox do |v, override|
             v.cpus = servers["cpu"]
             v.memory = servers["ram"]
+            #override.vm.disk :disk, size: "10GB", primary: true
             override.vm.network "public_network", bridge: "ens4"
           end
 
