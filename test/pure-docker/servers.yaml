@@ -24,4 +24,4 @@
       - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get update -y'}
       - { shell: 'DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io'}
       - { shell: 'cd /deploy-sourcegraph-docker && ./deploy.sh'}
-      # - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
+      - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
