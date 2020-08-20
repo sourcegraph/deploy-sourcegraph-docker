@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# set -eu
+set -eu
 cd $BUILDKITE_BUILD_CHECKOUT_PATH
-echo $PATH
-source ~/.profile
-echo $PATH
+
+env
+
 if ! command -v asdf &> /dev/null
 then
     echo "skipping asdf, TODO: ask Dave to add asdf to baremetal image"
