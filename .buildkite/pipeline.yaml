@@ -4,14 +4,14 @@ steps:
     command: .buildkite/validate-docker-compose.sh
     agents:
       queue: 'baremetal'
-  # - label: ':lipstick:'
-  #   command: .buildkite/prettier-check.sh
+    env:
+      PATH: "/var/lib/buildkite-agent/.asdf/shims:/var/lib/buildkite-agent/.asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+  - label: ':lipstick:'
+    command: .buildkite/prettier-check.sh
     agents:
       queue: 'baremetal'
-  #
-  # TODO: re-enable this!
-  # Disabled while baremetal agents are unstable, see: https://github.com/sourcegraph/sourcegraph/issues/12996
-  #
+    env:
+      PATH: "/var/lib/buildkite-agent/.asdf/shims:/var/lib/buildkite-agent/.asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
   - label: ':rice:'
     command: .buildkite/test-pure-docker.sh
     agents:
