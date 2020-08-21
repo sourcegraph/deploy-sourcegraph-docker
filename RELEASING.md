@@ -79,20 +79,15 @@ Visit http://localhost and confirm the app loads.
 
 ## 5) Confirm Pure-Docker works with a smoke test
 
-(this will take about ~7 minutes to run, and you must have a machine with 8 CPUs)
+This will take about ~10 minutes to run, and you must have a machine with 16 CPUs.
+
+Note: This does NOT run on Buildkite currently, you must run it manually, see https://github.com/sourcegraph/sourcegraph/issues/12996
+
+Install [Vagrant](https://vagrantup.com), then:
 
 ```sh
-cd test/pure-docker/
-vagrant up
-./smoke-test.sh
-vagrant destroy pure-docker-test
+.buildkite/test-pure-docker.sh
 ```
-
-**Message @stephen on Slack:**
-
-> I am releasing deploy-sourcegraph-docker, please release pure-docker.
-
-If you are Stephen, follow [releasing pure-docker](#releasing-pure-docker)
 
 ## 6) Tag the final release
 
@@ -120,6 +115,12 @@ Write a message to #dev-announce:
 
 > Docker Compose v3.9.2 has been released.
 
+## 9) Message @stephen on Slack
+
+> I am releasing deploy-sourcegraph-docker, please release pure-docker.
+
+If you are Stephen, follow [releasing pure-docker](#releasing-pure-docker) below.
+
 # This repository branching / tag scheme
 
 Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
@@ -131,7 +132,7 @@ The customer replica ones are important as we must maintain some diffs for repli
 
 ## Releasing pure-docker
 
-@stephen handles releasing pure Docker after Docker Compose is released. This process is tedious and manual, and applies to one single customer only.
+@stephen handles releasing pure Docker after Docker Compose is released. This process is somewhat tedious and manual, and applies to one single customer only.
 
 For pure-docker, we provide customers with an exact diff of changes to make. They do not run our deploy.sh scripts directly, instead they copy them or adapt them to their own deployment environment entirely. This means we must carefully communicate each change that is made.
 
@@ -173,10 +174,7 @@ During this process you will run into two merge conflicts:
 Once you have performed the above, you should run a basic smoke test to ensure that `./deploy.sh` on Ubuntu 18.04 causes all services to start up OK, that the frontend is responsive, and that no container UID/GIDs/file permissions have changed (which would be a regression). You can do this with Vagrant:
 
 ```sh
-cd test/pure-docker/
-vagrant up
-./smoke-test.sh
-vagrant destroy pure-docker-test
+.buildkite/test-pure-docker.sh
 ```
 
 Once you see `ALL TESTS PASSED`, then push the new pure-docker release branch up and tag the release:
@@ -191,3 +189,5 @@ Write an entry for https://docs.sourcegraph.com/admin/updates/pure_docker which 
 
 - A link to your `upgrade to v3.8.2` commit describing the exact changes needed to be made.
 - Any specific manual migrations, including potential `chown` commands that may be needed (if any new service is introduced, etc.)
+
+Contact https://app.hubspot.com/contacts/2762526/company/407948923/ over Slack and inform them the update is available, providing a link to the diff and other relevant details.

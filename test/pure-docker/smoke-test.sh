@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -eufo pipefail
 
+cd /deploy-sourcegraph-docker
+sudo su
 branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || echo '')
 
-if [[ "$branch_or_tag" = "*customer-replica*" ]]; then
+if [[ "$branch_or_tag" == *"customer-replica"* ]]; then
     # Expected number of containers on e.g. 3.18-customer-replica branch.
     expect_containers="58"
 else
@@ -16,7 +18,6 @@ sleep 10
 
 echo "TEST: Number of expected containers created"
 containers_count=$(docker ps --format '{{.Names}}' | wc -l)
-echo "${containers_count}"
 if [ "$containers_count" -ne "$expect_containers" ]; then
     docker ps --format '{{.Names}}'
     echo

@@ -11,5 +11,5 @@ if ! vagrant plugin list --no-tty | grep vagrant-google; then
 
 fi
 
-time vagrant up pure-docker-test-local --provider=virtualbox
+vagrant up pure-docker-test-local --provider=virtualbox
 vagrant destroy -f pure-docker-test-local

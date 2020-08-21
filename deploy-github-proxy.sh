@@ -21,6 +21,6 @@ docker run --detach \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
-    index.docker.io/sourcegraph/github-proxy:3.18.0@sha256:37b4fe9bebed612cc70a38c7c3202bf32e896cf826f578c8dbd1a7d985f48809
+    index.docker.io/sourcegraph/github-proxy:3.19.1@sha256:3b3adc501906d8580ebafb9cdfd34e9f29905d1186289701bfce48915f3084ae
 
 echo "Deployed github-proxy service"
