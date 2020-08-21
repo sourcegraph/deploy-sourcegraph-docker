@@ -21,4 +21,4 @@ docker run --detach \
     -v $VOLUME:/prometheus \
     -v $(pwd)/prometheus:/sg_prometheus_add_ons \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    index.docker.io/sourcegraph/prometheus:3.19.0@sha256:04c513f87c4af53eded2fd8d8f088a2b357f4338f34beb1e6f3a24b9772c3978
+    index.docker.io/sourcegraph/prometheus:3.19.1-rc.2
