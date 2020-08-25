@@ -8,10 +8,10 @@
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
 -
   box: bento/ubuntu-18.04
-  cpu: 8
+  cpu: 16
   name: pure-docker-test-local
   forward_ports: []
-  ram: 8192
+  ram: 20480
   shell_commands:
-      - { shell: 'cd /deploy-sourcegraph-docker && sed -i "s/--cpus=\(16\)/--cpus=8/g" deploy-*.sh && ./deploy.sh'}
+      - { shell: 'cd /deploy-sourcegraph-docker && ./deploy.sh'}
       - { shell: '/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh'}
