@@ -4,17 +4,11 @@ steps:
     command: .buildkite/validate-docker-compose.sh
     agents:
       queue: 'baremetal'
-    # env:
-    #   PATH: "/var/lib/buildkite-agent/.asdf/shims:/var/lib/buildkite-agent/.asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
   - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
     agents:
       queue: 'baremetal'
-    # env:
-    #   PATH: "/var/lib/buildkite-agent/.asdf/shims:/var/lib/buildkite-agent/.asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
   - label: ':rice:'
     command: .buildkite/test-pure-docker.sh
     agents:
       queue: 'baremetal'
-    # env:
-    #   PATH: "/var/lib/buildkite-agent/.asdf/shims:/var/lib/buildkite-agent/.asdf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
