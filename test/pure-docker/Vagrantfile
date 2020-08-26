@@ -20,8 +20,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.machine_type = servers['machine_type']
         g.image_family = 'ubuntu-1804-lts'
         g.google_project_id = 'sourcegraph-dev'
-        g.network = 'cloud'
-        g.subnetwork = 'cloud-subnet'
+        g.network = servers['network']
+        g.subnetwork = servers['subnetwork']
         g.zone = 'us-central1-c'
         g.external_ip = servers['external_ip']
         g.use_private_ip = servers['use_private_ip']
