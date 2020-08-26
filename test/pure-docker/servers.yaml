@@ -2,7 +2,7 @@
 -
   box: google/gce
   machine_type: "custom-16-20480"
-  name: pure-docker-test-gcp
+  name: pure-docker-test
   username: dave
   forward_ports: []
   shell_commands: []
