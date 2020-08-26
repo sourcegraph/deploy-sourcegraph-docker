@@ -25,6 +25,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             g.network = "cloud"
             g.subnetwork = "cloud-subnet"
             g.zone = "us-central1-c"
+            g.external_ip = false
+            g.use_private_ip = true
             o.ssh.username = servers["username"]
             o.ssh.private_key_path = "~/.ssh/id_rsa"
           end
