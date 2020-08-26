@@ -1,37 +1,35 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 # Specify minimum Vagrant version and Vagrant API version
-Vagrant.require_version ">= 1.6.0"
-VAGRANTFILE_API_VERSION = "2"
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'.freeze
 # Require YAML module
 require 'yaml'
 # Read YAML file with box details
 servers = YAML.load_file('servers.yaml')
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
   # Iterate through entries in YAML file
-	servers.each do |servers|
-        config.vm.define servers["name"] do |srv|
+  servers.each do |servers|
+    config.vm.define servers['name'] do |srv|
+      srv.vm.box = servers['box']
+      srv.vm.synced_folder '../../', '/deploy-sourcegraph-docker'
+      srv.vm.boot_timeout = 600
 
-          srv.vm.box = servers["box"]
-          srv.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
-          srv.vm.boot_timeout = 600
+      srv.vm.provider :google do |g, o|
+        g.machine_type = servers['machine_type']
+        g.image_family = 'ubuntu-1804-lts'
+        g.google_project_id = 'sourcegraph-dev'
+        g.network = 'cloud'
+        g.subnetwork = 'cloud-subnet'
+        g.zone = 'us-central1-c'
+        g.external_ip = servers['external_ip']
+        g.use_private_ip = servers['use_private_ip']
+        o.ssh.username = servers['username']
+        o.ssh.private_key_path = '~/.ssh/id_rsa'
+      end
 
-          srv.vm.provider :google do |g,o|
-            g.machine_type = servers["machine_type"]
-            g.image_family = "ubuntu-1804-lts"
-            g.google_project_id = "sourcegraph-dev"
-            g.network = "cloud"
-            g.subnetwork = "cloud-subnet"
-            g.zone = "us-central1-c"
-            g.external_ip = false
-            g.use_private_ip = true
-            o.ssh.username = servers["username"]
-            o.ssh.private_key_path = "~/.ssh/id_rsa"
-          end
-
-          config.vm.provision "shell", inline: <<-SHELL
+      config.vm.provision 'shell', inline: <<-SHELL
             #!/usr/bin/env bash
             set -euxo pipefail
             apt-get update
@@ -39,11 +37,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             curl -fsSL get.docker.com | sudo sh
             cd /deploy-sourcegraph-docker && ./deploy.sh
             /deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh
-          SHELL
+      SHELL
 
-          servers["shell_commands"].each do |sh|
-            srv.vm.provision "shell", inline: sh["shell"]
-			    end
-		end
+      servers['shell_commands'].each do |sh|
+        srv.vm.provision 'shell', inline: sh['shell']
+      end
+    end
   end
 end

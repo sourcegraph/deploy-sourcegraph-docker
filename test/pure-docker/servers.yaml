@@ -4,5 +4,7 @@
   machine_type: "custom-16-20480"
   name: pure-docker-test
   username: buildkite
+  external_ip: false
+  use_private_ip: true
   forward_ports: []
   shell_commands: []
