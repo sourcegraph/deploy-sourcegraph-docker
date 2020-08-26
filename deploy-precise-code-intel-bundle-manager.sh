@@ -9,7 +9,7 @@ source ./replicas.sh
 # Ports exposed to the public internet: none
 #
 VOLUME="$HOME/sourcegraph-docker/lsif-server-disk"
-./ensure-volume.sh $VOLUME 999
+./ensure-volume.sh $VOLUME 100
 docker run --detach \
     --name=precise-code-intel-bundle-manager \
     --network=sourcegraph \

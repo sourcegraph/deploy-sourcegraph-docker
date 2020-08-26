@@ -25,29 +25,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             g.network = "cloud"
             g.subnetwork = "cloud-subnet"
             g.zone = "us-central1-c"
-            o.ssh.username = "buildkite"
+            o.ssh.username = servers["username"]
             o.ssh.private_key_path = "~/.ssh/id_rsa"
-          end
-
-          srv.vm.provider :virtualbox do |v, override|
-            v.cpus = servers["cpu"]
-            v.memory = servers["ram"]
-            #override.vm.disk :disk, size: "10GB", primary: true
-            override.vm.network "public_network", bridge: "ens4"
           end
 
           config.vm.provision "shell", inline: <<-SHELL
             #!/usr/bin/env bash
             set -euxo pipefail
             apt-get update
-            # Configure nameserver to avoid some DNS failures.
-            echo nameserver 8.8.8.8 > /etc/resolv.conf
             # Install Docker
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-            sudo apt-get update -y
-            apt-cache policy docker-ce
-            apt-get install -y docker-ce docker-ce-cli containerd.io
+            curl -fsSL get.docker.com | sudo sh
+            cd /deploy-sourcegraph-docker && ./deploy.sh
+            /deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh
           SHELL
 
           servers["shell_commands"].each do |sh|
