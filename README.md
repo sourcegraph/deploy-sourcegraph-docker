@@ -83,6 +83,33 @@ Then try cloning the repository:
 $ git clone ssh://git@myhost.com/my/repo /tmp/my-repo
 ```
 
+## Testing
+
+Developers can test using [Vagrant](https://www.vagrantup.com) and your Sourcegraph GCP account.
+
+- Use [these](https://www.vagrantup.com/docs/index) instructions to install `Vagrant` on your local machine. Once sucessfully installed, install the required plugin:
+```
+vagrant plugin install vagrant-google
+```
+
+- Ensure your credentials are correct by running the following and following the prompts:
+```
+gcloud auth application-default login
+```
+
+- Edit the username in for the `pure-docker-test-dev` box in [servers.yaml](test/pure-docker/servers.yaml) to match your ssh user for GCP.
+
+- Run `vagrant up pure-docker-test-dev --provider=google`
+
+This command will start a GCP instance, upload your local copy of the reposistory and run a [smoke test](test/pure-docker/smoke-test.sh).
+
+To delete the server in GCP, run:
+```
+vagrant destroy pure-docker-test-dev
+```
+
+
+
 ## Questions & Issues
 
 [Open an issue (in sourcegraph/sourcegraph)](https://github.com/sourcegraph/sourcegraph/issues/new?assignees=&labels=deploy-sourcegraph-docker&template=deploy-sourcegraph-docker.md&title=%5Bdeploy-sourcegraph-docker%5D) or contact us (support@sourcegraph.com), we are happy to help!
