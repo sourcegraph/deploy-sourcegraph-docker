@@ -92,18 +92,18 @@ Developers can test using [Vagrant](https://www.vagrantup.com) and your Sourcegr
 vagrant plugin install vagrant-google
 ```
 
-- Ensure your credentials are correct by running the following and following the prompts:
+- Ensure your credentials are correct by excecuting the command below and following the prompts:
 ```
 gcloud auth application-default login
 ```
 
 - Edit the username in for the `pure-docker-test-dev` box in [servers.yaml](test/pure-docker/servers.yaml) to match your ssh user for GCP.
 
-- Run `vagrant up pure-docker-test-dev --provider=google`
+- Execute `vagrant up pure-docker-test-dev --provider=google`
 
 This command will start a GCP instance, upload your local copy of the reposistory and run a [smoke test](test/pure-docker/smoke-test.sh).
 
-To delete the server in GCP, run:
+To delete the server in GCP, execute the following command:
 ```
 vagrant destroy pure-docker-test-dev
 ```
