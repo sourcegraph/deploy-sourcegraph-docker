@@ -15,6 +15,8 @@
   box: google/gce
   machine_type: "custom-16-20480"
   name: pure-docker-test-dev
-  username: "your_username"
+  username: "dave"
   network: "default"
-  shell_commands: []
+  shell_commands:
+    # Add additional inline shell commands for testing below
+    - { shell: ''}

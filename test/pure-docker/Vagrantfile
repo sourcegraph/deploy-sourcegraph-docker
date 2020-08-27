@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         o.ssh.private_key_path = '~/.ssh/id_rsa'
       end
 
-      config.vm.provision 'shell', inline: <<-SHELL
+      srv.vm.provision 'shell', inline: <<-SHELL
             #!/usr/bin/env bash
             set -euxo pipefail
             apt-get update
