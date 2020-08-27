@@ -2,21 +2,8 @@
 -
   box: google/gce
   machine_type: "custom-16-20480"
-  name: pure-docker-test-ci
-  username: buildkite
+  name: pure-docker-test
   external_ip: false
   use_private_ip: true
-  network: "cloud"
-  subnetwork: "cloud-subnet"
-  shell_commands: []
-
-# For local dev DO NOT edit above this section
--
-  box: google/gce
-  machine_type: "custom-16-20480"
-  name: pure-docker-test-dev
-  username: "dave"
   network: "default"
-  shell_commands:
-    # Add additional inline shell commands for testing below
-    - { shell: ''}
+  shell_commands: []

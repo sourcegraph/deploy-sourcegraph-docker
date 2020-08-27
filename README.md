@@ -97,15 +97,24 @@ vagrant plugin install vagrant-google
 gcloud auth application-default login
 ```
 
-- Edit the username in for the `pure-docker-test-dev` box in [servers.yaml](test/pure-docker/servers.yaml) to match your ssh user for GCP.
+- Execute the following where `ssh_user` is a user you have GCP metadata.
 
-- Execute `vagrant up pure-docker-test-dev --provider=google`
+```
+VAGRANT_SSH_USER=ssh_user vagrant up pure-docker-test --provider=google
+```
 
 This command will start a GCP instance, upload your local copy of the reposistory and run a [smoke test](test/pure-docker/smoke-test.sh).
 
+To run any additional tests or commands, edit the `servers.yaml` and add the commands to the `shell_commands` list, eg:
+```
+shell_commands:
+    - { shell: 'moretests.sh'}
+```
+
+
 To delete the server in GCP, execute the following command:
 ```
-vagrant destroy pure-docker-test-dev
+vagrant destroy pure-docker-test
 ```
 
 

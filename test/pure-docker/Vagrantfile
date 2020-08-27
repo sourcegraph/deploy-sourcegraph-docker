@@ -5,27 +5,40 @@ Vagrant.require_version '>= 1.6.0'
 VAGRANTFILE_API_VERSION = '2'.freeze
 # Require YAML module
 require 'yaml'
+# Setup for CI or Local
+case ENV['VAGRANT_RUN_ENV']
+when 'CI'
+    project_id = 'sourcegraph-ci'
+    external_ip = false
+    use_private_ip = true
+    username = 'buildkite'
+else
+    project_id = 'sourcegraph-dev'
+    use_private_ip = false
+    username = ENV['VAGRANT_SSH_USER']
+end
+
 # Read YAML file with box details
 servers = YAML.load_file('servers.yaml')
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
-  servers.each do |servers|
-    config.vm.define servers['name'] do |srv|
-      srv.vm.box = servers['box']
+  servers.each do |server|
+    config.vm.define server['name'] do |srv|
+      srv.vm.box = server['box']
       srv.vm.synced_folder '../../', '/deploy-sourcegraph-docker'
       srv.vm.boot_timeout = 600
 
       srv.vm.provider :google do |g, o|
-        g.machine_type = servers['machine_type']
+        g.machine_type = server['machine_type']
         g.image_family = 'ubuntu-1804-lts'
-        g.google_project_id = 'sourcegraph-dev'
-        g.network = servers['network']
-        g.subnetwork = servers['subnetwork']
+        g.google_project_id = project_id
+        g.network = server['network']
+        g.subnetwork = server['subnetwork']
         g.zone = 'us-central1-c'
-        g.external_ip = servers['external_ip']
-        g.use_private_ip = servers['use_private_ip']
-        o.ssh.username = servers['username']
+        g.external_ip = external_ip
+        g.use_private_ip = use_private_ip
+        o.ssh.username = username
         o.ssh.private_key_path = '~/.ssh/id_rsa'
       end
 
@@ -39,7 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             /deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh
       SHELL
 
-      servers['shell_commands'].each do |sh|
+      server['shell_commands'].each do |sh|
         srv.vm.provision 'shell', inline: sh['shell']
       end
     end

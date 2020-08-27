@@ -12,3 +12,5 @@ steps:
     command: .buildkite/test-pure-docker.sh
     agents:
       queue: 'baremetal'
+    env:
+      VAGRANT_RUN_ENV: 'CI'

@@ -11,5 +11,5 @@ if ! vagrant plugin list --no-tty | grep vagrant-google; then
 
 fi
 
-vagrant up pure-docker-test-ci --provider=google
-vagrant destroy -f pure-docker-test-ci
+vagrant up pure-docker-test --provider=google
+vagrant destroy -f pure-docker-test
