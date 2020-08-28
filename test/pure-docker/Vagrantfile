@@ -13,7 +13,7 @@ when 'CI'
     use_private_ip = true
     username = 'buildkite'
 else
-    project_id = 'sourcegraph-dev'
+    project_id = 'sourcegraph-server'
     use_private_ip = false
     username = ENV['VAGRANT_SSH_USER']
 end
