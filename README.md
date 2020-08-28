@@ -97,8 +97,12 @@ vagrant plugin install vagrant-google
 gcloud auth application-default login
 ```
 
-- Execute the following where `ssh_user` is a user you have GCP metadata.
+- Configure your local variables using the following environment variables
+  - `VAGRANT_GCP_PROJECT_ID`: Project to run on. (default: `sourcegraph-server`)
+  - `VAGRANT_SSH_USER`: Your SSH user ID as specified in GCP metadata. (default: `ENV['USER']`)
+  - `VAGRANT_SSH_KEY`: Path to your SSH Keys as specified in GCP metadata. (default: `~/.ssh/id_rsa`)
 
+- Run the tests
 ```
 VAGRANT_SSH_USER=ssh_user vagrant up pure-docker-test --provider=google
 ```
@@ -108,16 +112,18 @@ This command will start a GCP instance, upload your local copy of the reposistor
 To run any additional tests or commands, edit the `servers.yaml` and add the commands to the `shell_commands` list, eg:
 ```
 shell_commands:
-    - { shell: 'moretests.sh'}
+    - [...]
+    - /vagrant/moretests.sh
+    - "ps aux | grep thisthat"
+    - |
+      cd /vagrant
+      bartest.sh
 ```
-
 
 To delete the server in GCP, execute the following command:
 ```
 vagrant destroy pure-docker-test
 ```
-
-
 
 ## Questions & Issues
 
