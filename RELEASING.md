@@ -79,9 +79,9 @@ Visit http://localhost and confirm the app loads.
 
 ## 5) Confirm Pure-Docker works with a smoke test
 
-This will take about ~10 minutes to run, and you must have a machine with 16 CPUs.
+Refer to the [TESTING.md](TESTING.md) for full instructions on running local tests.
 
-Note: This does NOT run on Buildkite currently, you must run it manually, see https://github.com/sourcegraph/sourcegraph/issues/12996
+This will take about ~10 minutes to run.
 
 Install [Vagrant](https://vagrantup.com), then:
 
