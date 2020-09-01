@@ -9,6 +9,7 @@
   username: buildkite
   ssh_key_path: "~/.ssh/id_rsa"
   shell_commands:
+   - "/deploy-sourcegraph-docker/test/pure-docker/setup.sh"
    - |
       cd /deploy-sourcegraph-docker
       ./deploy.sh
