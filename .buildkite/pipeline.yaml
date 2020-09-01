@@ -14,3 +14,9 @@ steps:
       queue: 'baremetal'
     env:
       VAGRANT_RUN_ENV: 'CI'
+  - wait: ~
+    continue_on_failure: true
+  - label: ':broom:'
+    command: .buildkite/cleanup.sh
+    agents:
+      queue: 'baremetal'
