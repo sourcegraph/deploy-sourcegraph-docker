@@ -79,15 +79,13 @@ Visit http://localhost and confirm the app loads.
 
 ## 5) Confirm Pure-Docker works with a smoke test
 
-Refer to the [TESTING.md](TESTING.md) for full instructions on running local tests.
-
-This will take about ~10 minutes to run.
-
 Install [Vagrant](https://vagrantup.com), then:
 
 ```sh
 .buildkite/test-pure-docker.sh
 ```
+
+This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
 ## 6) Tag the final release
 
@@ -171,11 +169,13 @@ During this process you will run into two merge conflicts:
 - Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
 - Do not commit: changes to `deploy-pgsql.sh`, as Postgres 9.6 is used here.
 
-Once you have performed the above, you should run a basic smoke test to ensure that `./deploy.sh` on Ubuntu 18.04 causes all services to start up OK, that the frontend is responsive, and that no container UID/GIDs/file permissions have changed (which would be a regression). You can do this with Vagrant:
+Once you have performed the above, you should run a basic smoke test to ensure that `./deploy.sh` on Ubuntu 18.04 causes all services to start up OK, that the frontend is responsive, and that no container UID/GIDs/file permissions have changed (which would be a regression). You can do this by installing [Vagrant](https://vagrantup.com) and running:
 
 ```sh
 .buildkite/test-pure-docker.sh
 ```
+
+This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
 Once you see `ALL TESTS PASSED`, then push the new pure-docker release branch up and tag the release:
 
