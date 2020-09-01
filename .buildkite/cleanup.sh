@@ -3,5 +3,6 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-yarn
-yarn run prettier-check
+cd test/pure-docker/
+
+vagrant destroy -f

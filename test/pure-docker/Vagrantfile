@@ -1,68 +1,64 @@
 # -*- mode: ruby -*-
-# vi: set ft=ruby :
+# # vi: set ft=ruby :
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'.freeze
+# Require YAML module
+require 'yaml'
 
-Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64"
-  config.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
-  config.vm.define "pure-docker-test"
-  config.vm.hostname = "pure-docker-test"
+# Read YAML file with box details
+servers = YAML.load_file('servers.yaml')
+# Create boxes
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Iterate through entries in YAML file
+  servers.each do |server|
+    config.vm.define server['name'] do |srv|
+      srv.vm.box = server['box']
+      srv.vm.synced_folder '../../', '/deploy-sourcegraph-docker'
+      srv.vm.boot_timeout = 600
 
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
-  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+      # Setup for CI or Local
+      case ENV['VAGRANT_RUN_ENV']
+      when 'CI'
+        project_id = server['project_id']
+        external_ip = server['external_ip']
+        use_private_ip = server['use_private_ip']
+        username = server['username']
+        ssh_key_path = server['ssh_key_path']
+      else
+        project_id = ENV['VAGRANT_GCP_PROJECT_ID'] || 'sourcegraph-server'
+        external_ip = nil
+        use_private_ip = false
+        username = ENV['VAGRANT_SSH_USER'] || ENV['USER']
+        ssh_key_path = ENV['VAGRANT_SSH_KEY'] || '~/.ssh/id_rsa'
+      end
 
-  config.vm.provider "virtualbox" do |v|
-    # Customize the amount of memory on the VM:
-    v.memory = "20480"
-    v.cpus = 16
-    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+      srv.vm.provider :google do |g, o|
+        g.machine_type = server['machine_type']
+        g.image_family = 'ubuntu-1804-lts'
+        g.google_project_id = project_id
+        g.network = server['network']
+        g.external_ip = external_ip
+        g.use_private_ip = use_private_ip
+        o.ssh.username = username
+        o.ssh.private_key_path = ssh_key_path
+      end
+
+      srv.vm.provision 'shell', inline: <<-SHELL
+        #!/usr/bin/env bash
+        set -euxo pipefail
+        apt-get update
+        # Install Docker
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update -y
+        apt-cache policy docker-ce
+        apt-get install -y docker-ceasdfasdf docker-ce-cli containerd.io || apt-get install -y docker-ce docker-ce-cli containerd.io
+      SHELL
+
+      server['shell_commands'].each do |sh|
+        srv.vm.provision 'shell', inline: sh
+      end
+    end
   end
-
-  config.vm.provision "shell", inline: <<-SHELL
-    #!/usr/bin/env bash
-    set -euxo pipefail
-
-    apt-get update
-
-    # Configure nameserver to avoid some DNS failures.
-    echo nameserver 8.8.8.8 > /etc/resolv.conf
-
-    # Install Docker
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    sudo apt-get update -y
-    apt-cache policy docker-ce
-    apt-get install -y docker-ce docker-ce-cli containerd.io
-
-    # Create volume directories.
-    cd /deploy-sourcegraph-docker
-    echo
-    echo "creating deployment for volume directories"
-    echo
-    ./deploy.sh
-    echo
-    echo "tearing down deployment for volume directories"
-    echo
-    ./teardown.sh
-
-    # Set permissions on volume directories.
-    #
-    # IMPORTANT: If these change, or a new service is introduced, it must be explicitly called out in
-    # https://docs.sourcegraph.com/admin/updates/pure_docker similar to https://docs.sourcegraph.com/admin/updates/pure_docker#v3-12-5-v3-13-2-changes
-    echo
-    echo "forcing static permissions on volume directories"
-    echo
-    pushd ~/sourcegraph-docker
-    chown -R 100:101 gitserver* lsif-server* prometheus-v2* repo-updater* searcher* sourcegraph-frontend* symbols* zoekt*
-    chown -R 999:1000 redis-store-disk redis-cache-disk
-    chown -R 472:472 grafana-disk
-    chown -R 999:999 pgsql-disk
-    popd
-    echo
-    echo "creating deployment"
-    echo
-    ./deploy.sh
-  SHELL
-
-  config.vm.provision "shell", path: "smoke-test.sh"
 end

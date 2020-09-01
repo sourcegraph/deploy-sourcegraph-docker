@@ -1,0 +1,16 @@
+---
+- name: pure-docker-test
+  box: google/gce
+  machine_type: "custom-16-20480"
+  project_id: sourcegraph-ci
+  external_ip: false
+  use_private_ip: true
+  network: default
+  username: buildkite
+  ssh_key_path: "~/.ssh/id_rsa"
+  shell_commands:
+   - "/deploy-sourcegraph-docker/test/pure-docker/setup.sh"
+   - |
+      cd /deploy-sourcegraph-docker
+      ./deploy.sh
+   - "/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh"
