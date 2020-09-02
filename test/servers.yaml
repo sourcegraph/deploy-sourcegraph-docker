@@ -29,6 +29,8 @@
        cd /deploy-sourcegraph-docker/docker-compose
        docker-compose up -d
        sleep 60
+       count=$(docker ps --format '{{.Names}}' | wc -l )
+       if [ "$count" != 21 ]; then  echo "missing containers"; exit 1; fi
     - |
        curl -f http://localhost:80
        curl -f http://localhost:80/healthz
