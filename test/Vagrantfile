@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
         sudo apt-get update -y
         apt-cache policy docker-ce
-        apt-get install -y docker-ce docker-ce-cli containerd.io || apt-get install -y docker-ce docker-ce-cli containerd.io
+        apt-get update -y && apt-get install -y docker-ce docker-ce-cli containerd.io || apt-get update -y && apt-get install -y docker-ce docker-ce-cli containerd.io
         # Install Docker Compose
         sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
