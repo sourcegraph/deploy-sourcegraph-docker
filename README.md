@@ -1,6 +1,6 @@
 # Pure-Docker Sourcegraph cluster deployment reference
 
-[![sourcegraph: search](https://img.shields.io/badge/sourcegraph-search-brightgreen.svg)](https://sourcegraph.com/github.com/sourcegraph/deploy-sourcegraph-docker) [![Build status](https://badge.buildkite.com/018ed23ed79d7297e7dd109b745597c58d875323fb06e81786.svg)](https://buildkite.com/sourcegraph/deploy-sourcegraph)
+[![sourcegraph: search](https://img.shields.io/badge/sourcegraph-search-brightgreen.svg)](https://sourcegraph.com/github.com/sourcegraph/deploy-sourcegraph-docker)
 
 There are two recommended ways to deploy Sourcegraph:
 
@@ -82,7 +82,6 @@ Then try cloning the repository:
 ```
 $ git clone ssh://git@myhost.com/my/repo /tmp/my-repo
 ```
-
 ## Questions & Issues
 
 [Open an issue (in sourcegraph/sourcegraph)](https://github.com/sourcegraph/sourcegraph/issues/new?assignees=&labels=deploy-sourcegraph-docker&template=deploy-sourcegraph-docker.md&title=%5Bdeploy-sourcegraph-docker%5D) or contact us (support@sourcegraph.com), we are happy to help!
