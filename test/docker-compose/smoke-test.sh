@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -eufo pipefail
 
-cd /deploy-sourcegraph-docker
+cd /deploy-sourcegraph-docker/docker-compose
 sudo su
+
+docker-compose up -d
+
 branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || echo '')
 
 if [[ "$branch_or_tag" == *"customer-replica"* ]]; then

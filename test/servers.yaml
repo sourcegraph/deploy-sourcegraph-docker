@@ -9,10 +9,7 @@
   username: buildkite
   ssh_key_path: "~/.ssh/id_rsa"
   shell_commands:
-   - "/deploy-sourcegraph-docker/test/pure-docker/setup.sh"
-   - |
-      cd /deploy-sourcegraph-docker
-      ./deploy.sh
+   - "/deploy-sourcegraph-docker/test/pure-docker/volume-config.sh"
    - "/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh"
 
 - name: docker-compose-test
@@ -25,12 +22,5 @@
   username: buildkite
   ssh_key_path: "~/.ssh/id_rsa"
   shell_commands:
-    - |
-       cd /deploy-sourcegraph-docker/docker-compose
-       docker-compose up -d
-       sleep 60
-       count=$(docker ps --format '{{.Names}}' | wc -l )
-       if [ "$count" != 21 ]; then  echo "missing containers"; exit 1; fi
-    - |
-       curl -f http://localhost:80
-       curl -f http://localhost:80/healthz
+    - "/deploy-sourcegraph-docker/test/docker-compose/smoke-test.sh"
+
