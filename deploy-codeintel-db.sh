@@ -9,10 +9,10 @@ set -e
 # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
 # Ports exposed to the public internet: none
 #
-VOLUME="$HOME/sourcegraph-docker/db-codeintel-disk"
+VOLUME="$HOME/sourcegraph-docker/codeintel-db-disk"
 ./ensure-volume.sh $VOLUME 999
 docker run --detach \
-    --name=db-codeintel \
+    --name=codeintel-db \
     --network=sourcegraph \
     --restart=always \
     --cpus=4 \
@@ -23,4 +23,4 @@ docker run --detach \
 # Sourcegraph requires PostgreSQL 9.6+. Generally newer versions are better,
 # but anything 9.6 and higher is supported.
 
-echo "Deployed db-codeintel service"
+echo "Deployed codeintel-db service"
