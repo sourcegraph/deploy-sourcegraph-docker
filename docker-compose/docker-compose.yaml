@@ -76,6 +76,7 @@ services:
       - GOMAXPROCS=12
       - JAEGER_AGENT_HOST=jaeger
       - PGHOST=pgsql
+      - CODEINTEL_PGHOST=db-codeintel
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
@@ -114,6 +115,7 @@ services:
     environment:
       - GOMAXPROCS=4
       - PGHOST=pgsql
+      - CODEINTEL_PGHOST=db-codeintel
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
@@ -553,6 +555,30 @@ services:
       - sourcegraph
     restart: always
 
+  # Description: PostgreSQL database for code intelligence data.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  db-codeintel:
+    container_name: db-codeintel
+    image: 'index.docker.io/sourcegraph/postgres-11.4:3.15.1@sha256:63090799b34b3115a387d96fe2227a37999d432b774a1d9b7966b8c5d81b56ad'
+    cpus: 4
+    mem_limit: '2g'
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - 'db-codeintel:/data/'
+    networks:
+      - sourcegraph
+    restart: always
+
+
   # Description: Redis for storing short-lived caches.
   #
   # Disk: 128GB / persistent SSD
@@ -592,6 +618,7 @@ volumes:
   grafana:
   precise-code-intel-bundle-manager:
   pgsql:
+  db-codeintel:
   prometheus-v2:
   redis-cache:
   redis-store:

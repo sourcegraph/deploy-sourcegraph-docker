@@ -20,6 +20,7 @@ docker run --detach \
     --memory=8g \
     -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
+    -e CODEINTEL_PGHOST=db-codeintel \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
     -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
