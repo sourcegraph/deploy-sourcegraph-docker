@@ -35,7 +35,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       srv.vm.provider :google do |g, o|
         g.machine_type = server['machine_type']
-        g.image_family = 'ubuntu-1804-lts'
+        g.image = 'e2e-a31088d3-2020-09-22t15-21-57z'
+        g.image_project_id = 'sourcegraph-ci'
         g.google_project_id = project_id
         g.name = "#{server['name']}-"+"#{Time.now.to_i}"
         g.network = server['network']
@@ -49,16 +50,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         #!/usr/bin/env bash
         set -euxo pipefail
         sudo apt-get update
-        # Install Docker
-        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-        sudo apt-get update -y
-        sudo apt-cache policy docker-ce
-        sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-        # Install Docker Compose
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
       SHELL
 
       server['shell_commands'].each do |sh|
