@@ -578,7 +578,6 @@ services:
       - sourcegraph
     restart: always
 
-
   # Description: Redis for storing short-lived caches.
   #
   # Disk: 128GB / persistent SSD
