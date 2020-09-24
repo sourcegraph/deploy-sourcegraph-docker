@@ -47,9 +47,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       srv.vm.provision 'shell', inline: <<-SHELL
-        #!/usr/bin/env bash
-        set -euxo pipefail
-        sudo apt-get update
       SHELL
 
       server['shell_commands'].each do |sh|
