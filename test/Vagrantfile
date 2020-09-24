@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'.freeze
+# Require YAML module
+require 'yaml'
+
+# Read YAML file with box details
+servers = YAML.load_file('servers.yaml')
+# Create boxes
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Iterate through entries in YAML file
+  servers.each do |server|
+    config.vm.define server['name'] do |srv|
+      srv.vm.box = server['box']
+      srv.vm.synced_folder '../', '/deploy-sourcegraph-docker'
+      srv.vm.boot_timeout = 600
+
+      # Setup for CI or Local
+      case ENV['VAGRANT_RUN_ENV']
+      when 'CI'
+        project_id = server['project_id']
+        external_ip = server['external_ip']
+        use_private_ip = server['use_private_ip']
+        username = server['username']
+        ssh_key_path = server['ssh_key_path']
+      else
+        project_id = ENV['VAGRANT_GCP_PROJECT_ID'] || 'sourcegraph-server'
+        external_ip = nil
+        use_private_ip = false
+        username = ENV['VAGRANT_SSH_USER'] || ENV['USER']
+        ssh_key_path = ENV['VAGRANT_SSH_KEY'] || '~/.ssh/id_rsa'
+      end
+
+      srv.vm.provider :google do |g, o|
+        g.machine_type = server['machine_type']
+        g.image = 'e2e-3c2f467e-2020-09-22t18-14-56z'
+        g.image_project_id = 'sourcegraph-ci'
+        g.google_project_id = project_id
+        g.name = "#{server['name']}-"+"#{Time.now.to_i}"
+        g.network = server['network']
+        g.external_ip = external_ip
+        g.use_private_ip = use_private_ip
+        o.ssh.username = username
+        o.ssh.private_key_path = ssh_key_path
+      end
+
+      srv.vm.provision 'shell', inline: <<-SHELL
+        #!/usr/bin/env bash
+        set -euxo pipefail
+        sudo apt-get update
+      SHELL
+
+      server['shell_commands'].each do |sh|
+        srv.vm.provision 'shell', inline: sh
+      end
+    end
+  end
+end
