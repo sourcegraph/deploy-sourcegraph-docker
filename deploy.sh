@@ -14,6 +14,7 @@ for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
 ./deploy-precise-code-intel-bundle-manager.sh
 ./deploy-precise-code-intel-worker.sh
 ./deploy-pgsql.sh
+./deploy-codeintel-db.sh
 ./deploy-prometheus.sh
 ./deploy-query-runner.sh
 ./deploy-redis-cache.sh
