@@ -4,7 +4,7 @@ set -e
 # Description: PostgreSQL database for code intelligence data.
 #
 # Disk: 128GB / persistent SSD
-# Network: 100mbps
+# Network: 1Gbps
 # Liveness probe: 5432/TCP
 # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
 # Ports exposed to the public internet: none

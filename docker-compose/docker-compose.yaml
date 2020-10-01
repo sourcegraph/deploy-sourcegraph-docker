@@ -515,6 +515,7 @@ services:
   # Description: PostgreSQL database for code intelligence data.
   #
   # Disk: 128GB / persistent SSD
+  # Network: 1Gbps
   # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
   # Ports exposed to the public internet: none
   #
