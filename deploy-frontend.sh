@@ -29,7 +29,6 @@ docker run --detach \
     -e INDEXED_SEARCH_SERVERS="$(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH ":6070")" \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
-    -e REPLACER_URL=http://replacer:3185 \
     -e PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187 \
     -e GRAFANA_SERVER_URL=http://grafana:3370 \
     -e JAEGER_SERVER_URL=http://jaeger:16686 \
@@ -37,7 +36,7 @@ docker run --detach \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.18.0@sha256:bd88d2e27210a1d429fea09f6fbd8d6c451d50de8d7c65bc379da3e14d6d8b73
+    index.docker.io/sourcegraph/frontend:3.19.1@sha256:2d57cd85bf54030163b0cad6bebcb216ed342c43cca386a7b074c1f65a201f57
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
