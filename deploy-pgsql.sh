@@ -11,6 +11,7 @@ set -e
 #
 VOLUME="$HOME/sourcegraph-docker/pgsql-disk"
 ./ensure-volume.sh $VOLUME 999
+# README: Keep postgres-9.6 and the volume mount in customer-replica branch
 docker run --detach \
     --name=pgsql \
     --network=sourcegraph \
