@@ -130,8 +130,6 @@ The customer replica ones are important as we must maintain some diffs for repli
 
 ## Releasing pure-docker
 
-@stephen handles releasing pure Docker after Docker Compose is released. This process is somewhat tedious and manual, and applies to one single customer only.
-
 For pure-docker, we provide customers with an exact diff of changes to make. They do not run our deploy.sh scripts directly, instead they copy them or adapt them to their own deployment environment entirely. This means we must carefully communicate each change that is made.
 
 To reduce the chance for errors, we send an exact diff of changes. This diff needs to be as minimal and concise as possible, and e.g. not include changes to unrelated files like `.prettierignore` or `docker-compose/` to avoid any confusion. See https://docs.sourcegraph.com/admin/updates/pure_docker for examples of what these diffs look like.
@@ -175,6 +173,8 @@ Once you have performed the above, you should run a basic smoke test to ensure t
 .buildkite/test-pure-docker.sh
 ```
 
+Or you can watch the buildkite build for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
+
 This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
 Once you see `ALL TESTS PASSED`, then push the new pure-docker release branch up and tag the release:
@@ -189,5 +189,6 @@ Write an entry for https://docs.sourcegraph.com/admin/updates/pure_docker which 
 
 - A link to your `upgrade to v3.8.2` commit describing the exact changes needed to be made.
 - Any specific manual migrations, including potential `chown` commands that may be needed (if any new service is introduced, etc.)
+- Look at https://github.com/sourcegraph/sourcegraph/pulls?q=is%3Apr+is%3Aopen+pure-docker to see if there are any open PRs that might need to be included.
 
-Contact https://app.hubspot.com/contacts/2762526/company/407948923/ over Slack and inform them the update is available, providing a link to the diff and other relevant details.
+Contact https://app.hubspot.com/contacts/2762526/company/407948923/ over Slack and inform them the update is available, providing a link to the diff and other relevant details like the blog post link.
