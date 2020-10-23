@@ -9,7 +9,7 @@ Simply clone the repository and `docker-compose up -d` to deploy Sourcegraph:
 ```sh
 git clone https://github.com/sourcegraph/deploy-sourcegraph-docker
 cd deploy-sourcegraph-docker/docker-compose/
-git checkout v3.21.1
+git checkout v3.21.2
 docker-compose up -d
 ```
 
