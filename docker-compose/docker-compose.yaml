@@ -535,6 +535,34 @@ services:
     networks:
       - sourcegraph
     restart: always
+  
+  # Description: MinIO for storing LSIF uploads.
+  #
+  # Disk: 128GB / persistent SSD
+  # Network: 1Gbps
+  # Ports exposed to other Sourcegraph services: 9000/TCP
+  # Ports exposed to public internet: none
+  #
+  minio:
+    container_name: minio
+    image: 'index.docker.io/sourcegraph/minio@sha256:3d7a0147396ea799284ba707765d477797518425682c9aa65faa5883a63fac4f'
+    cpus: 1
+    mem_limit: '1g'
+    environment:
+      - 'MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE'
+      - 'MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/minio/health/live']
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - 'minio:/data'
+    networks:
+      - sourcegraph
+    restart: always
+    command: ['server', '/data']
 
   # Description: Redis for storing short-lived caches.
   #
@@ -576,6 +604,7 @@ volumes:
   precise-code-intel-bundle-manager:
   pgsql:
   codeintel-db:
+  minio:
   prometheus-v2:
   redis-cache:
   redis-store:

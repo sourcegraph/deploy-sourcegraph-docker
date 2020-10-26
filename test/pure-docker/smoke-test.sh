@@ -14,7 +14,7 @@ if [[ "$branch_or_tag" == *"customer-replica"* ]]; then
     expect_containers="58"
 else
     # Expected number of containers on `master` branch.
-    expect_containers="24"
+    expect_containers="25"
 fi
 
 echo "Giving containers 10s to start..."
