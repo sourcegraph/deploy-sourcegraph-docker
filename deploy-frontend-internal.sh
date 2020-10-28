@@ -36,14 +36,14 @@ docker run --detach \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     # If these variables are updated, they must also be updated in the
     # deploy-frontend and precise-code-intel-worker containers as well.
-	-e PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3 \
-	-e PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads \
-	-e PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true \
-	-e AWS_ACCESS_KEY_ID='AKIAIOSFODNN7EXAMPLE' \
-	-e AWS_SECRET_ACCESS_KEY='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' \
-	-e AWS_ENDPOINT=http://minio:9000 \
-	-e AWS_REGION=us-east-1 \
-	-e AWS_S3_FORCE_PATH_STYLE=true \
+    -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3 \
+    -e PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads \
+    -e PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true \
+    -e AWS_ACCESS_KEY_ID='AKIAIOSFODNN7EXAMPLE' \
+    -e AWS_SECRET_ACCESS_KEY='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' \
+    -e AWS_ENDPOINT=http://minio:9000 \
+    -e AWS_REGION=us-east-1 \
+    -e AWS_S3_FORCE_PATH_STYLE=true \
     -v $VOLUME:/mnt/cache \
     index.docker.io/sourcegraph/frontend:3.21.2@sha256:0b11ad9197debc409c77f057d4d2b72147d5d2044c40ac16296c68d3ed1e21d3
 
