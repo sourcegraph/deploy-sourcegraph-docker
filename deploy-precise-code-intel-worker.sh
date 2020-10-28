@@ -17,14 +17,14 @@ docker run --detach \
     -e 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090' \
     # If these variables are updated, they must also be updated in the
     # deploy-frontend and deploy-frontend-internal containers as well.
-	-e PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3 \
-	-e PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads \
-	-e PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true \
-	-e AWS_ACCESS_KEY_ID='AKIAIOSFODNN7EXAMPLE' \
-	-e AWS_SECRET_ACCESS_KEY='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' \
-	-e AWS_ENDPOINT=http://minio:9000 \
-	-e AWS_REGION=us-east-1 \
-	-e AWS_S3_FORCE_PATH_STYLE=true \
+    -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3 \
+    -e PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads \
+    -e PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true \
+    -e AWS_ACCESS_KEY_ID='AKIAIOSFODNN7EXAMPLE' \
+    -e AWS_SECRET_ACCESS_KEY='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' \
+    -e AWS_ENDPOINT=http://minio:9000 \
+    -e AWS_REGION=us-east-1 \
+    -e AWS_S3_FORCE_PATH_STYLE=true \
     index.docker.io/sourcegraph/precise-code-intel-worker:3.21.2@sha256:77973d2d7b07702c2d9e456098b71c430b6c08966b3b028409d68c7837e5a950
 
 echo "Deployed precise-code-intel-worker service"
