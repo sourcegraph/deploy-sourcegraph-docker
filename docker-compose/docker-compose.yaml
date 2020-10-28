@@ -90,6 +90,16 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      # If these variables are updated, they must also be updated in the
+      # deploy-frontend and precise-code-intel-worker containers as well.
+      - PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3
+      - PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads
+      - PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true
+      - 'AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE'
+      - 'AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+      - AWS_ENDPOINT=http://minio:9000
+      - AWS_REGION=us-east-1
+      - AWS_S3_FORCE_PATH_STYLE=true
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -130,6 +140,17 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      # If these variables are updated, they must also be updated in the
+      # deploy-frontend-internal and deploy-frontend-internal containers
+      # as well.
+      - PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3
+      - PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads
+      - PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true
+      - 'AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE'
+      - 'AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+      - AWS_ENDPOINT=http://minio:9000
+      - AWS_REGION=us-east-1
+      - AWS_S3_FORCE_PATH_STYLE=true
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     networks:
@@ -290,6 +311,16 @@ services:
     environment:
       - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      # If these variables are updated, they must also be updated in the
+      # deploy-frontend and deploy-frontend-internal containers as well.
+      - PRECISE_CODE_INTEL_UPLOAD_BACKEND=S3
+      - PRECISE_CODE_INTEL_UPLOAD_BUCKET=lsif-uploads
+      - PRECISE_CODE_INTEL_UPLOAD_MANAGE_BUCKET=true
+      - 'AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE'
+      - 'AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+      - AWS_ENDPOINT=http://minio:9000
+      - AWS_REGION=us-east-1
+      - AWS_S3_FORCE_PATH_STYLE=true
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
       interval: 5s
