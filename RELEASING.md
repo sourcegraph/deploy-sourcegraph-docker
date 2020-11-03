@@ -13,7 +13,7 @@ The customer replica ones are important as we must maintain some diffs for repli
 
 ### Create the release branch
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates.
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
 
@@ -24,7 +24,7 @@ git push --set-upstream origin 3.17
 
 ### Update the image tags
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates.
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
 
 In the latest release branch you created:
 
