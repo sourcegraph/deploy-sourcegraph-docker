@@ -7,7 +7,7 @@ Just like deploy-sourcegraph, we use version branches and version tags. We _addi
 - Tag examples: `v3.8.2`, `v3.9.2`, `customer-replica-v3.8.2`, `customer-replica-v3.9.2-2`
 - Branch examples: `3.8`, `3.9`, `3.8-customer-replica`, `3.9-customer-replica`
 
-The customer replica ones are important as we must maintain some diffs for replication purposes, such as using a different Postgres version, changes to the `prometheus_targets.yml` and more. We use tags to ensure each AMI we save correlates directly with an immutable Git tag.
+The customer replica branches are distinct living branches which have diffs we maintain for replicating some customers using the pure-docker deployment model described in the README.md of this repository (e.g. the customers' different Postgres version, changes to the `prometheus_targets.yml`, and more.) We test, tag, and release these `$VERSION-customer-replica` branches as `customer-replica-$VERSION` to produce the final diffs we send to customers running a pure-docker deployment on e.g. in the [pure docker upgrade guide](https://docs.sourcegraph.com/admin/updates/pure_docker).
 
 ## Releasing a new version
 
