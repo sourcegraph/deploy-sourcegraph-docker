@@ -1,13 +1,19 @@
-# Releasing a new version
+# Release guide
 
-## 1) Update the image tags in `master`
+## Branching/tagging scheme
 
-In the latest `master` branch:
+Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
 
-1. Run `tools/update-docker-tags.sh $VERSION`
-2. Confirm the diff shows the image tags being updated to the version you expect, and push directly to `master`.
+- Tag examples: `v3.8.2`, `v3.9.2`, `customer-replica-v3.8.2`, `customer-replica-v3.9.2-2`
+- Branch examples: `3.8`, `3.9`, `3.8-customer-replica`, `3.9-customer-replica`
 
-## 2) Create the release branch
+The customer replica ones are important as we must maintain some diffs for replication purposes, such as using a different Postgres version, changes to the `prometheus_targets.yml` and more. We use tags to ensure each AMI we save correlates directly with an immutable Git tag.
+
+## Releasing a new version
+
+### Create the release branch
+
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates.
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
 
@@ -16,7 +22,20 @@ git checkout -B 3.17
 git push --set-upstream origin 3.17
 ```
 
-## 3) Smoke test: ensure Docker Compose starts from scratch
+### Update the image tags
+
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates.
+
+In the latest release branch you created:
+
+1. Run `tools/update-docker-tags.sh $VERSION`
+2. Confirm the diff shows the image tags being updated to the version you expect, and push directly to the release branch.
+
+### Cherry-pick image update to master
+
+Cherry-pick the commit where you update images on the release branch back into `master`.
+
+### Smoke test: ensure Docker Compose starts from scratch
 
 **IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
@@ -34,7 +53,7 @@ docker ps
 
 Visit http://localhost and confirm the app loads.
 
-## 4) Smoke test: ensure Docker Compose upgrades work
+### Smoke test: ensure Docker Compose upgrades work
 
 **IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
@@ -70,7 +89,7 @@ docker ps
 
 Visit http://localhost and confirm the app loads.
 
-## 5) Confirm Pure-Docker works with a smoke test
+### Confirm Pure-Docker works with a smoke test
 
 Install [Vagrant](https://vagrantup.com), then:
 
@@ -80,7 +99,7 @@ Install [Vagrant](https://vagrantup.com), then:
 
 This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
-## 6) Tag the final release
+### Tag the final release
 
 For example:
 
@@ -90,7 +109,7 @@ git tag v3.9.2
 git push origin v3.9.2
 ```
 
-## 7) Update documentation & publish notifications
+### Update documentation & publish notifications
 
 Replace the old version with the new version in the `master` branches of the following:
 
@@ -100,26 +119,11 @@ Replace the old version with the new version in the `master` branches of the fol
     - add a new section with all relevant upgrade details: https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/docker_compose.md#updating-a-docker-compose-sourcegraph-instance
     - Update `latestReleaseDockerComposeOrPureDocker` in https://github.com/sourcegraph/sourcegraph/blob/master/cmd/frontend/internal/app/pkg/updatecheck/handler.go#L47
 
-## 8) Post that you are done.
-
-Write a message to #dev-announce:
-
-> Docker Compose v3.9.2 has been released.
-
-## 9) Message @stephen on Slack
+### Message @stephen on Slack
 
 > I am releasing deploy-sourcegraph-docker, please release pure-docker.
 
 If you are Stephen, follow [releasing pure-docker](#releasing-pure-docker) below.
-
-# This repository branching / tag scheme
-
-Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
-
-- Tag examples: `v3.8.2`, `v3.9.2`, `customer-replica-v3.8.2`, `customer-replica-v3.9.2-2`
-- Branch examples: `3.8`, `3.9`, `3.8-customer-replica`, `3.9-customer-replica`
-
-The customer replica ones are important as we must maintain some diffs for replication purposes, such as using a different Postgres version, changes to the `prometheus_targets.yml` and more. We use tags to ensure each AMI we save correlates directly with an immutable Git tag.
 
 ## Releasing pure-docker
 
