@@ -119,12 +119,6 @@ Replace the old version with the new version in the `master` branches of the fol
     - add a new section with all relevant upgrade details: https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/docker_compose.md#updating-a-docker-compose-sourcegraph-instance
     - Update `latestReleaseDockerComposeOrPureDocker` in https://github.com/sourcegraph/sourcegraph/blob/master/cmd/frontend/internal/app/pkg/updatecheck/handler.go#L47
 
-### Message @stephen on Slack
-
-> I am releasing deploy-sourcegraph-docker, please release pure-docker.
-
-If you are Stephen, follow [releasing pure-docker](#releasing-pure-docker) below.
-
 ## Releasing pure-docker
 
 For pure-docker, we provide customers with an exact diff of changes to make. They do not run our deploy.sh scripts directly, instead they copy them or adapt them to their own deployment environment entirely. This means we must carefully communicate each change that is made.
