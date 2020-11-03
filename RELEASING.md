@@ -4,17 +4,10 @@
 
 In the latest `master` branch:
 
-1. Find and replace `:insiders` with `:3.0.0` on all files except this one. This is required for the next step.
-2. Run these commands:
+1. Run `tools/update-docker-tags.sh $VERSION`
+2. Confirm the diff shows the image tags being updated to the version you expect, and push directly to `master`.
 
-```
-go get -u github.com/slimsag/update-docker-tags
-update-docker-tags --constraint 'sourcegraph/prometheus=<10.0' --constraint 'sourcegraph/grafana=<6.0' .
-```
-
-3. Confirm the diff shows the image tags being updated to the version you expect, and push directly to `master`.
-
-## 2) Create the release branch:
+## 2) Create the release branch
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
 
