@@ -1,20 +1,19 @@
-# Releasing a new version
+# Release guide
 
-## 1) Update the image tags in `master`
+## Branching/tagging scheme
 
-In the latest `master` branch:
+Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
 
-1. Find and replace `:insiders` with `:3.0.0` on all files except this one. This is required for the next step.
-2. Run these commands:
+- Tag examples: `v3.8.2`, `v3.9.2`, `customer-replica-v3.8.2`, `customer-replica-v3.9.2-2`
+- Branch examples: `3.8`, `3.9`, `3.8-customer-replica`, `3.9-customer-replica`
 
-```
-go get -u github.com/slimsag/update-docker-tags
-update-docker-tags --constraint 'sourcegraph/prometheus=<10.0' --constraint 'sourcegraph/grafana=<6.0' .
-```
+The customer replica branches are distinct living branches which have diffs we maintain for replicating some customers using the pure-docker deployment model described in the README.md of this repository (e.g. the customers' different Postgres version, changes to the `prometheus_targets.yml`, and more.) We test, tag, and release these `$VERSION-customer-replica` branches as `customer-replica-$VERSION` to produce the final diffs we send to customers running a pure-docker deployment on e.g. in the [pure docker upgrade guide](https://docs.sourcegraph.com/admin/updates/pure_docker).
 
-3. Confirm the diff shows the image tags being updated to the version you expect, and push directly to `master`.
+## Releasing a new version
 
-## 2) Create the release branch:
+### Create the release branch
+
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
 
@@ -23,7 +22,20 @@ git checkout -B 3.17
 git push --set-upstream origin 3.17
 ```
 
-## 3) Smoke test: ensure Docker Compose starts from scratch
+### Update the image tags
+
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+
+In the latest release branch you created:
+
+1. Run `tools/update-docker-tags.sh $VERSION`
+2. Confirm the diff shows the image tags being updated to the version you expect, and push directly to the release branch.
+
+### Cherry-pick image update to master
+
+Cherry-pick the commit where you update images on the release branch back into `master`.
+
+### Smoke test: ensure Docker Compose starts from scratch
 
 **IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
@@ -41,7 +53,7 @@ docker ps
 
 Visit http://localhost and confirm the app loads.
 
-## 4) Smoke test: ensure Docker Compose upgrades work
+### Smoke test: ensure Docker Compose upgrades work
 
 **IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
@@ -77,7 +89,7 @@ docker ps
 
 Visit http://localhost and confirm the app loads.
 
-## 5) Confirm Pure-Docker works with a smoke test
+### Confirm Pure-Docker works with a smoke test
 
 Install [Vagrant](https://vagrantup.com), then:
 
@@ -87,7 +99,7 @@ Install [Vagrant](https://vagrantup.com), then:
 
 This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
-## 6) Tag the final release
+### Tag the final release
 
 For example:
 
@@ -97,7 +109,7 @@ git tag v3.9.2
 git push origin v3.9.2
 ```
 
-## 7) Update documentation & publish notifications
+### Update documentation & publish notifications
 
 Replace the old version with the new version in the `master` branches of the following:
 
@@ -107,30 +119,7 @@ Replace the old version with the new version in the `master` branches of the fol
     - add a new section with all relevant upgrade details: https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/docker_compose.md#updating-a-docker-compose-sourcegraph-instance
     - Update `latestReleaseDockerComposeOrPureDocker` in https://github.com/sourcegraph/sourcegraph/blob/master/cmd/frontend/internal/app/pkg/updatecheck/handler.go#L47
 
-## 8) Post that you are done.
-
-Write a message to #dev-announce:
-
-> Docker Compose v3.9.2 has been released.
-
-## 9) Message @stephen on Slack
-
-> I am releasing deploy-sourcegraph-docker, please release pure-docker.
-
-If you are Stephen, follow [releasing pure-docker](#releasing-pure-docker) below.
-
-# This repository branching / tag scheme
-
-Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
-
-- Tag examples: `v3.8.2`, `v3.9.2`, `customer-replica-v3.8.2`, `customer-replica-v3.9.2-2`
-- Branch examples: `3.8`, `3.9`, `3.8-customer-replica`, `3.9-customer-replica`
-
-The customer replica ones are important as we must maintain some diffs for replication purposes, such as using a different Postgres version, changes to the `prometheus_targets.yml` and more. We use tags to ensure each AMI we save correlates directly with an immutable Git tag.
-
 ## Releasing pure-docker
-
-@stephen handles releasing pure Docker after Docker Compose is released. This process is somewhat tedious and manual, and applies to one single customer only.
 
 For pure-docker, we provide customers with an exact diff of changes to make. They do not run our deploy.sh scripts directly, instead they copy them or adapt them to their own deployment environment entirely. This means we must carefully communicate each change that is made.
 
@@ -175,6 +164,8 @@ Once you have performed the above, you should run a basic smoke test to ensure t
 .buildkite/test-pure-docker.sh
 ```
 
+Or you can watch the buildkite build for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
+
 This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
 Once you see `ALL TESTS PASSED`, then push the new pure-docker release branch up and tag the release:
@@ -189,5 +180,6 @@ Write an entry for https://docs.sourcegraph.com/admin/updates/pure_docker which 
 
 - A link to your `upgrade to v3.8.2` commit describing the exact changes needed to be made.
 - Any specific manual migrations, including potential `chown` commands that may be needed (if any new service is introduced, etc.)
+- Look at https://github.com/sourcegraph/sourcegraph/pulls?q=is%3Apr+is%3Aopen+pure-docker to see if there are any open PRs that might need to be included.
 
-Contact https://app.hubspot.com/contacts/2762526/company/407948923/ over Slack and inform them the update is available, providing a link to the diff and other relevant details.
+Contact https://app.hubspot.com/contacts/2762526/company/407948923/ over Slack and inform them the update is available, providing a link to the diff and other relevant details like the blog post link.
