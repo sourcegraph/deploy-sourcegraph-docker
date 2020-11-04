@@ -21,6 +21,7 @@ docker run --detach \
     -e DEPLOY_TYPE=pure-docker \
     -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
+    -e CODEINTEL_PGHOST=codeintel-db \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
     -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
@@ -34,6 +35,6 @@ docker run --detach \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/frontend:3.20.1@sha256:13d46293d35ab4a9212ed4c7ceee76a42ea76805f92820ae62fc7c3b20938a8c
+    index.docker.io/sourcegraph/frontend:3.21.2@sha256:0b11ad9197debc409c77f057d4d2b72147d5d2044c40ac16296c68d3ed1e21d3
 
 echo "Deployed sourcegraph-frontend-internal service"

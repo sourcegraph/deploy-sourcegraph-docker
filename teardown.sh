@@ -15,6 +15,8 @@ docker rm -f jaeger &> /dev/null || true
 docker rm -f precise-code-intel-bundle-manager &> /dev/null || true
 docker rm -f precise-code-intel-worker &> /dev/null || true
 docker rm -f pgsql &> /dev/null || true &
+docker rm -f codeintel-db &> /dev/null || true &
+docker rm -f minio &> /dev/null || true &
 docker rm -f prometheus &> /dev/null || true
 docker rm -f query-runner &> /dev/null || true &
 docker rm -f redis-cache &> /dev/null || true &
