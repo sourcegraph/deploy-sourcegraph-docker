@@ -85,7 +85,6 @@ services:
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
@@ -125,7 +124,6 @@ services:
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
@@ -252,31 +250,6 @@ services:
       - sourcegraph
     restart: always
 
-  # Description: Stores and manages precise code intelligence bundles.
-  #
-  # Disk: 200GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 3187/TCP
-  # Ports exposed to the public internet: none
-  #
-  precise-code-intel-bundle-manager:
-    container_name: precise-code-intel-bundle-manager
-    image: 'index.docker.io/sourcegraph/precise-code-intel-bundle-manager:3.21.2@sha256:467501742ec4c2595799664321671cf03ff13549b05b63b3a8e9b5c52f99fd99'
-    cpus: 2
-    mem_limit: '2g'
-    environment:
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-    healthcheck:
-      test: "wget -q 'http://127.0.0.1:3187/healthz' -O /dev/null || exit 1"
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
-    volumes:
-      - 'precise-code-intel-bundle-manager:/lsif-storage'
-    networks:
-      - sourcegraph
-    restart: always
-
   # Description: Handles conversion of uploaded precise code intelligence bundles.
   #
   # Ports exposed to other Sourcegraph services: 3188/TCP
@@ -288,7 +261,6 @@ services:
     cpus: 2
     mem_limit: '4g'
     environment:
-      - 'PRECISE_CODE_INTEL_BUNDLE_MANAGER_URL=http://precise-code-intel-bundle-manager:3187'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
@@ -601,7 +573,6 @@ volumes:
   caddy:
   gitserver-0:
   grafana:
-  precise-code-intel-bundle-manager:
   pgsql:
   codeintel-db:
   minio:
