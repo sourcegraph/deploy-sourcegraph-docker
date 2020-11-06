@@ -18,6 +18,6 @@ docker run --detach \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
-    index.docker.io/sourcegraph/query-runner:insiders@sha256:52b5d9269068d3f1316364f914b77ddb11ee735d95461c68ecda87af7cc2290f
+    index.docker.io/sourcegraph/query-runner:insiders@sha256:1ca759a965cdabc6afb1d3b1dc629186a039c481aa53bf0a3eef70ed45ca1c16
 
 echo "Deployed query-runner service"
