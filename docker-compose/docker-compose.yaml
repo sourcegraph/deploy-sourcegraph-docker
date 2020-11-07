@@ -69,7 +69,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:insiders4c40ac16296c68d3ed1e21d3'
+    image: 'index.docker.io/sourcegraph/frontend:insiders'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -109,7 +109,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:insiders4c40ac16296c68d3ed1e21d3'
+    image: 'index.docker.io/sourcegraph/frontend:insiders'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -142,7 +142,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:insiders71e8c9dec0803c15c5fec6cb'
+    image: 'index.docker.io/sourcegraph/gitserver:insiders'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -165,7 +165,7 @@ services:
   #
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: 'index.docker.io/sourcegraph/search-indexer:insiderse4f6dd372a4225bcfebc4f2f'
+    image: 'index.docker.io/sourcegraph/search-indexer:insiders'
     mem_limit: '16g'
     environment:
       - GOMAXPROCS=8
@@ -185,7 +185,7 @@ services:
   #
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: 'index.docker.io/sourcegraph/indexed-searcher:insiders20c97dfbca0721f61521fe3c'
+    image: 'index.docker.io/sourcegraph/indexed-searcher:insiders'
     cpus: 8
     mem_limit: '50g'
     environment:
@@ -211,7 +211,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:insiders5965253f50322a8dc2b325df'
+    image: 'index.docker.io/sourcegraph/searcher:insiders'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -239,7 +239,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:insidersd8088513dbb35d6f8e620b9a'
+    image: 'index.docker.io/sourcegraph/github-proxy:insiders'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -257,7 +257,7 @@ services:
   #
   precise-code-intel-worker:
     container_name: precise-code-intel-worker
-    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders6b3b028409d68c7837e5a950'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -282,7 +282,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:insiders6e6fc1b76f801e6e5e628277'
+    image: 'index.docker.io/sourcegraph/query-runner:insiders'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -301,7 +301,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:insiders0a987c3de2eb6fd8ab1655e6'
+    image: 'index.docker.io/sourcegraph/repo-updater:insiders'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -323,7 +323,7 @@ services:
   #
   syntect-server:
     container_name: syntect-server
-    image: 'index.docker.io/sourcegraph/syntax-highlighter:insiderse71390d80e9924a73139d793'
+    image: 'index.docker.io/sourcegraph/syntax-highlighter:insiders'
     cpus: 4
     mem_limit: '6g'
     healthcheck:
@@ -344,7 +344,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:insiders0cc1d0dfe213a8583255bfcf'
+    image: 'index.docker.io/sourcegraph/symbols:insiders'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -371,7 +371,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:insiders511097d41b4daf9b0cfb5802'
+    image: 'index.docker.io/sourcegraph/prometheus:insiders'
     cpus: 4
     mem_limit: '8g'
     volumes:
@@ -398,7 +398,7 @@ services:
   # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
   grafana:
     container_name: grafana
-    image: 'index.docker.io/sourcegraph/grafana:insiders56b537f1c0131969079cffd1'
+    image: 'index.docker.io/sourcegraph/grafana:insiders'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -419,7 +419,7 @@ services:
   #
   cadvisor:
     container_name: cadvisor
-    image: 'index.docker.io/sourcegraph/cadvisor:insidersfc37bda237322d020a124701'
+    image: 'index.docker.io/sourcegraph/cadvisor:insiders'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -444,7 +444,7 @@ services:
   #
   jaeger:
     container_name: jaeger
-    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:insidersae6da8ebe2f23c9f6d62d397'
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:insiders'
     cpus: 0.5
     mem_limit: '512m'
     ports:
@@ -469,7 +469,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-11.4:insiders3967628427d41c92d9209e97'
+    image: 'index.docker.io/sourcegraph/postgres-11.4:insiders'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
@@ -544,7 +544,7 @@ services:
   #
   redis-cache:
     container_name: redis-cache
-    image: 'index.docker.io/sourcegraph/redis-cache:insiders063bd94210c0e9d529c38e56'
+    image: 'index.docker.io/sourcegraph/redis-cache:insiders'
     cpus: 1
     mem_limit: '6g'
     volumes:
@@ -560,7 +560,7 @@ services:
   #
   redis-store:
     container_name: redis-store
-    image: 'index.docker.io/sourcegraph/redis-store:insiders4ab5cf7620c995461c005168'
+    image: 'index.docker.io/sourcegraph/redis-store:insiders'
     cpus: 1
     mem_limit: '6g'
     volumes:
