@@ -13,7 +13,6 @@
     - query-runner:6060
     - repo-updater:6060
     - syntect-server:6060
-    - precise-code-intel-bundle-manager:6060
     - precise-code-intel-worker:6060
     # Add new entries here for every searcher/symbol/gitserver replica.
     - zoekt-indexserver-0:6072
