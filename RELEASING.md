@@ -101,6 +101,8 @@ This will take about ~10 minutes to run. Refer to the [testing documentation](TE
 
 ### Tag the final release
 
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you during `release:close`. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+
 For example:
 
 ```
