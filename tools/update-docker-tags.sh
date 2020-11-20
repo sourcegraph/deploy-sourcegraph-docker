@@ -24,4 +24,4 @@ go run github.com/slimsag/update-docker-tags \
   -enforce="sourcegraph/searcher=$CONSTRAINT" \
   -enforce="sourcegraph/symbols=$CONSTRAINT" \
   -enforce="sourcegraph/minio=$CONSTRAINT" \
-  base/
+  ./
