@@ -9,7 +9,7 @@ sudo su
 
 if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
     # Expected number of containers on e.g. 3.18-customer-replica branch.
-    expect_containers="58"
+    expect_containers="59"
 else
     # Expected number of containers on `master` branch.
     expect_containers="24"
