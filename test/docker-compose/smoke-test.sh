@@ -6,9 +6,7 @@ sudo su
 
 docker-compose up -d
 
-branch_or_tag=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match || echo '')
-
-if [[ "$branch_or_tag" == *"customer-replica"* ]]; then
+if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
 	# Expected number of containers on e.g. 3.18-customer-replica branch.
 	expect_containers="58"
 else
