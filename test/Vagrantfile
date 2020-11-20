@@ -12,6 +12,7 @@ servers = YAML.load_file('servers.yaml')
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
   servers.each do |server|
+    config.env.enable
     config.vm.define server['name'] do |srv|
       srv.vm.box = server['box']
       srv.vm.synced_folder '../', '/deploy-sourcegraph-docker'
@@ -47,7 +48,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       srv.vm.provision 'shell', inline: <<-SHELL
-      SHELL
+        #!/usr/bin/env bash
+        cat << EOF >> /root/.profile
+export GIT_BRANCH=#{ENV['BUILDKITE_BRANCH']}
+EOF      
+        SHELL
 
       server['shell_commands'].each do |sh|
         srv.vm.provision 'shell', inline: sh

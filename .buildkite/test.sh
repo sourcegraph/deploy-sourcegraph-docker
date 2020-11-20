@@ -8,9 +8,12 @@ exit_code=0
 
 cd test/
 
-if ! vagrant plugin list --no-tty | grep vagrant-google; then
-	vagrant plugin install vagrant-google
-fi
+plugins=(vagrant-google vagrant-env vagrant-scp)
+for i in "${plugins[@]}"; do
+  if ! vagrant plugin list --no-tty | grep "$i"; then
+    vagrant plugin install "$i"
+  fi
+done
 
 vagrant up $box --provider=google || exit_code=$?
 vagrant destroy -f $box
