@@ -6,16 +6,10 @@ sudo su
 
 docker-compose up -d
 
-if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
-	# Expected number of containers on e.g. 3.18-customer-replica branch.
-	expect_containers="58"
-else
-	# Expected number of containers on `master` branch.
-	expect_containers="22"
-fi
+expect_containers="22"
 
-echo "Giving containers 10s to start..."
-sleep 10
+echo "Giving containers 30s to start..."
+sleep 30
 
 echo "TEST: Number of expected containers created"
 containers_count=$(docker ps --format '{{.Names}}' | wc -l)
@@ -34,6 +28,7 @@ for i in {0..30}; do
 		docker ps
 		echo
 		echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running"
+    echo containers
 		exit 1
 	fi
 	echo "Containers running OK.. waiting 10s"
