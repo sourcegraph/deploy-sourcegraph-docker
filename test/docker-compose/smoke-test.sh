@@ -28,6 +28,7 @@ for i in {0..30}; do
 		docker ps
 		echo
 		echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running"
+    echo containers
 		exit 1
 	fi
 	echo "Containers running OK.. waiting 10s"
