@@ -4,15 +4,13 @@ source ./replicas.sh
 
 docker rm -f apache &> /dev/null || true &
 docker rm -f cadvisor &> /dev/null || true &
-# Not used in the customer-replica branch.
-#docker rm -f caddy    &> /dev/null || true &
+docker rm -f caddy    &> /dev/null || true &
 docker rm -f sourcegraph-frontend-internal &> /dev/null || true &
 docker rm -f $(addresses "sourcegraph-frontend-" $NUM_FRONTEND "") &> /dev/null || true &
 docker rm -f github-proxy &> /dev/null || true &
 docker rm -f $(addresses "gitserver-" $NUM_GITSERVER "") &> /dev/null || true &
 docker rm -f grafana &> /dev/null || true
 docker rm -f jaeger &> /dev/null || true
-docker rm -f precise-code-intel-bundle-manager &> /dev/null || true
 docker rm -f precise-code-intel-worker &> /dev/null || true
 docker rm -f pgsql &> /dev/null || true &
 docker rm -f codeintel-db &> /dev/null || true &
