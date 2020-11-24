@@ -6,13 +6,7 @@ sudo su
 
 docker-compose up -d
 
-if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
-	# Expected number of containers on e.g. 3.18-customer-replica branch.
-	expect_containers="58"
-else
-	# Expected number of containers on `master` branch.
-	expect_containers="22"
-fi
+expect_containers="22"
 
 echo "Giving containers 10s to start..."
 sleep 10
