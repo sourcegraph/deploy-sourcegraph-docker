@@ -101,6 +101,8 @@ This will take about ~10 minutes to run. Refer to the [testing documentation](TE
 
 ### Tag the final release
 
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you during `release:close`. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+
 For example:
 
 ```
@@ -108,16 +110,6 @@ git checkout 3.9
 git tag v3.9.2
 git push origin v3.9.2
 ```
-
-### Update documentation & publish notifications
-
-Replace the old version with the new version in the `master` branches of the following:
-
-- This repository: `docker-compose/README.md`
-- sourcegraph/sourcegraph:
-    - replace two instances: https://github.com/sourcegraph/sourcegraph/blob/master/doc/admin/install/docker-compose/index.md
-    - add a new section with all relevant upgrade details: https://sourcegraph.com/github.com/sourcegraph/sourcegraph@a718276cbdc4c9e079d5495cb34ce663c5d35c01/-/blob/doc/admin/updates/docker_compose.md#updating-a-docker-compose-sourcegraph-instance
-    - Update `latestReleaseDockerComposeOrPureDocker` in https://github.com/sourcegraph/sourcegraph/blob/master/cmd/frontend/internal/app/pkg/updatecheck/handler.go#L47
 
 ## Releasing pure-docker
 

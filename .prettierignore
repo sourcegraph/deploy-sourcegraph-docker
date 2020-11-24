@@ -1,2 +1,3 @@
 .github/
 *.md
+rootfs/etc/docker/daemon.json

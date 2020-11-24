@@ -8,3 +8,4 @@ nginx/sourcegraph.key
 .vagrant
 *.log
 
+/right.dhall
