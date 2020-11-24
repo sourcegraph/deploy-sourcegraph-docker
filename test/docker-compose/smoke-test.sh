@@ -8,8 +8,8 @@ docker-compose up -d
 
 expect_containers="22"
 
-echo "Giving containers 10s to start..."
-sleep 10
+echo "Giving containers 30s to start..."
+sleep 30
 
 echo "TEST: Number of expected containers created"
 containers_count=$(docker ps --format '{{.Names}}' | wc -l)
