@@ -8,6 +8,10 @@ require 'yaml'
 
 # Read YAML file with box details
 servers = YAML.load_file('servers.yaml')
+
+# Base image to use for test instances
+image = 'e2e-491e9f27-2020-10-28t17-32-00z'
+
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
@@ -36,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       srv.vm.provider :google do |g, o|
         g.machine_type = server['machine_type']
-        g.image = 'e2e-3c2f467e-2020-09-22t18-14-56z'
+        g.image = image
         g.image_project_id = 'sourcegraph-ci'
         g.google_project_id = project_id
         g.name = "#{server['name']}-"+"#{Time.now.to_i}"
@@ -51,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         #!/usr/bin/env bash
         cat << EOF >> /root/.profile
 export GIT_BRANCH=#{ENV['BUILDKITE_BRANCH']}
-EOF      
+EOF
         SHELL
 
       server['shell_commands'].each do |sh|
