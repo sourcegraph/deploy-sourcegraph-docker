@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eufxo pipefail
+set -eufo pipefail
 
 cd /deploy-sourcegraph-docker
 sudo su
