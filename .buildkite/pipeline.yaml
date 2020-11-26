@@ -10,12 +10,14 @@ steps:
       queue: 'baremetal'
   - label: ':rice:'
     command: .buildkite/vagrant-run.sh pure-docker-test
+    artifact_paths: ./*.log
     agents:
       queue: 'baremetal'
     env:
       VAGRANT_RUN_ENV: 'CI'
   - label: ':rice:'
     command: .buildkite/vagrant-run.sh docker-compose-test
+    artifact_paths: ./*.log
     agents:
       queue: 'baremetal'
     env:
