@@ -3,10 +3,14 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-box=$1
+box="$1"
 exit_code=0
 
-cd test/
+pushd "test"
+
+cleanup() {
+  vagrant destroy -f "$box"
+}
 
 plugins=(vagrant-google vagrant-env vagrant-scp)
 for i in "${plugins[@]}"; do
@@ -15,10 +19,12 @@ for i in "${plugins[@]}"; do
   fi
 done
 
-vagrant up $box --provider=google || exit_code=$?
-vagrant destroy -f $box
+trap cleanup EXIT
+vagrant up "$box" --provider=google || exit_code=$?
 
-if [ "$exit_code" != 0 ]
-then
-  exit 1
-fi
+vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../../../
+
+if [ "$exit_code" != 0 ]; then
+  exit $exit_code
+fils
+

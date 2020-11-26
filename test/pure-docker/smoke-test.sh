@@ -32,9 +32,11 @@ for i in {0..30}; do
     containers=$(docker ps --format '{{.Names}}' | xargs -I{} -n1 sh -c "printf '{}: ' && docker inspect --format '{{.State.Status}}' {}")
     containers_running=$(echo "$containers" | grep "running" | wc -l)
     if [ "$containers_running" -ne "$expect_containers" ]; then
-        docker ps
         echo
-        echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running"
+        containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
+        echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running. The following containers are failing: $containers_failing"
+        echo ""
+        for i in $containers_failing; do docker logs $i > /deploy-sourcegraph-docker/$i.log; done
         exit 1
     fi
     echo "Containers running OK.. waiting 10s"

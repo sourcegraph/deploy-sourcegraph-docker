@@ -9,13 +9,13 @@ steps:
     agents:
       queue: 'baremetal'
   - label: ':rice:'
-    command: .buildkite/test.sh pure-docker-test
+    command: .buildkite/vagrant-run.sh pure-docker-test
     agents:
       queue: 'baremetal'
     env:
       VAGRANT_RUN_ENV: 'CI'
   - label: ':rice:'
-    command: .buildkite/test.sh docker-compose-test
+    command: .buildkite/vagrant-run.sh docker-compose-test
     agents:
       queue: 'baremetal'
     env:
