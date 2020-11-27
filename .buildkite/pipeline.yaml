@@ -25,10 +25,3 @@ steps:
       queue: 'baremetal'
     env:
       TEST_TYPE: 'docker-compose-test'
-  - wait: ~
-    continue_on_failure: true
-  - label: ':broom:'
-    command: .buildkite/cleanup.sh
-    parallelism: 5
-    agents:
-      queue: 'baremetal'
