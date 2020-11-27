@@ -7,4 +7,5 @@ nginx/sourcegraph.key
 
 .vagrant
 *.log
+.env
 

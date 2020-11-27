@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       srv.vm.provider :google do |g, o|
         g.machine_type = server['machine_type']
-        g.image = 'e2e-3c2f467e-2020-09-22t18-14-56z'
+        g.image = ENV['IMAGE']
         g.image_project_id = 'sourcegraph-ci'
         g.google_project_id = project_id
         g.name = "#{server['name']}-"+"#{Time.now.to_i}"
@@ -47,7 +47,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       srv.vm.provision 'shell', inline: <<-SHELL
-      SHELL
+        #!/usr/bin/env bash
+        cat << EOF >> /root/.profile
+export GIT_BRANCH=#{ENV['BUILDKITE_BRANCH']}
+export TEST_TYPE=#{ENV['TEST_TYPE']}
+EOF
+        SHELL
 
       server['shell_commands'].each do |sh|
         srv.vm.provision 'shell', inline: sh
