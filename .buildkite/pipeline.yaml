@@ -17,14 +17,14 @@ steps:
     agents:
       queue: 'baremetal'
     env:
-      TEST_TYPE: 'pure-docker'
+      TEST_TYPE: 'pure-docker-test'
   - label: ':rice: docker-compose-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     agents:
       queue: 'baremetal'
     env:
-      TEST_TYPE: 'docker-compose'
+      TEST_TYPE: 'docker-compose-test'
   - wait: ~
     continue_on_failure: true
   - label: ':broom:'
