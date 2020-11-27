@@ -2,7 +2,7 @@
 set -eufo pipefail
 
 deploy_sourcegraph() {
-	cd /deploy-sourcegraph-docker
+	cd $(dirname "${BASH_SOURCE[0]}")/..
 	#Deploy sourcegraph
 	if [[ "$TEST_TYPE" == "pure-docker-test" ]]; then
 		./test/volume-config.sh
