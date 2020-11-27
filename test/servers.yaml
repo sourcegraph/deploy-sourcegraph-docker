@@ -1,5 +1,5 @@
 ---
-- name: pure-docker-test
+- name: docker-test
   box: google/gce
   machine_type: "custom-16-20480"
   project_id: sourcegraph-ci
@@ -9,18 +9,5 @@
   username: buildkite
   ssh_key_path: "~/.ssh/id_rsa"
   shell_commands:
-   - "/deploy-sourcegraph-docker/test/pure-docker/volume-config.sh"
-   - "/deploy-sourcegraph-docker/test/pure-docker/smoke-test.sh"
-
-- name: docker-compose-test
-  box: google/gce
-  machine_type: "custom-16-20480"
-  project_id: sourcegraph-ci
-  external_ip: false
-  use_private_ip: true
-  network: default
-  username: buildkite
-  ssh_key_path: "~/.ssh/id_rsa"
-  shell_commands:
-    - "/deploy-sourcegraph-docker/test/docker-compose/smoke-test.sh"
+   - "/deploy-sourcegraph-docker/test/smoke-test.sh"
 
