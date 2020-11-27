@@ -22,8 +22,7 @@ done
 trap cleanup EXIT
 vagrant up "$box" --provider=google || exit_code=$?
 
-vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
-
 if [ "$exit_code" != 0 ]; then
+	vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
 	exit $exit_code
 fi
