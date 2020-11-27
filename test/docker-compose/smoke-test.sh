@@ -28,7 +28,7 @@ for i in {0..30}; do
 		containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
 		echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running. The following containers are failing: $containers_failing"
 		echo ""
-		for cf in $containers_failing; do docker logs "$cf" >/deploy-sourcegraph-docker/"$cf".log; done
+		for cf in $containers_failing; do docker logs -t "$cf" >/deploy-sourcegraph-docker/"$cf".log; done
 		exit 1
 	fi
 	echo "Containers running OK.. waiting 10s"
