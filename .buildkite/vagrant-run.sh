@@ -8,9 +8,9 @@ exit_code=0
 
 pushd "test"
 
-cleanup() {
-	vagrant destroy -f "$box"
-}
+# cleanup() {
+# 	vagrant destroy -f "$box"
+# }
 
 plugins=(vagrant-google vagrant-env vagrant-scp)
 for i in "${plugins[@]}"; do
@@ -19,7 +19,7 @@ for i in "${plugins[@]}"; do
 	fi
 done
 
-trap cleanup EXIT
+# trap cleanup EXIT
 vagrant up "$box" --provider=google || exit_code=$?
 
 if [ "$exit_code" != 0 ]; then
