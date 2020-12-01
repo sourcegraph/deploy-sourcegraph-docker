@@ -23,8 +23,7 @@
     },
     {
       "groupName": "Sourcegraph Docker images list",
-      "packagePatterns": ["github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images"],
-      "labels": ["automerge"]
+      "packagePatterns": ["github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images"]
     }
   ],
   "masterIssue": true,
