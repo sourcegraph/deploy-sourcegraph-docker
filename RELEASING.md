@@ -13,7 +13,7 @@ The customer replica branches are distinct living branches which have diffs we m
 
 ### Create the release branch
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
 
@@ -24,7 +24,7 @@ git push --set-upstream origin 3.17
 
 ### Update the image tags
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 In the latest release branch you created:
 
@@ -101,7 +101,7 @@ This will take about ~10 minutes to run. Refer to the [testing documentation](TE
 
 ### Tag the final release
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you during `release:close`. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+> ⚠️ If you are using the Sourcegraph release tooling, this will be done for you as part of the release steps. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 For example:
 
