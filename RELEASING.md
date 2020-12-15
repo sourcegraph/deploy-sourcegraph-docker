@@ -37,7 +37,9 @@ Cherry-pick the commit where you update images on the release branch back into `
 
 ### Smoke test: ensure Docker Compose starts from scratch
 
-**IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
+> ⚠️ This test now runs in Buildkite, under the `docker-compose-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
+
+This step must be run on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
 ```
 git checkout <version_branch>
@@ -90,6 +92,10 @@ docker ps
 Visit http://localhost and confirm the app loads.
 
 ### Confirm Pure-Docker works with a smoke test
+
+> ⚠️ This test now runs in Buildkite, under the `docker-compose-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
+
+See [Releasing Pure-Docker](#releasing-pure-docker) to set up a Pure-Docker release.
 
 Install [Vagrant](https://vagrantup.com), then:
 
