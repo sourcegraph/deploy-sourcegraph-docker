@@ -1,0 +1,18 @@
+# Routes all plain http requests to sourcegraph-frontend - suitable for local testing.
+#
+# Caddyfile documentation: https://caddyserver.com/docs/caddyfile
+
+:80
+
+{{ range $h, $containers := groupByLabel $ "src.frontend" }}
+reverse_proxy {
+  # lb_policy round_robin
+
+  {{ range $c, $container := $containers }}
+  {{ range $n, $net := $container.Networks }}
+  {{ $port := index $container.Labels "virtual.port" }}
+  to {{ $net.IP }}:{{ if $port }}{{ trim $port }}{{ else }}80{{ end }}
+  {{ end }}
+  {{ end }}
+}
+{{ end }}
