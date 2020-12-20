@@ -7,3 +7,5 @@ github.com/slimsag/update-docker-tags v0.7.0/go.mod h1:T42NkUDP2MrfiSj3NT4JI27g/
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201129044102-91280e756de5/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201201090328-3a2078e373f0 h1:TUc11bYIC0asZE0EAA+6ZR93kuJHezVHXNYRcLMmzzU=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201201090328-3a2078e373f0/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201220021356-213efca6309f h1:A/m+vtjMkb5fl4tlhxCfzzh/odj0IEDvCCniE68xdIY=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201220021356-213efca6309f/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
