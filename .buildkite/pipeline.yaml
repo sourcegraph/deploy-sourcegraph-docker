@@ -1,4 +1,7 @@
 $schema: 'http://json.schemastore.org/buildkite'
+env:
+  IMAGE: 'e2e-491e9f27-2020-10-28t17-32-00z'
+  VAGRANT_RUN_ENV: 'CI'
 steps:
   - label: ':docker:'
     command: .buildkite/validate-docker-compose.sh
@@ -8,22 +11,17 @@ steps:
     command: .buildkite/prettier-check.sh
     agents:
       queue: 'baremetal'
-  - label: ':rice:'
-    command: .buildkite/test.sh pure-docker-test
+  - label: ':rice: pure-docker-test'
+    command: .buildkite/vagrant-run.sh docker-test
+    artifact_paths: ./*.log
     agents:
       queue: 'baremetal'
     env:
-      VAGRANT_RUN_ENV: 'CI'
-  - label: ':rice:'
-    command: .buildkite/test.sh docker-compose-test
+      TEST_TYPE: 'pure-docker-test'
+  - label: ':rice: docker-compose-test'
+    command: .buildkite/vagrant-run.sh docker-test
+    artifact_paths: ./*.log
     agents:
       queue: 'baremetal'
     env:
-      VAGRANT_RUN_ENV: 'CI'
-  - wait: ~
-    continue_on_failure: true
-  - label: ':broom:'
-    command: .buildkite/cleanup.sh
-    parallelism: 5
-    agents:
-      queue: 'baremetal'
+      TEST_TYPE: 'docker-compose-test'

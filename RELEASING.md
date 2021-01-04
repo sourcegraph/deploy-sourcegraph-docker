@@ -13,7 +13,7 @@ The customer replica branches are distinct living branches which have diffs we m
 
 ### Create the release branch
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
 
@@ -24,7 +24,7 @@ git push --set-upstream origin 3.17
 
 ### Update the image tags
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 In the latest release branch you created:
 
@@ -37,7 +37,9 @@ Cherry-pick the commit where you update images on the release branch back into `
 
 ### Smoke test: ensure Docker Compose starts from scratch
 
-**IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
+> ⚠️ This test now runs in Buildkite, under the `docker-compose-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
+
+This step must be run on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
 ```
 git checkout <version_branch>
@@ -91,6 +93,10 @@ Visit http://localhost and confirm the app loads.
 
 ### Confirm Pure-Docker works with a smoke test
 
+> ⚠️ This test now runs in Buildkite, under the `docker-compose-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
+
+See [Releasing Pure-Docker](#releasing-pure-docker) to set up a Pure-Docker release.
+
 Install [Vagrant](https://vagrantup.com), then:
 
 ```sh
@@ -101,7 +107,7 @@ This will take about ~10 minutes to run. Refer to the [testing documentation](TE
 
 ### Tag the final release
 
-> ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you during `release:close`. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases).
+> ⚠️ If you are using the Sourcegraph release tooling, this will be done for you as part of the release steps. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 For example:
 

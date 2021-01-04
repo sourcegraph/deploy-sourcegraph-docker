@@ -20,6 +20,12 @@
       "ignoreUnstable": false,
       "semanticCommits": false,
       "automerge": false
+    },
+    {
+      "groupName": "Sourcegraph Docker images list",
+      "packagePatterns": ["github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images"],
+      "allowedVersions": "~=0.0.0",
+      "automerge": true
     }
   ],
   "masterIssue": true,
