@@ -35,29 +35,21 @@ In the latest release branch you created:
 
 Cherry-pick the commit where you update images on the release branch back into `master`.
 
+
+### Smoke Test: ensure  Pure-Docker starts from scratch
+
+> ⚠️ This test now runs in Buildkite, under the `pure-docker-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
 ### Smoke test: ensure Docker Compose starts from scratch
 
 > ⚠️ This test now runs in Buildkite, under the `docker-compose-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
 
-This step must be run on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
-
-```
-git checkout <version_branch>
-cd docker-compose/
-docker-compose up -d
-```
-
-Check that all services come up and report as healthy in the output of:
-
-```
-docker ps
-```
-
-Visit http://localhost and confirm the app loads.
+Refer to the [testing documentation](TESTING.md) for running tests from your local machine.
 
 ### Smoke test: ensure Docker Compose upgrades work
 
-**IMPORTANT**: This step MUST be ran on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
+> ⚠️ This test now runs in Buildktie, in the `qa` pipeline under the `Sourcegraph Upgrade` step, you can validate [the results of the CI run](https://buildkite.com/sourcegraph)
+
+**IMPORTANT**: This step MUST be run on a Linux machine, NOT Mac or Windows/WSL. This is because Docker for Linux treats file permissions differently and we must identify such issues.
 
 Start the prior version of Docker Compose:
 
@@ -90,20 +82,6 @@ docker ps
 ```
 
 Visit http://localhost and confirm the app loads.
-
-### Confirm Pure-Docker works with a smoke test
-
-> ⚠️ This test now runs in Buildkite, under the `docker-compose-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
-
-See [Releasing Pure-Docker](#releasing-pure-docker) to set up a Pure-Docker release.
-
-Install [Vagrant](https://vagrantup.com), then:
-
-```sh
-.buildkite/test-pure-docker.sh
-```
-
-This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
 ### Tag the final release
 
@@ -156,13 +134,7 @@ During this process you will run into two merge conflicts:
 - Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
 - Do not commit: changes to `deploy-pgsql.sh`, as Postgres 9.6 is used here.
 
-Once you have performed the above, you should run a basic smoke test to ensure that `./deploy.sh` on Ubuntu 18.04 causes all services to start up OK, that the frontend is responsive, and that no container UID/GIDs/file permissions have changed (which would be a regression). You can do this by installing [Vagrant](https://vagrantup.com) and running:
-
-```sh
-.buildkite/test-pure-docker.sh
-```
-
-Or you can watch the buildkite build for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
+Check buildkite for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
 
 This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
 
