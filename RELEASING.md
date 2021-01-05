@@ -69,7 +69,7 @@ For pure-docker, we provide customers with an exact diff of changes to make. The
 
 To reduce the chance for errors, we send an exact diff of changes. This diff needs to be as minimal and concise as possible, and e.g. not include changes to unrelated files like `.prettierignore` or `docker-compose/` to avoid any confusion. See https://docs.sourcegraph.com/admin/updates/pure_docker for examples of what these diffs look like.
 
-Pretend `3.8` was the last version of pure-docker release (look for the latest `n.n-customer-replica` branch), and that `3.9` is the version we want to release (which must have already been released for Docker Compose deployments). Then:
+Pretend `3.8` was the last version of pure-docker release (look for the latest `n.n-customer-replica` branch), and that `3.9` is the version we want to release. Then:
 
 ```sh
 # Checkout the current pure-docker release branch
