@@ -10,6 +10,9 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 8080/TCP
 # Ports exposed to the public internet: none
 #
+# Also add the following volume mount for container monitoring on MacOS:
+#   --volume='/var/run/docker.sock:/var/run/docker.sock:ro' 
+#
 sudo docker run --detach \
     --name=cadvisor \
     --network=sourcegraph \
