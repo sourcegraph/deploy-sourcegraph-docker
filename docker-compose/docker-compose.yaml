@@ -428,6 +428,8 @@ services:
       - '/sys:/sys:ro'
       - '/var/lib/docker/:/var/lib/docker:ro'
       - '/dev/disk/:/dev/disk:ro'
+      # Uncomment to enable container monitoring on MacOS
+      # - '/var/run/docker.sock:/var/run/docker.sock:ro'
     networks:
       - sourcegraph
     restart: always
@@ -507,7 +509,7 @@ services:
     networks:
       - sourcegraph
     restart: always
-  
+
   # Description: MinIO for storing LSIF uploads.
   #
   # Disk: 128GB / persistent SSD
