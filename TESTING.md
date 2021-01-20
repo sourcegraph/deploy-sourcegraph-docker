@@ -16,10 +16,9 @@ gcloud auth application-default login
   - `VAGRANT_GCP_PROJECT_ID`: Project to run on. (default: `sourcegraph-server`)
   - `VAGRANT_SSH_USER`: Your SSH user ID as specified in GCP metadata. (default: `ENV['USER']`)
   - `VAGRANT_SSH_KEY`: Path to your SSH Keys as specified in GCP metadata. (default: `~/.ssh/id_rsa`)
-
-- Run the tests with a `deployment-type-test` where `deployment-type-test` can be `pure-docker-test` or `docker-compose-test`.
+  - `TEST_TYPE`:  Deployment type to test, `pure-docker-test` or `docker-compose-test`.
 ```
-.buildkite/test.sh <deployment-type-test>
+.buildkite/vagrant-run.sh docker-test
 ```
 
 This command will start a GCP instance, upload your local copy of the reposistory and run the relevant smoke test for each deployment type, [pure-docker-test](test/pure-docker/smoke-test.sh) or [docker-compose-test](test/docker-compose/smoke-test.sh).
@@ -34,3 +33,34 @@ shell_commands:
       cd /vagrant
       bartest.sh
 ```
+<<<<<<< HEAD
+=======
+### Smoke test: ensure Docker Compose upgrades work
+
+Start the prior version of Docker Compose:
+
+```
+git checkout <previous_version_branch>
+cd test/
+TEST_TYPE=docker-compose-test vagrant up docker-test 
+```
+
+Wait for the test to pass and for the output (approximately 5-10 minutes):
+
+```
+docker-test: ALL TESTS PASSED
+```
+
+Update to the latest version:
+
+```
+git checkout master
+TEST_TYPE=docker-compose-test vagrant provision docker-test
+```
+
+Wait for the test to pass and for the output (approximately 5-10 minutes):
+
+```
+docker-test: ALL TESTS PASSED
+```
+>>>>>>> 3.24
