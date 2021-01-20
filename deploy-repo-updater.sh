@@ -23,6 +23,6 @@ docker run --detach \
     -e JAEGER_AGENT_HOST=jaeger \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/repo-updater:insiders@sha256:53f0fcd28885d379c1c9046028e45ae2b96be4a34a0011afacb133d76bc82bb6
+    index.docker.io/sourcegraph/repo-updater:3.24.0@sha256:4b4303984ebff22af65d848108a334d1f2de7fafae7ccb39a3f24c2c3b6185d2
 
 echo "Deployed repo-updater service"
