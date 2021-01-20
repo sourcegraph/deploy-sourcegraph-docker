@@ -43,12 +43,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.network = server['network']
         g.external_ip = external_ip
         g.use_private_ip = use_private_ip
-<<<<<<< HEAD
-=======
         g.scopes = [
             "compute-rw"
         ]
->>>>>>> 3.24
         o.ssh.username = username
         o.ssh.private_key_path = ssh_key_path
       end
