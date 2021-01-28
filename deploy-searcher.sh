@@ -22,6 +22,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/searcher:3.24.0@sha256:3f315c62a9081e57e95571085bbc5f3e25a05edfe1b63d275f22d11b5db37e73
+    index.docker.io/sourcegraph/searcher:3.24.1@sha256:a2f20fc7fab1dc594c1d89c590151e571eb86bb727a320a4a613f1139572b958
 
 echo "Deployed searcher $1 service"
