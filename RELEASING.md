@@ -31,11 +31,6 @@ In the latest release branch you created:
 1. Run `tools/update-docker-tags.sh $VERSION`
 2. Confirm the diff shows the image tags being updated to the version you expect, and push directly to the release branch.
 
-### Cherry-pick image update to master
-
-Cherry-pick the commit where you update images on the release branch back into `master`.
-
-
 ### Smoke Test: ensure  Pure-Docker starts from scratch
 
 > ⚠️ This test now runs in Buildkite, under the `pure-docker-test` step - you can validate [the results of the CI run](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker) instead.
