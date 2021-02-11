@@ -11,6 +11,7 @@
     job: node
   targets:
     - cadvisor:8080
+    - sourcegraph-frontend-internal:6060
 - labels:
     job: github-proxy
   targets:
