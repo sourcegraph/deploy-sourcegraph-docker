@@ -8,13 +8,13 @@ set -u
 IMAGE=
 
 # The sourcegraph version running on both the source and destination hosts. NOTE: this version must be the same when migration data ie : 3.24.1
-VERSION=
+VERSION=3.24.1
 
 # The username and hostname of the host you will be migrating from. Takes the form of username@host ie: sourcegraph-user@myhost
-SRC_HOST=
+SRC_HOST=dave-dev
 
 # The username and hostname of the host you will be migrating too. Takes the form of username@host ie: sourcegraph-user@myhost
-DST_HOST=
+DST_HOST=dave-dev
 
 # Fully qualified path to the docker-compose directory on a host
-COMPOSE_DIR=
+COMPOSE_DIR=/home/dave/sourcegraph/deploy-sourcegraph-docker/docker-compose
