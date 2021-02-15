@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -uxo pipefail
+set -euo pipefail
 
 # shellcheck source=migration_vars
 source migration_vars
@@ -12,19 +12,23 @@ codeintel_dump_file=$(mktemp)
 trap 'rm -f ${sg_dump_file} ${codeintel_dump_file}' EXIT
 
 # Get the  ID of the sourcegraph container
+echo "Obtaing sourcegraph container ID"
 CONTAINER_ID=$(ssh "${SRC_HOST}" docker ps | grep "${IMAGE}:${VERSION}" | cut -f 1 -d ' ')
 
 # Dump sourcegraph db and alter script for migration
+echo "Dumping sourcegraph database"
 ssh ${SRC_HOST} "docker exec ${CONTAINER_ID} pg_dump -C --username=postgres sourcegraph" >${sg_dump_file}
-sed '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${sg_dump_file}
+sed -n --silent '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${sg_dump_file} > /dev/null 2>&1
 printf '\connect -reuse-previous=on dbname=postgres\nDROP DATABASE sg;\nALTER DATABASE "sourcegraph" RENAME TO sg;\nALTER DATABASE sg OWNER TO sg;\n' >> ${sg_dump_file}
 
 # Dump codeintel db and alter script for migration
+echo "Dumping codeintel database"
 ssh ${SRC_HOST} "docker exec ${CONTAINER_ID} pg_dump -C --username=postgres sourcegraph-codeintel" >${codeintel_dump_file}
-sed '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${codeintel_dump_file}
+sed -n --silent '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${codeintel_dump_file} > /dev/null 2>&1
 printf '\connect -reuse-previous=on dbname=postgres\nDROP DATABASE sg;\nALTER DATABASE "sourcegraph-codeintel" RENAME TO sg;\nALTER DATABASE sg OWNER TO sg;\n' >> ${codeintel_dump_file}
 
 # Upload database dumps to new docker-compose deployment
+echo "Uploading dumps to new deployment"
 chmod 544 ${sg_dump_file} ${codeintel_dump_file}
 scp ${sg_dump_file} "${DST_HOST}:${sg_dump_file}"
 scp ${codeintel_dump_file} "${DST_HOST}:${codeintel_dump_file}"
@@ -38,6 +42,7 @@ sleep 10
 docker cp ${sg_dump_file} pgsql:${sg_dump_file}
 docker cp ${codeintel_dump_file} codeintel-db:${codeintel_dump_file}
 
+echo 'Starting migration'
 docker exec pgsql sh -c 'psql -v ERROR_ON_STOP=1 -U sg -f ${sg_dump_file} postgres'
 docker exec codeintel-db sh -c 'psql -v ERROR_ON_STOP=1 -U sg -f ${codeintel_dump_file} postgres'
 
@@ -49,5 +54,6 @@ curl -f http://localhost:80
 curl -f http://localhost:80/healthz
 sleep 10
 done
+echo 'Migration completed'
 "
 
