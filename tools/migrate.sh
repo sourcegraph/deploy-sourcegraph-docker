@@ -1,15 +1,15 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euxo pipefail
 
 # shellcheck source=migration_vars
 source migration_vars
 
-iamge=${image:-sourcegraph/server}
+image=${image:-sourcegraph/server}
 sg_dump_file=$(mktemp)
 codeintel_dump_file=$(mktemp)
 
-trap 'rm -f ${sg_dump_file} ${codeintel_dump_file}' EXIT
+# trap 'rm -f ${sg_dump_file} ${codeintel_dump_file}' EXIT
 
 # Get the  ID of the sourcegraph container
 echo "Obtaing sourcegraph container ID"
@@ -18,13 +18,13 @@ container_id=$(ssh "${src_host}" docker ps | grep "${image}:${version}" | cut -f
 # Dump sourcegraph db and alter script for migration
 echo "Dumping sourcegraph database"
 ssh ${src_host} "docker exec ${container_id} pg_dump -C --username=postgres sourcegraph" >${sg_dump_file}
-sed -n --silent '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${sg_dump_file} >/dev/null 2>&1
+sed -i '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${sg_dump_file} >/dev/null 2>&1
 printf '\connect -reuse-previous=on dbname=postgres\nDROP DATABASE sg;\nALTER DATABASE "sourcegraph" RENAME TO sg;\nALTER DATABASE sg OWNER TO sg;\n' >>${sg_dump_file}
 
 # Dump codeintel db and alter script for migration
 echo "Dumping codeintel database"
 ssh ${src_host} "docker exec ${container_id} pg_dump -C --username=postgres sourcegraph-codeintel" >${codeintel_dump_file}
-sed -n --silent '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${codeintel_dump_file} >/dev/null 2>&1
+sed -i '/^CREATE DATABASE/a CREATE USER postgres WITH SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;' ${codeintel_dump_file} >/dev/null 2>&1
 printf '\connect -reuse-previous=on dbname=postgres\nDROP DATABASE sg;\nALTER DATABASE "sourcegraph-codeintel" RENAME TO sg;\nALTER DATABASE sg OWNER TO sg;\n' >>${codeintel_dump_file}
 
 # Upload database dumps to new docker-compose deployment
