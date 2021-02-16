@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Please ensure the variales in migration vars have been assigned before running this script. 
+
 set -euxo pipefail
 
 # shellcheck source=migration_vars
@@ -9,7 +11,7 @@ image=${image:-sourcegraph/server}
 sg_dump_file=$(mktemp)
 codeintel_dump_file=$(mktemp)
 
-# trap 'rm -f ${sg_dump_file} ${codeintel_dump_file}' EXIT
+trap 'rm -f ${sg_dump_file} ${codeintel_dump_file}' EXIT
 
 # Get the  ID of the sourcegraph container
 echo "Obtaing sourcegraph container ID"
