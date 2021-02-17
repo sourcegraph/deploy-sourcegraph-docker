@@ -18,7 +18,7 @@ services:
   caddy:
     container_name: caddy
     image: 'index.docker.io/caddy/caddy:alpine@sha256:ef2f47730caa12cb7d0ba944c048b8e48f029d5e0ff861840fa2b8f1868e1966'
-    cpus: 4
+    cpus: 1
     mem_limit: '4g'
     environment:
       - 'XDG_DATA_HOME=/caddy-storage/data'
@@ -70,7 +70,7 @@ services:
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
     image: 'index.docker.io/sourcegraph/frontend:3.24.1@sha256:34a642351c054502a1e60c053ffaa7951c199bfb0fe6b1ff276b0b25588685e2'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     environment:
       - DEPLOY_TYPE=docker-compose
@@ -110,7 +110,7 @@ services:
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
     image: 'index.docker.io/sourcegraph/frontend:3.24.1@sha256:34a642351c054502a1e60c053ffaa7951c199bfb0fe6b1ff276b0b25588685e2'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     environment:
       - DEPLOY_TYPE=docker-compose
@@ -143,7 +143,7 @@ services:
   gitserver-0:
     container_name: gitserver-0
     image: 'index.docker.io/sourcegraph/gitserver:3.24.1@sha256:c582534891428ba7c7960b479b867e2aa418917ddbed776eab6f6ca0a37b733d'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     environment:
       - GOMAXPROCS=4
@@ -186,7 +186,7 @@ services:
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/indexed-searcher:3.24.1@sha256:76d7e8a7453caed03412064d2f8e40dd49b9df958edd846e5a91c514b840803e'
-    cpus: 8
+    cpus: 1
     mem_limit: '50g'
     environment:
       - GOMAXPROCS=8
@@ -212,7 +212,7 @@ services:
   searcher-0:
     container_name: searcher-0
     image: 'index.docker.io/sourcegraph/searcher:3.24.1@sha256:a2f20fc7fab1dc594c1d89c590151e571eb86bb727a320a4a613f1139572b958'
-    cpus: 2
+    cpus: 1
     mem_limit: '2g'
     environment:
       - GOMAXPROCS=2
@@ -258,7 +258,7 @@ services:
   precise-code-intel-worker:
     container_name: precise-code-intel-worker
     image: 'index.docker.io/sourcegraph/precise-code-intel-worker:3.24.1@sha256:eb1edce00bfe44a0b48305c5fa598f834aa712de3c744c041dda81103d46b4e0'
-    cpus: 2
+    cpus: 1
     mem_limit: '4g'
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -302,7 +302,7 @@ services:
   repo-updater:
     container_name: repo-updater
     image: 'index.docker.io/sourcegraph/repo-updater:3.24.1@sha256:4b3efefff54882d2ac10d77e444caed2e3f51fcd7e11e841e4025b36e96b47d5'
-    cpus: 4
+    cpus: 1
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=1
@@ -324,7 +324,7 @@ services:
   syntect-server:
     container_name: syntect-server
     image: 'index.docker.io/sourcegraph/syntax-highlighter:3.24.1@sha256:83ff65809e6647b466bd400de4c438a32feeabe8e791b12e15c67c84529ad2de'
-    cpus: 4
+    cpus: 1
     mem_limit: '6g'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
@@ -345,7 +345,7 @@ services:
   symbols-0:
     container_name: symbols-0
     image: 'index.docker.io/sourcegraph/symbols:3.24.1@sha256:59ea001223edff4a2f85f44116c6bc236fdbd1db3d3b73553ea04eb5b9bd4db0'
-    cpus: 2
+    cpus: 1
     mem_limit: '4g'
     environment:
       - GOMAXPROCS=2
@@ -372,7 +372,7 @@ services:
   prometheus:
     container_name: prometheus
     image: 'index.docker.io/sourcegraph/prometheus:3.24.1@sha256:57e1b06908ef52cc0ba11d5f79894c01b65c609fd815aa8a93f91102b56a29ce'
-    cpus: 4
+    cpus: 1
     mem_limit: '8g'
     volumes:
       - 'prometheus-v2:/prometheus'
@@ -472,7 +472,7 @@ services:
   pgsql:
     container_name: pgsql
     image: 'index.docker.io/sourcegraph/postgres-11.4:3.24.1@sha256:a55fea6638d478c2368c227d06a1a2b7a2056b693967628427d41c92d9209e97'
-    cpus: 4
+    cpus: 1
     mem_limit: '2g'
     healthcheck:
       test: '/liveness.sh'
@@ -496,7 +496,7 @@ services:
   codeintel-db:
     container_name: codeintel-db
     image: 'index.docker.io/sourcegraph/codeintel-db:3.24.1@sha256:a55fea6638d478c2368c227d06a1a2b7a2056b693967628427d41c92d9209e97'
-    cpus: 4
+    cpus: 1
     mem_limit: '2g'
     healthcheck:
       test: '/liveness.sh'
