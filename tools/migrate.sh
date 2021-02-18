@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Please ensure the variales in migration vars have been assigned before running this script. 
+# Please ensure the variables in migration vars have been assigned before running this script. 
 
 set -euxo pipefail
 
