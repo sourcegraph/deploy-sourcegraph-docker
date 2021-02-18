@@ -4,8 +4,10 @@
 
 set -euxo pipefail
 
+(
 # shellcheck source=migration_vars
 source migration_vars
+)
 
 image=${image:-sourcegraph/server}
 sg_dump_file=$(mktemp)
