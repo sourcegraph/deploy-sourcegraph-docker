@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -u
+
+# Please populate the following variables with details of your migration
+
+# The name of the sourcegraph server image. Defaults to "sourcegraph/server"
+IMAGE=
+
+# The sourcegraph version running on both the source and destination hosts. NOTE: this version must be the same when migration data ie : 3.24.1
+VERSION=
+
+# The username and hostname of the host you will be migrating from. Takes the form of username@host ie: sourcegraph-user@myhost
+SRC_HOST=
+
+# The username and hostname of the host you will be migrating too. Takes the form of username@host ie: sourcegraph-user@myhost
+DST_HOST=
+
+# Fully qualified path to the docker-compose directory on a host
+COMPOSE_DIR=
