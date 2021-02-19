@@ -22,6 +22,7 @@ docker run --detach \
     -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
     -e CODEINTEL_PGHOST=codeintel-db \
+    -e CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
     -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
