@@ -21,6 +21,6 @@ pushd ~/sourcegraph-docker
 chown -R 100:101 gitserver* prometheus-v2* repo-updater* searcher* sourcegraph-frontend* symbols* zoekt* minio-disk
 chown -R 999:1000 redis-store-disk redis-cache-disk
 chown -R 472:472 grafana-disk
-chown -R 999:999 pgsql-disk codeintel-db-disk
+chown -R 999:999 pgsql-disk codeintel-db-disk codeinsights-db-disk
 popd
 echo "Ready to deploy"
