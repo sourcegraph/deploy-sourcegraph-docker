@@ -5,6 +5,7 @@
     # Uncomment these if you want to monitor PostgreSQL / Redis via Prometheus.
     #- pgsql:9187
     #- codeintel-db:9187
+    #- codeinsights-db:9187
     #- redis-cache:9121
     #- redis-store:9121
 - labels:
