@@ -33,8 +33,7 @@ shell_commands:
       cd /vagrant
       bartest.sh
 ```
-<<<<<<< HEAD
-=======
+
 ### Smoke test: ensure Docker Compose upgrades work
 
 Start the prior version of Docker Compose:
@@ -63,4 +62,3 @@ Wait for the test to pass and for the output (approximately 5-10 minutes):
 ```
 docker-test: ALL TESTS PASSED
 ```
->>>>>>> 3.24
