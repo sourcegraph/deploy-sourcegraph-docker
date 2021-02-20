@@ -18,8 +18,9 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=2g \
-    -v ~/sourcegraph-docker/pgsql-disk:/data/pgdata \
-    sourcegraph/postgres-9.6:19-05-02_0f388b45@sha256:dd7ba3ba2e04f5615a580ce4caa28174f8dd94215ec450cf9728d5164b81b432
+    -e PGDATA=/var/lib/postgresql/data/pgdata \
+    -v $VOLUME:/var/lib/postgresql/data/ \
+    index.docker.io/sourcegraph/postgres-11.4:3.25.0@sha256:a55fea6638d478c2368c227d06a1a2b7a2056b693967628427d41c92d9209e97
 
 # Sourcegraph requires PostgreSQL 9.6+. Generally newer versions are better,
 # but anything 9.6 and higher is supported.

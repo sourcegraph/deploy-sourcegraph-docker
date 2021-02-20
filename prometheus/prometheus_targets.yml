@@ -5,54 +5,54 @@
     # Uncomment these if you want to monitor PostgreSQL / Redis via Prometheus.
     #- pgsql:9187
     #- codeintel-db:9187
+    #- codeinsights-db:9187
     #- redis-cache:9121
     #- redis-store:9121
+- labels:
+    job: node
+  targets:
     - cadvisor:8080
     - sourcegraph-frontend-internal:6060
+- labels:
+    job: github-proxy
+  targets:
     - github-proxy:6060
+- labels:
+    job: query-runner
+  targets:
     - query-runner:6060
+- labels:
+    job: repo-updater
+  targets:
     - repo-updater:6060
+- labels:
+    job: node
+  targets:
     - syntect-server:6060
+- labels:
+    job: precise-code-intel-worker
+  targets:
     - precise-code-intel-worker:6060
     # Add new entries here for every searcher/symbol/gitserver replica.
+- labels:
+    job: zoekt-indexserver
+  targets:
     - zoekt-indexserver-0:6072
+- labels:
+    job: sourcegraph-frontend
+  targets:
     - sourcegraph-frontend-0:6060
-    - sourcegraph-frontend-1:6060
-    - sourcegraph-frontend-2:6060
+- labels:
+    job: gitserver
+  targets:
     - gitserver-0:6060
-    - gitserver-1:6060
-    - gitserver-2:6060
-    - gitserver-3:6060
-    - gitserver-4:6060
-    - gitserver-5:6060
-    - gitserver-6:6060
-    - gitserver-7:6060
-    - gitserver-8:6060
-    - gitserver-9:6060
-    - gitserver-10:6060
-    - gitserver-11:6060
-    - gitserver-12:6060
-    - gitserver-13:6060
-    - gitserver-14:6060
-    - gitserver-15:6060
-    - gitserver-16:6060
-    - gitserver-17:6060
+- labels:
+    job: searcher
+  targets:
     - searcher-0:6060
-    - searcher-1:6060
-    - searcher-2:6060
-    - searcher-3:6060
-    - searcher-4:6060
-    - searcher-5:6060
-    - searcher-6:6060
-    - searcher-7:6060
-    - searcher-8:6060
-    - searcher-9:6060
-    - searcher-10:6060
-    - searcher-11:6060
-    - searcher-12:6060
-    - searcher-13:6060
-    - searcher-14:6060
-    - searcher-15:6060
+- labels:
+    job: symbols
+  targets:
     - symbols-0:6060
     - symbols-1:6060
     - symbols-2:6060

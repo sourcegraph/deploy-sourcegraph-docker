@@ -23,6 +23,7 @@ docker run --detach \
     -e JAEGER_AGENT_HOST=jaeger \
     -e PGHOST=pgsql \
     -e CODEINTEL_PGHOST=codeintel-db \
+    -e CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SRC_SYNTECT_SERVER=http://syntect-server:9238 \
     -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
@@ -36,7 +37,7 @@ docker run --detach \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.24.0@sha256:0cd42a1922384266b0bf900443c9b32f56ca1c67dc0ce6e655cf0d4e2599ef7d
+    index.docker.io/sourcegraph/frontend:3.25.0@sha256:86b8b0c82b320d9315ceb9d1d65bc7af88824bd2f5713b922eb11751a46c3e19
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
