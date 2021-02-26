@@ -18,7 +18,6 @@ docker run --detach \
     --cpus=4 \
     --memory=2g \
     -e POSTGRES_PASSWORD=password \
-    -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v $VOLUME:/var/lib/postgresql/data/ \
     index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:f985af2fef860cc48be40ded864df025b8794b02b86e66cbc6c55bfe3c418831
 
