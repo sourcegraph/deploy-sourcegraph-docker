@@ -531,7 +531,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
     volumes:
-      - "codeinsights-db:/data/"
+      - "codeinsights-db:/var/lib/postgresql/data/"
     networks:
       - sourcegraph
     restart: always
