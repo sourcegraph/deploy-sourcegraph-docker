@@ -29,6 +29,13 @@ for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do ./deploy-zoekt-webserver.sh $
 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
+# Wait for frontend-internal to run migrations before starting remaining frontend containers
+while [ "$(docker inspect sourcegraph-frontend-internal --format '{{.State.Status}}')" != "running" ]
+do
+  echo "waiting for interal frontend to start"
+  sleep 5
+done
+
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do ./deploy-frontend.sh $i; done
 ./deploy-caddy.sh
 wait
