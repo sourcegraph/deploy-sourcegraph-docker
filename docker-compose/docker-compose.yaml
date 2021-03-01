@@ -156,6 +156,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    hostname: gitserver-0
 
   # Description: Backend for indexed text search operations.
   #
