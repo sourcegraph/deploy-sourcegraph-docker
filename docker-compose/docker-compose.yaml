@@ -101,6 +101,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Serves the internal Sourcegraph frontend API.
   #
@@ -135,6 +138,12 @@ services:
     networks:
       - sourcegraph
     restart: always
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
 
   # Description: Stores clones of repositories to perform Git operations.
   #
@@ -519,7 +528,7 @@ services:
   # Network: 1Gbps
   # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
   # Ports exposed to the public internet: none
-  # 
+  #
   # Note: You should deploy this as a container, do not try to connect it to your external
   # Postgres deployment (TimescaleDB is a bit special and most hosted Postgres deployments
   # do not support TimescaleDB, the data here is akin to gitserver's data, where losing it
