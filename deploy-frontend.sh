@@ -21,7 +21,7 @@ docker run --detach \
     --health-cmd="wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1" \
     --health-interval=5s \
     --health-timeout=10s \
-    --health-retries=3 \
+    --health-retries=5 \
     --health-start-period=300s \
     -e DEPLOY_TYPE=pure-docker \
     -e GOMAXPROCS=12 \
