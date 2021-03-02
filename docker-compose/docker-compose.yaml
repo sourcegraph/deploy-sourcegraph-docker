@@ -94,7 +94,7 @@ services:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
       timeout: 10s
-      retries: 3
+      retries: 5
       start_period: 300s
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
