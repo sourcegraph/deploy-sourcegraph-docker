@@ -40,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.image = ENV['IMAGE']
         g.image_project_id = 'sourcegraph-ci'
         g.google_project_id = project_id
-        g.name = "#{server['name']}-"+"#{Time.now.to_i}"
+        g.name = "#{server['name']}-"+"#{Time.now.to_i}"+"#{rand(100000)}"
         g.network = server['network']
         g.external_ip = external_ip
         g.use_private_ip = use_private_ip
