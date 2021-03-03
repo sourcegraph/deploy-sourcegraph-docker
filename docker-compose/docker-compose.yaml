@@ -92,6 +92,8 @@ services:
       - 'PROMETHEUS_URL=http://prometheus:9090'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
+      interval: 10s
+      timeout: 10s
       retries: 5
       start_period: 300s
     volumes:
