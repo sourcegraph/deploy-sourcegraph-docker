@@ -18,6 +18,11 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=8g \
+    --health-cmd="wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1" \
+    --health-interval=5s \
+    --health-timeout=10s \
+    --health-retries=5 \
+    --health-start-period=300s \
     -e DEPLOY_TYPE=pure-docker \
     -e GOMAXPROCS=12 \
     -e JAEGER_AGENT_HOST=jaeger \
@@ -37,7 +42,7 @@ docker run --detach \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.25.0@sha256:86b8b0c82b320d9315ceb9d1d65bc7af88824bd2f5713b922eb11751a46c3e19
+    index.docker.io/sourcegraph/frontend:3.26.0@sha256:236ac617dbc9f50d371734d4a631538d641751af2ff733488bec9acc83972cc9
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
