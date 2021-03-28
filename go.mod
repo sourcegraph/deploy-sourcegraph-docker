@@ -4,5 +4,5 @@ go 1.15
 
 require (
 	github.com/slimsag/update-docker-tags v0.7.0
-	github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210326235517-17e00b63e61d
+	github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210328090448-c338993fcf66
 )
