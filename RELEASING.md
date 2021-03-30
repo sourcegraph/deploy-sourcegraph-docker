@@ -95,7 +95,7 @@ At this point you should evaluate the `git status` output as well as all the cha
 During this process you will run into two merge conflicts:
 
 - Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
-- Do not commit: changes to `deploy-pgsql.sh`, as Postgres 12.6 is used here.
+- Do not commit: changes to `deploy-pgsql.sh`, as Postgres 9.6 is used here.
 
 4. Push the changes to github
 ```shell
