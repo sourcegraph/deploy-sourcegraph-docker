@@ -30,6 +30,13 @@ for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do ./deploy-zoekt-webserver.sh $
 
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
+# Wait for frontend-internal to run migrations before starting remaining frontend containers
+while [ "$(docker inspect sourcegraph-frontend-internal --format '{{.State.Health.Status}}')" != "healthy" ]
+do
+  echo "waiting for internal frontend to start"
+  sleep 5
+done
+
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do ./deploy-frontend.sh $i; done
 # Not used in customer-replica branch.
 #./deploy-caddy.sh
