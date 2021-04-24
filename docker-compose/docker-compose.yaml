@@ -144,6 +144,12 @@ services:
       timeout: 10s
       retries: 5
       start_period: 300s
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      codeintel-db:
+        condition: service_healthy
+
 
   # Description: Stores clones of repositories to perform Git operations.
   #
@@ -490,7 +496,7 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 15s
     volumes:
       - 'pgsql:/data/'
@@ -514,7 +520,7 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 15s
     volumes:
       - 'codeintel-db:/data/'
