@@ -5,7 +5,10 @@ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/slimsag/update-docker-tags v0.7.0 h1:43SSOii74DpuQ3HK+AxHeE54tTFiUEz1xOsiI8hwymQ=
 github.com/slimsag/update-docker-tags v0.7.0/go.mod h1:T42NkUDP2MrfiSj3NT4JI27g/ksCngfCiY1goUQdIh0=
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 3.27
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201129044102-91280e756de5/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201201090328-3a2078e373f0 h1:TUc11bYIC0asZE0EAA+6ZR93kuJHezVHXNYRcLMmzzU=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20201201090328-3a2078e373f0/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
@@ -249,6 +252,9 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2021041404344
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210414043445-ba783981d697/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210415160409-bd574e8a3f58 h1:4RrCvPZQml4iCvXNKioFMnLsc5chQXmVEX113RHXp5A=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210415160409-bd574e8a3f58/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+<<<<<<< HEAD
 >>>>>>> origin/publish-3.27.3
+=======
+>>>>>>> 3.27
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210416231038-ef666e3150e2 h1:3dWfhQ274OOPNTqueETpL5lW0ct20h+6bn0t+nfcIuM=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210416231038-ef666e3150e2/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
