@@ -11,6 +11,8 @@ steps:
     command: .buildkite/prettier-check.sh
     agents:
       queue: 'baremetal'
+  - label: ":git: :sleuth_or_spy:"
+    command: .buildkite/verify-release/verify-release.sh      
   - label: ':rice: pure-docker-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
