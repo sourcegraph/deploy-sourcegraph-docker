@@ -18,7 +18,7 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=8g \
-    --hostname=gitserver-0 \
+    --hostname=gitserver-$1 \
     -e GOMAXPROCS=4 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
