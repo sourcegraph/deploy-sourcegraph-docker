@@ -14,6 +14,6 @@ docker run --detach \
     --cpus=2 \
     --memory=4g \
     -e 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090' \
-    index.docker.io/sourcegraph/precise-code-intel-worker:3.27.4@sha256:455b3be9455fe1ae43828859beb0ed3ffce9a07c431bd2fce713eb60731d0aeb
+    index.docker.io/sourcegraph/precise-code-intel-worker:3.27.5@sha256:09db41ce9fdf57cbab769e769a146f2b7549bc087f4cf432f53fb0732b470690
 
 echo "Deployed precise-code-intel-worker service"
