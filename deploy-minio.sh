@@ -21,5 +21,5 @@ docker run --detach \
     -v $VOLUME:/data \
     -e MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE \
     -e MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
-    index.docker.io/sourcegraph/minio:3.27.4@sha256:e534fd638ee25fb730bd53cd4633b28e4d8f8383580857e3bb45ad36f64929fe \
+    index.docker.io/sourcegraph/minio:3.27.5@sha256:e534fd638ee25fb730bd53cd4633b28e4d8f8383580857e3bb45ad36f64929fe \
     server /data
