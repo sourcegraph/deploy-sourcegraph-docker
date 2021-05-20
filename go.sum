@@ -4,5 +4,5 @@ github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/slimsag/update-docker-tags v0.7.0 h1:43SSOii74DpuQ3HK+AxHeE54tTFiUEz1xOsiI8hwymQ=
 github.com/slimsag/update-docker-tags v0.7.0/go.mod h1:T42NkUDP2MrfiSj3NT4JI27g/ksCngfCiY1goUQdIh0=
-github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210416231038-ef666e3150e2 h1:3dWfhQ274OOPNTqueETpL5lW0ct20h+6bn0t+nfcIuM=
-github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210416231038-ef666e3150e2/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210520070838-c1803b2268ca h1:6fa/JI0qTuNve2P1E6XFkvXLtj1OXfOU5XeJthQjq6A=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210520070838-c1803b2268ca/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=

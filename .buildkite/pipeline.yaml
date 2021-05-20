@@ -1,6 +1,6 @@
 $schema: 'http://json.schemastore.org/buildkite'
 env:
-  IMAGE: 'e2e-cd59179f-2020-12-04t18-24-14z'
+  IMAGE: 'e2e-83b47b020-2021-04-22t20-56-49z'
   VAGRANT_RUN_ENV: 'CI'
 steps:
   - label: ':docker:'
@@ -11,6 +11,8 @@ steps:
     command: .buildkite/prettier-check.sh
     agents:
       queue: 'baremetal'
+  - label: ":git: :sleuth_or_spy:"
+    command: .buildkite/verify-release/verify-release.sh      
   - label: ':rice: pure-docker-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
