@@ -336,7 +336,7 @@ services:
   #
   worker:
     container_name: worker
-    image: 'index.docker.io/sourcegraph/worker:insiders'
+    image: 'index.docker.io/sourcegraph/worker:97840_2021-06-02_d90a77b_patch@sha256:7fb1f7a4d009f2ab7343f5d34b6fc2fb2dcd9950df87e9b840e1c13b99b21c4a'
     cpus: 4
     mem_limit: '4g'
     environment:
