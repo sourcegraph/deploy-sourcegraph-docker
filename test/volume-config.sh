@@ -14,7 +14,6 @@ echo
 #
 # IMPORTANT: If these change, or a new service is introduced, it must be explicitly called out in
 # https://docs.sourcegraph.com/admin/updates/pure_docker similar to https://docs.sourcegraph.com/admin/updates/pure_docker#v3-12-5-v3-13-2-changes
-# TODO: Note instructions above (putting here so we have a diff catch as well)
 echo
 echo "forcing static permissions on volume directories"
 echo
