@@ -280,6 +280,7 @@ services:
     mem_limit: '4g'
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -329,6 +330,27 @@ services:
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'repo-updater:/mnt/cache'
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Manages background processes.
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 3189/TCP 6060/TCP
+  # Ports exposed to the public internet: none
+  #
+  worker:
+    container_name: worker
+    image: 'index.docker.io/sourcegraph/worker:insiders@sha256:c724fc8d29c30135d30e41a798b6a7688b5eda0a3b9a7b74753faf7028c02b41'
+    cpus: 4
+    mem_limit: '4g'
+    environment:
+      - GOMAXPROCS=1
+      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - JAEGER_AGENT_HOST=jaeger
+    volumes:
+      - 'worker:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -626,6 +648,7 @@ volumes:
   redis-cache:
   redis-store:
   repo-updater:
+  worker:
   searcher-0:
   sourcegraph-frontend-0:
   sourcegraph-frontend-internal-0:
