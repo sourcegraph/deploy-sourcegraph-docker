@@ -10,14 +10,14 @@ deploy_sourcegraph() {
 
 		if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
 			# Expected number of containers on e.g. 3.18-customer-replica branch.
-			expect_containers="60"
+			expect_containers="61"
 		else
 			# Expected number of containers on `master` branch.
-			expect_containers="25"
+			expect_containers="21"
 		fi
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
 		docker-compose --file docker-compose/docker-compose.yaml up -d
-		expect_containers="23"
+		expect_containers="24"
 	fi
 
 	echo "Giving containers 30s to start..."
