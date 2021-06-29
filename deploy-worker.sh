@@ -2,26 +2,26 @@
 set -e
 source ./replicas.sh
 
-# Description: Backend for symbols operations.
+# Description: Manages background processes.
 #
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
-# Liveness probe: none
-# Ports exposed to other Sourcegraph services: 3184/TCP 6060/TCP
+# Liveness probe: n/a
+# Ports exposed to other Sourcegraph services: 3189/TCP 6060/TCP
 # Ports exposed to the public internet: none
 #
-VOLUME="$HOME/sourcegraph-docker/symbols-$1-disk"
+VOLUME="$HOME/sourcegraph-docker/worker-disk"
 ./ensure-volume.sh $VOLUME 100
 docker run --detach \
-    --name=symbols-$1 \
+    --name=worker \
     --network=sourcegraph \
     --restart=always \
-    --cpus=2 \
+    --cpus=4 \
     --memory=4g \
-    -e GOMAXPROCS=2 \
+    -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/symbols:3.29.1@sha256:eb4ab149e6eea7601dd7335df35b505649204f9a47e0c83efcfbc595d6f8914b
+    index.docker.io/sourcegraph/worker:3.29.1@sha256:b0e4900f4ad41288b3c84e7ab7ac7e5a2e2355150f3d400b29ae8a018ac4ee8f
 
-echo "Deployed symbols $1 service"
+echo "Deployed worker service"
