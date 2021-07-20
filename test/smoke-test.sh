@@ -6,7 +6,7 @@ deploy_sourcegraph() {
 	#Deploy sourcegraph
 	if [[ "$TEST_TYPE" == "pure-docker-test" ]]; then
 		./test/volume-config.sh
-		./deploy.sh
+		./pure-docker/deploy.sh
 
 		if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
 			# Expected number of containers on e.g. 3.18-customer-replica branch.

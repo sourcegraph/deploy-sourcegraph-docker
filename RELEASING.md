@@ -1,5 +1,8 @@
 # Release guide
 
+**This is the guide for releasing the [Pure-Docker Sourcegraph deployment reference](./pure-docker/README.md).**
+The docker-compose release is done entirely via the [Sourcegraph release tool](https://about.sourcegraph.com/handbook/engineering/distribution/tools/release).
+
 ## Branching/tagging scheme
 
 Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
