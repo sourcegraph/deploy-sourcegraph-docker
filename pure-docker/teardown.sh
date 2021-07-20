@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -e
+
+root_dir="$(dirname "${BASH_SOURCE[0]}")/.."
+cd "$root_dir"
+
 source ./replicas.sh
 
 docker rm -f cadvisor &> /dev/null || true &
