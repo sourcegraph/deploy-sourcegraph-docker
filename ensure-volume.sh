@@ -4,7 +4,7 @@ set -euf -o pipefail
 VOLUME=$1
 USER_ID=$2
 
-if [[ "${CI:-"false"}" == "true" ]]; then
+if [[ "${CI:-"false"}" != "true" ]]; then
   exit 0
 fi
 
