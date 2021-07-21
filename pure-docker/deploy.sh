@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-root_dir="$(dirname "${BASH_SOURCE[0]}")/.."
+root_dir="$(dirname "${BASH_SOURCE[0]}")"
 cd "$root_dir"
 
 source ./replicas.sh
