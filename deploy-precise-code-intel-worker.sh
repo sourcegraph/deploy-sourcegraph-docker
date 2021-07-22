@@ -15,6 +15,6 @@ docker run --detach \
     --memory=4g \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
-    index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:b635e06165d1e6a4ca7573f7aa97baba7e392d88b83d7cee8752928202db94a1
+    index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:41517ae72a3289efd7ec1202b751659e8d75cfcd05fe75543c8911ec73ca1a9f
 
 echo "Deployed precise-code-intel-worker service"
