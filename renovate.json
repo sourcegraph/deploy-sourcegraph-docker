@@ -5,21 +5,11 @@
   "packageRules": [
     {
       "packagePatterns": ["^index.docker.io/sourcegraph/"],
-      "excludePackageNames": ["index.docker.io/sourcegraph/grafana", "index.docker.io/sourcegraph/prometheus"],
       "groupName": "Sourcegraph Docker images",
       "versionScheme": "semver",
       "ignoreUnstable": false,
       "semanticCommits": false,
-      "automerge": false
-    },
-    {
-      "packageNames": ["index.docker.io/sourcegraph/grafana", "index.docker.io/sourcegraph/prometheus"],
-      "groupName": "Sourcegraph Prometheus / Grafana Docker images",
-      "allowedVersions": "<10.0",
-      "versionScheme": "semver",
-      "ignoreUnstable": false,
-      "semanticCommits": false,
-      "automerge": false
+      "automerge": true
     },
     {
       "groupName": "Sourcegraph Docker images list",
