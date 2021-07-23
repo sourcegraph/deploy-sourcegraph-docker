@@ -18,6 +18,6 @@ docker run --detach \
     --cpus=1 \
     --memory=6g \
     -v $VOLUME:/redis-data \
-    index.docker.io/sourcegraph/redis-store:3.30.0@sha256:5e9fec6f4f9801fcd012a5eb4d35d1f50e9e7c6aad2733790698ab28b8378930
+    index.docker.io/sourcegraph/redis-store:3.30.1@sha256:5e9fec6f4f9801fcd012a5eb4d35d1f50e9e7c6aad2733790698ab28b8378930
 
 echo "Deployed redis-store service"
