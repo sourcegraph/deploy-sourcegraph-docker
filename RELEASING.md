@@ -95,8 +95,15 @@ At this point you should evaluate the `git status` output as well as all the cha
 During this process you will run into two merge conflicts:
 
 - Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
+- The prettier ignore should look like this:
 
-4. Push the changes to github
+```
+.github/
+*.md
+rootfs/etc/docker/daemon.json
+```
+
+1. Push the changes to github
 ```shell
 git push --set-upstream origin 3.9-customer-replica
 ```
