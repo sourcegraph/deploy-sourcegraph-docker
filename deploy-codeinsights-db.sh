@@ -20,7 +20,7 @@ docker run --detach \
     -e POSTGRES_PASSWORD=password \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v $VOLUME:/var/lib/postgresql/data/ \
-    index.docker.io/sourcegraph/codeinsights-db:3.30.0@sha256:f96ee58ffb3610c032f03b9e63b32f3b074fd0791333142414b6b756bccabf28
+    index.docker.io/sourcegraph/codeinsights-db:3.30.1@sha256:4b1dfac1028bcb5a77565b62db634d3f1a5da5b45dbac21c0a87ae6995cb609a
 
 # Note: You should deploy this as a container, do not try to connect it to your external
 # Postgres deployment (TimescaleDB is a bit special and most hosted Postgres deployments
