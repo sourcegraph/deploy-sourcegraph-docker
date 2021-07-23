@@ -68,10 +68,10 @@ Pretend `3.8` was the last version of pure-docker release (look for the latest `
 
 ```sh
 # Checkout the current pure-docker release branch
-git checkout 3.8-customer-replica 
+git checkout 3.8-customer-replica
 
 # Create the new pure-docker release branch
-git checkout -B 3.9-customer-replica 
+git checkout -B 3.9-customer-replica
 
 # Merge the publish-3.9 branch, which will have been created by the release tool, into the pure-docker release branch.
 git merge publish-3.9
@@ -95,7 +95,6 @@ At this point you should evaluate the `git status` output as well as all the cha
 During this process you will run into two merge conflicts:
 
 - Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
-- Do not commit: changes to `deploy-pgsql.sh`, as Postgres 9.6 is used here.
 
 4. Push the changes to github
 ```shell
