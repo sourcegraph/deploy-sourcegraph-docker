@@ -421,3 +421,5 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2021072323535
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210723235359-0db8621b9b6f/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210725162533-96bb87a878ed h1:TDtfw63TbomtVNKb51TIHLSAx9MVLiHRugSPyf+wt3w=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210725162533-96bb87a878ed/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210726005811-81bae565b6b4 h1:TmScT5ALR5ZVIlofeD1J3rU5/BnLg1WYwMxT4yO+8Aw=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210726005811-81bae565b6b4/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
