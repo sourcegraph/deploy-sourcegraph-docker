@@ -524,6 +524,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    stop_grace_period: 120s
 
   # Description: PostgreSQL database for code intelligence data.
   #
@@ -548,6 +549,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    stop_grace_period: 120s
 
   # Description: TimescaleDB time-series database for code insights data.
   #
@@ -573,6 +575,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    stop_grace_period: 120s
 
   # Description: MinIO for storing LSIF uploads.
   #
