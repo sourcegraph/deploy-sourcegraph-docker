@@ -20,5 +20,5 @@ docker run --detach \
     -p 0.0.0.0:5778:5778 \
     -p 0.0.0.0:6831:6831 \
     -p 0.0.0.0:6832:6832 \
-    index.docker.io/sourcegraph/jaeger-all-in-one:3.30.2@sha256:ef14add94cfacc816f51edda194f640ae3e0359063f16e424d2d90f951ab0c1a \
+    index.docker.io/sourcegraph/jaeger-all-in-one:3.30.3@sha256:3aef8a4ace5c6ec7a034564a63581e0e6d9512e0a2ecc45b65cb4b2de2e89be4 \
     --memory.max-traces=20000
