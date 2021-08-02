@@ -69,7 +69,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:423d9d7f14107339792b4ec5e3610b57d01dce0a390e30bbfefda1c163587a56'
+    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:07206787b154da77d133333a507bdd26df7fb6f17b696bcf1c628ac8f69a4236'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -113,7 +113,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:423d9d7f14107339792b4ec5e3610b57d01dce0a390e30bbfefda1c163587a56'
+    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:07206787b154da77d133333a507bdd26df7fb6f17b696bcf1c628ac8f69a4236'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -150,6 +150,7 @@ services:
       codeintel-db:
         condition: service_healthy
 
+
   # Description: Stores clones of repositories to perform Git operations.
   #
   # Disk: 200GB / persistent SSD
@@ -158,7 +159,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:insiders@sha256:320febe0e9f15ab0d25bfbbfec83caec0757a5ed26d600548c678b969f66f2aa'
+    image: 'index.docker.io/sourcegraph/gitserver:insiders@sha256:2c2fb7ba482518481be45a17b0ac81698c3062efa2e4e2133ab928ab031a43bc'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -228,7 +229,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:insiders@sha256:6e0023081f993c654ad4ea7a63b7e9d307448c5533c836f0b3b5243db959fa56'
+    image: 'index.docker.io/sourcegraph/searcher:insiders@sha256:8c5751c7a499cae8ba0ad772b06a02d6a8270021946fde71937480dd42ac64ac'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -256,7 +257,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:insiders@sha256:e8148f33b62479bf563e05ad0923f84ce9be38b45043889194076eff4bed4e4b'
+    image: 'index.docker.io/sourcegraph/github-proxy:insiders@sha256:1e6c71f78d4729208bf2016977a18b7fa9a4856bbb111546c66bff49f914b54b'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -274,7 +275,7 @@ services:
   #
   precise-code-intel-worker:
     container_name: precise-code-intel-worker
-    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:ca92df3fb60f09c634227ded0f8f1d8549fbca49c5e9976a71d15a48916052ca'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:62992ccbd790f72e59bb03a79d13bcdc46bdf5680c01e84fb44cc51a9d484f8e'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -300,7 +301,7 @@ services:
   #
   query-runner:
     container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:insiders@sha256:c3d9a10bbf0697b330025fa5e5cd8571e358fd23f48cbbbcf47e4dc0a606b9c2'
+    image: 'index.docker.io/sourcegraph/query-runner:insiders@sha256:59721e8267aa7ee95822c8609e9bba1ad1f6ebebf19b27203fe31905f5169278'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -319,7 +320,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:insiders@sha256:fbcdc6735331693ce682ad9553240cb217d24e3c40234535a8bdb528ffdf2295'
+    image: 'index.docker.io/sourcegraph/repo-updater:insiders@sha256:2b2b3f34bbb6d6dd045d976843337aaa29057b44637eddc352c7c8ba9da62c2c'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -341,7 +342,7 @@ services:
   #
   worker:
     container_name: worker
-    image: 'index.docker.io/sourcegraph/worker:insiders@sha256:293bc7804869b66714002b92a84d5c5b9690602bf2d83474761074c6eae8cfc6'
+    image: 'index.docker.io/sourcegraph/worker:insiders@sha256:b6bfaf41e075f1e9c342a39881f578a344c151c70dcf93099ebf8a82ad0011da'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -383,7 +384,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:insiders@sha256:0eac2d380b05b288f7bec37324870e1cc425d92f290420edd9714eea81f592e1'
+    image: 'index.docker.io/sourcegraph/symbols:insiders@sha256:bdd8ee612b0291859874af64fca88d14a425be7670d8f49a06fc360fe7a433f7'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -458,7 +459,7 @@ services:
   #
   cadvisor:
     container_name: cadvisor
-    image: 'index.docker.io/sourcegraph/cadvisor:insiders@sha256:6b7f3d4a6ab00444f7df65e74d6d552462280b6b73e605827b5a759877f6a1dd'
+    image: 'index.docker.io/sourcegraph/cadvisor:insiders@sha256:ae163e3912bbbb1e2abd81581b81dc36b8ee9b3264805a7bde8bfb9f47981253'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -485,7 +486,7 @@ services:
   #
   jaeger:
     container_name: jaeger
-    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:insiders@sha256:bbeea94c57f3b395858e39d39f0df9beb5d2b93adad93f030f8d8184da41b11f'
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:insiders@sha256:5ac56c83b2284a19cc736fe66cf11facaa084a28417382b35773ff1ab87fe166'
     cpus: 0.5
     mem_limit: '512m'
     ports:
@@ -510,7 +511,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-12.6-alpine:3.30.0@sha256:439246675646322cf6b22a277ab86d790287bc4c532e2a2f4a4e0538d06cd206'
+    image: 'index.docker.io/sourcegraph/postgres-12.6:95244_2021-05-06_2c1f77e@sha256:35040317490324a15e1259c9023a726eb27c694530f6f8877e87d337c7b97778'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
@@ -524,6 +525,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    stop_grace_period: 120s
 
   # Description: PostgreSQL database for code intelligence data.
   #
@@ -548,6 +550,7 @@ services:
     networks:
       - sourcegraph
     restart: always
+    stop_grace_period: 120s
 
   # Description: TimescaleDB time-series database for code insights data.
   #
@@ -562,17 +565,18 @@ services:
   # would be bad but it can be rebuilt given enough time.)
   codeinsights-db:
     container_name: codeinsights-db
-    image: 'index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:75be25ec13a1a2706adefff68c8101a58d692e8d36ebac3e43f33b9304e5b8c7'
+    image: "index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:75be25ec13a1a2706adefff68c8101a58d692e8d36ebac3e43f33b9304e5b8c7"
     cpus: 4
-    mem_limit: '2g'
+    mem_limit: "2g"
     environment:
       - POSTGRES_PASSWORD=password
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - 'codeinsights-db:/var/lib/postgresql/data/'
+      - "codeinsights-db:/var/lib/postgresql/data/"
     networks:
       - sourcegraph
     restart: always
+    stop_grace_period: 120s
 
   # Description: MinIO for storing LSIF uploads.
   #
