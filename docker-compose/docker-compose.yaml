@@ -502,6 +502,8 @@ services:
       - sourcegraph
     restart: always
     command: ['--memory.max-traces=20000']
+    environment:
+      - 'SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json'
 
   # Description: PostgreSQL database for various data.
   #
