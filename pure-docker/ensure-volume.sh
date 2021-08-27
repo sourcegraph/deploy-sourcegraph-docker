@@ -9,5 +9,5 @@ if [[ "${CI:-"false"}" != "true" ]]; then
 fi
 
 if [ ! -d $VOLUME ]; then
-  mkdir -p $VOLUME && sudo chown $USER_ID:$USER_ID $VOLUME && sudo chmod 777 $VOLUME
+    mkdir -p $VOLUME && sudo chown $USER_ID:$USER_ID $VOLUME && sudo chmod 777 $VOLUME
 fi

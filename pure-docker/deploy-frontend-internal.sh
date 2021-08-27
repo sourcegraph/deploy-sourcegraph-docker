@@ -2,18 +2,18 @@
 set -e
 source ./replicas.sh
 
-# Description: Serves the frontend of Sourcegraph via HTTP(S).
+# Description: Serves the internal Sourcegraph frontend API.
 #
 # Disk: 128GB / non-persistent SSD
 # Network: 100mbps
-# Liveness probe: HTTP GET http://sourcegraph-frontend:3080/healthz
-# Ports exposed to other Sourcegraph services: 6060/TCP
-# Ports exposed to the public internet: 3080 (HTTP) and/or 3443 (HTTPS)
+# Liveness probe: n/a
+# Ports exposed to other Sourcegraph services: 3090/TCP 6060/TCP
+# Ports exposed to the public internet: none
 #
-VOLUME="$HOME/sourcegraph-docker/sourcegraph-frontend-$1-disk"
+VOLUME="$HOME/sourcegraph-docker/sourcegraph-frontend-internal-0-disk"
 ./ensure-volume.sh $VOLUME 100
 docker run --detach \
-    --name=sourcegraph-frontend-$1 \
+    --name=sourcegraph-frontend-internal \
     --network=sourcegraph \
     --restart=always \
     --cpus=4 \
@@ -21,11 +21,10 @@ docker run --detach \
     --health-cmd="wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1" \
     --health-interval=5s \
     --health-timeout=10s \
-    --health-retries=5 \
+    --health-retries=3 \
     --health-start-period=300s \
     -e DEPLOY_TYPE=pure-docker \
-    -e GOMAXPROCS=12 \
-    -e JAEGER_AGENT_HOST=jaeger \
+    -e GOMAXPROCS=4 \
     -e PGHOST=pgsql \
     -e CODEINTEL_PGHOST=codeintel-db \
     -e CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres \
@@ -36,17 +35,11 @@ docker run --detach \
     -e INDEXED_SEARCH_SERVERS="$(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH ":6070")" \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e REPO_UPDATER_URL=http://repo-updater:3182 \
-    -e GRAFANA_SERVER_URL=http://grafana:3370 \
+    -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e JAEGER_SERVER_URL=http://jaeger:16686 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
-    -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.30.2@sha256:8f2d83ea37bddea634d34fc0a14f07fa353fe87a00e6d3730bb188e97101e611
+    index.docker.io/sourcegraph/frontend:3.31.0@sha256:8f22c65d628f8dcbb77cd97b007a6be63c4edf43d72c712b7eb72d43a63a44d5
 
-# Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
-# lists which each allow you to specify more container instances for scaling
-# purposes. Be sure to also apply such a change here to the frontend-internal
-# service.
-
-echo "Deployed sourcegraph-frontend $1 service"
+echo "Deployed sourcegraph-frontend-internal service"

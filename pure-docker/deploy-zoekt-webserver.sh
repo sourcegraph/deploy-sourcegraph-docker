@@ -22,6 +22,6 @@ docker run --detach \
     -e GOMAXPROCS=16 \
     -e HOSTNAME=zoekt-webserver-$1:6070 \
     -v $VOLUME:/data/index \
-    index.docker.io/sourcegraph/indexed-searcher:3.30.2@sha256:ede7be935ab07792cdf7a508e01dc5316915e30e8661c270d8d1c4f15c9ebd15
+    index.docker.io/sourcegraph/indexed-searcher:3.31.0@sha256:9f7d05a20aa928276bef283f834e0094d1940e71ef71a7d1365a033bece9e9ca
 
 echo "Deployed zoekt-webserver $1 service"

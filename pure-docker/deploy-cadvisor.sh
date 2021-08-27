@@ -11,7 +11,7 @@ source ./replicas.sh
 # Ports exposed to the public internet: none
 #
 # Also add the following volume mount for container monitoring on MacOS:
-#   --volume='/var/run/docker.sock:/var/run/docker.sock:ro'
+#   --volume='/var/run/docker.sock:/var/run/docker.sock:ro' 
 #
 sudo docker run --detach \
     --name=cadvisor \
@@ -24,7 +24,7 @@ sudo docker run --detach \
     --volume=/sys:/sys:ro \
     --volume=/var/lib/docker/:/var/lib/docker:ro \
     --volume=/dev/disk/:/dev/disk:ro \
-    index.docker.io/sourcegraph/cadvisor:3.30.2@sha256:78bbda3d1372b4b5f960c2784a301c711b0f132b6839532f91b4ef05932ec606 \
+    index.docker.io/sourcegraph/cadvisor:3.31.0@sha256:803bcd8194a97b0e24a23305b733d8c0fd7390d7a4d9f82e921c9aeb793e32b7 \
     --port=8080
 
 echo "Deployed cadvisor"

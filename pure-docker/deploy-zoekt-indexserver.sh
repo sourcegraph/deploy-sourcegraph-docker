@@ -4,7 +4,7 @@ source ./replicas.sh
 
 # Rename the old ~/sourcegraph-docker/zoekt-shared-disk -> ~/sourcegraph-docker/zoekt-$1-shared-disk
 # if it exists. This ensures we don't have to rebuild the search index from scratch.
-if [ -e ~/sourcegraph-docker/zoekt-shared-disk ]
+if [ -e ~/sourcegraph-docker/zoekt-shared-disk ] 
 then mv ~/sourcegraph-docker/zoekt-shared-disk ~/sourcegraph-docker/zoekt-$1-shared-disk
 fi
 
@@ -29,6 +29,6 @@ docker run --detach \
     -e HOSTNAME=zoekt-webserver-$1:6070 \
     -e SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090 \
     -v $VOLUME:/data/index \
-    index.docker.io/sourcegraph/search-indexer:3.30.2@sha256:5e9a2f7cdc3f46d84d3eaa03b8473d5a5850a7082291e3da961781d858b05a84
+    index.docker.io/sourcegraph/search-indexer:3.31.0@sha256:59959d474c48ab59c477a8d60f1500bbca63fbf18204146616994f4a4733337c
 
 echo "Deployed zoekt-indexserver $1 service"

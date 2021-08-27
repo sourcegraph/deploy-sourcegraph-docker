@@ -10,7 +10,7 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=4g \
-    -v $(pwd)/apache/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf \
+    -v "$(pwd)"/apache/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf \
     -p 0.0.0.0:80:80 \
     httpd:2.4
 
