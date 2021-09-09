@@ -22,6 +22,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/symbols:3.31.2@sha256:aa83875baf0412a4be52e7daeedef7ba69a3d91a2fc17e4062cecee78adf5b8b
+    index.docker.io/sourcegraph/symbols:3.31.2@sha256:34ce29202d0cb97d99acbc1b01bb9d9c9a037d43a3768fa3ab678b393d011228
 
 echo "Deployed symbols $1 service"
