@@ -58,3 +58,5 @@
     job: symbols
   targets:
     - symbols-0:6060
+    - postgres-exporter:9187
+
