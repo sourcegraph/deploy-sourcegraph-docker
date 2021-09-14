@@ -150,7 +150,6 @@ services:
       codeintel-db:
         condition: service_healthy
 
-
   # Description: Stores clones of repositories to perform Git operations.
   #
   # Disk: 200GB / persistent SSD
@@ -513,7 +512,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-12.6:3.31.2@sha256:593c38e4308a7b29d7256363e52668650e710f042d1811d87de5fb1f5fe67ecb'
+    image: 'index.docker.io/sourcegraph/postgres-12.6-alpine:3.31.2@sha256:fa8ff1246441b3d8eb1d8efc6854e22087013a5ab0e9e7205fce604adbd8b106'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
@@ -567,14 +566,14 @@ services:
   # would be bad but it can be rebuilt given enough time.)
   codeinsights-db:
     container_name: codeinsights-db
-    image: "index.docker.io/sourcegraph/codeinsights-db:3.31.2@sha256:912ba3900ab688b8ac23d8f7906e638160dda49c71490b8e3f69f04e81ffe8bf"
+    image: 'index.docker.io/sourcegraph/codeinsights-db:3.31.2@sha256:912ba3900ab688b8ac23d8f7906e638160dda49c71490b8e3f69f04e81ffe8bf'
     cpus: 4
-    mem_limit: "2g"
+    mem_limit: '2g'
     environment:
       - POSTGRES_PASSWORD=password
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - "codeinsights-db:/var/lib/postgresql/data/"
+      - 'codeinsights-db:/var/lib/postgresql/data/'
     networks:
       - sourcegraph
     restart: always
