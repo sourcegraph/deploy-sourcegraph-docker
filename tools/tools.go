@@ -4,5 +4,5 @@ package tools
 
 import (
 	// pins update-docker-tags CLI
-	_ "github.com/slimsag/update-docker-tags"
+	_ "github.com/sourcegraph/update-docker-tags"
 )

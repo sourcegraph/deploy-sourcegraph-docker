@@ -20,7 +20,7 @@ func main() {
 	)
 	args := []string{
 		"run",
-		"github.com/slimsag/update-docker-tags",
+		"github.com/sourcegraph/update-docker-tags",
 	}
 	for _, image := range images.SourcegraphDockerImages {
 		args = append(args, fmt.Sprintf("-enforce=sourcegraph/%s=%s", image, constraint))
