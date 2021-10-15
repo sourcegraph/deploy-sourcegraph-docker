@@ -67,6 +67,8 @@ services:
   # lists which each allow you to specify more container instances for scaling
   # purposes. Be sure to also apply such a change here to the frontend-internal
   # service.
+  #
+  # Note: Mount internal CA's into /etc/ssl/certs
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
     image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:7c453e79a63e92b79901a6b523859d43e870f978162a60a4b219a6e54aa6c98a'
