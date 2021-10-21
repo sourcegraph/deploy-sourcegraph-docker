@@ -40,6 +40,6 @@ docker run --detach \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/frontend:insiders@sha256:3a77ddb36fb8723d1b81ba422589a5008480f0c99f5f43b447d1e659bb8e915a
+    index.docker.io/sourcegraph/frontend:3.33.0@sha256:d9509019a7a75c3f1b6eb78dca4bbc8f03df0e95edbeb9672a3e3106b98eda10
 
 echo "Deployed sourcegraph-frontend-internal service"
