@@ -1,3 +1,6 @@
 .github/
 *.md
+<<<<<<< HEAD
 rootfs/etc/docker/daemon.json
+=======
+>>>>>>> origin/publish-3.33.0
