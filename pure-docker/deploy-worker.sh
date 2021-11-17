@@ -22,6 +22,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/worker:3.32.0@sha256:7dc39bb04b485b1a5f19e85d3259609e9bd1bc9e11dd0eb98a2861890b4b3124
+    index.docker.io/sourcegraph/worker:3.32.1@sha256:775280710d057a31a64e6634c0136512c37ddb46f0a93b096f77f7ec7d574742
 
 echo "Deployed worker service"
