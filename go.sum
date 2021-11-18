@@ -4,5 +4,7 @@ github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211004111412-361a06ed69ad h1:RWYHo1vnj0FLOtSNvIGo2j1f5jHj3SDFEbMEK7UGf2w=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211004111412-361a06ed69ad/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211118002453-a32abbdbb307 h1:XHSkCQaXm4FJoK0Jy24NprGNaCpVAtxSoNiLX4klbJc=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211118002453-a32abbdbb307/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/update-docker-tags v0.9.0 h1:FeqPS1GH5n4KyTha/SpZvDDmrdS4c+N8cQ3xb4Rlb+A=
 github.com/sourcegraph/update-docker-tags v0.9.0/go.mod h1:lCDsoUnk/ASDbm7UxE7tU3qAUhQxA7xykELHXcLeKFM=
