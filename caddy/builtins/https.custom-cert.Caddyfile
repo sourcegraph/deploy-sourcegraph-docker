@@ -11,6 +11,6 @@
 }
 redir @http https://{host}{uri}
 
-tls /sourcegraph.pem /sourcegraph.key
+tls /ssl/sourcegraph.pem /ssl/sourcegraph.key
 
 reverse_proxy {$SRC_FRONTEND_ADDRESSES}
