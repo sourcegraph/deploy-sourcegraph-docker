@@ -572,8 +572,8 @@ services:
     cpus: 1
     mem_limit: '1g'
     environment:
-      - 'MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE'
-      - 'MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+      - 'MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE'
+      - 'MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/minio/health/live']
       interval: 10s
