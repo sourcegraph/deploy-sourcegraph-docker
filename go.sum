@@ -88,8 +88,6 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2021092100071
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210921000716-1bce92cba6fe/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210921021404-896386b7dd5a h1:1hF3+qaXdtZc1ChbZyE6QdUMhMZKDYYR0ccweKWQL5c=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210921021404-896386b7dd5a/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
-<<<<<<< HEAD
-=======
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210922003002-93dcee8ad0cd h1:7p2ZZlaSCvApHefgeGSt/E95KmGVfrJUNIIF/V3wXgg=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210922003002-93dcee8ad0cd/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20210923155357-cc58dbe08e7d h1:3Fi5k+TCcqw9E05VVIJAAtHUFLp4ybbMA5Y50qssA4k=
@@ -134,6 +132,5 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2021100400104
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211004001043-24ee99287181/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211004111412-361a06ed69ad h1:RWYHo1vnj0FLOtSNvIGo2j1f5jHj3SDFEbMEK7UGf2w=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20211004111412-361a06ed69ad/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
->>>>>>> origin/publish-3.33.0
 github.com/sourcegraph/update-docker-tags v0.8.0 h1:TlW1kptkWCT/va/+x1In3qBZGkRPLg/aL0b/feqBgII=
 github.com/sourcegraph/update-docker-tags v0.8.0/go.mod h1:lCDsoUnk/ASDbm7UxE7tU3qAUhQxA7xykELHXcLeKFM=

@@ -4,7 +4,6 @@
 The docker-compose release is done entirely via the [Sourcegraph release tool](https://about.sourcegraph.com/handbook/engineering/distribution/tools/release).
 
 ## Branching/tagging scheme
-<<<<<<< HEAD
 
 ```
 git checkout -B 3.17
@@ -14,22 +13,17 @@ git push --set-upstream origin 3.17
 ### Update the image tags
 
 The customer replica branches are distinct living branches which have diffs we maintain for replicating some customers using the pure-docker deployment model described in the README.md of this repository (e.g. the customers' different Postgres version, changes to the `prometheus_targets.yml`, and more.) We test, tag, and release these `$VERSION-customer-replica` branches as `customer-replica-$VERSION` to produce the final diffs we send to customers running a pure-docker deployment on e.g. in the [pure docker upgrade guide](https://docs.sourcegraph.com/admin/updates/pure_docker).
-=======
->>>>>>> origin/publish-3.33.0
 
 ## Releasing a new version
 
 ### Create the release branch
 
-<<<<<<< HEAD
-=======
 The customer replica branches are distinct living branches which have diffs we maintain for replicating some customers using the pure-docker deployment model described in the README.md of this repository (e.g. the customers' different Postgres version, changes to the `prometheus_targets.yml`, and more.) We test, tag, and release these `$VERSION-customer-replica` branches as `customer-replica-$VERSION` to produce the final diffs we send to customers running a pure-docker deployment on e.g. in the [pure docker upgrade guide](https://docs.sourcegraph.com/admin/updates/pure_docker).
 
 ## Releasing a new version
 
 ### Create the release branch
 
->>>>>>> origin/publish-3.33.0
 > ⚠️ If you are using the Sourcegraph release tooling, this step will be done for you in the PR it creates. Learn more about the release process in [the handbook](https://about.sourcegraph.com/handbook/engineering/releases). In this case, do not do this step manually.
 
 For example if releasing `v3.17.2` then create this branch from latest `master`:
