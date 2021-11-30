@@ -291,27 +291,6 @@ services:
       - sourcegraph
     restart: always
 
-  # Description: Saved search query runner / notification service.
-  #
-  # Disk: 1GB / non-persistent SSD (only for read-only config file)
-  # Network: 100mbps
-  # Liveness probe: n/a
-  # Ports exposed to other Sourcegraph services: 3183/TCP 6060/TCP
-  # Ports exposed to the public internet: none
-  #
-  query-runner:
-    container_name: query-runner
-    image: 'index.docker.io/sourcegraph/query-runner:insiders@sha256:54773f1663b0e9b83ebc616c0ebaeea8190cf1b7afc36f495e26dc625b982a67'
-    cpus: 1
-    mem_limit: '1g'
-    environment:
-      - GOMAXPROCS=1
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST=jaeger
-    networks:
-      - sourcegraph
-    restart: always
-
   # Description: Handles repository metadata (not Git data) lookups and updates from external code hosts and other similar services.
   #
   # Disk: 128GB / non-persistent SSD
