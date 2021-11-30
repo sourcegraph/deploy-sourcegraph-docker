@@ -13,11 +13,11 @@ deploy_sourcegraph() {
 			expect_containers="61"
 		else
 			# Expected number of containers on `master` branch.
-			expect_containers="26"
+			expect_containers="25"
 		fi
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
 		docker-compose --file docker-compose/docker-compose.yaml up -d
-		expect_containers="24"
+		expect_containers="23"
 	fi
 
 	echo "Giving containers 30s to start..."
