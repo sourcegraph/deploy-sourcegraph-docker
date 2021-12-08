@@ -2,15 +2,6 @@
 - labels:
     job: node
   targets:
-    # Uncomment these if you want to monitor PostgreSQL / Redis via Prometheus.
-    #- pgsql:9187
-    #- codeintel-db:9187
-    #- codeinsights-db:9187
-    #- redis-cache:9121
-    #- redis-store:9121
-- labels:
-    job: node
-  targets:
     - cadvisor:8080
     - sourcegraph-frontend-internal:6060
 - labels:
@@ -58,6 +49,23 @@
     job: symbols
   targets:
     - symbols-0:6060
-    - symbols-1:6060
-    - symbols-2:6060
-    - symbols-3:6060
+- labels:
+    job: pgsql
+  targets:
+    - pgsql:9187
+- labels:
+    job: codeintel-db
+  targets:
+    - codeintel-db:9187
+- labels:
+    job: codeinsights-db
+  targets:
+    - codeinsights-db:9187
+- labels:
+    job: redis-cache
+  targets:
+    - redis-cache:9121
+- labels:
+    job: redis-store
+  targets:
+    - redis-store:9121
