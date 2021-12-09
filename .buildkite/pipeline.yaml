@@ -5,11 +5,11 @@ env:
 steps:
   - label: ':docker:'
     command: .buildkite/validate-docker-compose.sh
-    agents: { queue: 'baremetal' }
+    agents: { queue: 'vagrant' }
 
   - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
-    agents: { queue: 'baremetal' }
+    agents: { queue: 'vagrant' }
 
   - label: ":git: :sleuth_or_spy:"
     command: .buildkite/verify-release/verify-release.sh
@@ -20,11 +20,11 @@ steps:
     artifact_paths: ./*.log
     env:
       TEST_TYPE: 'pure-docker-test'
-    agents: { queue: 'baremetal' }
+    agents: { queue: 'vagrant' }
 
   - label: ':rice: docker-compose-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     env:
       TEST_TYPE: 'docker-compose-test'
-    agents: { queue: 'baremetal' }
+    agents: { queue: 'vagrant' }
