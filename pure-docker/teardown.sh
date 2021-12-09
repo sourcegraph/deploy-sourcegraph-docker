@@ -20,7 +20,6 @@ docker rm -f codeintel-db &> /dev/null || true &
 docker rm -f codeinsights-db &> /dev/null || true &
 docker rm -f minio &> /dev/null || true &
 docker rm -f prometheus &> /dev/null || true
-docker rm -f query-runner &> /dev/null || true &
 docker rm -f redis-cache &> /dev/null || true &
 docker rm -f redis-store &> /dev/null || true &
 docker rm -f repo-updater &> /dev/null || true &
