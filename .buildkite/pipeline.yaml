@@ -3,27 +3,28 @@ env:
   IMAGE: 'e2e-2e61d9153-2021-06-22t15-18-00z'
   VAGRANT_RUN_ENV: 'CI'
 steps:
-  - label: ":docker:"
+  - label: ':docker:'
     command: .buildkite/validate-docker-compose.sh
-    agents:
-      queue: 'baremetal'
+    agents: { queue: 'vagrant' }
+
   - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
-    agents:
-      queue: 'baremetal'
+    agents: { queue: 'vagrant' }
+
   - label: ":git: :sleuth_or_spy:"
-    command: .buildkite/verify-release/verify-release.sh      
+    command: .buildkite/verify-release/verify-release.sh
+    agents: { queue: standard }
+
   - label: ':rice: pure-docker-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
-    agents:
-      queue: 'baremetal'
     env:
       TEST_TYPE: 'pure-docker-test'
+    agents: { queue: 'vagrant' }
+
   - label: ':rice: docker-compose-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
-    agents:
-      queue: 'baremetal'
     env:
       TEST_TYPE: 'docker-compose-test'
+    agents: { queue: 'vagrant' }
