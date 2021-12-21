@@ -22,7 +22,6 @@ for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
 ./deploy-codeinsights-db.sh
 ./deploy-minio.sh
 ./deploy-prometheus.sh
-./deploy-query-runner.sh
 ./deploy-redis-cache.sh
 ./deploy-redis-store.sh
 ./deploy-repo-updater.sh
