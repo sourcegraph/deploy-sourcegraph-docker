@@ -1,5 +1,70 @@
 version: '2.4'
 services:
+
+  # Description: This container will migrate the Postgres `frontend` database
+  #
+  # Disk: None
+  # Ports: None
+  #
+  # This container should start after the database instance starts, perform the migrations
+  # and then exit cleanly. After exiting the `frontend` service is allowed to start.
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  migrator-frontend:
+    container_name: migrator-frontend
+    image: 'index.docker.io/sourcegraph/migrator:122149_2021-12-17_1f7179c'
+    cpus: 4
+    mem_limit: '8g'
+    command:
+      ["up", "-db", "frontend"]
+    environment:
+      - PGHOST=pgsql
+      - PGPORT=5432
+      - PGUSER=sg
+      - PGPASSWORD=sg
+      - PGDATABASE=sg
+      - PGSSLMODE=disable
+
+    restart: "on-failure"
+    networks: 
+      - sourcegraph
+    depends_on:
+      pgsql:
+        condition: service_healthy
+
+  # Description: This container will migrate the Postgres `codeintel` database
+  #
+  # Disk: None
+  # Ports: None
+  #
+  # This container should start after the database instance starts, perform the migrations
+  # and then exit cleanly. After exiting the `codeintel` service is allowed to start.
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  migrator-codeintel:
+    container_name: migrator-codeintel
+    image: 'index.docker.io/sourcegraph/migrator:122149_2021-12-17_1f7179c'
+    cpus: 4
+    mem_limit: '8g'
+    command:
+      ["up", "-db", "codeintel"]
+    environment:
+      - CODEINTEL_PGHOST=codeintel-db
+      - CODEINTEL_PGPORT=5432
+      - CODEINTEL_PGUSER=sg
+      - CODEINTEL_PGPASSWORD=sg
+      - CODEINTEL_PGDATABASE=sg
+      - CODEINTEL_PGSSLMODE=disable
+
+    restart: "on-failure"
+    networks: 
+      - sourcegraph
+    depends_on:
+      codeintel-db:
+        condition: service_healthy
+
   # Description: Acts as a reverse proxy for all of the sourcegraph-frontend instances
   #
   # Disk: 1GB / persistent SSD
@@ -90,6 +155,7 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      - 'NEW_MIGRATIONS=true'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -133,6 +199,7 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      - 'NEW_MIGRATIONS=true'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     networks:
@@ -145,11 +212,10 @@ services:
       retries: 5
       start_period: 300s
     depends_on:
-      pgsql:
-        condition: service_healthy
-      codeintel-db:
-        condition: service_healthy
-
+      migrator-frontend:
+        condition: service_completed_successfully
+      migrator-codeintel:
+        condition: service_completed_successfully
 
   # Description: Stores clones of repositories to perform Git operations.
   #
