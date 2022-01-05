@@ -1,4 +1,4 @@
 yarn 1.19.2
 shellcheck 0.7.1
 nodejs 13.12.0
-go 1.16
+golang 1.16
