@@ -1,30 +1,36 @@
-$schema: 'http://json.schemastore.org/buildkite'
+$schema: "http://json.schemastore.org/buildkite"
 env:
-  IMAGE: 'e2e-2e61d9153-2021-06-22t15-18-00z'
-  VAGRANT_RUN_ENV: 'CI'
+  IMAGE: "e2e-2e61d9153-2021-06-22t15-18-00z"
+  VAGRANT_RUN_ENV: "CI"
 steps:
-  - label: ':docker:'
+  - label: ":docker:"
     command: .buildkite/validate-docker-compose.sh
-    agents: { queue: 'vagrant' }
+    agents: { queue: "vagrant" }
 
-  - label: ':lipstick:'
+  - label: ":lipstick:"
     command: .buildkite/prettier-check.sh
-    agents: { queue: 'vagrant' }
+    agents: { queue: "vagrant" }
 
   - label: ":git: :sleuth_or_spy:"
     command: .buildkite/verify-release/verify-release.sh
     agents: { queue: standard }
 
-  - label: ':rice: pure-docker-test'
+  - label: ":rice: pure-docker-test"
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     env:
-      TEST_TYPE: 'pure-docker-test'
-    agents: { queue: 'vagrant' }
+      TEST_TYPE: "pure-docker-test"
+    agents: { queue: "vagrant" }
 
-  - label: ':rice: docker-compose-test'
+  - label: ":rice: docker-compose-test"
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     env:
-      TEST_TYPE: 'docker-compose-test'
-    agents: { queue: 'vagrant' }
+      TEST_TYPE: "docker-compose-test"
+    agents: { queue: "vagrant" }
+
+  # This runs the Checkov Terraform Code scanner
+  # https://www.checkov.io/
+  - command: .buildkite/ci-checkov.sh
+    label: ":checkov:"
+    agents: { queue: "standard" }
