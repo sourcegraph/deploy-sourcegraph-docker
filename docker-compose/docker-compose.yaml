@@ -1,7 +1,7 @@
 version: '2.4'
 services:
-
-  # Description: This container will migrate the Postgres `frontend` database
+  # Description: This container will migrate the Postgres `frontend`,
+  # `codeintel`, and `codeinsights` databases
   #
   # Disk: None
   # Ports: None
@@ -11,13 +11,13 @@ services:
   #
   # If you're using a DB instance hosted outside of docker-compose, the environment variables
   # for this container will need to be updated to reflect the new connection information.
-  migrator-frontend:
-    container_name: migrator-frontend
+  migrator:
+    container_name: migrator
     image: 'index.docker.io/sourcegraph/migrator:122149_2021-12-17_1f7179c'
     cpus: 4
     mem_limit: '8g'
     command:
-      ["up", "-db", "frontend"]
+      ["up"]
     environment:
       - PGHOST=pgsql
       - PGPORT=5432
@@ -26,31 +26,6 @@ services:
       - PGDATABASE=sg
       - PGSSLMODE=disable
 
-    restart: "on-failure"
-    networks: 
-      - sourcegraph
-    depends_on:
-      pgsql:
-        condition: service_healthy
-
-  # Description: This container will migrate the Postgres `codeintel` database
-  #
-  # Disk: None
-  # Ports: None
-  #
-  # This container should start after the database instance starts, perform the migrations
-  # and then exit cleanly. After exiting the `codeintel` service is allowed to start.
-  #
-  # If you're using a DB instance hosted outside of docker-compose, the environment variables
-  # for this container will need to be updated to reflect the new connection information.
-  migrator-codeintel:
-    container_name: migrator-codeintel
-    image: 'index.docker.io/sourcegraph/migrator:122149_2021-12-17_1f7179c'
-    cpus: 4
-    mem_limit: '8g'
-    command:
-      ["up", "-db", "codeintel"]
-    environment:
       - CODEINTEL_PGHOST=codeintel-db
       - CODEINTEL_PGPORT=5432
       - CODEINTEL_PGUSER=sg
@@ -58,10 +33,18 @@ services:
       - CODEINTEL_PGDATABASE=sg
       - CODEINTEL_PGSSLMODE=disable
 
+      - CODEINSIGHTS_PGHOST=codeinsights-db
+      - CODEINSIGHTS_PGPORT=5432
+      - CODEINSIGHTS_PGUSER=postgres
+      - CODEINSIGHTS_PGPASSWORD=password
+      - CODEINSIGHTS_PGDATABASE=postgres
+      - CODEINSIGHTS_PGSSLMODE=disable
     restart: "on-failure"
     networks: 
       - sourcegraph
     depends_on:
+      pgsql:
+        condition: service_healthy
       codeintel-db:
         condition: service_healthy
 
@@ -212,9 +195,7 @@ services:
       retries: 5
       start_period: 300s
     depends_on:
-      migrator-frontend:
-        condition: service_completed_successfully
-      migrator-codeintel:
+      migrator:
         condition: service_completed_successfully
 
   # Description: Stores clones of repositories to perform Git operations.
@@ -238,6 +219,9 @@ services:
       - sourcegraph
     restart: always
     hostname: gitserver-0
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Backend for indexed text search operations.
   #
@@ -261,6 +245,10 @@ services:
       - sourcegraph
     restart: always
     hostname: zoekt-indexserver-0
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
+
   # Description: Backend for indexed text search operations.
   #
   # Disk: 200GB / persistent SSD
@@ -286,6 +274,9 @@ services:
       - sourcegraph
     restart: always
     hostname: zoekt-webserver-0
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Backend for text search operations.
   #
@@ -312,6 +303,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Rate-limiting proxy for the GitHub API.
   #
@@ -333,6 +327,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Handles conversion of uploaded precise code intelligence bundles.
   #
@@ -356,6 +353,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Handles repository metadata (not Git data) lookups and updates from external code hosts and other similar services.
   #
@@ -378,6 +378,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Manages background processes.
   #
@@ -399,6 +402,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Backend for syntax highlighting operations.
   #
@@ -420,6 +426,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Backend for symbols operations.
   #
@@ -447,6 +456,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Prometheus collects metrics and aggregates them into graphs.
   #
@@ -469,6 +481,9 @@ services:
     restart: always
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Dashboards and graphs for Prometheus metrics.
   #
@@ -495,6 +510,9 @@ services:
     networks:
       - sourcegraph
     restart: always
+    depends_on:
+      sourcegraph-frontend-internal:
+        condition: service_healthy
 
   # Description: Publishes Prometheus metrics about Docker containers.
   #
