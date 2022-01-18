@@ -192,9 +192,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 300s
-    depends_on:
-      migrator:
-        condition: service_completed_successfully
 
   # Description: Stores clones of repositories to perform Git operations.
   #
@@ -217,9 +214,6 @@ services:
       - sourcegraph
     restart: always
     hostname: gitserver-0
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Backend for indexed text search operations.
   #
@@ -243,9 +237,6 @@ services:
       - sourcegraph
     restart: always
     hostname: zoekt-indexserver-0
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Backend for indexed text search operations.
   #
@@ -272,9 +263,6 @@ services:
       - sourcegraph
     restart: always
     hostname: zoekt-webserver-0
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Backend for text search operations.
   #
@@ -301,9 +289,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Rate-limiting proxy for the GitHub API.
   #
@@ -325,9 +310,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Handles conversion of uploaded precise code intelligence bundles.
   #
@@ -351,9 +333,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Handles repository metadata (not Git data) lookups and updates from external code hosts and other similar services.
   #
@@ -376,9 +355,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Manages background processes.
   #
@@ -400,9 +376,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Backend for syntax highlighting operations.
   #
@@ -424,9 +397,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Backend for symbols operations.
   #
@@ -454,9 +424,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Prometheus collects metrics and aggregates them into graphs.
   #
@@ -479,9 +446,6 @@ services:
     restart: always
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Dashboards and graphs for Prometheus metrics.
   #
@@ -508,9 +472,6 @@ services:
     networks:
       - sourcegraph
     restart: always
-    depends_on:
-      sourcegraph-frontend-internal:
-        condition: service_healthy
 
   # Description: Publishes Prometheus metrics about Docker containers.
   #
