@@ -13,7 +13,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   migrator:
     container_name: migrator
-    image: 'index.docker.io/sourcegraph/migrator:122149_2021-12-17_1f7179c'
+    image: 'index.docker.io/sourcegraph/migrator:3.35.1'
     cpus: 4
     mem_limit: '8g'
     command:
@@ -33,6 +33,9 @@ services:
       - CODEINTEL_PGDATABASE=sg
       - CODEINTEL_PGSSLMODE=disable
 
+      # If you are not running code insights, please see: 
+      # https://docs.sourcegraph.com/admin/install/docker-compose/operations#database-migrations for more information
+      # for information on how to configure Sourcegraph migrations
       - CODEINSIGHTS_PGHOST=codeinsights-db
       - CODEINSIGHTS_PGPORT=5432
       - CODEINSIGHTS_PGUSER=postgres
@@ -117,7 +120,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:7c453e79a63e92b79901a6b523859d43e870f978162a60a4b219a6e54aa6c98a'
+    image: 'index.docker.io/sourcegraph/frontend:3.35.1'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -138,6 +141,7 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      - 'NEW_MIGRATIONS=true'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -161,7 +165,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:7c453e79a63e92b79901a6b523859d43e870f978162a60a4b219a6e54aa6c98a'
+    image: 'index.docker.io/sourcegraph/frontend:3.35.1'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -181,6 +185,7 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      - 'NEW_MIGRATIONS=true'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     networks:
