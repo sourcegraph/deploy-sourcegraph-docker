@@ -32,5 +32,5 @@ steps:
   # This runs the Checkov Terraform Code scanner
   # https://www.checkov.io/
   - command: .buildkite/ci-checkov.sh
-    label: ":checkov:"
+    label: ":lock: security - checkov"
     agents: { queue: "standard" }
