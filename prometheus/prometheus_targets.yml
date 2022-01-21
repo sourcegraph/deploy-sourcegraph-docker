@@ -18,10 +18,6 @@
   targets:
     - github-proxy:6060
 - labels:
-    job: query-runner
-  targets:
-    - query-runner:6060
-- labels:
     job: repo-updater
   targets:
     - repo-updater:6060
