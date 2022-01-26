@@ -76,14 +76,15 @@ git checkout 3.8-customer-replica
 # Create the new pure-docker release branch
 git checkout -B 3.9-customer-replica
 
-# Merge the publish-3.9 branch, which will have been created by the release tool, into the pure-docker release branch.
-git merge publish-3.9
+# Merge the publish-3.9 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes.
+git merge publish-3.9 -X theirs
+
+# Reset to previous commit so we can manually inspect ALL changes - we want to create multiple commits instead of keeping a single merge commit
+git reset HEAD~
 
 # Show which files may have been deleted, etc.
 git status
 
-# Reset to HEAD so we can manually inspect ALL changes - we do not want to actually do a merge.
-git reset HEAD
 ```
 
 At this point you should evaluate the `git status` output as well as all the changes in your working git directory. You need to ensure the following happens:
