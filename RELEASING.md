@@ -94,6 +94,7 @@ At this point you should evaluate the `git status` output as well as all the cha
     - `git commit -m 'merge 3.9 (changes unrelated to upgrade)'`
 3. Create **one** commit with the changes _customers need to apply in order to ugprade_, i.e. the image tag changes, adding/removing any new services, updating env vars, but no unrelated changes.
     - Do not include `docker-compose/` changes in this commit, those are irrelevant to pure-docker users.
+    - Double check `pure-docker/deploy-pgsql.sh` file and make sure it has the correct image sha. It should look something like `index.docker.io/sourcegraph/postgres-12.6-alpine:3.36.3@sha256:<hash>`
     - `git commit -m 'upgrade to v3.9.0'`
 
 During this process you will run into two merge conflicts:
