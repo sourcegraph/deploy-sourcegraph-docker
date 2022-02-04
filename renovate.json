@@ -2,9 +2,7 @@
   "$schema": "http://json.schemastore.org/renovate",
   "extends": ["config:base"],
   "prHourlyLimit": 5,
-  "schedule": [
-    "before 3am on Monday"
-  ],
+  "schedule": ["before 3am on Monday"],
   "packageRules": [
     {
       "packagePatterns": ["^index.docker.io/sourcegraph/"],
