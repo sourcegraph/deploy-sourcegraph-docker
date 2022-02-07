@@ -1,7 +1,8 @@
 {
   "$schema": "http://json.schemastore.org/renovate",
   "extends": ["config:base"],
-  "prHourlyLimit": 0,
+  "prHourlyLimit": 5,
+  "schedule": ["before 3am on Monday"],
   "packageRules": [
     {
       "packagePatterns": ["^index.docker.io/sourcegraph/"],
@@ -10,7 +11,7 @@
       "versionScheme": "semver",
       "ignoreUnstable": false,
       "semanticCommits": false,
-      "automerge": false
+      "automerge": true
     },
     {
       "packageNames": ["index.docker.io/sourcegraph/grafana", "index.docker.io/sourcegraph/prometheus"],
@@ -19,7 +20,7 @@
       "versionScheme": "semver",
       "ignoreUnstable": false,
       "semanticCommits": false,
-      "automerge": false
+      "automerge": true
     },
     {
       "groupName": "Sourcegraph Docker images list",
