@@ -13,7 +13,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   migrator:
     container_name: migrator
-    image: 'index.docker.io/sourcegraph/migrator:3.35.1'
+    image: 'index.docker.io/sourcegraph/migrator:3.36.3@sha256:4339ced184eb228da06b5050da11794ea221f47be8a7ca24369a54a8cece923b'
     cpus: 1
     mem_limit: '2g'
     command:
