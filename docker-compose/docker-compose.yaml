@@ -154,7 +154,9 @@ services:
       - sourcegraph
     restart: always
     depends_on:
-      sourcegraph-frontend-internal:
+      pgsql:
+        condition: service_healthy
+      codeintel-db:
         condition: service_healthy
 
   # Description: Serves the internal Sourcegraph frontend API.
