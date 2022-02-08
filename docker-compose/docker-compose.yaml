@@ -14,8 +14,8 @@ services:
   migrator:
     container_name: migrator
     image: 'index.docker.io/sourcegraph/migrator:3.35.1'
-    cpus: 4
-    mem_limit: '8g'
+    cpus: 1
+    mem_limit: '2g'
     command:
       ["up"]
     environment:
