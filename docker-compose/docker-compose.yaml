@@ -74,7 +74,6 @@ services:
     mem_limit: '8g'
     environment:
       - DEPLOY_TYPE=docker-compose
-      - GOMAXPROCS=12
       - JAEGER_AGENT_HOST=jaeger
       - PGHOST=pgsql
       - CODEINTEL_PGHOST=codeintel-db
@@ -118,7 +117,6 @@ services:
     mem_limit: '8g'
     environment:
       - DEPLOY_TYPE=docker-compose
-      - GOMAXPROCS=4
       - PGHOST=pgsql
       - CODEINTEL_PGHOST=codeintel-db
       - CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres
@@ -150,7 +148,6 @@ services:
       codeintel-db:
         condition: service_healthy
 
-
   # Description: Stores clones of repositories to perform Git operations.
   #
   # Disk: 200GB / persistent SSD
@@ -163,7 +160,6 @@ services:
     cpus: 4
     mem_limit: '8g'
     environment:
-      - GOMAXPROCS=4
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
     volumes:
@@ -187,7 +183,6 @@ services:
     cpus: 8
     mem_limit: '16g'
     environment:
-      - GOMAXPROCS=8
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
     volumes:
@@ -208,7 +203,6 @@ services:
     cpus: 8
     mem_limit: '50g'
     environment:
-      - GOMAXPROCS=8
       - 'HOSTNAME=zoekt-webserver-0:6070'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:6070/healthz' -O /dev/null || exit 1"
@@ -234,7 +228,6 @@ services:
     cpus: 2
     mem_limit: '2g'
     environment:
-      - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
     healthcheck:
@@ -262,7 +255,6 @@ services:
     cpus: 1
     mem_limit: '1g'
     environment:
-      - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
     networks:
@@ -304,7 +296,6 @@ services:
     cpus: 4
     mem_limit: '4g'
     environment:
-      - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
@@ -326,7 +317,6 @@ services:
     cpus: 4
     mem_limit: '4g'
     environment:
-      - GOMAXPROCS=1
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
     volumes:
@@ -368,7 +358,6 @@ services:
     cpus: 2
     mem_limit: '4g'
     environment:
-      - GOMAXPROCS=2
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
     healthcheck:
@@ -547,14 +536,14 @@ services:
   # would be bad but it can be rebuilt given enough time.)
   codeinsights-db:
     container_name: codeinsights-db
-    image: "index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:72474269adad3a974c59323e063b45bb5933ec8121d5a34119bef504d7854f36"
+    image: 'index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:72474269adad3a974c59323e063b45bb5933ec8121d5a34119bef504d7854f36'
     cpus: 4
-    mem_limit: "2g"
+    mem_limit: '2g'
     environment:
       - POSTGRES_PASSWORD=password
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - "codeinsights-db:/var/lib/postgresql/data/"
+      - 'codeinsights-db:/var/lib/postgresql/data/'
     networks:
       - sourcegraph
     restart: always
