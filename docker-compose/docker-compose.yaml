@@ -140,7 +140,6 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
-      - 'NEW_MIGRATIONS=true'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 10s
@@ -183,7 +182,6 @@ services:
       - 'JAEGER_SERVER_URL=http://jaeger:16686'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
-      - 'NEW_MIGRATIONS=true'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     networks:
