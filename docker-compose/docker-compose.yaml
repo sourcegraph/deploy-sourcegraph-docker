@@ -143,9 +143,9 @@ services:
       - 'NEW_MIGRATIONS=true'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
-      interval: 5s
+      interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
       start_period: 300s
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
@@ -153,9 +153,7 @@ services:
       - sourcegraph
     restart: always
     depends_on:
-      pgsql:
-        condition: service_healthy
-      codeintel-db:
+      sourcegraph-frontend-internal:
         condition: service_healthy
 
   # Description: Serves the internal Sourcegraph frontend API.
