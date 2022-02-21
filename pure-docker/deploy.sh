@@ -32,6 +32,13 @@ for i in $(seq 0 $(($NUM_SYMBOLS - 1))); do ./deploy-symbols.sh $i; done
 for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do ./deploy-zoekt-indexserver.sh $i; done
 for i in $(seq 0 $(($NUM_INDEXED_SEARCH - 1))); do ./deploy-zoekt-webserver.sh $i; done
 
+./deploy-migrator.sh
+while [ "$(docker inspect migrator --format '{{.State.Status}}')" != "exited" ]
+do
+  echo "waiting for migrator to complete"
+  sleep 5
+done
+
 # Redis must be started before these.
 ./deploy-frontend-internal.sh
 # Wait for frontend-internal to run migrations before starting remaining frontend containers
