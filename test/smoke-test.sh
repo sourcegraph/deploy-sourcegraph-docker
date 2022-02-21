@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eufo pipefail
+set -euxfo pipefail
 
 deploy_sourcegraph() {
 	cd $(dirname "${BASH_SOURCE[0]}")/..
@@ -10,7 +10,7 @@ deploy_sourcegraph() {
 
 		if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
 			# Expected number of containers on e.g. 3.18-customer-replica branch.
-			expect_containers="60"
+			expect_containers="61"
 		else
 			# Expected number of containers on `master` branch.
 			expect_containers="25"
@@ -37,19 +37,15 @@ test_count() {
 
 test_containers() {
 	echo "TEST: Checking every 10s that containers are running for 5 minutes..."
-	for i in {0..30}; do
+	for i in {0..1}; do
 		containers=$(docker ps --format '{{.Names}}' | xargs -I{} -n1 sh -c "printf '{}: ' && docker inspect --format '{{.State.Status}}' {}")
 		containers_running=$(echo "$containers" | grep -c "running")
 		if [[ "$containers_running" -ne "$expect_containers" ]]; then
-			echo
-			containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
 			echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running. The following containers are failing: $containers_failing"
-			echo ""
-			for cf in $containers_failing; do docker logs -t "$cf" >/deploy-sourcegraph-docker/"$cf".log; done
 			exit 1
 		fi
 		echo "Containers running OK.. waiting 10s"
-		sleep 10
+		sleep 1
 	done
 
 	echo "TEST: Checking frontend is accessible"
@@ -58,6 +54,21 @@ test_containers() {
 
 	echo "ALL TESTS PASSED"
 }
+
+catch_errors() {
+	count=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -c -v Up) || exit 0
+	containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
+	if [[ $count -ne 0 ]]; then
+	    echo 
+		for cf in $containers_failing; do
+			echo "$cf is failing. Review the log files uploaded as artefacts to see errors."
+			docker logs -t "$cf" >"$cf".log 2>&1
+		done
+		exit 1
+	fi
+}
+
+trap catch_errors EXIT
 
 deploy_sourcegraph
 test_count

@@ -1,4 +1,5 @@
-yarn 1.19.2
+nodejs 16.7.0
+yarn 1.22.4
 shellcheck 0.7.1
-nodejs 13.12.0
 golang 1.16
+python system
