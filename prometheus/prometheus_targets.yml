@@ -48,11 +48,11 @@
 - labels:
     job: pgsql
   targets:
-    - pgsql:9187
+    - pgsql-exporter:9187
 - labels:
     job: codeintel-db
   targets:
-    - codeintel-db:9187
+    - codeintel-db-exporter:9187
 - labels:
     job: codeinsights-db
   targets:

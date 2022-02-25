@@ -550,6 +550,26 @@ services:
     restart: always
     stop_grace_period: 120s
 
+  # Description: This container will collect and expose prometheus metrics about `pgsql` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  pgsql-exporter:
+    container_name: pgsql-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://sg:@pgsql:5432/?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/queries.yaml'
+
   # Description: PostgreSQL database for code intelligence data.
   #
   # Disk: 128GB / persistent SSD
@@ -574,6 +594,26 @@ services:
       - sourcegraph
     restart: always
     stop_grace_period: 120s
+
+  # Description: This container will collect and expose prometheus metrics about `codeintel-db` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  codeintel-db-exporter:
+    container_name: codeintel-db-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://sg:@pgsql:5432/?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_intel_queries.yaml'
 
   # Description: TimescaleDB time-series database for code insights data.
   #
