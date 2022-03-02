@@ -12,7 +12,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-12.6-alpine:insiders@sha256:5a6badacb3cf2a2bfc039f68746e0d849e95ded1976bf3ef18471008069c5a97'
+    image: 'index.docker.io/sourcegraph/postgres-12-alpine:latest'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
