@@ -371,6 +371,10 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
+      - 'SRC_GIT_SERVERS=gitserver-0:3178'
+      - 'SEARCHER_URL=http://searcher-0:3181'
+      - 'SYMBOLS_URL=http://symbols-0:3184'
+      - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
     volumes:
       - 'worker:/mnt/cache'
     networks:
