@@ -632,7 +632,7 @@ services:
   # would be bad but it can be rebuilt given enough time.)
   codeinsights-db:
     container_name: codeinsights-db
-    image: 'index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:da1e7ad250d5eeffc1057f8c4cf6c65c6ebb3ae2aa898451b3d1d87cf8ddef94'
+    image: 'postgres:12.7-alpine'
     cpus: 4
     mem_limit: '2g'
     environment:
