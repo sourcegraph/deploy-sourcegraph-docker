@@ -616,7 +616,7 @@ services:
       - sourcegraph
     restart: always
     environment:
-      - 'DATA_SOURCE_NAME=postgres://sg:@pgsql:5432/?sslmode=disable'
+      - 'DATA_SOURCE_NAME=postgres://sg:@codeintel-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_intel_queries.yaml'
 
   # Description: TimescaleDB time-series database for code insights data.
