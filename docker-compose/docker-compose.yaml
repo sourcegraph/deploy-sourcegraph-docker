@@ -630,14 +630,18 @@ services:
   # Ports: None
   #
   # This container should mount the codeinsights volume, change ownership on the files,
-  # and then exit cleanly. After exiting the `codeinsights-db` service is allowed to start.
+  # remove any reference to the timescaledb library, and then exit cleanly.
+  # After exiting the `codeinsights-db` service is allowed to start.
   #
   codeinsights-chown:
     container_name: codeinsights-chown
     image: index.docker.io/sourcegraph/alpine-3.12:insiders@sha256:290c7a045f18b8dab3021e6d5667f751b44c5bd488c408ebd387a802a4bf4876
     cpus: 0.1
     mem_limit: '10m'
-    command: ["sh", "-c", "if [ -d /var/lib/postgresql/data/ ]; then chown -R 999:999 /var/lib/postgresql/data/; fi"]
+    command:
+      - "sh"
+      - "-c"
+      - if [ -d /var/lib/postgresql/data/ ]; then chown -R 999:999 /var/lib/postgresql/data/; sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'timescaledb(.*)\'/\1 = '\2'/;s/,'/'/" /var/lib/postgresql/data/pgdata/postgresql.conf; fi
     restart: "on-failure"
     networks:
       - sourcegraph
