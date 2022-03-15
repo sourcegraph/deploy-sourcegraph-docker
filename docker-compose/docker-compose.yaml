@@ -623,25 +623,25 @@ services:
       - 'DATA_SOURCE_NAME=postgres://sg:@codeintel-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_intel_queries.yaml'
 
-  # Description: This container will update file permissions on the
-  # `codeinsights` database
+  # Description: This container will update the postgres configuration
+  # on the `codeinsights` database
   #
   # Disk: None
   # Ports: None
   #
-  # This container should mount the codeinsights volume, change ownership on the files,
-  # remove any reference to the timescaledb library, and then exit cleanly.
+  # This container should mount the codeinsights volume, remove any
+  # reference to the timescaledb library, and then exit cleanly.
   # After exiting the `codeinsights-db` service is allowed to start.
   #
-  codeinsights-chown:
-    container_name: codeinsights-chown
+  codeinsights-fix-conf:
+    container_name: codeinsights-fix-conf
     image: index.docker.io/sourcegraph/alpine-3.12:insiders@sha256:290c7a045f18b8dab3021e6d5667f751b44c5bd488c408ebd387a802a4bf4876
     cpus: 0.1
     mem_limit: '10m'
     command:
       - "sh"
       - "-c"
-      - if [ -d /var/lib/postgresql/data/ ]; then chown -R 999:999 /var/lib/postgresql/data/; sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'timescaledb(.*)\'/\1 = '\2'/;s/,'/'/" /var/lib/postgresql/data/pgdata/postgresql.conf; fi
+      - if [ -d /var/lib/postgresql/data/pgdata ]; then sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'timescaledb(.*)\'/\1 = '\2'/;s/,'/'/" /var/lib/postgresql/data/pgdata/postgresql.conf; fi
     restart: "on-failure"
     networks:
       - sourcegraph
@@ -678,7 +678,7 @@ services:
     restart: always
     stop_grace_period: 120s
     depends_on:
-      codeinsights-chown:
+      codeinsights-fix-conf:
         condition: service_completed_successfully
 
   # Description: This container will collect and expose prometheus metrics about `codeinsights-db` PostgreSQL server.
