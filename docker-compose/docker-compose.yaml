@@ -638,8 +638,10 @@ services:
     cpus: 4
     mem_limit: '2g'
     environment:
-      - POSTGRES_PASSWORD=password
       - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
     volumes:
       - 'codeinsights-db:/var/lib/postgresql/data/'
     networks:
