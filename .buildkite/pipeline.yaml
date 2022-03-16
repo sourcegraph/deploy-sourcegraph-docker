@@ -1,6 +1,6 @@
 $schema: "http://json.schemastore.org/buildkite"
 env:
-  IMAGE: "e2e-2e61d9153-2021-06-22t15-18-00z"
+  IMAGE: "e2e-0040635f0-2022-03-16t17-33-08z"
   VAGRANT_RUN_ENV: "CI"
 steps:
   - label: ":docker:"
