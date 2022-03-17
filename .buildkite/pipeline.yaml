@@ -13,7 +13,7 @@ steps:
 
   - label: ":git: :sleuth_or_spy:"
     command: .buildkite/verify-release/verify-release.sh
-    agents: { queue: standard }
+    agents: { queue: job }
 
   - label: ":rice: pure-docker-test"
     command: .buildkite/vagrant-run.sh docker-test
@@ -33,4 +33,4 @@ steps:
   # https://www.checkov.io/
   - command: .buildkite/ci-checkov.sh
     label: ":lock: security - checkov"
-    agents: { queue: "standard" }
+    agents: { queue: "job" }
