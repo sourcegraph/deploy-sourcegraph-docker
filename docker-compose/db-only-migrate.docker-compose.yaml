@@ -29,7 +29,7 @@ services:
 
   codeintel-db:
     container_name: codeintel-db
-    image: 'index.docker.io/sourcegraph/codeintel-db:insiders@sha256:cd901b1180229101cc8c6deebda24c14f6224295cd2153cafe0665199499c342'
+    image: 'index.docker.io/sourcegraph/codeintel-db:3.38.0@sha256:32682b563f62fd3b883ec8b77b180e4bddff09db51cde17734562f018b5b40a2'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
