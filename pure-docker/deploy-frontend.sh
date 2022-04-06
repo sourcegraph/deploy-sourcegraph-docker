@@ -42,7 +42,7 @@ docker run --detach \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.38.0@sha256:d88aa1afc8a31c6fb6964c7765f79645f9fdd82ce4df2f3a6976d6ca4870573f
+    index.docker.io/sourcegraph/frontend:3.38.1@sha256:ffa092eadcfa4f88f3237ada173a962521ba97066af2cb572f0ac740a18cbf10
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
