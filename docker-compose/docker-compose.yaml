@@ -681,6 +681,26 @@ services:
       codeinsights-fix-conf:
         condition: service_completed_successfully
 
+  # Description: This container will collect and expose prometheus metrics about `codeinsights-db` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  codeinsights-db-exporter:
+    container_name: codeinsights-db-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://postgres:@codeinsights-db:5432/postgres?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
+
   # Description: MinIO for storing LSIF uploads.
   #
   # Disk: 128GB / persistent SSD
