@@ -210,7 +210,7 @@ services:
   gitserver-0:
     container_name: gitserver-0
     image: 'index.docker.io/sourcegraph/gitserver:3.38.1@sha256:f4afde31c06adf8f9b1e5b6dd1768934be5b5e71a2eff111d4e0955288ee1d85'
-    cpus: 4
+    cpus: 8
     mem_limit: '8g'
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -255,7 +255,7 @@ services:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/indexed-searcher:3.38.1@sha256:0c2b31f1b5be6e851676c6df678dee74fd51733a4c230942a52876384f263e6b'
     cpus: 8
-    mem_limit: '50g'
+    mem_limit: '10g'
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
     healthcheck:
