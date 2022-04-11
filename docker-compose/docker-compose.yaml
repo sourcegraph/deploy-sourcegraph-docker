@@ -568,7 +568,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   pgsql-exporter:
     container_name: pgsql-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:f626c611ea5f4bb9efe184994755dfb64d117d4f50c74fc09665093bf1e6939e'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -613,7 +613,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   codeintel-db-exporter:
     container_name: codeintel-db-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:f626c611ea5f4bb9efe184994755dfb64d117d4f50c74fc09665093bf1e6939e'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -663,7 +663,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   codeinsights-db-exporter:
     container_name: codeinsights-db-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:f626c611ea5f4bb9efe184994755dfb64d117d4f50c74fc09665093bf1e6939e'
     cpus: 0.1
     mem_limit: '50m'
     networks:
