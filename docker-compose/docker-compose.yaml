@@ -48,6 +48,8 @@ services:
     depends_on:
       pgsql:
         condition: service_healthy
+      codeinsights-db:
+        condition: service_healthy
       codeintel-db:
         condition: service_healthy
 
@@ -568,7 +570,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   pgsql-exporter:
     container_name: pgsql-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:f626c611ea5f4bb9efe184994755dfb64d117d4f50c74fc09665093bf1e6939e'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -615,7 +617,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   codeintel-db-exporter:
     container_name: codeintel-db-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:3.37.0@sha256:20e58b62f064037ac3d901eba565f49d7e1daae2a237e6fa3d5351580d576dea'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:f626c611ea5f4bb9efe184994755dfb64d117d4f50c74fc09665093bf1e6939e'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -625,17 +627,13 @@ services:
       - 'DATA_SOURCE_NAME=postgres://sg:@codeintel-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_intel_queries.yaml'
 
-  # Description: TimescaleDB time-series database for code insights data.
+  # Description: PostgreSQL database for code insights data.
   #
   # Disk: 128GB / persistent SSD
   # Network: 1Gbps
   # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
   # Ports exposed to the public internet: none
   #
-  # Note: You should deploy this as a container, do not try to connect it to your external
-  # Postgres deployment (TimescaleDB is a bit special and most hosted Postgres deployments
-  # do not support TimescaleDB, the data here is akin to gitserver's data, where losing it
-  # would be bad but it can be rebuilt given enough time.)
   codeinsights-db:
     container_name: codeinsights-db
     image: 'index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:82fe7f91dbdca1cd397a80f1023d9da4e9c6af103bc36866d800e3a8279eea00'
@@ -644,7 +642,15 @@ services:
     shm_size: '1g'
     environment:
       - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
       - PGDATA=/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 10
+      start_period: 15s
     volumes:
       - 'codeinsights-db:/var/lib/postgresql/data/'
       - '../codeinsights-db/conf:/conf/'
@@ -652,6 +658,26 @@ services:
       - sourcegraph
     restart: always
     stop_grace_period: 120s
+
+  # Description: This container will collect and expose prometheus metrics about `codeinsights-db` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  codeinsights-db-exporter:
+    container_name: codeinsights-db-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:f626c611ea5f4bb9efe184994755dfb64d117d4f50c74fc09665093bf1e6939e'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://postgres:@codeinsights-db:5432/postgres?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
 
   # Description: MinIO for storing LSIF uploads.
   #
