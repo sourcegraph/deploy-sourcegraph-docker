@@ -676,7 +676,7 @@ services:
       - sourcegraph
     restart: always
     environment:
-      - 'DATA_SOURCE_NAME=postgres://postgres:@codeinsights-db:5432/postgres?sslmode=disable'
+      - 'DATA_SOURCE_NAME=postgres://postgres:password@codeinsights-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
 
   # Description: MinIO for storing LSIF uploads.
