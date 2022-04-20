@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Description: TimescaleDB time-series database for code insights data.
+# Description: PostgreSQL database for code insights data.
 #
 # Disk: 128GB / persistent SSD
 # Network: 1Gbps
@@ -11,20 +11,25 @@ set -e
 #
 VOLUME="$HOME/sourcegraph-docker/codeinsights-db-disk"
 ./ensure-volume.sh $VOLUME 999
+
+# Remove timescaledb from the shared_preload_libraries configuration
+# This step can be performed manually instead of run as part of the deploy script
+sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'timescaledb(.*)\'/\1 = '\2'/;s/,'/'/" $VOLUME/pgdata/postgresql.conf
+
 docker run --detach \
     --name=codeinsights-db \
     --network=sourcegraph \
     --restart=always \
     --cpus=4 \
     --memory=2g \
+    -e POSTGRES_DB=postgres \
     -e POSTGRES_PASSWORD=password \
+    -e POSTGRES_USER=postgres \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v $VOLUME:/var/lib/postgresql/data/ \
-    index.docker.io/sourcegraph/codeinsights-db:3.38.1@sha256:d370303e464af5fa4fc46f7dca2f2e7875cbe220b9c13f2f7fc1a1f1c2692951
+    index.docker.io/sourcegraph/codeinsights-db:3.39.0@sha256:9b69e9c0eb502ad57d052630f2d279e3f5eaa721518f908b2a1e5dbaa248638f
 
-# Note: You should deploy this as a container, do not try to connect it to your external
-# Postgres deployment (TimescaleDB is a bit special and most hosted Postgres deployments
-# do not support TimescaleDB, the data here is akin to gitserver's data, where losing it
-# would be bad but it can be rebuilt given enough time.)
+# Sourcegraph requires PostgreSQL 12+. Generally newer versions are better,
+# but anything 12 and higher is supported.
 
 echo "Deployed codeinsights-db service"
