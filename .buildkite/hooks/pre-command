@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 
 set -eu
-cd $BUILDKITE_BUILD_CHECKOUT_PATH
+pushd "$(dirname "${BASH_SOURCE[0]}")"/../..
 
-if ! command -v asdf &> /dev/null
-then
-    echo "skipping asdf, TODO: ask Dave to add asdf to baremetal image"
-    exit
-fi
+WORKDIR=$(pwd)
 
-echo "Installing asdf dependencies as defined in '$BUILDKITE_BUILD_CHECKOUT_PATH/.tool-versions':"
+echo "Installing asdf dependencies as defined in '${WORKDIR}/.tool-versions':"
 asdf install
