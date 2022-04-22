@@ -17,7 +17,7 @@ services:
     cpus: 0.5
     mem_limit: '500m'
     command:
-      ["up", "-db=all"]
+      ["up"]
     environment:
       - PGHOST=pgsql
       - PGPORT=5432
