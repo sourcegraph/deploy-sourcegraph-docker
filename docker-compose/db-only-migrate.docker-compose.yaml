@@ -1,5 +1,6 @@
-# This file contains only the pgsql service definition, and is used during
-# the sourcegraph/server -> docker-compose migration process.
+# This file contains the pgsql service definition (the primary Sourcegraph database deployment), 
+# as well as the codeintel-db service definition (a separate postgres deployment). Both run postgres.
+# This file is used during the sourcegraph/server -> docker-compose migration process.
 #
 # 🚨This file MUST be kept in sync with the pgsql definition in docker-compose/docker-compose.yaml
 version: '2.4'
