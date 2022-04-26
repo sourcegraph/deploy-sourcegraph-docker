@@ -491,6 +491,11 @@ services:
     image: 'index.docker.io/sourcegraph/cadvisor:insiders@sha256:3544dba5cd99c429ac62f4773454c8406abe126ba340f34e457b38d828c63395'
     cpus: 1
     mem_limit: '1g'
+    # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
+    # `cadvisor` requires root privileges in order to display provisioning metrics.
+    # These metrics provide critical information to help you scale the Sourcegraph deployment.
+    # If you would like to bring your own infrastructure monitoring & alerting solution,
+    # you may want to remove the `cadvisor` container completely 
     privileged: true
     volumes:
       - '/:/rootfs:ro'
