@@ -24,6 +24,13 @@ sudo docker run --detach \
     --volume=/sys:/sys:ro \
     --volume=/var/lib/docker/:/var/lib/docker:ro \
     --volume=/dev/disk/:/dev/disk:ro \
+    # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
+    # `cadvisor` requires root privileges in order to display provisioning metrics.
+    # These metrics provide critical information to help you scale the Sourcegraph deployment.
+    # If you would like to bring your own infrastructure monitoring & alerting solution,
+    # you may want to remove the `cadvisor` container completely 
+    --privileged \
+    --device=/dev/kmsg \
     index.docker.io/sourcegraph/cadvisor:3.36.3@sha256:249c573262967979889a186344ba5cc4e8e9186ec4f26c759ce9f8527560da69 \
     --port=8080
 
