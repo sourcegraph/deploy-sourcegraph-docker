@@ -10,7 +10,6 @@ source ./replicas.sh
 
 docker network create sourcegraph &> /dev/null || true
 
-./deploy-apache.sh
 ./deploy-cadvisor.sh
 ./deploy-github-proxy.sh
 for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
@@ -49,6 +48,5 @@ do
 done
 
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do ./deploy-frontend.sh $i; done
-# Not used in customer-replica branch.
-#./deploy-caddy.sh
+./deploy-caddy.sh
 wait
