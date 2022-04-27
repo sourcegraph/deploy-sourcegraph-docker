@@ -56,7 +56,7 @@
 - labels:
     job: codeinsights-db
   targets:
-    - codeinsights-db:9187
+    - codeinsights-db-exporter:9187
 - labels:
     job: redis-cache
   targets:
