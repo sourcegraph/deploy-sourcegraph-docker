@@ -379,6 +379,7 @@ services:
       - 'SEARCHER_URL=http://searcher-0:3181'
       - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
+      - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'worker:/mnt/cache'
     networks:
