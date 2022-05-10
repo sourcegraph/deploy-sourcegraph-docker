@@ -1,16 +1,16 @@
 name: pr-auditor
 on:
   pull_request:
-    types: [ closed, edited, opened ]
+    types: [closed, edited, opened]
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with: { repository: 'sourcegraph/sourcegraph' }
+        with: { repository: "sourcegraph/sourcegraph" }
       - uses: actions/setup-go@v2
-        with: { go-version: '1.17' }
+        with: { go-version: "1.18" }
 
       - run: ./dev/pr-auditor/check-pr.sh
         env:
