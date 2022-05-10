@@ -12,12 +12,10 @@ services:
   # If you're using a DB instance hosted outside of docker-compose, the environment variables
   # for this container will need to be updated to reflect the new connection information.
   migrator:
-    container_name: migrator
     image: 'index.docker.io/sourcegraph/migrator:insiders@sha256:05e820b0694f0a5008e8069a50089ebc9dc7cc464075c2c166b0ef29dba60ac5'
     cpus: 0.5
     mem_limit: '500m'
-    command:
-      ["up"]
+    command: ['up']
     environment:
       - PGHOST=pgsql
       - PGPORT=5432
@@ -33,7 +31,7 @@ services:
       - CODEINTEL_PGDATABASE=sg
       - CODEINTEL_PGSSLMODE=disable
 
-      # If you are not running code insights, please see: 
+      # If you are not running code insights, please see:
       # https://docs.sourcegraph.com/admin/install/docker-compose/operations#database-migrations for more information
       # for information on how to configure Sourcegraph migrations
       - CODEINSIGHTS_PGHOST=codeinsights-db
@@ -42,8 +40,8 @@ services:
       - CODEINSIGHTS_PGPASSWORD=password
       - CODEINSIGHTS_PGDATABASE=postgres
       - CODEINSIGHTS_PGSSLMODE=disable
-    restart: "on-failure"
-    networks: 
+    restart: 'on-failure'
+    networks:
       - sourcegraph
     depends_on:
       pgsql:
@@ -69,7 +67,6 @@ services:
   # If none of these built-in configurations suit your needs, then you can create your own Caddyfile, see:
   # https://caddyserver.com/docs/caddyfile
   caddy:
-    container_name: caddy
     image: 'index.docker.io/caddy:2.4.6-alpine@sha256:b5a59725783bab0d65803f87028c68dd6611ca6184040bd98b18797cbe26bdd9'
     cpus: 4
     mem_limit: '4g'
@@ -121,7 +118,6 @@ services:
   # purposes. Be sure to also apply such a change here to the frontend-internal
   # service.
   sourcegraph-frontend-0:
-    container_name: sourcegraph-frontend-0
     image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:42bdb4d375adff51c00195d435c836f5066fe9ef15fd9c24b567c659c56c2099'
     cpus: 4
     mem_limit: '8g'
@@ -164,7 +160,6 @@ services:
   # Ports exposed to the public internet: none
   #
   sourcegraph-frontend-internal:
-    container_name: sourcegraph-frontend-internal
     image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:42bdb4d375adff51c00195d435c836f5066fe9ef15fd9c24b567c659c56c2099'
     cpus: 4
     mem_limit: '8g'
@@ -210,7 +205,6 @@ services:
   # Ports exposed to the public internet: none
   #
   gitserver-0:
-    container_name: gitserver-0
     image: 'index.docker.io/sourcegraph/gitserver:insiders@sha256:21fe84d3dc706c010a4d286eef3272c88d1b996521e881805231de0b0d4f5390'
     cpus: 4
     mem_limit: '8g'
@@ -233,7 +227,6 @@ services:
   # Ports exposed to the public internet: none
   #
   zoekt-indexserver-0:
-    container_name: zoekt-indexserver-0
     image: 'index.docker.io/sourcegraph/search-indexer:insiders@sha256:461625546e3636a1abd38b94b3accea6b8d1ae92924b738cc7b41f5e8f74bb45'
     cpus: 8
     mem_limit: '16g'
@@ -254,7 +247,6 @@ services:
   # Ports exposed to the public internet: none
   #
   zoekt-webserver-0:
-    container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/indexed-searcher:insiders@sha256:9d7f9a49ba16dae3c2e0ae27972b02421d65c60682ea107633dac6ab286228fb'
     cpus: 8
     mem_limit: '50g'
@@ -279,7 +271,6 @@ services:
   # Ports exposed to the public internet: none
   #
   searcher-0:
-    container_name: searcher-0
     image: 'index.docker.io/sourcegraph/searcher:insiders@sha256:936192a6308c409db340fa13c4872cc6facab02247c3b3d6fea773ec64fc87ea'
     cpus: 2
     mem_limit: '2g'
@@ -306,7 +297,6 @@ services:
   # Ports exposed to the public internet: none
   #
   github-proxy:
-    container_name: github-proxy
     image: 'index.docker.io/sourcegraph/github-proxy:insiders@sha256:1ee9534f48d4855a429a2611bf1ebbfe40f3dd9d7a1db2281ae20dd64ee0e243'
     cpus: 1
     mem_limit: '1g'
@@ -323,7 +313,6 @@ services:
   # Ports exposed to the public internet: none
   #
   precise-code-intel-worker:
-    container_name: precise-code-intel-worker
     image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:a83643eb396d707e62ebbc5c3457747440576edaed013b5c2bf663a03eb56315'
     cpus: 2
     mem_limit: '4g'
@@ -347,7 +336,6 @@ services:
   # Ports exposed to the public internet: none
   #
   repo-updater:
-    container_name: repo-updater
     image: 'index.docker.io/sourcegraph/repo-updater:insiders@sha256:db4934978c82d1986710a22e79e7dbdcbf19382f8ae0c3d98e84908fde83f3dd'
     cpus: 4
     mem_limit: '4g'
@@ -368,7 +356,6 @@ services:
   # Ports exposed to the public internet: none
   #
   worker:
-    container_name: worker
     image: 'index.docker.io/sourcegraph/worker:insiders@sha256:60bb1263a5a4b18ee1de32aa5e9151102ab0680e84b263cca687e01fd1eefc45'
     cpus: 4
     mem_limit: '4g'
@@ -393,7 +380,6 @@ services:
   # Ports exposed to the public internet: none
   #
   syntect-server:
-    container_name: syntect-server
     image: 'index.docker.io/sourcegraph/syntax-highlighter:insiders@sha256:c7154c611a62a900c79b49bf1ca99af75ec2db779b7fb4303f0abf20022ba60c'
     cpus: 4
     mem_limit: '6g'
@@ -414,7 +400,6 @@ services:
   # Ports exposed to the public internet: none
   #
   symbols-0:
-    container_name: symbols-0
     image: 'index.docker.io/sourcegraph/symbols:insiders@sha256:28ee85a4ad008ba1d54125d70c75a59269fee048966a32c235a7c8ab5a88bd3b'
     cpus: 2
     mem_limit: '4g'
@@ -440,7 +425,6 @@ services:
   # Ports exposed to the public internet: none (HTTP 9090 should be exposed to admins only)
   #
   prometheus:
-    container_name: prometheus
     image: 'index.docker.io/sourcegraph/prometheus:insiders@sha256:b36ad28d24e010cfacb6c21d8b95656f78e2f1cd74ab43fdddfa35b181d9fe39'
     cpus: 4
     mem_limit: '8g'
@@ -467,7 +451,6 @@ services:
   # 'GF_AUTH_PROXY_HEADER_NAME='X-Forwarded-User'
   # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
   grafana:
-    container_name: grafana
     image: 'index.docker.io/sourcegraph/grafana:insiders@sha256:00064d24e19e1159dd70d12bc328db64e8c45fb53062b9b0e3db93984371836d'
     cpus: 1
     mem_limit: '1g'
@@ -488,7 +471,6 @@ services:
   # Ports exposed to the public internet: none
   #
   cadvisor:
-    container_name: cadvisor
     image: 'index.docker.io/sourcegraph/cadvisor:insiders@sha256:87571e704d066e9edaa6034cf73dd32042e24a14505c281db0505622940baab3'
     cpus: 1
     mem_limit: '1g'
@@ -496,7 +478,7 @@ services:
     # `cadvisor` requires root privileges in order to display provisioning metrics.
     # These metrics provide critical information to help you scale the Sourcegraph deployment.
     # If you would like to bring your own infrastructure monitoring & alerting solution,
-    # you may want to remove the `cadvisor` container completely 
+    # you may want to remove the `cadvisor` container completely
     privileged: true
     volumes:
       - '/:/rootfs:ro'
@@ -523,7 +505,6 @@ services:
   # Ports exposed to site admins only: 16686/HTTP
   #
   jaeger:
-    container_name: jaeger
     image: 'index.docker.io/sourcegraph/jaeger-all-in-one:insiders@sha256:5ddf4be454010327b9aa79c33cd447e5fb1ec64e7ad4add9702731dfdd497c6d'
     cpus: 0.5
     mem_limit: '512m'
@@ -550,7 +531,6 @@ services:
   # Ports exposed to the public internet: none
   #
   pgsql:
-    container_name: pgsql
     image: 'index.docker.io/sourcegraph/postgres-12-alpine:135107_2022-03-03_9498a8bd3366@sha256:e26b159dc7c0c47d136886390c899816e669a3c2c1ead689bdad0b610364e45e'
     cpus: 4
     mem_limit: '4g'
@@ -578,7 +558,6 @@ services:
   # If you're using a DB instance hosted outside of docker-compose, the environment variables
   # for this container will need to be updated to reflect the new connection information.
   pgsql-exporter:
-    container_name: pgsql-exporter
     image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:9c7eb0c76afcd2d564e9fd9a71d2a4443285aca409521e778ceddf455e2c4d6a'
     cpus: 0.1
     mem_limit: '50m'
@@ -597,7 +576,6 @@ services:
   # Ports exposed to the public internet: none
   #
   codeintel-db:
-    container_name: codeintel-db
     image: 'index.docker.io/sourcegraph/codeintel-db:insiders@sha256:f24ab8dd55fa7c1017cbf235f93e51d4d38be0231f9488f3fd11883184b0969e'
     cpus: 4
     mem_limit: '4g'
@@ -625,7 +603,6 @@ services:
   # If you're using a DB instance hosted outside of docker-compose, the environment variables
   # for this container will need to be updated to reflect the new connection information.
   codeintel-db-exporter:
-    container_name: codeintel-db-exporter
     image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:9c7eb0c76afcd2d564e9fd9a71d2a4443285aca409521e778ceddf455e2c4d6a'
     cpus: 0.1
     mem_limit: '50m'
@@ -644,7 +621,6 @@ services:
   # Ports exposed to the public internet: none
   #
   codeinsights-db:
-    container_name: codeinsights-db
     image: 'index.docker.io/sourcegraph/codeinsights-db:insiders@sha256:7c016ad0893bf00b95ebf98f59b772358b0f638f5ec3361e95148a42d641559b'
     cpus: 4
     mem_limit: '2g'
@@ -677,7 +653,6 @@ services:
   # If you're using a DB instance hosted outside of docker-compose, the environment variables
   # for this container will need to be updated to reflect the new connection information.
   codeinsights-db-exporter:
-    container_name: codeinsights-db-exporter
     image: 'index.docker.io/sourcegraph/postgres_exporter:insiders@sha256:9c7eb0c76afcd2d564e9fd9a71d2a4443285aca409521e778ceddf455e2c4d6a'
     cpus: 0.1
     mem_limit: '50m'
@@ -696,7 +671,6 @@ services:
   # Ports exposed to public internet: none
   #
   minio:
-    container_name: minio
     image: 'index.docker.io/sourcegraph/minio:insiders@sha256:0daf4c0c821634eeefbf90f48d467eece09597aff5d9f582685c8c875f03e6fa'
     cpus: 1
     mem_limit: '1g'
@@ -723,7 +697,6 @@ services:
   # Ports exposed to the public internet: none
   #
   redis-cache:
-    container_name: redis-cache
     image: 'index.docker.io/sourcegraph/redis-cache:insiders@sha256:793b73f1cd185682109dc3adb235d74aab9a3152c2f6afccf0913a0cf9210879'
     cpus: 1
     mem_limit: '7g'
@@ -739,7 +712,6 @@ services:
   # Ports exposed to the public internet: none
   #
   redis-store:
-    container_name: redis-store
     image: 'index.docker.io/sourcegraph/redis-store:insiders@sha256:130abf3b12d6b4be117aaf0f4ab49e1e00d9d80b8c9b94b0b4594e84fd46d010'
     cpus: 1
     mem_limit: '7g'
