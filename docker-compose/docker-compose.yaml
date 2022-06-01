@@ -33,7 +33,7 @@ services:
       - CODEINTEL_PGDATABASE=sg
       - CODEINTEL_PGSSLMODE=disable
 
-      # If you are not running code insights, please see: 
+      # If you are not running code insights, please see:
       # https://docs.sourcegraph.com/admin/install/docker-compose/operations#database-migrations for more information
       # for information on how to configure Sourcegraph migrations
       - CODEINSIGHTS_PGHOST=codeinsights-db
@@ -43,7 +43,7 @@ services:
       - CODEINSIGHTS_PGDATABASE=postgres
       - CODEINSIGHTS_PGSSLMODE=disable
     restart: "on-failure"
-    networks: 
+    networks:
       - sourcegraph
     depends_on:
       pgsql:
@@ -496,7 +496,7 @@ services:
     # `cadvisor` requires root privileges in order to display provisioning metrics.
     # These metrics provide critical information to help you scale the Sourcegraph deployment.
     # If you would like to bring your own infrastructure monitoring & alerting solution,
-    # you may want to remove the `cadvisor` container completely 
+    # you may want to remove the `cadvisor` container completely
     privileged: true
     volumes:
       - '/:/rootfs:ro'
@@ -559,7 +559,7 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 10
+      retries: 360
       start_period: 15s
     volumes:
       - 'pgsql:/data/'
@@ -606,7 +606,7 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 10
+      retries: 360
       start_period: 15s
     volumes:
       - 'codeintel-db:/data/'
