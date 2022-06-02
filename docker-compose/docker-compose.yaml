@@ -659,7 +659,7 @@ services:
       interval: 10s
       timeout: 1s
       retries: 10
-      start_period: 15s
+      start_period: 1h
     volumes:
       - 'codeinsights-db:/var/lib/postgresql/data/'
       - '../codeinsights-db/conf:/conf/'
