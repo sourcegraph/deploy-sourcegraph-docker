@@ -559,8 +559,8 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 360
-      start_period: 15s
+      retries: 10
+      start_period: 1h
     volumes:
       - 'pgsql:/data/'
       - '../pgsql/conf:/conf/'
@@ -606,8 +606,8 @@ services:
       test: '/liveness.sh'
       interval: 10s
       timeout: 1s
-      retries: 360
-      start_period: 15s
+      retries: 10
+      start_period: 1h
     volumes:
       - 'codeintel-db:/data/'
       - '../codeintel-db/conf:/conf/'
