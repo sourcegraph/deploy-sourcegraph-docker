@@ -19,7 +19,7 @@ docker run --detach \
     --memory=2g \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v $VOLUME:/var/lib/postgresql/data/ \
-    index.docker.io/sourcegraph/codeintel-db:3.40.0@sha256:9146c38e7740338d30a1148642c5a562d880fe8979484d06de321775390b0d4e
+    index.docker.io/sourcegraph/codeintel-db:3.40.2@sha256:6875529ccf5cf582d84fd26cd1d0f21f809e58deeb2c03561226a3e284d4ae49
 
 # Sourcegraph requires PostgreSQL 12+. Generally newer versions are better,
 # but anything 12 and higher is supported.
