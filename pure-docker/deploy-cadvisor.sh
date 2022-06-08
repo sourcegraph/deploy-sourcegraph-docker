@@ -31,7 +31,7 @@ sudo docker run --detach \
     # you may want to remove the `cadvisor` container completely 
     --privileged \
     --device=/dev/kmsg \
-    index.docker.io/sourcegraph/cadvisor:3.40.1@sha256:16f2e8472a623fd27f76b859db8e6804d4c1dee439fd583193e0df92a11fb616 \
+    index.docker.io/sourcegraph/cadvisor:3.40.2@sha256:e21a75f21455f25029b46b084c1d9674d09578bdf57b3bddf358b765c77b06e0 \
     --port=8080
 
 echo "Deployed cadvisor"
