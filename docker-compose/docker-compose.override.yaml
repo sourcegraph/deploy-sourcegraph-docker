@@ -1,0 +1,33 @@
+version: '2.4'
+services:
+  executor:
+    container_name: executor
+    image: 'index.docker.io/sourcegraph/executor:insiders@sha256:2cfa8f547eadbff999f523055889ffa2ff308bdf11408c777f98c035ebc16878'
+    cpus: 1
+    mem_limit: '4g'
+    # Run as root (required for docker daemon control)
+    user: root
+    # Run with privileged capabilities (required for docker daemon control)
+    privileged: true
+    environment:
+      # Note: Must match `executors.frontendURL` in site config
+      - EXECUTOR_FRONTEND_URL=http://sourcegraph-frontend-0:3080
+      # Note: Must match `executors.accessToken` in site config
+      - EXECUTOR_FRONTEND_PASSWORD=hunter2hunter2hunter2
+      # Choose what work to process
+      - EXECUTOR_QUEUE_NAME=codeintel
+      # Note: Must match left-hand side of scratch volume mount
+      - EXECUTOR_DOCKER_HOST_MOUNT_PATH=/tmp/sourcegraph/executor-scratch
+      # Note: Must match right-hand side of scratch volume mount
+      - TMPDIR=/scratch
+      # Run as root (required for docker daemon control)
+      - UID=1000
+      - GID=1000
+    volumes:
+      # Mount docker socket
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      # Mount volume for workspaces shared by executor and launched containers
+      - '/tmp/sourcegraph/executor-scratch:/scratch'
+    networks:
+      - sourcegraph
+    restart: always

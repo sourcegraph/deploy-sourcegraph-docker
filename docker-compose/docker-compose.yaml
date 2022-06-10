@@ -235,8 +235,8 @@ services:
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
     image: 'index.docker.io/sourcegraph/search-indexer:insiders@sha256:461625546e3636a1abd38b94b3accea6b8d1ae92924b738cc7b41f5e8f74bb45'
-    cpus: 8
-    mem_limit: '16g'
+    cpus: 2
+    mem_limit: '4g'
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
@@ -256,8 +256,8 @@ services:
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
     image: 'index.docker.io/sourcegraph/indexed-searcher:insiders@sha256:9d7f9a49ba16dae3c2e0ae27972b02421d65c60682ea107633dac6ab286228fb'
-    cpus: 8
-    mem_limit: '50g'
+    cpus: 2
+    mem_limit: '4g'
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
     healthcheck:
