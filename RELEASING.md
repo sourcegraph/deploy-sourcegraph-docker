@@ -78,7 +78,7 @@ git checkout 3.8-customer-replica
 # Create the new pure-docker release branch
 git checkout -B 3.9-customer-replica
 
-# Merge the publish-3.9 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes.
+# Merge the publish-3.9 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes. Note that "theirs" is a Git term, not a placeholder.
 git merge publish-3.9 -X theirs
 
 # Reset to previous commit so we can manually inspect ALL changes - we want to create multiple commits instead of keeping a single merge commit
@@ -86,8 +86,18 @@ git reset HEAD~
 
 # Show which files may have been deleted, etc.
 git status
-
 ```
+
+While committing in next steps, you will run into two merge conflicts:
+
+- Do not commit `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
+- The `.prettierignore` should contain the following lines:
+
+    ```
+    .github/
+    *.md
+    rootfs/etc/docker/daemon.json
+    ```
 
 At this point you should evaluate the `git status` output as well as all the changes in your working git directory. You need to ensure the following happens:
 
@@ -98,22 +108,10 @@ At this point you should evaluate the `git status` output as well as all the cha
     - Do not include `docker-compose/` changes in this commit, those are irrelevant to pure-docker users.
     - Double check `pure-docker/deploy-pgsql.sh` file and make sure it has the correct image sha. It should look something like `index.docker.io/sourcegraph/postgres-12.6-alpine:3.36.3@sha256:<hash>`
     - `git commit -m 'upgrade to v3.9.0'`
-
-During this process you will run into two merge conflicts:
-
-- Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
-- The prettier ignore should look like this:
-
-```
-.github/
-*.md
-rootfs/etc/docker/daemon.json
-```
-
-1. Push the changes to github
-```shell
-git push --set-upstream origin 3.9-customer-replica
-```
+4. Push the changes
+    ```shell
+    git push --set-upstream origin 3.9-customer-replica
+    ```
 
 Check buildkite for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
 
@@ -151,8 +149,18 @@ git reset HEAD~
 
 # Show which files may have been deleted, etc.
 git status
-
 ```
+
+While committing in next steps, you will run into two merge conflicts:
+
+- Do not commit `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
+- The `.prettierignore` should contain the following lines:
+
+    ```
+    .github/
+    *.md
+    rootfs/etc/docker/daemon.json
+    ```
 
 At this point you should evaluate the `git status` output as well as all the changes in your working git directory. You need to ensure the following happens:
 
@@ -163,22 +171,10 @@ At this point you should evaluate the `git status` output as well as all the cha
     - Do not include `docker-compose/` changes in this commit, those are irrelevant to pure-docker users.
     - Double check `pure-docker/deploy-pgsql.sh` file and make sure it has the correct image sha. It should look something like `index.docker.io/sourcegraph/postgres-12.6-alpine:3.36.3@sha256:<hash>`
     - `git commit -m 'upgrade to v3.8.1'`
-
-During this process you will run into two merge conflicts:
-
-- Do not commit: `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
-- The prettier ignore should look like this:
-
-```
-.github/
-*.md
-rootfs/etc/docker/daemon.json
-```
-
-1. Push the changes to github
-```shell
-git push --set-upstream origin 3.8.1-customer-replica
-```
+4. Push the changes to github
+    ```shell
+    git push --set-upstream origin 3.8.1-customer-replica
+    ```
 
 Open a Pull Request against `3.8-customer-replica` (base branch)
 
