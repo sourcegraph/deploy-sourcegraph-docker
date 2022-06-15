@@ -14,3 +14,8 @@ redir @http https://{host}{uri}
 tls /sourcegraph.pem /sourcegraph.key
 
 reverse_proxy {$SRC_FRONTEND_ADDRESSES}
+
+# If the customer uses a reverse proxy in front of Caddy, 
+# add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
+# More information in https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
+# trusted_proxies: - 

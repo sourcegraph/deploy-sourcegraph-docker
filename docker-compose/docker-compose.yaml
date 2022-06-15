@@ -85,6 +85,9 @@ services:
     volumes:
       - 'caddy:/caddy-storage'
       #
+      # IMPORTANT: if a customer uses a reverse proxy in front of Caddy
+      # the configuration files below must be updated to include trusted_proxies
+      # 
       # Comment out the following line when using HTTPS with either Let's Encrypt or custom certificates
       - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
       #
@@ -103,10 +106,6 @@ services:
       #
       # Uncomment / update the following line when using HTTPS with custom certificates
       # - '/LOCAL/KEY/PATH.key:/sourcegraph.key'
-      # 
-      # Uncomment / update the following line if Caddy is behind a reverse proxy or load balancer
-      # IMPORTANT: the file below needs to be updated to include customer's ips
-      # - '../caddy/builtins/https.trusted-proxies.Caddyfile'
     ports:
       - '0.0.0.0:80:80'
       - '0.0.0.0:443:443'
