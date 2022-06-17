@@ -70,7 +70,7 @@ services:
   # https://caddyserver.com/docs/caddyfile
   caddy:
     container_name: caddy
-    image: 'index.docker.io/caddy:2.4.6-alpine@sha256:b5a59725783bab0d65803f87028c68dd6611ca6184040bd98b18797cbe26bdd9'
+    image: 'index.docker.io/caddy:2.5.1-alpine@sha256:6e62b63d4d7a4826f9e93c904a0e5b886a8bea2234b6569e300924282a2e8e6c'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -85,6 +85,9 @@ services:
     volumes:
       - 'caddy:/caddy-storage'
       #
+      # IMPORTANT: if a customer uses a reverse proxy in front of Caddy
+      # the configuration files below must be updated to include trusted_proxies
+      # 
       # Comment out the following line when using HTTPS with either Let's Encrypt or custom certificates
       - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
       #
