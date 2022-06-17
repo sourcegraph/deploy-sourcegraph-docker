@@ -4,9 +4,9 @@
 
 :80
 
-reverse_proxy {$SRC_FRONTEND_ADDRESSES}
-
-# If the customer uses a reverse proxy in front of Caddy, 
-# add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
+# Add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
 # More information in https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
-# trusted_proxies: - 
+reverse_proxy {
+	to {$SRC_FRONTEND_ADDRESSES}
+	trusted_proxies 0.0.0.0/0
+}

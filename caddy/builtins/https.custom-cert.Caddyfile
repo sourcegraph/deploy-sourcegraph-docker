@@ -1,4 +1,4 @@
-# Serves Sourcegraph over HTTPS, using a custom SSL certificate/key pair 
+# Serves Sourcegraph over HTTPS, using a custom SSL certificate/key pair
 # that's bind mounted from the host to /sourcegraph.pem and /sourcegraph.key.
 #
 # Caddyfile documentation: https://caddyserver.com/docs/caddyfile
@@ -7,15 +7,15 @@
 
 # Redirects all HTTP traffic to HTTPS (using custom SSL certificates disables the automatic HTTPS feature of Caddy, see https://caddyserver.com/docs/automatic-https)
 @http {
-   protocol http
+	protocol http
 }
 redir @http https://{host}{uri}
 
 tls /sourcegraph.pem /sourcegraph.key
 
-reverse_proxy {$SRC_FRONTEND_ADDRESSES}
-
-# If the customer uses a reverse proxy in front of Caddy, 
-# add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
+# Add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
 # More information in https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
-# trusted_proxies: - 
+reverse_proxy {
+	to {$SRC_FRONTEND_ADDRESSES}
+	trusted_proxies 0.0.0.0/0
+}

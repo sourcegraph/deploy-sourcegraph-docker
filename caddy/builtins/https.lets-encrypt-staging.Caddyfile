@@ -1,32 +1,31 @@
 # Serves Sourcegraph over HTTPS, using Caddy's automatic HTTPS certificate feature:
 # https://caddyserver.com/docs/automatic-https
-# 
-# Note: This configuration uses Let's Encrypt's staging environment. This will 
-# allow you to ensure that everything is correctly configured (with a reduced 
+#
+# Note: This configuration uses Let's Encrypt's staging environment. This will
+# allow you to ensure that everything is correctly configured (with a reduced
 # chance of running into rate limit issues). Note that using this configuration
 # issues a fake certificate (for testing purposes) instead of a trusted one.
 #
-# 🚨 Warning: If your DNS and Caddy configuration aren't properly configured (as 
-#             specified in https://caddyserver.com/docs/automatic-https), you can 
-#             run into Let's Encrypt rate limits which can block your certificates 
-#             for up to a week. 
+# 🚨 Warning: If your DNS and Caddy configuration aren't properly configured (as
+#             specified in https://caddyserver.com/docs/automatic-https), you can
+#             run into Let's Encrypt rate limits which can block your certificates
+#             for up to a week.
 #             It's strongly recommened that you use this Caddyfile to test your
-#             configuration before switching to the production one. 
+#             configuration before switching to the production one.
 #
 # Caddyfile documentation: https://caddyserver.com/docs/caddyfile
 #
-
 {
-    # Use Let's Encrypt's staging environment
-    acme_ca "https://acme-staging-v02.api.letsencrypt.org/directory"
-    email {$SRC_ACME_EMAIL}
+	# Use Let's Encrypt's staging environment
+	acme_ca "https://acme-staging-v02.api.letsencrypt.org/directory"
+	email {$SRC_ACME_EMAIL}
 }
 
 {$SRC_SITE_ADDRESS}
 
-reverse_proxy {$SRC_FRONTEND_ADDRESSES}
-
-# If the customer uses a reverse proxy in front of Caddy, 
-# add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
+# Add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.
 # More information in https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
-# trusted_proxies: - 
+reverse_proxy {
+	to {$SRC_FRONTEND_ADDRESSES}
+	trusted_proxies 0.0.0.0/0
+}
