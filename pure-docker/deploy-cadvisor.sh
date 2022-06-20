@@ -13,6 +13,11 @@ source ./replicas.sh
 # Also add the following volume mount for container monitoring on MacOS:
 #   --volume='/var/run/docker.sock:/var/run/docker.sock:ro' 
 #
+# You may remove the --privileged flag to run with reduced privileges.
+# `cadvisor` requires root privileges in order to display provisioning metrics.
+# These metrics provide critical information to help you scale the Sourcegraph deployment.
+# If you would like to bring your own infrastructure monitoring & alerting solution,
+# you may want to remove the `cadvisor` container completely
 sudo docker run --detach \
     --name=cadvisor \
     --network=sourcegraph \
@@ -24,14 +29,9 @@ sudo docker run --detach \
     --volume=/sys:/sys:ro \
     --volume=/var/lib/docker/:/var/lib/docker:ro \
     --volume=/dev/disk/:/dev/disk:ro \
-    # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
-    # `cadvisor` requires root privileges in order to display provisioning metrics.
-    # These metrics provide critical information to help you scale the Sourcegraph deployment.
-    # If you would like to bring your own infrastructure monitoring & alerting solution,
-    # you may want to remove the `cadvisor` container completely 
     --privileged \
     --device=/dev/kmsg \
-    index.docker.io/sourcegraph/cadvisor:3.40.0@sha256:c995a7ecb8b6f1cf8a1de4f6c1cb85084761150354bad1fd81c212584010e1f1 \
+    index.docker.io/sourcegraph/cadvisor:3.41.0@sha256:019e9a9c18078cefbecf70e3923396eb5f33ed74f2274fcd095ce29330f243de \
     --port=8080
 
 echo "Deployed cadvisor"
