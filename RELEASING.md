@@ -78,8 +78,9 @@ git checkout 3.8-customer-replica
 # Create the new pure-docker release branch
 git checkout -B 3.9-customer-replica
 
-# Merge the publish-3.9 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes. Note that "theirs" is a Git term, not a placeholder.
-git merge publish-3.9 -X theirs
+# Merge the publish-3.9.0 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes. Note that "theirs" is a Git term, not a placeholder.
+# Note the publish-x.x.x branch is usually in the format `publish-x.x.x`
+git merge publish-3.9.0 -X theirs
 
 # Reset to previous commit so we can manually inspect ALL changes - we want to create multiple commits instead of keeping a single merge commit
 git reset HEAD~
