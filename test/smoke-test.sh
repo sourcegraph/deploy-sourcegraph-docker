@@ -57,9 +57,9 @@ test_containers() {
 
 catch_errors() {
 	count=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -c -v Up)
-	containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
 	if [[ $count -ne 0 ]]; then
-	    echo 
+            containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
+	    echo
 		for cf in $containers_failing; do
 			echo "$cf is failing. Review the log files uploaded as artefacts to see errors."
 			docker logs -t "$cf" >"$cf".log 2>&1
