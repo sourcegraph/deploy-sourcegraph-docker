@@ -56,7 +56,7 @@ test_containers() {
 }
 
 catch_errors() {
-	count=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -c -v Up) || exit 0
+	count=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -c -v Up)
 	containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
 	if [[ $count -ne 0 ]]; then
 	    echo 
