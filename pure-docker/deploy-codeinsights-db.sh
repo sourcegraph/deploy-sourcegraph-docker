@@ -12,10 +12,6 @@ set -e
 VOLUME="$HOME/sourcegraph-docker/codeinsights-db-disk"
 ./ensure-volume.sh $VOLUME 999
 
-# Remove timescaledb from the shared_preload_libraries configuration
-# This step can be performed manually instead of run as part of the deploy script
-sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'timescaledb(.*)\'/\1 = '\2'/;s/,'/'/" $VOLUME/pgdata/postgresql.conf
-
 docker run --detach \
     --name=codeinsights-db \
     --network=sourcegraph \
