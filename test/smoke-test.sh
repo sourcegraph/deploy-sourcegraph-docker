@@ -41,6 +41,7 @@ test_containers() {
 		containers=$(docker ps --format '{{.Names}}' | xargs -I{} -n1 sh -c "printf '{}: ' && docker inspect --format '{{.State.Status}}' {}")
 		containers_running=$(echo "$containers" | grep -c "running")
 		if [[ "$containers_running" -ne "$expect_containers" ]]; then
+			containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
 			echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running. The following containers are failing: $containers_failing"
 			exit 1
 		fi
