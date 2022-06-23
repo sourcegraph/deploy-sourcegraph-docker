@@ -10,7 +10,7 @@ set -e
 # Ports exposed to the public internet: none
 #
 VOLUME="$HOME/sourcegraph-docker/codeinsights-db-disk"
-./ensure-volume.sh $VOLUME 999
+./ensure-volume.sh $VOLUME 70
 
 docker run --detach \
     --name=codeinsights-db \
