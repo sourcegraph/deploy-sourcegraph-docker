@@ -8,9 +8,9 @@ deploy_sourcegraph() {
 		./test/volume-config.sh
 		timeout 600s ./pure-docker/deploy.sh
 
-		if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
+		if [[ "$GIT_BRANCH" == *"test"* ]]; then
 			# Expected number of containers on e.g. 3.18-customer-replica branch.
-			expect_containers="61"
+			expect_containers="60"
 		else
 			# Expected number of containers on `master` branch.
 			expect_containers="25"
