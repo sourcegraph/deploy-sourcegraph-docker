@@ -5,7 +5,7 @@ cd /deploy-sourcegraph-docker
 sudo su
 
 #Deploy sourcegraph
-./deploy.sh
+timeout 600s ./deploy.sh
 
 if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
     # Expected number of containers on e.g. 3.18-customer-replica branch.
