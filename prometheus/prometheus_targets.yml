@@ -26,6 +26,10 @@
   targets:
     - repo-updater:6060
 - labels:
+    job: worker
+  targets:
+    - worker:6060
+- labels:
     job: node
   targets:
     - syntect-server:6060
