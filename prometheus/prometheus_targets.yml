@@ -17,6 +17,10 @@
   targets:
     - worker:6060
 - labels:
+    job: worker-executors
+  targets:
+    - worker:6996
+- labels:
     job: node
   targets:
     - syntect-server:6060
