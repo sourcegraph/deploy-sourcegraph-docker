@@ -1,0 +1,204 @@
+version: '2.4'
+services:
+  migrator:
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      codeinsights-db:
+        condition: service_healthy
+      codeintel-db:
+        condition: service_healthy
+  sourcegraph-frontend-internal:
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      codeintel-db:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+
+  # Description: PostgreSQL database for various data.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  pgsql:
+    container_name: pgsql
+    image: 'index.docker.io/sourcegraph/postgres-12-alpine:3.41.0@sha256:f6d812944066b0f69107117d55fe784686eea578a5911881eba3aaa9fc3f1dee'
+    cpus: 4
+    mem_limit: '4g'
+    shm_size: '1g'
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 10
+      start_period: 1h
+    volumes:
+      - 'pgsql:/data/'
+      - '../pgsql/conf:/conf/'
+    networks:
+      - sourcegraph
+    restart: always
+    stop_grace_period: 120s
+
+  # Description: This container will collect and expose prometheus metrics about `pgsql` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  pgsql-exporter:
+    container_name: pgsql-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:3.41.0@sha256:0e5868a46240fcaf86dbb080b6e39addfaf6ec17a43e170ce7fdb68ea3cd48a5'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://sg:@pgsql:5432/?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/queries.yaml'
+
+  # Description: PostgreSQL database for code intelligence data.
+  #
+  # Disk: 128GB / persistent SSD
+  # Network: 1Gbps
+  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  codeintel-db:
+    container_name: codeintel-db
+    image: 'index.docker.io/sourcegraph/codeintel-db:3.41.0@sha256:a6620d00c542360b89ce4c512653449e4b296400d3c52eb89b8ee23dff21dea8'
+    cpus: 4
+    mem_limit: '4g'
+    shm_size: '1g'
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 10
+      start_period: 1h
+    volumes:
+      - 'codeintel-db:/data/'
+      - '../codeintel-db/conf:/conf/'
+    networks:
+      - sourcegraph
+    restart: always
+    stop_grace_period: 120s
+
+  # Description: This container will collect and expose prometheus metrics about `codeintel-db` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  codeintel-db-exporter:
+    container_name: codeintel-db-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:3.41.0@sha256:0e5868a46240fcaf86dbb080b6e39addfaf6ec17a43e170ce7fdb68ea3cd48a5'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://sg:@codeintel-db:5432/?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_intel_queries.yaml'
+
+  # Description: PostgreSQL database for code insights data.
+  #
+  # Disk: 128GB / persistent SSD
+  # Network: 1Gbps
+  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  codeinsights-db:
+    container_name: codeinsights-db
+    image: 'index.docker.io/sourcegraph/codeinsights-db:3.41.0@sha256:572a1a59b067c529393de7297201f3e4e0b94c2fb590efe26918d39c2af2f6fd'
+    cpus: 4
+    mem_limit: '2g'
+    shm_size: '1g'
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: '/liveness.sh'
+      interval: 10s
+      timeout: 1s
+      retries: 10
+      start_period: 1h
+    volumes:
+      - 'codeinsights-db:/var/lib/postgresql/data/'
+      - '../codeinsights-db/conf:/conf/'
+    networks:
+      - sourcegraph
+    restart: always
+    stop_grace_period: 120s
+
+  # Description: This container will collect and expose prometheus metrics about `codeinsights-db` PostgreSQL server.
+  #
+  # Disk: None
+  # Ports exposed to other Sourcegraph services: 9187/TCP
+  # Ports exposed to the public internet: none
+  #
+  # If you're using a DB instance hosted outside of docker-compose, the environment variables
+  # for this container will need to be updated to reflect the new connection information.
+  codeinsights-db-exporter:
+    container_name: codeinsights-db-exporter
+    image: 'index.docker.io/sourcegraph/postgres_exporter:3.41.0@sha256:0e5868a46240fcaf86dbb080b6e39addfaf6ec17a43e170ce7fdb68ea3cd48a5'
+    cpus: 0.1
+    mem_limit: '50m'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - 'DATA_SOURCE_NAME=postgres://postgres:password@codeinsights-db:5432/?sslmode=disable'
+      - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
+
+  # Description: Redis for storing short-lived caches.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
+  # Ports exposed to the public internet: none
+  #
+  redis-cache:
+    container_name: redis-cache
+    image: 'index.docker.io/sourcegraph/redis-cache:3.41.0@sha256:faa3a8b5abc8fe73b2155499f1e48c4062c44b263fd0867f6a2b2cf3807617a1'
+    cpus: 1
+    mem_limit: '7g'
+    volumes:
+      - 'redis-cache:/redis-data'
+    networks:
+      - sourcegraph
+    restart: always
+
+  # Description: Redis for storing semi-persistent data like user sessions.
+  #
+  # Disk: 128GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
+  # Ports exposed to the public internet: none
+  #
+  redis-store:
+    container_name: redis-store
+    image: 'index.docker.io/sourcegraph/redis-store:3.41.0@sha256:41b9dff04e841b72b269db36a47f01d4c393e48ecfe63afe0b32bebbb3e37ffb'
+    cpus: 1
+    mem_limit: '7g'
+    volumes:
+      - 'redis-store:/redis-data'
+    networks:
+      - sourcegraph
+    restart: always
+
+volumes:
+  codeintel-db:
+  codeinsights-db:
+  redis-cache:
+  redis-store:
+  pgsql:
