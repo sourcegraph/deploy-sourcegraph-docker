@@ -1,0 +1,9 @@
+version: '2.4'
+services:
+  caddy:
+    environment:
+      - "SRC_SITE_ADDRESS=${SOURCEGRAPH_HOSTNAME}"
+    volumes:
+      - '../caddy/builtins/https.custom-cert.Caddyfile:/etc/caddy/Caddyfile'
+      - "${TLS_CERT_PATH}:/sourcegraph.pem"
+      - "${TLS_KEY_PATH}:/sourcegraph.key"
