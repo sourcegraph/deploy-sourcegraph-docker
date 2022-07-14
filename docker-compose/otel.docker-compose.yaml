@@ -1,0 +1,20 @@
+# docker-compose -f docker-compose/docker-compose.yaml -f docker-compose/otel.docker-compose.yaml -f docker-compose/low-resource.docker-compose.yaml up
+
+version: '2.4'
+services:
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector:0.54.0
+    volumes:
+      - '../otel-collector/config.yaml:/etc/otel-collector/config.yaml'
+    cpus: 0.5
+    mem_limit: '512m'
+    ports:
+      - '0.0.0.0:4317:4317'
+      - '0.0.0.0:55679:55679'
+    networks:
+      - sourcegraph
+    restart: always
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+    command: ['--config', '/etc/otel-collector/config.yaml', '']

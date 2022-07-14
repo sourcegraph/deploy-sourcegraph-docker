@@ -1,0 +1,13 @@
+# Development overlay - has reduced resource requirements, and exposes the deployment on
+# 127.0.0.1:8080
+
+version: '2.4'
+services:
+  zoekt-webserver-0:
+    cpus: 1
+  zoekt-indexserver-0:
+    cpus: 1
+  caddy:
+    ports:
+      - '0.0.0.0:8080:80'
+  sourcegraph-frontend-internal-0:
