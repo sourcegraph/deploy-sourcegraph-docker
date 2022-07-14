@@ -1,0 +1,40 @@
+version: '2.4'
+services:
+  migrator:
+    image: ${SG_MIGRATOR_IMAGE}
+  caddy:
+    image: ${SG_CADDY_IMAGE}
+  sourcegraph-frontend-0:
+    image: ${SG_SOURCEGRAPH_FRONTEND_0_IMAGE}
+  sourcegraph-frontend-internal:
+    image: ${SG_SOURCEGRAPH_FRONTEND_INTERNAL_IMAGE}
+  gitserver-0:
+    image: ${SG_GITSERVER_0_IMAGE}
+  zoekt-indexserver-0:
+    image: ${SG_ZOEKT_INDEXSERVER_0_IMAGE}
+  zoekt-webserver-0:
+    image: ${SG_ZOEKT_WEBSERVER_0_IMAGE}
+  searcher-0:
+    image: ${SG_SEARCHER_0_IMAGE}
+  github-proxy:
+    image: ${SG_GITHUB_PROXY_IMAGE}
+  precise-code-intel-worker:
+    image: ${SG_PRECISE_CODE_INTEL_WORKER_IMAGE}
+  repo-updater:
+    image: ${SG_REPO_UPDATER_IMAGE}
+  worker:
+    image: ${SG_WORKER_IMAGE}
+  syntect-server:
+    image: ${SG_SYNTECT_SERVER_IMAGE}
+  symbols-0:
+    image: ${SG_SYMBOLS_0_IMAGE}
+  prometheus:
+    image: ${SG_PROMETHEUS_IMAGE}
+  grafana:
+    image: ${SG_GRAFANA_IMAGE}
+  cadvisor:
+    image: ${SG_CADVISOR_IMAGE}
+  jaeger:
+    image: ${SG_JAEGER_IMAGE}
+  minio:
+    image: ${SG_MINIO_IMAGE}
