@@ -162,43 +162,7 @@ services:
       - 'DATA_SOURCE_NAME=postgres://postgres:password@codeinsights-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
 
-  # Description: Redis for storing short-lived caches.
-  #
-  # Disk: 128GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
-  # Ports exposed to the public internet: none
-  #
-  redis-cache:
-    container_name: redis-cache
-    image: 'index.docker.io/sourcegraph/redis-cache:3.41.0@sha256:faa3a8b5abc8fe73b2155499f1e48c4062c44b263fd0867f6a2b2cf3807617a1'
-    cpus: 1
-    mem_limit: '7g'
-    volumes:
-      - 'redis-cache:/redis-data'
-    networks:
-      - sourcegraph
-    restart: always
-
-  # Description: Redis for storing semi-persistent data like user sessions.
-  #
-  # Disk: 128GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
-  # Ports exposed to the public internet: none
-  #
-  redis-store:
-    container_name: redis-store
-    image: 'index.docker.io/sourcegraph/redis-store:3.41.0@sha256:41b9dff04e841b72b269db36a47f01d4c393e48ecfe63afe0b32bebbb3e37ffb'
-    cpus: 1
-    mem_limit: '7g'
-    volumes:
-      - 'redis-store:/redis-data'
-    networks:
-      - sourcegraph
-    restart: always
-
 volumes:
   codeintel-db:
   codeinsights-db:
-  redis-cache:
-  redis-store:
   pgsql:

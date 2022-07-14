@@ -1,40 +1,40 @@
 version: '2.4'
 services:
   migrator:
-    image: ${SG_MIGRATOR_IMAGE}
+    image: ${SG_MIGRATOR_IMAGE:-index.docker.io/sourcegraph/migrator:3.41.0@sha256:96542d49ff2063fdce00f36d78abbeea6f0397d62064b6deaf29426c0e988a17}
   caddy:
-    image: ${SG_CADDY_IMAGE}
+    image: ${SG_CADDY_IMAGE:-index.docker.io/caddy:2.5.1-alpine@sha256:6e62b63d4d7a4826f9e93c904a0e5b886a8bea2234b6569e300924282a2e8e6c}
   sourcegraph-frontend-0:
-    image: ${SG_SOURCEGRAPH_FRONTEND_0_IMAGE}
+    image: ${SG_SOURCEGRAPH_FRONTEND_0_IMAGE:-index.docker.io/sourcegraph/frontend:3.41.0@sha256:5cc61dc6c57d5823f431cdf968f85903aa0396096cb84551f30049395376ad33}
   sourcegraph-frontend-internal:
-    image: ${SG_SOURCEGRAPH_FRONTEND_INTERNAL_IMAGE}
+    image: ${SG_SOURCEGRAPH_FRONTEND_INTERNAL_IMAGE:-index.docker.io/sourcegraph/frontend:3.41.0@sha256:5cc61dc6c57d5823f431cdf968f85903aa0396096cb84551f30049395376ad33}
   gitserver-0:
-    image: ${SG_GITSERVER_0_IMAGE}
+    image: ${SG_GITSERVER_0_IMAGE:-index.docker.io/sourcegraph/gitserver:3.41.0@sha256:41173b9e058071fb1224548790b13fd21865a39f7173889842140adfa977a0ef}
   zoekt-indexserver-0:
-    image: ${SG_ZOEKT_INDEXSERVER_0_IMAGE}
+    image: ${SG_ZOEKT_INDEXSERVER_0_IMAGE:-index.docker.io/sourcegraph/search-indexer:3.41.0@sha256:daedaa6e899d442b10c332b2e3e344f08b1045a0b8d6140dac6f7dd334c58d9d}
   zoekt-webserver-0:
-    image: ${SG_ZOEKT_WEBSERVER_0_IMAGE}
+    image: ${SG_ZOEKT_WEBSERVER_0_IMAGE:-index.docker.io/sourcegraph/indexed-searcher:3.41.0@sha256:786278f08b6e61a0ab203bd7325559321860b14b172741886f6154f0e13e425a}
   searcher-0:
-    image: ${SG_SEARCHER_0_IMAGE}
+    image: ${SG_SEARCHER_0_IMAGE:-index.docker.io/sourcegraph/searcher:3.41.0@sha256:6dd52571c1c17f1b8a3ecddb0cf943a4f9c128f71bf256d401f3e4a6a8f8af4d}
   github-proxy:
-    image: ${SG_GITHUB_PROXY_IMAGE}
+    image: ${SG_GITHUB_PROXY_IMAGE:-index.docker.io/sourcegraph/github-proxy:3.41.0@sha256:f4ed5bf38ad06a71106ea53b08202ad7193debe5062df2c4a8b0befe0a8a34e0}
   precise-code-intel-worker:
-    image: ${SG_PRECISE_CODE_INTEL_WORKER_IMAGE}
+    image: ${SG_PRECISE_CODE_INTEL_WORKER_IMAGE:-index.docker.io/sourcegraph/precise-code-intel-worker:3.41.0@sha256:2e5c54f47fd05117717a0784487221602099424e6531bca0489c850088d6f7de}
   repo-updater:
-    image: ${SG_REPO_UPDATER_IMAGE}
+    image: ${SG_REPO_UPDATER_IMAGE:-index.docker.io/sourcegraph/repo-updater:3.41.0@sha256:ec6d23fd721999bb90f9851f64f779bb17fdec8c7c2e1813468ce35160f3267d}
   worker:
-    image: ${SG_WORKER_IMAGE}
+    image: ${SG_WORKER_IMAGE:-index.docker.io/sourcegraph/worker:3.41.0@sha256:dc92ab5280183674bd9dd933e410d19de769e6f8514c2f579223259865a55026}
   syntect-server:
-    image: ${SG_SYNTECT_SERVER_IMAGE}
+    image: ${SG_SYNTECT_SERVER_IMAGE:-index.docker.io/sourcegraph/syntax-highlighter:3.41.0@sha256:c39677af141613aecd733663b60585e85a17e3f8a44e02bd864e6a6954e7aba1}
   symbols-0:
-    image: ${SG_SYMBOLS_0_IMAGE}
+    image: ${SG_SYMBOLS_0_IMAGE:-index.docker.io/sourcegraph/symbols:3.41.0@sha256:8ed2dd547db8fe78cb2a33991dde5bf07b72aa5a1564a9b3dca5edd8b10b17b3}
   prometheus:
-    image: ${SG_PROMETHEUS_IMAGE}
+    image: ${SG_PROMETHEUS_IMAGE:-index.docker.io/sourcegraph/prometheus:3.41.0@sha256:386f6a7681341a8e1c11e68fa2897ac2259977843eeafa44f96ea48a407c276b}
   grafana:
-    image: ${SG_GRAFANA_IMAGE}
+    image: ${SG_GRAFANA_IMAGE:-index.docker.io/sourcegraph/grafana:3.41.0@sha256:dd1b3cc830f8fb55e54890e08c987fa5d71190b2921a31b828c491264f4b46d8}
   cadvisor:
-    image: ${SG_CADVISOR_IMAGE}
+    image: ${SG_CADVISOR_IMAGE:-index.docker.io/sourcegraph/cadvisor:3.41.0@sha256:019e9a9c18078cefbecf70e3923396eb5f33ed74f2274fcd095ce29330f243de}
   jaeger:
-    image: ${SG_JAEGER_IMAGE}
+    image: ${SG_JAEGER_IMAGE:-index.docker.io/sourcegraph/jaeger-all-in-one:3.41.0@sha256:5fa5daafa37c6831ccba378f2472cbd12c0801aef4086683f96962a1746b9d81}
   minio:
-    image: ${SG_MINIO_IMAGE}
+    image: ${SG_MINIO_IMAGE:-index.docker.io/sourcegraph/minio:3.41.0@sha256:d5377e0c6e4ed742c551f253591d4a1a7f3a104ca17c51d46d6324206577f209}
