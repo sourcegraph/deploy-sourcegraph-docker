@@ -15,4 +15,4 @@ services:
     restart: always
     environment:
       - JAEGER_AGENT_HOST=jaeger
-    command: ['--config', '/etc/otel-collector/config.yaml', '']
+    command: ['--config', '/etc/otel-collector/config.yaml']
