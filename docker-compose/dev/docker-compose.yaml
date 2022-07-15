@@ -10,4 +10,3 @@ services:
   caddy:
     ports:
       - '0.0.0.0:8080:80'
-  sourcegraph-frontend-internal-0:

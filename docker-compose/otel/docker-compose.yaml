@@ -1,5 +1,3 @@
-# docker-compose -f docker-compose/docker-compose.yaml -f docker-compose/otel.docker-compose.yaml -f docker-compose/low-resource.docker-compose.yaml up
-
 version: '2.4'
 services:
   otel-collector:
