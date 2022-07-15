@@ -320,7 +320,7 @@ services:
     mem_limit: '1g'
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - JAEGER_AGENT_HOST
+      - JAEGER_AGENT_HOST=jaeger
       - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     networks:
       - sourcegraph
