@@ -131,7 +131,6 @@ services:
     environment:
       - DEPLOY_TYPE=docker-compose
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
       - PGHOST=pgsql
       - CODEINTEL_PGHOST=codeintel-db
       - CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres
@@ -189,7 +188,6 @@ services:
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     networks:
@@ -223,7 +221,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     volumes:
       - 'gitserver-0:/data/repos'
     networks:
@@ -293,7 +290,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -321,7 +317,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     networks:
       - sourcegraph
     restart: always
@@ -339,7 +334,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
       interval: 5s
@@ -364,7 +358,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'repo-updater:/mnt/cache'
@@ -386,7 +379,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SEARCHER_URL=http://searcher-0:3181'
       - 'SYMBOLS_URL=http://symbols-0:3184'
@@ -433,7 +425,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - JAEGER_AGENT_HOST=jaeger
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
       interval: 5s
