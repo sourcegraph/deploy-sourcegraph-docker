@@ -32,7 +32,7 @@ services:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
   
-  zoekt-indexerver-0:
+  zoekt-indexserver-0:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
 
