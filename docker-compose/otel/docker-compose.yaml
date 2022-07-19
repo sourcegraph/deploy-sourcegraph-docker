@@ -1,5 +1,10 @@
 version: '2.4'
 services:
+  # Description: Ingests OpenTelemetry data.
+  #
+  # Disk: 128GB / non-persistent SSD
+  # Ports exposed to other Sourcegraph services: 4317 (receiver), 55679 (zpages)
+  # Ports exposed to the public internet: none
   otel-collector:
     container_name: otel-collector
     image: otel/opentelemetry-collector:0.54.0
@@ -7,9 +12,6 @@ services:
       - '../otel-collector/config.yaml:/etc/otel-collector/config.yaml'
     cpus: 0.5
     mem_limit: '512m'
-    ports:
-      - '0.0.0.0:4317:4317'
-      - '0.0.0.0:55679:55679'
     networks:
       - sourcegraph
     restart: always
