@@ -7,17 +7,15 @@ services:
   # Ports exposed to the public internet: none
   otel-collector:
     container_name: otel-collector
-    image: otel/opentelemetry-collector:0.54.0
-    volumes:
-      - '../otel-collector/config.yaml:/etc/otel-collector/config.yaml'
+    image: 'index.docker.io/sourcegraph/opentelemetry-collector:162246_2022-07-20_15dd0e0df1cc@sha256:3d64a9d20a791ba1c5d717ecb64cc19a10b1e30d2aac277143e773c5a9d28c2f'
     cpus: 0.5
     mem_limit: '512m'
     networks:
       - sourcegraph
     restart: always
     environment:
-      - JAEGER_AGENT_HOST=jaeger
-    command: ['--config', '/etc/otel-collector/config.yaml']
+      - JAEGER_HOST=jaeger
+    command: ['--config', '/etc/otel-collector/configs/jaeger.yaml']
 
   # Apply exporter configuration - to learn more, see:
   # https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md#configuration-options
