@@ -27,6 +27,6 @@ docker run --detach \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SYMBOLS_URL="$(addresses "http://symbols-" $NUM_SYMBOLS ":3184")" \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/worker:insiders@sha256:db428aa8602142005970708a6211b395c0798cf0b1ef1f40530860990ea2b1f9
+    index.docker.io/sourcegraph/worker:3.42.0@sha256:afe47a56ad55f01bfbb3795cfce870a72e991ed188174e19502b519af137d10f
 
 echo "Deployed worker service"
