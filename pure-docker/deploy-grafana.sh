@@ -21,7 +21,7 @@ docker run --detach \
     -v $VOLUME:/var/lib/grafana \
     -v $(pwd)/../grafana/datasources:/sg_config_grafana/provisioning/datasources \
     -v $(pwd)/../grafana/dashboards:/sg_grafana_additional_dashboards \
-    index.docker.io/sourcegraph/grafana:3.42.0@sha256:bbefba8eb0306041ca31788c68b79f354de9721dbf35bdd8acd55192f18fad51
+    index.docker.io/sourcegraph/grafana:3.42.1@sha256:821b116f8385200ace38a02e0f7a33ad429d14de33fc1b86917364ab2bcce260
 
 # Add the following lines above if you wish to use an auth proxy with Grafana:
 #
