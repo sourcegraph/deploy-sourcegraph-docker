@@ -739,6 +739,8 @@ services:
       - sourcegraph
     restart: always
     command: ['--config', '/etc/otel-collector/configs/logging.yaml']
+    volumes:
+      - '../otel-collector:/etc/otel-collector/'
 
 volumes:
   caddy:
