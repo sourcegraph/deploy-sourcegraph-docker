@@ -738,9 +738,10 @@ services:
     networks:
       - sourcegraph
     restart: always
+    # Default configurations are shipped in '/etc/otel-collector/configs/'
     command: ['--config', '/etc/otel-collector/configs/logging.yaml']
     volumes:
-      - '../otel-collector:/etc/otel-collector/'
+      - '../otel-collector/config.yaml:/etc/otel-collector/config.yaml'
 
 volumes:
   caddy:
