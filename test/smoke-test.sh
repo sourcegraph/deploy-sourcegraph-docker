@@ -13,7 +13,7 @@ deploy_sourcegraph() {
 			expect_containers="62"
 		else
 			# Expected number of containers on `master` branch.
-			expect_containers="25"
+			expect_containers="26"
 		fi
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
 		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
@@ -59,8 +59,8 @@ test_containers() {
 catch_errors() {
 	count=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -c -v Up) || true
 	if [[ $count -ne 0 ]]; then
-            containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
-	    echo
+		containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
+		echo
 		for cf in $containers_failing; do
 			echo "$cf is failing. Review the log files uploaded as artefacts to see errors."
 			docker logs -t "$cf" >"$cf".log 2>&1

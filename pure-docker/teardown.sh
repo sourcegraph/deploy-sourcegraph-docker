@@ -30,6 +30,7 @@ docker rm -f $(addresses "symbols-" $NUM_SYMBOLS "") &> /dev/null || true &
 docker rm -f syntect-server &> /dev/null || true &
 docker rm -f $(addresses "zoekt-indexserver-" $NUM_INDEXED_SEARCH "") &> /dev/null || true &
 docker rm -f $(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH "") &> /dev/null || true &
+docker rm -f otel-collector &> /dev/null || true &
 
 docker network rm sourcegraph &> /dev/null || true &
 wait
