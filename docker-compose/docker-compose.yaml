@@ -16,8 +16,7 @@ services:
     image: 'index.docker.io/sourcegraph/migrator:169594_2022-08-27_c479e442c579@sha256:c2c517a7bd59197bcabbebe7ea1e02a85dce3a69d5cab7dbbc8a021cbc231041'
     cpus: 0.5
     mem_limit: '500m'
-    command:
-      ["up"]
+    command: ['up']
     environment:
       - PGHOST=pgsql
       - PGPORT=5432
@@ -42,7 +41,7 @@ services:
       - CODEINSIGHTS_PGPASSWORD=password
       - CODEINSIGHTS_PGDATABASE=postgres
       - CODEINSIGHTS_PGSSLMODE=disable
-    restart: "on-failure"
+    restart: 'on-failure'
     networks:
       - sourcegraph
     depends_on:
@@ -87,7 +86,7 @@ services:
       #
       # IMPORTANT: if a customer uses a reverse proxy in front of Caddy
       # the configuration files below must be updated to include trusted_proxies
-      # 
+      #
       # Comment out the following line when using HTTPS with either Let's Encrypt or custom certificates
       - '../caddy/builtins/http.Caddyfile:/etc/caddy/Caddyfile'
       #
@@ -733,8 +732,8 @@ services:
   otel-collector:
     container_name: otel-collector
     image: 'index.docker.io/sourcegraph/opentelemetry-collector:169594_2022-08-27_c479e442c579@sha256:d35ab95bba6604a9f0ba7edbdf209ba5e53c7ad918d7dcb084b8a4603b0e8257'
-    cpus: 0.5
-    mem_limit: '512m'
+    cpus: 1
+    mem_limit: '1g'
     networks:
       - sourcegraph
     restart: always
