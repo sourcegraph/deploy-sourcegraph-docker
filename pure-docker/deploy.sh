@@ -14,7 +14,6 @@ docker network create sourcegraph &>/dev/null || true
 ./deploy-github-proxy.sh
 for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
 ./deploy-grafana.sh
-./deploy-jaeger.sh
 ./deploy-precise-code-intel-worker.sh
 ./deploy-pgsql.sh
 ./deploy-codeintel-db.sh
