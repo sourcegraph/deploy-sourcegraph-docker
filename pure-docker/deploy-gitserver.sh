@@ -22,6 +22,7 @@ docker run --detach \
     -e GOMAXPROCS=4 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
+    -e 'GITHUB_BASE_URL=http://github-proxy:3180' \
     -v $VOLUME:/data/repos \
     index.docker.io/sourcegraph/gitserver:3.43.0@sha256:b3192b3fdc59fccc80c9d3e6bb2be38c0ca1474281fce09e89f664d07aa8f2ae
 

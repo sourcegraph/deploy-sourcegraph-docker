@@ -218,6 +218,7 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
+      - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'gitserver-0:/data/repos'
     networks:
