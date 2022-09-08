@@ -23,6 +23,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e JAEGER_AGENT_HOST=jaeger \
     -v $VOLUME:/data/repos \
-    index.docker.io/sourcegraph/gitserver:3.43.1@sha256:457d6a2851ac5a115e96985ed356a00421bd4714b2e247c6ed31457955f7f398
+    index.docker.io/sourcegraph/gitserver:3.43.2@sha256:611c797f24d7d4f6ebcdb7ddb3802949d43a7a7f3d708ca57f4929c4ebfbc9e6
 
 echo "Deployed gitserver $1 service"
