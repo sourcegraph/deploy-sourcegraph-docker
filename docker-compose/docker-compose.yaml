@@ -112,6 +112,41 @@ services:
       - sourcegraph
     restart: always
 
+  # Description: NGINX alternative to standard Caddy acts as a reverse proxy for all of the sourcegraph-frontend instances
+  #
+  # Disk: 1GB / persistent SSD
+  # Ports exposed to other Sourcegraph services: none
+  # Ports exposed to the public internet: 80 (HTTP) and 443 (HTTPS)
+  #
+  # Sourcegraph ships with a few builtin templates that cover common HTTP/HTTPS configurations:
+  # - HTTP only (default)
+  # - HTTPS with Let's Encrypt
+  # - HTTPS with custom certificates
+  nginx:
+    container_name: nginx
+    image: 'nginx:stable'
+    cpus: 4
+    mem_limit: '4g'
+    environment:
+      - 'SRC_FRONTEND_ADDRESSES=sourcegraph-frontend-0:3080'
+      # Uncomment & update this line when using Let's Encrypt or custom HTTPS certificates:
+      # - 'SRC_SITE_ADDRESS=sourcegraph.example.com'
+      #
+      # Uncomment & update the following line when using HTTPS with Let's Encrypt
+      # - 'SRC_ACME_EMAIL=admin@example.com'
+    volumes:
+      - '../nginx/:/etc/nginx/'
+
+    ports:
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
+    networks:
+      - sourcegraph
+    restart: always
+    depends_on:
+      sourcegraph-frontend-0:
+        condition: service_healthy
+
   # Description: Serves the frontend of Sourcegraph via HTTP(S).
   #
   # Disk: 128GB / non-persistent SSD
