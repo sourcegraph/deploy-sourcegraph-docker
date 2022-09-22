@@ -25,7 +25,7 @@ docker run --detach \
     --health-start-period=300s \
     -e DEPLOY_TYPE=pure-docker \
     -e GOMAXPROCS=12 \
-    -e JAEGER_AGENT_HOST=jaeger \
+    -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -e PGHOST=pgsql \
     -e CODEINTEL_PGHOST=codeintel-db \
     -e CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres \
@@ -42,7 +42,7 @@ docker run --detach \
     -e PROMETHEUS_URL=http://prometheus:9090 \
     -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:3.41.0@sha256:5cc61dc6c57d5823f431cdf968f85903aa0396096cb84551f30049395376ad33
+    index.docker.io/sourcegraph/frontend:4.0.0@sha256:2bb90bd8f0be48e21578144917b088d0bb5ba478003a42e88e8087488eee63f4
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling
