@@ -34,6 +34,10 @@
   targets:
     - zoekt-indexserver-0:6072
 - labels:
+    job: zoekt-webserver
+  targets:
+    - zoekt-webserver-0:6070
+- labels:
     job: sourcegraph-frontend
   targets:
     - sourcegraph-frontend-0:6060
