@@ -20,8 +20,8 @@ deploy_sourcegraph() {
 		expect_containers="26"
 	fi
 
-	echo "Giving containers 30s to start..."
-	sleep 30
+	echo "Giving containers 600s to start..."
+	sleep 600
 }
 
 test_count() {
