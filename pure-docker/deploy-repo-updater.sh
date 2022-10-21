@@ -23,6 +23,6 @@ docker run --detach \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/repo-updater:4.0.1@sha256:54260c7ada1c58f7141e84660108af4a83fb3eca84230ccd5525e46344e645ad
+    index.docker.io/sourcegraph/repo-updater:4.1.0@sha256:7d15b9e1094f4b166363ad6e15b9c33e58e9a47f2a8ca1e72653d0c8fda5b255
 
 echo "Deployed repo-updater service"
