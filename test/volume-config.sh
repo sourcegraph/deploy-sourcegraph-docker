@@ -2,6 +2,14 @@
 
 # Create volume directories.
 cd /deploy-sourcegraph-docker
+echo
+echo "creating deployment for volume directories"
+echo
+./pure-docker/deploy.sh
+echo
+echo "tearing down deployment for volume directories"
+echo
+./pure-docker/teardown.sh
 # Set permissions on volume directories.
 #
 # IMPORTANT: If these change, or a new service is introduced, it must be explicitly called out in
