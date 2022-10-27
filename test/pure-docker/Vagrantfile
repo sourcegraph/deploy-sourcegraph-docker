@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
-  config.vm.synced_folder "../../", "/deploy-sourcegraph-docker"
+  config.vm.synced_folder "../../pure-docker", "/deploy-sourcegraph-docker"
   config.vm.define "pure-docker-test"
   config.vm.hostname = "pure-docker-test"
 
