@@ -6,7 +6,7 @@ deploy_sourcegraph() {
 	#Deploy sourcegraph
 	if [[ "$TEST_TYPE" == "pure-docker-test" ]]; then
 		./test/volume-config.sh
-		timeout 600s ./pure-docker/deploy.sh
+		timeout 1200s ./pure-docker/deploy.sh
 
 		if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
 			# Expected number of containers on e.g. 3.18-customer-replica branch.
