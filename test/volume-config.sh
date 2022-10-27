@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euxfo pipefail
+
 # Create volume directories.
 cd /deploy-sourcegraph-docker
 # Set permissions on volume directories.
