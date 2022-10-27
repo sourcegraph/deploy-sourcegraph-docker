@@ -5,8 +5,8 @@ deploy_sourcegraph() {
 	cd $(dirname "${BASH_SOURCE[0]}")/..
 	#Deploy sourcegraph
 	if [[ "$TEST_TYPE" == "pure-docker-test" ]]; then
-		./test/volume-config.sh
-		timeout 1200s ./pure-docker/deploy.sh
+		timeout 600s ./test/volume-config.sh
+		timeout 300s ./pure-docker/deploy.sh
 
 		if [[ "$GIT_BRANCH" == *"customer-replica"* ]]; then
 			# Expected number of containers on e.g. 3.18-customer-replica branch.
@@ -20,8 +20,8 @@ deploy_sourcegraph() {
 		expect_containers="26"
 	fi
 
-	echo "Giving containers 30s to start..."
-	sleep 30
+	echo "Giving containers 300s to start..."
+	sleep 300
 }
 
 test_count() {
