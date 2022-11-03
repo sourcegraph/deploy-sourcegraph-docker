@@ -1,75 +1,98 @@
 ---
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: node
   targets:
     - cadvisor:8080
     - sourcegraph-frontend-internal:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: github-proxy
   targets:
     - github-proxy:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: repo-updater
   targets:
     - repo-updater:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: worker
   targets:
     - worker:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: worker-executors
   targets:
     - worker:6996
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: node
   targets:
     - syntect-server:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: precise-code-intel-worker
   targets:
     - precise-code-intel-worker:6060
     # Add new entries here for every searcher/symbol/gitserver replica.
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: zoekt-indexserver
   targets:
     - zoekt-indexserver-0:6072
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: zoekt-webserver
   targets:
     - zoekt-webserver-0:6070
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: sourcegraph-frontend
   targets:
     - sourcegraph-frontend-0:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: gitserver
   targets:
     - gitserver-0:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: searcher
   targets:
     - searcher-0:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: symbols
   targets:
     - symbols-0:6060
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: pgsql
   targets:
     - pgsql-exporter:9187
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: codeintel-db
   targets:
     - codeintel-db-exporter:9187
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: codeinsights-db
   targets:
     - codeinsights-db-exporter:9187
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: redis-cache
   targets:
     - redis-cache:9121
 - labels:
+    nodename: "sourcegraph-docker-compose-host"
     job: redis-store
   targets:
     - redis-store:9121
+- labels:
+    nodename: "sourcegraph-docker-compose-host"
+    job: node-exporter
+  targets:
+    - node-exporter:9100
