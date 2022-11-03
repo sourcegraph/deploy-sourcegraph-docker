@@ -520,6 +520,35 @@ services:
     command:
       - --port=8080
 
+  # Description: Publishes Prometheus metrics about the machine's hardware / operating system.
+  #
+  # Disk: none
+  # Ports exposed to other Sourcegraph services: 9100/TCP
+  # Ports exposed to the public internet: none
+  #
+  node-exporter:
+    container_name: node-exporter
+    image: 'index.docker.io/sourcegraph/node-exporter:181368_2022-11-03_bf1f156a4692@sha256:2d9dcdf0b2226f0c3d550a64d2667710265462350a3ba9ebe37d0302bc64af0f'
+    cpus: .5
+    mem_limit: '1g'
+    pid: 'host'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--no-collector.wifi'
+      - '--no-collector.hwmon'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    networks:
+      - sourcegraph
+    restart: always
+
   # Description: PostgreSQL database for various data.
   #
   # Disk: 128GB / persistent SSD
