@@ -10,6 +10,7 @@ source ./replicas.sh
 
 docker network create sourcegraph &>/dev/null || true
 
+./deploy-node-exporter.sh
 ./deploy-cadvisor.sh
 ./deploy-github-proxy.sh
 for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
