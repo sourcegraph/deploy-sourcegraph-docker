@@ -15,6 +15,6 @@ docker run --detach \
     --memory=4g \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
-    index.docker.io/sourcegraph/precise-code-intel-worker:4.1.2@sha256:710f6da3b53cffbf49f95452a0871c2975768ebe0176e9c50026ae47e9e2a723
+    index.docker.io/sourcegraph/precise-code-intel-worker:4.1.3@sha256:4d331c87bb9d941856f9bfa7af79d421f602313fe2b7b6bf52afff5ba415b15e
 
 echo "Deployed precise-code-intel-worker service"
