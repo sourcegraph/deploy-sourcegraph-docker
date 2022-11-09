@@ -1,5 +1,9 @@
 # Docker container monitoring rules
 
+global:
+  scrape_interval:     30s
+  evaluation_interval: 30s
+
 groups:
   - name: docker.rules
     rules:
