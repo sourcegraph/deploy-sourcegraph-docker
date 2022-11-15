@@ -6,8 +6,11 @@ set -euxo pipefail
 # Please read the notes below the script if you are cloning a private repository
 # Example: DEPLOY_SOURCEGRAPH_DOCKER_FORK_REVISION='v4.1.3'
 DEPLOY_SOURCEGRAPH_DOCKER_FORK_REVISION="$1"
-DEPLOY_SOURCEGRAPH_DOCKER_FORK_CLONE_URL='https://github.com/sourcegraph/deploy-sourcegraph-docker.git'
+DEPLOY_SOURCEGRAPH_DOCKER_FORK_CLONE_URL="$2"
 ##################### NO CHANGES REQUIRED BELOW THIS LINE #####################
+if [ "$2" = "" ]; then
+    DEPLOY_SOURCEGRAPH_DOCKER_FORK_CLONE_URL='https://github.com/sourcegraph/deploy-sourcegraph-docker.git'
+fi
 DEPLOY_SOURCEGRAPH_DOCKER_CHECKOUT='/root/deploy-sourcegraph-docker'
 DOCKER_COMPOSE_VERSION='1.29.2'
 DOCKER_DAEMON_CONFIG_FILE='/etc/docker/daemon.json'
