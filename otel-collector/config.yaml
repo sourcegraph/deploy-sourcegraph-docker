@@ -15,7 +15,7 @@ exporters:
 
 extensions:
   health_check:
-    port: ":13133"
+    endpoint: ":13133"
   zpages:
     endpoint: "localhost:55679"
 
