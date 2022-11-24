@@ -1,11 +1,23 @@
 # This is the template configuration for OpenTelemetry collector, and is not used by default.
 # It is mounted to '/etc/otel-collector/config.yaml' in the otel-collector container.
 
+receivers:
+  otlp:
+    protocols:
+      grpc: # port 4317
+      http: # port 4318
+
 exporters:
   # Add your exporter(s) configuration here. For each exporter, make sure it is enabled
   # in the service configuration below.
   # Refer to our OpenTelemetry docs for information on how to configure different exporters:
   # https://docs.sourcegraph.com/admin/observability/opentelemetry
+
+extensions:
+  health_check:
+    endpoint: ":13133"
+  zpages:
+    endpoint: "localhost:55679"
 
 service:
   pipelines:
@@ -19,16 +31,3 @@ service:
     # Do not remove these extensions
     - health_check
     - zpages
-
-receivers:
-  otlp:
-    protocols:
-      grpc: # port 4317
-      http: # port 4318
-
-extensions:
-  health_check:
-    port: 13133
-  zpages:
-    endpoint: "localhost:55679"
-
