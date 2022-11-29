@@ -19,7 +19,7 @@ docker run --detach \
     --memory=2g \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v $VOLUME:/var/lib/postgresql/data/ \
-    index.docker.io/sourcegraph/postgres-12-alpine:3.43.0@sha256:10586005197bf1f71dfc98cf8452defb92fc26042d9812231b31c030bd65035c
+    index.docker.io/sourcegraph/postgres-12-alpine:4.2.0@sha256:7350375edbff346066017b79a56206d994f94c4e2755128c87c3241a614b8a11
 
 # Sourcegraph requires PostgreSQL 12+. Generally newer versions are better,
 # but anything 12 and higher is supported.
