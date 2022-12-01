@@ -143,6 +143,8 @@ services:
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
+      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 10s
@@ -184,6 +186,8 @@ services:
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
+      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
+      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
@@ -335,6 +339,8 @@ services:
     mem_limit: '4g'
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
+      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
+      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
@@ -386,6 +392,8 @@ services:
       - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'GITHUB_BASE_URL=http://github-proxy:3180'
+      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
+      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
     volumes:
       - 'worker:/mnt/cache'
     networks:
@@ -694,33 +702,29 @@ services:
       - 'DATA_SOURCE_NAME=postgres://postgres:password@codeinsights-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
 
-  # Description: MinIO for storing LSIF uploads.
+  # Description: generic S3-like blobstore for storing LSIF uploads.
   #
   # Disk: 128GB / persistent SSD
   # Network: 1Gbps
   # Ports exposed to other Sourcegraph services: 9000/TCP
   # Ports exposed to public internet: none
   #
-  minio:
-    container_name: minio
-    image: 'index.docker.io/sourcegraph/minio:169594_2022-08-27_c479e442c579@sha256:50319e1de1b733fac50aeabc470a6dc0cd827ffd6e6bee0d094494f0bce28ac6'
+  blobstore:
+    container_name: blobstore
+    image: 'index.docker.io/sourcegraph/blobstore:insiders@sha256:d23213863f6bc67c153bcb18e1d427c63ba9440969cc2b533377c6ee5c12f83f'
     cpus: 1
     mem_limit: '1g'
-    environment:
-      - 'MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE'
-      - 'MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/minio/health/live']
+      test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/']
       interval: 10s
       timeout: 1s
       retries: 3
       start_period: 15s
     volumes:
-      - 'minio:/data'
+      - 'blobstore:/data'
     networks:
       - sourcegraph
     restart: always
-    command: ['server', '/data']
 
   # Description: Redis for storing short-lived caches.
   #
@@ -779,7 +783,7 @@ volumes:
   pgsql:
   codeintel-db:
   codeinsights-db:
-  minio:
+  blobstore:
   prometheus-v2:
   redis-cache:
   redis-store:
