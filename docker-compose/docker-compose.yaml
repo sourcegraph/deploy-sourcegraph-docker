@@ -13,7 +13,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   migrator:
     container_name: migrator
-    image: 'index.docker.io/sourcegraph/migrator:169594_2022-08-27_c479e442c579@sha256:c2c517a7bd59197bcabbebe7ea1e02a85dce3a69d5cab7dbbc8a021cbc231041'
+    image: 'index.docker.io/sourcegraph/migrator:insiders@sha256:17c5773ef91cff99a826f09c9ae5bd4f41808ba1765b9519ea387d3fa2554167'
     cpus: 0.5
     mem_limit: '500m'
     command: ['up']
@@ -124,7 +124,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:169594_2022-08-27_c479e442c579@sha256:69e0e8142e3ede85e4dcb04e693b3a64d2c5fe28286ea2ce6877f6d324eee178'
+    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:04be58393463d8046d8042a1e40a29025c099b14d081647f44c1a64d82d3a046'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -168,7 +168,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:169594_2022-08-27_c479e442c579@sha256:69e0e8142e3ede85e4dcb04e693b3a64d2c5fe28286ea2ce6877f6d324eee178'
+    image: 'index.docker.io/sourcegraph/frontend:insiders@sha256:04be58393463d8046d8042a1e40a29025c099b14d081647f44c1a64d82d3a046'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -334,7 +334,7 @@ services:
   #
   precise-code-intel-worker:
     container_name: precise-code-intel-worker
-    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:169594_2022-08-27_c479e442c579@sha256:f5d0eff3bcaa72dfd9e0c7f88829ff0dc27580a875338c68ecd83393884db510'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:insiders@sha256:0a99317d8859a06bb7a3f8de0933dc16ac5da959df34d8a95acb3eea03057be9'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -381,7 +381,7 @@ services:
   #
   worker:
     container_name: worker
-    image: 'index.docker.io/sourcegraph/worker:169594_2022-08-27_c479e442c579@sha256:7c0504e41595cc5ad37a7f42ce5a064edffee4a5772fe4bb56f32827def275f7'
+    image: 'index.docker.io/sourcegraph/worker:insiders@sha256:243bbd21a865492d10d0665f179cecc02a945c2407625675d444872587471a1a'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -711,7 +711,7 @@ services:
   #
   blobstore:
     container_name: blobstore
-    image: 'index.docker.io/sourcegraph/blobstore:insiders@sha256:d23213863f6bc67c153bcb18e1d427c63ba9440969cc2b533377c6ee5c12f83f'
+    image: 'index.docker.io/sourcegraph/blobstore:insiders@sha256:7a38bbdf8ca9548f0f295c599335ad022ce73dac405cf350cf5fa7be16980af2'
     cpus: 1
     mem_limit: '1g'
     healthcheck:
