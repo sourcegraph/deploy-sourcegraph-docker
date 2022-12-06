@@ -15,6 +15,8 @@ docker run --detach \
     --memory=4g \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
-    index.docker.io/sourcegraph/precise-code-intel-worker:3.43.0@sha256:39c2ca49ff9f33dffb00b8a66aa2a3105a5039a278a7c9d8d45e2e18c5cabcd0
+    -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore \
+    -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
+    index.docker.io/sourcegraph/precise-code-intel-worker:187572_2022-12-06_cbecc5321c7d@sha256:d1b1546d784fec8c90928a40e1b7eafc33202a53e4fcd501001d3f4a73e5c8ce
 
 echo "Deployed precise-code-intel-worker service"
