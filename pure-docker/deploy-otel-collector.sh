@@ -15,5 +15,5 @@ docker run --detach \
     --memory=1g \
     -e JAEGER_HOST=jaeger \
     -v $(pwd)/../otel-collector/config.yaml:/etc/otel-collector/config.yaml \
-    index.docker.io/sourcegraph/opentelemetry-collector:4.2.0@sha256:4bc1df3d5bc681f2b16c39a66f3517b7493cf993046ac3036e781ad7c9c30a65 \
+    index.docker.io/sourcegraph/opentelemetry-collector:4.2.1@sha256:7eb705baf65ce8873de04626959886936f9efe70f3219d6dd14b1ab5c8d66062 \
     --config /etc/otel-collector/configs/logging.yaml

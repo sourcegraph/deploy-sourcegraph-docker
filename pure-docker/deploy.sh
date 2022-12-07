@@ -19,7 +19,7 @@ for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
 ./deploy-pgsql.sh
 ./deploy-codeintel-db.sh
 ./deploy-codeinsights-db.sh
-./deploy-minio.sh
+./deploy-blobstore.sh
 ./deploy-prometheus.sh
 ./deploy-redis-cache.sh
 ./deploy-redis-store.sh
