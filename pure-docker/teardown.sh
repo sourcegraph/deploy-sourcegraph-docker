@@ -6,7 +6,7 @@ cd "$root_dir"
 
 source ./replicas.sh
 
-docker rm -f apache &> /dev/null || true &
+docker rm -f apache &>/dev/null || true &
 docker rm -f cadvisor &> /dev/null || true &
 docker rm -f caddy    &> /dev/null || true &
 docker rm -f sourcegraph-frontend-internal &> /dev/null || true &
@@ -19,7 +19,7 @@ docker rm -f precise-code-intel-worker &> /dev/null || true
 docker rm -f pgsql &> /dev/null || true &
 docker rm -f codeintel-db &> /dev/null || true &
 docker rm -f codeinsights-db &> /dev/null || true &
-docker rm -f minio &> /dev/null || true &
+docker rm -f blobstore &> /dev/null || true &
 docker rm -f migrator &> /dev/null || true &
 docker rm -f prometheus &> /dev/null || true
 docker rm -f redis-cache &> /dev/null || true &
