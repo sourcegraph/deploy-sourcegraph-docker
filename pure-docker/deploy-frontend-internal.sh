@@ -38,7 +38,9 @@ docker run --detach \
     -e GRAFANA_SERVER_URL=http://grafana:3000 \
     -e GITHUB_BASE_URL=http://github-proxy:3180 \
     -e PROMETHEUS_URL=http://prometheus:9090 \
+    -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore \
+    -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/frontend:4.2.0@sha256:7cfc4a4364947c43bac10cdc3e1165fabb12a6529b9614a5769a477f1943780d
+    index.docker.io/sourcegraph/frontend:4.2_187939_2022-12-07_5d744edd0103@sha256:1f3f9365b74a80ca8a77b3f17822410952d5b349fdac4f25ec2af11095b45cdd
 
 echo "Deployed sourcegraph-frontend-internal service"

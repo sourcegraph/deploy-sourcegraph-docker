@@ -26,7 +26,9 @@ docker run --detach \
     -e SEARCHER_URL="$(addresses "http://searcher-" $NUM_SEARCHER ":3181")" \
     -e SRC_GIT_SERVERS="$(addresses "gitserver-" $NUM_GITSERVER ":3178")" \
     -e SYMBOLS_URL="$(addresses "http://symbols-" $NUM_SYMBOLS ":3184")" \
+    -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore \
+    -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/worker:4.2.0@sha256:05fdf1b5e01af6523910878376afae6729c228b4a433e4dd2b6f26904f77a87e
+    index.docker.io/sourcegraph/worker:4.2_187939_2022-12-07_5d744edd0103@sha256:54f1a7775f26ffee087451eac88b0c23910bdff3d0d92eb8c500744ba20caf40
 
 echo "Deployed worker service"
