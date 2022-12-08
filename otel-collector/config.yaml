@@ -20,6 +20,9 @@ extensions:
     endpoint: "localhost:55679"
 
 service:
+  telemetry:
+    metrics:
+      address: ":8888"
   pipelines:
     traces:
       exporters:
