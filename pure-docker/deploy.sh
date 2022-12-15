@@ -10,7 +10,7 @@ source ./replicas.sh
 
 docker network create sourcegraph &>/dev/null || true
 
-./deploy-apache.sh
+./deploy-node-exporter.sh
 ./deploy-cadvisor.sh
 ./deploy-github-proxy.sh
 for i in $(seq 0 $(($NUM_GITSERVER - 1))); do ./deploy-gitserver.sh $i; done
@@ -47,6 +47,5 @@ while [ "$(docker inspect sourcegraph-frontend-internal --format '{{.State.Healt
 done
 
 for i in $(seq 0 $(($NUM_FRONTEND - 1))); do ./deploy-frontend.sh $i; done
-# Not used in customer-replica branch.
-#./deploy-caddy.sh
+./deploy-caddy.sh
 wait
