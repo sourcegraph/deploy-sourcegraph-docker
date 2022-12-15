@@ -190,6 +190,8 @@ github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-2022051120082
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20220511200824-abaeea3fde03/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20220922183713-4ab710dc0025 h1:DVHm16IbByMG0t9vu3hbSabb5AMNND48IOQrnTgCMYk=
 github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20220922183713-4ab710dc0025/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20221215223216-8c996a77af64 h1:5aLMdmCalJgijqlK4faWfOlWYDaX2ggs1EwWzCDhwCg=
+github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images v0.0.0-20221215223216-8c996a77af64/go.mod h1:RrAuT1kEkrErj2fmr4f3pPDoBF0ruFBhOSC1yORlv24=
 github.com/sourcegraph/update-docker-tags v0.9.0 h1:FeqPS1GH5n4KyTha/SpZvDDmrdS4c+N8cQ3xb4Rlb+A=
 github.com/sourcegraph/update-docker-tags v0.9.0/go.mod h1:lCDsoUnk/ASDbm7UxE7tU3qAUhQxA7xykELHXcLeKFM=
 github.com/sourcegraph/update-docker-tags v0.10.0 h1:KpY1HtvSt0FzDM/sR0jQF5StNbiPKpqmHhE0jpBEa0A=
