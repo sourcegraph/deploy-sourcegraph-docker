@@ -96,3 +96,8 @@
     job: node-exporter
   targets:
     - node-exporter:9100
+- labels:
+    nodename: "sourcegraph-docker-compose-host"
+    job: otel-collector
+  targets:
+    - otel-collector:8888
