@@ -31,7 +31,7 @@ sudo docker run --detach \
     --volume=/dev/disk/:/dev/disk:ro \
     --privileged \
     --device=/dev/kmsg \
-    index.docker.io/sourcegraph/cadvisor:187572_2022-12-06_cbecc5321c7d@sha256:755748f2f9b00d8f70bd65349e85235585bdf1a663e26198c8eaf91dfd5636e1 \
+    index.docker.io/sourcegraph/cadvisor:4.3.0@sha256:a96e536b268f8ab97a6ae7ffbcca2254cd30d214d80f00a17b0f09c425a55ebb \
     --port=8080
 
 echo "Deployed cadvisor"
