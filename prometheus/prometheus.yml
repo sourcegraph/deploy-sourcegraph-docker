@@ -15,7 +15,7 @@ alerting:
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  - '*_rules.yml'
+  - '/sg_config_prometheus/*_rules.yml'
   - '/sg_prometheus_add_ons/*_rules.yml'
 
 # Configure targets to scrape
