@@ -6,6 +6,7 @@ cd "$root_dir"
 
 source ./replicas.sh
 
+docker rm -f apache &>/dev/null || true &
 docker rm -f node-exporter &>/dev/null || true &
 docker rm -f cadvisor &> /dev/null || true &
 docker rm -f caddy    &> /dev/null || true &
