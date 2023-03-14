@@ -145,6 +145,20 @@ services:
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
+      - |
+        SRC_PROF_SERVICES=
+          [
+            { "Name": "frontend-0", "Host": "sourcegraph-frontend-0:6060" },
+            { "Name": "frontend-internal-0", "Host": "sourcegraph-frontend-internal-0:6060" },
+            { "Name": "gitserver-0", "Host": "gitserver-0:6060" },
+            { "Name": "searcher-0", "Host": "searcher-0:6060" },
+            { "Name": "symbols-0", "Host": "symbols-0:6060" },
+            { "Name": "repo-updater", "Host": "repo-updater:6060" },
+            { "Name": "github-proxy", "Host": "github-proxy:6060" },
+            { "Name": "worker", "Host": "worker:6060" },
+            { "Name": "zoekt-indexserver-0", "Host": "zoekt-indexserver-0:6072" },
+            { "Name": "zoekt-webserver-0", "Host": "zoekt-webserver-0:6070", "DefaultPath": "/debug/requests/" }
+          ]
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 10s
