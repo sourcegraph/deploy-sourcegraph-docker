@@ -10,7 +10,7 @@ services:
   #
   jaeger:
     container_name: jaeger
-    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:4.4.2@sha256:667e639b6dacd171f8446edcba4cae27b4ddfb35628f1231b19aa1dd24e73757'
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:72c21e5e4ff8353096a74db42cd7899bbc06007611de1d1b58e5713a309a850d'
     cpus: 0.5
     mem_limit: '512m'
     ports:

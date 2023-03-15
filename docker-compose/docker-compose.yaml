@@ -13,7 +13,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   migrator:
     container_name: migrator
-    image: 'index.docker.io/sourcegraph/migrator:4.4.2@sha256:603b17216b6390e486fed6ff3ce4d6bced1446f8ef820b5b4e1278e4d885123f'
+    image: 'index.docker.io/sourcegraph/migrator:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:1a9da32c08a37a2cf14cb703862033f0867b5d36c34b50a5dd51782f3a6c3c61'
     cpus: 0.5
     mem_limit: '500m'
     command: ['up']
@@ -124,7 +124,7 @@ services:
   # service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
-    image: 'index.docker.io/sourcegraph/frontend:4.4.2@sha256:9f7b7d2feccc8e6b404bd4d82f2866b61880447e21a56015ec393547ca3981ce'
+    image: 'index.docker.io/sourcegraph/frontend:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:fb8adb1a39818cc40d60c8f0dc20b469f19ba1308ab7f02dcd7d5db5ea02be43'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -168,7 +168,7 @@ services:
   #
   sourcegraph-frontend-internal:
     container_name: sourcegraph-frontend-internal
-    image: 'index.docker.io/sourcegraph/frontend:4.4.2@sha256:9f7b7d2feccc8e6b404bd4d82f2866b61880447e21a56015ec393547ca3981ce'
+    image: 'index.docker.io/sourcegraph/frontend:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:fb8adb1a39818cc40d60c8f0dc20b469f19ba1308ab7f02dcd7d5db5ea02be43'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -216,7 +216,7 @@ services:
   #
   gitserver-0:
     container_name: gitserver-0
-    image: 'index.docker.io/sourcegraph/gitserver:4.4.2@sha256:198e9516a79a8aeac4d1d04c9b0bbe5c1bbb71f2395efe645570c93c09e184ab'
+    image: 'index.docker.io/sourcegraph/gitserver:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:fa2492f38ce0f86659187f93481ed68c8ee664e28d22b1aac68cc968ff2f416b'
     cpus: 4
     mem_limit: '8g'
     environment:
@@ -240,7 +240,7 @@ services:
   #
   zoekt-indexserver-0:
     container_name: zoekt-indexserver-0
-    image: 'index.docker.io/sourcegraph/search-indexer:4.4.2@sha256:7716a32597300f7dfb7e974465a3bd3c62fae3aa485b48d9aa9f79ea3348f87f'
+    image: 'index.docker.io/sourcegraph/search-indexer:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:7716a32597300f7dfb7e974465a3bd3c62fae3aa485b48d9aa9f79ea3348f87f'
     cpus: 8
     mem_limit: '16g'
     environment:
@@ -263,7 +263,7 @@ services:
   #
   zoekt-webserver-0:
     container_name: zoekt-webserver-0
-    image: 'index.docker.io/sourcegraph/indexed-searcher:4.4.2@sha256:013190418308b94521e072972ae2342c41f99144205f58d61f5dfeda29ac0f58'
+    image: 'index.docker.io/sourcegraph/indexed-searcher:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:013190418308b94521e072972ae2342c41f99144205f58d61f5dfeda29ac0f58'
     cpus: 8
     mem_limit: '50g'
     environment:
@@ -290,7 +290,7 @@ services:
   #
   searcher-0:
     container_name: searcher-0
-    image: 'index.docker.io/sourcegraph/searcher:4.4.2@sha256:62554970dfe2a82c82fb82fa6b8fb77f0acef2ce0d9760c8745433f48d8113be'
+    image: 'index.docker.io/sourcegraph/searcher:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:c619dd237a0d85895ce2b16558c5b96732f25fa2b39f128338238cd2a21703f7'
     cpus: 2
     mem_limit: '2g'
     environment:
@@ -317,7 +317,7 @@ services:
   #
   github-proxy:
     container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:4.4.2@sha256:f5b2b2e8251e6599a5757ad5cbab8fdfe11b3f71446af852b70cf2a58cc062e1'
+    image: 'index.docker.io/sourcegraph/github-proxy:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:fea056d49cf6ebeb87a28a91043ed105812cdbe7f9764066e10696c97a64499d'
     cpus: 1
     mem_limit: '1g'
     environment:
@@ -334,7 +334,7 @@ services:
   #
   precise-code-intel-worker:
     container_name: precise-code-intel-worker
-    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:4.4.2@sha256:87f00201b234483e2b7cd98980621668e69cb11ab9a39e3304b3f2e681ae4d60'
+    image: 'index.docker.io/sourcegraph/precise-code-intel-worker:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:e4b391bb9c08c58253856b5b07a0df0db4154d86764b9261963e54e0f7700d68'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -360,7 +360,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:4.4.2@sha256:b2e5940eaac58788b0cc6cb2a4de4d53e15d28477fb7bd12ec31d416426cdbd0'
+    image: 'index.docker.io/sourcegraph/repo-updater:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:5bca7c9b9347c1f6d6bb0876ab66b9ea5e5503ab70768f41adefd1d5725f5e7b'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -381,7 +381,7 @@ services:
   #
   worker:
     container_name: worker
-    image: 'index.docker.io/sourcegraph/worker:4.4.2@sha256:88403801cc0809ed7227b9bed7be4a15c9fb382b7ce639d39adac0648d6acfc7'
+    image: 'index.docker.io/sourcegraph/worker:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:6f6cd5a8a831cc4c477a547f40ba13b9b3300cc5d6ee436ff35f03044b4e59df'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -408,7 +408,7 @@ services:
   #
   syntect-server:
     container_name: syntect-server
-    image: 'index.docker.io/sourcegraph/syntax-highlighter:4.4.2@sha256:e02c9d64e431815bf51b05036463d60a2472f4a6ba8c3c475083c3b116ed0fe6'
+    image: 'index.docker.io/sourcegraph/syntax-highlighter:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:cf254fae2a14195355a13bab36c3315cf32d4c9c920b5d2c5edeed6d45cb25b4'
     cpus: 4
     mem_limit: '6g'
     healthcheck:
@@ -429,7 +429,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:4.4.2@sha256:8c00918153e3e4e1155c19ba59f93cc889ffaaac6f8f7dc91ff2e5d610e1b740'
+    image: 'index.docker.io/sourcegraph/symbols:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:911b3a75d49bedbbf2c071f6154ade2c86fad4c98127120afd5ac7f95bbbd023'
     cpus: 2
     mem_limit: '4g'
     environment:
@@ -455,7 +455,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:4.4.2@sha256:d833d00a39937cf700f276f816dc789615d6396979418a7d9362386513b1fc9d'
+    image: 'index.docker.io/sourcegraph/prometheus:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:c53b97107315da1edc0c76c9a3875a8d171e7f2bf4a4a742b3c70ebc151350c3'
     cpus: 4
     mem_limit: '8g'
     volumes:
@@ -482,7 +482,7 @@ services:
   # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
   grafana:
     container_name: grafana
-    image: 'index.docker.io/sourcegraph/grafana:4.4.2@sha256:69777c3a895a03eee035c173c91c0f25893285118c06e51a67728ec4259e2296'
+    image: 'index.docker.io/sourcegraph/grafana:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:9fe740597af16754f5789f3c8f9328d484bff68ad867bae4dcd312e0006a4596'
     cpus: 1
     mem_limit: '1g'
     volumes:
@@ -503,7 +503,7 @@ services:
   #
   cadvisor:
     container_name: cadvisor
-    image: 'index.docker.io/sourcegraph/cadvisor:4.4.2@sha256:4c3af0c4fd9ea4425d38f7d1a784833c5fd542542cdbb81292044773e686fa60'
+    image: 'index.docker.io/sourcegraph/cadvisor:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:21454f2a451b6c4fee34677b736639520fdf91a90b3e34f57cc310b4caa5af9e'
     cpus: 1
     mem_limit: '1g'
     # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
@@ -536,7 +536,7 @@ services:
   #
   node-exporter:
     container_name: node-exporter
-    image: 'index.docker.io/sourcegraph/node-exporter:4.4.2@sha256:fa8e5700b7762fffe0674e944762f44bb787a7e44d97569fe55348260453bf80'
+    image: 'index.docker.io/sourcegraph/node-exporter:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:fa8e5700b7762fffe0674e944762f44bb787a7e44d97569fe55348260453bf80'
     cpus: .5
     mem_limit: '1g'
     pid: 'host'
@@ -565,7 +565,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-12-alpine:4.4.2@sha256:ed669f0b7a2062fa6c5e734ddbbba26e34b3dc9e7503f88b99324327e45352f1'
+    image: 'index.docker.io/sourcegraph/postgres-12-alpine:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:eb35bb89708172fac6d1f3015566fb4683793f9235b233ba128496761d5d141a'
     cpus: 4
     mem_limit: '4g'
     shm_size: '1g'
@@ -593,7 +593,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   pgsql-exporter:
     container_name: pgsql-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:4.4.2@sha256:f928bb932a5f8202d283d78cff686bc0a090b8a407b43337c1aa62d6c65cfb34'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:9af5c00e647b0c0be84226dc521c3e340c5122ebe8a589d3fd5a63b2e3a919a1'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -612,7 +612,7 @@ services:
   #
   codeintel-db:
     container_name: codeintel-db
-    image: 'index.docker.io/sourcegraph/codeintel-db:4.4.2@sha256:87a375d13344ae5c3556f77b2aab553b3b799cab21476ff998f9b17bd287ea37'
+    image: 'index.docker.io/sourcegraph/codeintel-db:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:5871983d7f126535a5093a8266add353a8395f878cce8636d43f86febac5d0e1'
     cpus: 4
     mem_limit: '4g'
     shm_size: '1g'
@@ -640,7 +640,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   codeintel-db-exporter:
     container_name: codeintel-db-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:4.4.2@sha256:f928bb932a5f8202d283d78cff686bc0a090b8a407b43337c1aa62d6c65cfb34'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:9af5c00e647b0c0be84226dc521c3e340c5122ebe8a589d3fd5a63b2e3a919a1'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -659,7 +659,7 @@ services:
   #
   codeinsights-db:
     container_name: codeinsights-db
-    image: 'index.docker.io/sourcegraph/codeinsights-db:4.4.2@sha256:2206b7554f4fde2fbe946163a514b3580e62096c0316f706121363a3c4e30baf'
+    image: 'index.docker.io/sourcegraph/codeinsights-db:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:023996faa98941da9212954fe43708c88c4f25362d90b2dfb0ad91ac009bf718'
     cpus: 4
     mem_limit: '2g'
     shm_size: '1g'
@@ -692,7 +692,7 @@ services:
   # for this container will need to be updated to reflect the new connection information.
   codeinsights-db-exporter:
     container_name: codeinsights-db-exporter
-    image: 'index.docker.io/sourcegraph/postgres_exporter:4.4.2@sha256:f928bb932a5f8202d283d78cff686bc0a090b8a407b43337c1aa62d6c65cfb34'
+    image: 'index.docker.io/sourcegraph/postgres_exporter:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:9af5c00e647b0c0be84226dc521c3e340c5122ebe8a589d3fd5a63b2e3a919a1'
     cpus: 0.1
     mem_limit: '50m'
     networks:
@@ -711,7 +711,7 @@ services:
   #
   blobstore:
     container_name: blobstore
-    image: 'index.docker.io/sourcegraph/blobstore:4.4.2@sha256:61aa6837e27a898953ea310276d0b2cde6dcd45392d90d7ca4a4395841d8a965'
+    image: 'index.docker.io/sourcegraph/blobstore:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:ce4be072d168007b92cd1d9bab03eea9085047c4b35bc79f60683ca5b419a03e'
     cpus: 1
     mem_limit: '1g'
     healthcheck:
@@ -734,7 +734,7 @@ services:
   #
   redis-cache:
     container_name: redis-cache
-    image: 'index.docker.io/sourcegraph/redis-cache:4.4.2@sha256:133a5996f9f4e0e1c407c6c7c4060ccc0eef0eb3195ff05085fd8411d2e5a311'
+    image: 'index.docker.io/sourcegraph/redis-cache:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:31a555383cf32ffbb79b8a8c05f1426c81b2973a38495f44155501eb4e7df5b6'
     cpus: 1
     mem_limit: '7g'
     volumes:
@@ -750,7 +750,7 @@ services:
   #
   redis-store:
     container_name: redis-store
-    image: 'index.docker.io/sourcegraph/redis-store:4.4.2@sha256:bc7f73b47ef52bc4b76020ecfeffed5b88e9207a5e79ecc6bb8dbcec61bd4225'
+    image: 'index.docker.io/sourcegraph/redis-store:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:3801cbc35eda578b635c3bb0cc37ad4b080fb026e572c0dfc82839d00531c1f4'
     cpus: 1
     mem_limit: '7g'
     volumes:
@@ -765,7 +765,7 @@ services:
   # Ports exposed to the public internet: none
   otel-collector:
     container_name: otel-collector
-    image: 'index.docker.io/sourcegraph/opentelemetry-collector:4.4.2@sha256:f0723c96c973258ad3123ddc479261bb8f5827bbac1d091b6a683fde55334413'
+    image: 'index.docker.io/sourcegraph/opentelemetry-collector:main-dry-run-pjlast-bitbucket-server-cherry-pick_207149_2023-03-15_c26675f6f849@sha256:ed867f888c014547c9ee9d89671da5fac320e958f1a6015a6e7d174bcca0ce9d'
     cpus: 1
     mem_limit: '1g'
     networks:
