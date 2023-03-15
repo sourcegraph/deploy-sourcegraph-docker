@@ -149,7 +149,7 @@ services:
         SRC_PROF_SERVICES=
           [
             { "Name": "frontend-0", "Host": "sourcegraph-frontend-0:6060" },
-            { "Name": "frontend-internal-0", "Host": "sourcegraph-frontend-internal-0:6060" },
+            { "Name": "frontend-internal-0", "Host": "sourcegraph-frontend-internal:6060" },
             { "Name": "gitserver-0", "Host": "gitserver-0:6060" },
             { "Name": "searcher-0", "Host": "searcher-0:6060" },
             { "Name": "symbols-0", "Host": "symbols-0:6060" },
