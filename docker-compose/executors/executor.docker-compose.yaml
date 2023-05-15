@@ -17,7 +17,7 @@ services:
       # Choose what work to process
       - EXECUTOR_QUEUE_NAME=
       # Note: Must match left-hand side of scratch volume mount
-      - EXECUTOR_DOCKER_HOST_MOUNT_PATH=/tmp/sourcegraph/executor-scratch
+      - EXECUTOR_DOCKER_HOST_MOUNT_PATH=/scratch
       # Note: Must match right-hand side of scratch volume mount
       - TMPDIR=/scratch
       # Run as root (required for docker daemon control)
@@ -27,7 +27,7 @@ services:
       # Mount docker socket
       - '/var/run/docker.sock:/var/run/docker.sock'
       # Mount volume for workspaces shared by executor and launched containers
-      - '/tmp/sourcegraph/executor-scratch:/scratch'
+      - '/scratch:/scratch'
     networks:
       - sourcegraph
     restart: always
