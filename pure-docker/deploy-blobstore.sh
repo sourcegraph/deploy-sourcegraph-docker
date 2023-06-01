@@ -19,4 +19,4 @@ docker run --detach \
     --memory=1g \
     -p 0.0.0.0:9000:9000 \
     -v $VOLUME:/data \
-    index.docker.io/sourcegraph/blobstore:5.0.4@sha256:b0f5c38c10d4b85e59972b66141f56b2b7beeb9596f1d2fd4a75456300d0bed6
+    index.docker.io/sourcegraph/blobstore:5.0.5@sha256:4cda2a975d620cc8457040a42df5a34b2c84372f5966ab59e2f9e185c2358770
