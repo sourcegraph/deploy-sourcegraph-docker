@@ -22,6 +22,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/searcher:5.1.1@sha256:2112aadc4d48cfc2d959151856f11c504db690cdefe4c9943321dcf0b06d181d
+    index.docker.io/sourcegraph/searcher:5.1.2@sha256:0328bd6d582c1974d0fd17b84ee21293db3b6792e02ffb407483ee8d03ea7532
 
 echo "Deployed searcher $1 service"
