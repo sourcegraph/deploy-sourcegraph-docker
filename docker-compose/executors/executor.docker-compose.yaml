@@ -10,7 +10,7 @@ services:
     # Run with privileged capabilities (required for docker daemon control)
     privileged: true
     environment:
-      # Refer to https://docs.sourcegraph.com/admin/deploy_executors_binary#step-2-setup-environment-variables on how to populate these variables
+      # Refer to https://docs.sourcegraph.com/admin/executors/deploy_executors_binary#step-2-setup-environment-variables on how to populate these variables
       - EXECUTOR_FRONTEND_URL=http://sourcegraph-frontend-0:3080
       # Note: Must match `executors.accessToken` in site config
       - EXECUTOR_FRONTEND_PASSWORD=
