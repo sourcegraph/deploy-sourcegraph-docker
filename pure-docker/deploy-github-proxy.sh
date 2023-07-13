@@ -21,6 +21,6 @@ docker run --detach \
     -e GOMAXPROCS=1 \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
-    index.docker.io/sourcegraph/github-proxy:5.1.2@sha256:03b2e83e929318d24829c3ca53f8d76d858024aa6b29b7f0ed5c315d0453b5f9
+    index.docker.io/sourcegraph/github-proxy:5.1.3@sha256:4061b9b55a2c2b814d4c0aa1b8bffda1a9a089102d7ee177d813161a2e87e979
 
 echo "Deployed github-proxy service"
