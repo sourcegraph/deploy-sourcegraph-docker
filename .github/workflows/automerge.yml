@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: automerge
-        uses: pascalgn/automerge-action@v0.12.0
+        uses: pascalgn/automerge-action@c9bd1823770819dc8fb8a5db2d11a3a95fbe9b07 # v0.12.0
         env:
           # Allows this merge to trigger other actions
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
