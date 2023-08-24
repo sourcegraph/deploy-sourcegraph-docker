@@ -29,6 +29,6 @@ docker run --detach \
     -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore \
     -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/worker:5.1.6@sha256:896883346f60fc0bacbf2a0ef36b9c424d5a5453aa29964095a755e510672943
+    index.docker.io/sourcegraph/worker:5.1.7@sha256:013124d674896a20a981dd08d062120619f70137ae2031e574ee5f283e887e27
 
 echo "Deployed worker service"
