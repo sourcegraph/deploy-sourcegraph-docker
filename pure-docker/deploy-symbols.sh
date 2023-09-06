@@ -22,6 +22,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -v $VOLUME:/mnt/cache \
-    index.docker.io/sourcegraph/symbols:5.1.7@sha256:fb4e907f48692a83b9cddb520f37e41004a4612e85537ed8e0bd76b184631330
+    index.docker.io/sourcegraph/symbols:5.1.8@sha256:4e926e008c8bb7a6fa2319549c02467329311027b0c8d96598329809f4624795
 
 echo "Deployed symbols $1 service"
