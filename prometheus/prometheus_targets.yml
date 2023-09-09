@@ -7,11 +7,6 @@
     - sourcegraph-frontend-internal:6060
 - labels:
     nodename: "sourcegraph-docker-compose-host"
-    job: github-proxy
-  targets:
-    - github-proxy:6060
-- labels:
-    nodename: "sourcegraph-docker-compose-host"
     job: repo-updater
   targets:
     - repo-updater:6060
