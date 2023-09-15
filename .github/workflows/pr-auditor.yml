@@ -13,8 +13,8 @@ jobs:
       - uses: actions/setup-go@v2
         with: { go-version: '1.18' }
 
-      - run: ./dev/pr-auditor/check-pr.sh
+      - run: './check-pr.sh'
         env:
           GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
-          GITHUB_TOKEN: ${{ secrets.CODENOTIFY_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           GITHUB_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

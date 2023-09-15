@@ -1,0 +1,33 @@
+version: '2.4'
+services:
+  executor:
+    container_name: executor
+    image: 'index.docker.io/sourcegraph/executor:216430_2023-05-02_5.0-3cc9006de32c@sha256:c4a3345793d3e858631dde1eac69b10cc37bc522e7266f9061ed8ad1fde6e8a0'
+    cpus: 1
+    mem_limit: '4g'
+    # Run as root (required for docker daemon control)
+    user: root
+    # Run with privileged capabilities (required for docker daemon control)
+    privileged: true
+    environment:
+      # Refer to https://docs.sourcegraph.com/admin/executors/deploy_executors_binary#step-2-setup-environment-variables on how to populate these variables
+      - EXECUTOR_FRONTEND_URL=http://sourcegraph-frontend-0:3080
+      # Note: Must match `executors.accessToken` in site config
+      - EXECUTOR_FRONTEND_PASSWORD=
+      # Choose what work to process
+      - EXECUTOR_QUEUE_NAME=
+      # Note: Must match left-hand side of scratch volume mount
+      - EXECUTOR_DOCKER_HOST_MOUNT_PATH=/scratch
+      # Note: Must match right-hand side of scratch volume mount
+      - TMPDIR=/scratch
+      # Run as root (required for docker daemon control)
+      - UID=1000
+      - GID=1000
+    volumes:
+      # Mount docker socket
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      # Mount volume for workspaces shared by executor and launched containers
+      - '/scratch:/scratch'
+    networks:
+      - sourcegraph
+    restart: always

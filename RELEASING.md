@@ -3,14 +3,17 @@
 **This is the guide for releasing the [Pure-Docker Sourcegraph deployment reference](./pure-docker/README.md).**
 The docker-compose release is done entirely via the [Sourcegraph release tool](https://about.sourcegraph.com/handbook/engineering/distribution/tools/release).
 
+## Customer Replica
+
+We maintain a copy of pure-docker in a separate [repo](https://github.com/sourcegraph/deploy-sourcegraph-docker-customer-replica-1) for a [customer](https://github.com/sourcegraph/accounts/issues/565). In the past
+this was maintained in this repo as a separate series of branches that were suffixed with -customer-replica. This was deprecated in favor of the separate repo after 4.4.1. The repo is included in our release automation so no additional manual steps are required after 4.4.1. This note is just sharing context for future releases and for anyone referencing -customer-replica branches.
+
 ## Branching/tagging scheme
 
-Just like deploy-sourcegraph, we use version branches and version tags. We _additionally_ have a second set which is customer-replication branches and version tags:
+Just like deploy-sourcegraph, we use version branches and version tags.
 
-- Tag examples: `v3.8.2`, `v3.9.2`, `customer-replica-v3.8.2`, `customer-replica-v3.9.2-2`
-- Branch examples: `3.8`, `3.9`, `3.8-customer-replica`, `3.9-customer-replica`
-
-The customer replica branches are distinct living branches which have diffs we maintain for replicating some customers using the pure-docker deployment model described in the README.md of this repository (e.g. the customers' different Postgres version, changes to the `prometheus_targets.yml`, and more.) We test, tag, and release these `$VERSION-customer-replica` branches as `customer-replica-$VERSION` to produce the final diffs we send to customers running a pure-docker deployment on e.g. in the [pure docker upgrade guide](https://docs.sourcegraph.com/admin/updates/pure_docker).
+- Tag examples: `v3.8.2`, `v3.9.2`
+- Branch examples: `3.8`, `3.9`
 
 ## Releasing a new version
 
@@ -66,135 +69,3 @@ git push origin v3.9.2
 For pure-docker, we provide customers with an exact diff of changes to make. They do not run our deploy.sh scripts directly, instead they copy them or adapt them to their own deployment environment entirely. This means we must carefully communicate each change that is made.
 
 To reduce the chance for errors, we send an exact diff of changes. This diff needs to be as minimal and concise as possible, and e.g. not include changes to unrelated files like `.prettierignore` or `docker-compose/` to avoid any confusion. See https://docs.sourcegraph.com/admin/updates/pure_docker for examples of what these diffs look like.
-
-### Major/Minor release
-
-Pretend `3.8` was the last version of pure-docker release (look for the latest `n.n-customer-replica` branch), and that `3.9` is the version we want to release. Then:
-
-```sh
-# Checkout the current pure-docker release branch
-git checkout 3.8-customer-replica
-
-# Create the new pure-docker release branch
-git checkout -B 3.9-customer-replica
-
-# Merge the publish-3.9.0 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes. Note that "theirs" is a Git term, not a placeholder.
-git merge publish-3.9.0 -X theirs
-
-# Reset to previous commit so we can manually inspect ALL changes - we want to create multiple commits instead of keeping a single merge commit
-git reset HEAD~
-
-# Show which files may have been deleted, etc.
-git status
-```
-
-While committing in next steps, you will run into two merge conflicts:
-
-- Do not commit `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
-- The `.prettierignore` should contain the following lines:
-
-    ```
-    .github/
-    *.md
-    rootfs/etc/docker/daemon.json
-    ```
-
-At this point you should evaluate the `git status` output as well as all the changes in your working git directory. You need to ensure the following happens:
-
-1. Files that were shown as deleted in the `git status` output get deleted in the relevant commit.
-2. Create **one** commit with changes _unrelated to the upgrade_, i.e. include ALL changes that are not directly related to upgrading:
-    - `git commit -m 'merge 3.9 (changes unrelated to upgrade)'`
-3. Create **one** commit with the changes _customers need to apply in order to ugprade_, i.e. the image tag changes, adding/removing any new services, updating env vars, but no unrelated changes.
-    - Do not include `docker-compose/` changes in this commit, those are irrelevant to pure-docker users.
-    - Double check `pure-docker/deploy-pgsql.sh` file and make sure it has the correct image sha. It should look something like `index.docker.io/sourcegraph/postgres-12.6-alpine:3.36.3@sha256:<hash>`
-    - `git commit -m 'upgrade to v3.9.0'`
-4. Push the changes
-    ```shell
-    git push --set-upstream origin 3.9-customer-replica
-    ```
-
-Check buildkite for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
-
-This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
-
-Once you see `ALL TESTS PASSED`, tag the release:
-
-```sh
-git tag customer-replica-v3.9.0
-git push origin customer-replica-v3.9.0
-```
-
-Write an entry for https://docs.sourcegraph.com/admin/updates/pure_docker which includes:
-
-- A link to your `upgrade to v3.9.0` commit describing the exact changes needed to be made.
-- Any specific manual migrations, including potential `chown` commands that may be needed (if any new service is introduced, etc.)
-- Look at https://github.com/sourcegraph/sourcegraph/pulls?q=is%3Apr+is%3Aopen+pure-docker to see if there are any open PRs that might need to be included.
-
-### Patch release
-
-Pretend `3.8` was the last version of pure-docker release (look for the latest `n.n-customer-replica` branch), and that `3.8.1` is the version we want to release. Then:
-
-```sh
-# Checkout the current pure-docker release branch
-git checkout 3.8-customer-replica
-
-# Create the new pure-docker release branch
-git checkout -B 3.8.1-customer-replica
-
-# Merge the publish-3.8.1 branch, which will have been created by the release tool, into the pure-docker release branch. Default to taking the remote changes.
-git merge publish-3.8.1 -X theirs
-
-# Reset to previous commit so we can manually inspect ALL changes - we want to create multiple commits instead of keeping a single merge commit
-git reset HEAD~
-
-# Show which files may have been deleted, etc.
-git status
-```
-
-While committing in next steps, you will run into two merge conflicts:
-
-- Do not commit `deploy-caddy.sh` or changes related to it, as `deploy-apache.sh` is used here.
-- The `.prettierignore` should contain the following lines:
-
-    ```
-    .github/
-    *.md
-    rootfs/etc/docker/daemon.json
-    ```
-
-At this point you should evaluate the `git status` output as well as all the changes in your working git directory. You need to ensure the following happens:
-
-1. Files that were shown as deleted in the `git status` output get deleted in the relevant commit.
-2. Create **one** commit with changes _unrelated to the upgrade_, i.e. include ALL changes that are not directly related to upgrading:
-    - `git commit -m 'merge 3.8.1 (changes unrelated to upgrade)'`
-3. Create **one** commit with the changes _customers need to apply in order to ugprade_, i.e. the image tag changes, adding/removing any new services, updating env vars, but no unrelated changes.
-    - Do not include `docker-compose/` changes in this commit, those are irrelevant to pure-docker users.
-    - Double check `pure-docker/deploy-pgsql.sh` file and make sure it has the correct image sha. It should look something like `index.docker.io/sourcegraph/postgres-12.6-alpine:3.36.3@sha256:<hash>`
-    - `git commit -m 'upgrade to v3.8.1'`
-4. Push the changes to github
-    ```shell
-    git push --set-upstream origin 3.8.1-customer-replica
-    ```
-
-Open a Pull Request against `3.8-customer-replica` (base branch)
-
-Check buildkite for the branch after pushing it, e.g. at https://github.com/sourcegraph/deploy-sourcegraph-docker/commits/3.19-customer-replica
-
-This will take about ~10 minutes to run. Refer to the [testing documentation](TESTING.md) if you run into issues / need more instructions.
-
-Once you see `ALL TESTS PASSED`, merge the Pull Request and tag a new release
-
-```sh
-git checkout 3.8-customer-replica
-git pull
-git tag customer-replica-v3.8.1
-git push origin customer-replica-v3.8.1
-```
-
-Write an entry for https://docs.sourcegraph.com/admin/updates/pure_docker which includes:
-
-- A link to your `upgrade to v3.8.1` commit describing the exact changes needed to be made.
-- Any specific manual migrations, including potential `chown` commands that may be needed (if any new service is introduced, etc.)
-- Look at https://github.com/sourcegraph/sourcegraph/pulls?q=is%3Apr+is%3Aopen+pure-docker to see if there are any open PRs that might need to be included.
-
-Contact https://app.hubspot.com/contacts/2762526/company/407948923/ over Slack and inform them the update is available, providing a link to the diff and other relevant details like the blog post link.
