@@ -15,6 +15,6 @@ docker run --detach \
     --restart=always \
     --cpus=4 \
     --memory=6g \
-    index.docker.io/sourcegraph/syntax-highlighter:5.1.8@sha256:71998fd2544147b42b9b6ac374acea2f3d6a717bf70a25b2e985966a61d6ca28
+    index.docker.io/sourcegraph/syntax-highlighter:5.1.9@sha256:2b37e51a60748dca8a25fd516308efdb0baf24a709a67f417e092bae0b945f95
 
 echo "Deployed syntect-server service"
