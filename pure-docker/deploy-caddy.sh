@@ -32,5 +32,5 @@ docker run --detach \
     -p 0.0.0.0:443:443 \
     -v $VOLUME:/caddy-storage \
     --mount type=bind,source="$(pwd)"/../caddy/builtins/http.Caddyfile,target=/etc/caddy/Caddyfile \
-    index.docker.io/caddy:2.7.3-alpine@sha256:f9824933254e3e43e0508670ee9bdcde704621017e95119a05317383b1878f4f
+    index.docker.io/caddy:2.7.4-alpine@sha256:3d1bf053476f2415b40e728c37e1112ee7551fa154a63d6f62b275c13fea8166
 
