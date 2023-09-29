@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -23,6 +24,13 @@ func main() {
 	app := &cli.App{
 		Name:  "upgrade-test",
 		Usage: "Upgrade test is an upgrade smoke test for Sourcegraph's docker-compose deployment type.",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:     "verbose",
+				Aliases:  []string{"v"},
+				Usage:    "Stream verbose output to stdout.",
+			},
+		},
 		Commands: []*cli.Command{
 			{
 				Name:    "standard",
@@ -35,9 +43,18 @@ func main() {
 						Usage:    "A sequence of versions to do standard upgrades through.",
 						Required: true,
 					},
+					&cli.BoolFlag{
+						Name:     "order-versions",
+						Aliases:  []string{"ovs"},
+						Usage:    "Order versions in the sequence provided by the user, before commencing upgrades.",
+					},
 				},
 				Action: func(cCtx *cli.Context) error {
-					ctx := context.Background()
+					ctx := cCtx.Context
+					// get flags
+					verbose := cCtx.Bool("verbose")
+					fmt.Println("Verbose mode: ", verbose)
+					order := cCtx.Bool("order-versions")
 					// Process user provided versions
 					userVersions := cCtx.StringSlice("versions")
 					var versions []*semver.Version
@@ -66,7 +83,7 @@ func main() {
 						}
 						return nil
 					}(ctx)
-					if err := testStandardUpgrade(ctx, versions); err != nil {
+					if err := testStandardUpgrade(ctx, order, versions); err != nil {
 						return fmt.Errorf("Standard upgrade failed: %w", err)
 					}
 					return nil
@@ -91,7 +108,7 @@ func main() {
 					},
 				},
 				Action: func(cCtx *cli.Context) error {
-					ctx := context.Background()
+					ctx := cCtx.Context
 					from, err := semver.NewVersion(cCtx.String("from"))
 					if err != nil {
 						return fmt.Errorf("Invalid 'from' version: %s", cCtx.String("from"))
@@ -169,7 +186,11 @@ func initTest(ctx context.Context) (string, error) {
 }
 
 // Standard upgrade test tests the migrator `up` command, iterating over a slice of versions in the order provided.
-func testStandardUpgrade(ctx context.Context, versions []*semver.Version) error {
+func testStandardUpgrade(ctx context.Context, ordered bool, versions []*semver.Version) error {
+	if ordered {
+		sort.Sort(semver.Collection(versions))
+		log.Println("Versions in order:", versions)
+	}
 	for _, version := range versions {
 		// git checkout version tag
 		if err := gitCheckoutVersion(ctx, version); err != nil {
