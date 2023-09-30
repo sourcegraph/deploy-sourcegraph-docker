@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -66,19 +65,15 @@ func main() {
 						versions = append(versions, ver)
 					}
 
-					currentBranch, err := initTest(ctx, verbose)
+					err := initTest(ctx, verbose)
 					if err != nil {
 						return fmt.Errorf(err.Error())
 					}
-					// Reset the branch to the initial state on test completion or error
+					// Remove the /tmp deploy-sourcegraph-docker repo after test completion or error
 					defer func(ctx context.Context) error {
-						deferErr := exec.CommandContext(ctx, "git", "checkout", "-f", currentBranch).Run()
-						if deferErr != nil {
-							if err != nil {
-								return fmt.Errorf("error: %w; error checking out initial branch %s: %v", err, currentBranch, deferErr)
-							} else {
-								return fmt.Errorf("Error checking out branch %s: %w", currentBranch, err)
-							}
+						err := run.Cmd(ctx, "rm", "-rf", "/tmp/deploy-sourcegraph-docker").Run().Wait()
+						if err != nil {
+							return fmt.Errorf("Failed to remove deploy-sourcegraph-docker repo: %w", err)
 						}
 						return nil
 					}(ctx)
@@ -118,19 +113,15 @@ func main() {
 					if err != nil {
 						return fmt.Errorf("Invalid 'to' version: %s", cCtx.String("to"))
 					}
-					currentBranch, err := initTest(ctx, verbose)
+					err = initTest(ctx, verbose)
 					if err != nil {
 						return fmt.Errorf("Failed to initialize env: %w", err)
 					}
-					// Reset the branch to the initial state on test completion or error
+					// Remove the /tmp deploy-sourcegraph-docker repo after test completion or error
 					defer func(ctx context.Context) error {
-						deferErr := exec.CommandContext(ctx, "git", "checkout", "-f", currentBranch).Run()
-						if deferErr != nil {
-							if err != nil {
-								return fmt.Errorf("error: %w; error checking out initial branch %s: %v", err, currentBranch, deferErr)
-							} else {
-								return fmt.Errorf("Error checking out branch %s: %w", currentBranch, err)
-							}
+						err := run.Cmd(ctx, "rm", "-rf", "/tmp/deploy-sourcegraph-docker").Run().Wait()
+						if err != nil {
+							return fmt.Errorf("Failed to remove deploy-sourcegraph-docker repo: %w", err)
 						}
 						return nil
 					}(ctx)
@@ -161,29 +152,31 @@ func main() {
 // Failures in any step will exit before the test begins.
 //
 // Warning this clears all containers/volumes on the host!
-func initTest(ctx context.Context, verbose bool) (string, error) {
-	if err := checkRepo(ctx); err != nil {
-		log.Fatal("test running in wrong repo:", err)
+func initTest(ctx context.Context, verbose bool) error {
+	fmt.Println("Cloning deploy-sourcegraph-docker repo to /tmp/deploy-sourcegraph-docker")
+	if verbose {
+		err := run.Cmd(ctx, "git", "clone", "https://github.com/sourcegraph/deploy-sourcegraph-docker.git").
+		Dir("/tmp/deploy-sourcegraph-docker").
+		Run().Stream(os.Stdout)
+		if err != nil {
+			log.Fatal("failed to clone deploy-sourcegraph-docker repo: ", err)
+		} 
+	} else {
+		err := run.Cmd(ctx, "git", "clone", "https://github.com/sourcegraph/deploy-sourcegraph-docker.git").
+		Dir("/tmp/deploy-sourcegraph-docker").Run()
+		if err != nil {
+			log.Fatal("failed to clone deploy-sourcegraph-docker repo: ", err)
+		}
 	}
-	if err := exec.CommandContext(ctx, "git", "fetch").Run(); err != nil {
-		log.Fatal("failed to fetch tags:", err)
-	}
-
-	// Get the current branch to reset to after test completes
-	out, err := exec.CommandContext(ctx, "git", "branch", "--show-current").Output()
-	if err != nil {
-		log.Fatal("failed to get current branch at init: ", err)
-	}
-	currentBranch := strings.TrimSpace(string(out))
 
 	// Clear current docker environment
-	if err := composeDown(ctx, verbose); err != nil {
-		log.Fatal("failed to run docker-compose down during initialization: ", err)
+	if err := dockerClean(ctx, verbose); err != nil {
+		log.Fatal("failed to clean docker environment during initialization: ", err)
 	}
 	if err := dockerPrune(ctx, verbose); err != nil {
 		log.Fatal("failed to run docker prune during initialization: ", err)
 	}
-	return currentBranch, err
+	return nil
 }
 
 // Standard upgrade test tests the migrator `up` command, iterating over a slice of versions in the order provided.
@@ -302,7 +295,8 @@ func validateUpgrade(ctx context.Context, verbose bool, version *semver.Version)
 		err := run.Cmd(ctx, "docker", "exec", "pgsql",
 			"psql", "-U", "sg",
 			"-c",
-			"'SELECT", "COUNT(*)", "FROM", "migration_logs", "WHERE", "success=false;'", "-t").Run().Stream(&numFailedMigrations)
+			"'SELECT", "COUNT(*)", "FROM", "migration_logs", "WHERE", "success=false;'", "-t").
+			Run().Stream(&numFailedMigrations)
 		if err != nil {
 			return fmt.Errorf("failed to query pgsql for failed migrations count: %s", err)
 		}
@@ -401,12 +395,16 @@ func migratorUpgrade(ctx context.Context, verbose bool, vFrom, vTo *semver.Versi
 func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Version) error {
 	fmt.Println("Checking out version " + fmt.Sprintf("v%s", version.String()))
 	if verbose {
-		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Stream(os.Stdout)
+		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).
+		Dir("/tmp/deploy-sourcegraph-docker").
+		Run().Stream(os.Stdout)
 		if err != nil {
 			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
 		}
 	} else {
-		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Wait()
+		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).
+		Dir("/tmp/deploy-sourcegraph-docker").
+		Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
 		}
@@ -428,6 +426,23 @@ func dockerPrune(ctx context.Context, verbose bool) error {
 		err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to prune docker volumes: %s", err)
+		}
+	}
+	return nil
+}
+
+// Stop and clean all docker containers on init
+func dockerClean(ctx context.Context, verbose bool) error {
+	fmt.Println("Stopping and cleaning all docker containers...")
+	if verbose {
+		err := run.Cmd(ctx, "docker", "rm", "-f", "$(docker", "ps", "-aq)").Run().Stream(os.Stdout)
+		if err != nil {
+			return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
+		}
+	} else {
+		err := run.Cmd(ctx, "docker", "rm", "-f", "$(docker", "ps", "-aq)").Run().Wait()
+		if err != nil {
+			return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
 		}
 	}
 	return nil
@@ -466,20 +481,17 @@ func composeUpTimeout(ctx context.Context, verbose bool, images ...string) error
 // Docker compose up
 func composeUp(ctx context.Context, verbose bool, images ...string) error {
 	fmt.Println("Starting docker-compose up...")
-	path, err := filepath.Abs("../docker-compose")
-	if !strings.Contains(path, "deploy-sourcegraph-docker/docker-compose") {
-		return fmt.Errorf("docker-compose commands not executed in docker-compose directory: cmd.Dir = %s", path)
-	}
-	if err != nil {
-		return fmt.Errorf("failed to get absolute path for docker-compose: %s", err)
-	}
 	if verbose {
-		err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Stream(os.Stdout)
+		err := run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).
+		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+		Run().Stream(os.Stdout)
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose up: %w", err)
 		}
 	} else {
-		err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Wait()
+		err := run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).
+		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+		Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose up: %w", err)
 		}
@@ -490,20 +502,17 @@ func composeUp(ctx context.Context, verbose bool, images ...string) error {
 // Docker compose up
 func composeDown(ctx context.Context, verbose bool, images ...string) error {
 	fmt.Println("Starting docker-compose down...")
-	path, err := filepath.Abs("../docker-compose")
-	if !strings.Contains(path, "deploy-sourcegraph-docker/docker-compose") {
-		return fmt.Errorf("docker-compose commands not executed in docker-compose directory: cmd.Dir = %s", path)
-	}
-	if err != nil {
-		return fmt.Errorf("failed to get absolute path for docker-compose: %s", err)
-	}
 	if verbose {
-		err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Stream(os.Stdout)
+		err := run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).
+		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+		Run().Stream(os.Stdout)
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose down: %w", err)
 		}
 	} else {
-		err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Wait()
+		err := run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).
+		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+		Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose down: %w", err)
 		}
