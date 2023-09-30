@@ -279,7 +279,7 @@ func validateUpgrade(ctx context.Context, verbose bool, version *semver.Version)
 	fmt.Printf("\nChecking version %s for version update, failed migrations, and drift.", fmt.Sprintf("v%s", version.String()))
 
 	// Validate pgsql database versions.version row was set correctly.
-	fmt.Printf("\nChecking that versions.version has been updated ... ")
+	fmt.Printf("\nChecking that versions.version has been updated... ")
 	var versionFromDB bytes.Buffer
 	err := run.Cmd(ctx, "docker", "exec", "pgsql",
 		"psql", "-U", "sg",
@@ -297,7 +297,7 @@ func validateUpgrade(ctx context.Context, verbose bool, version *semver.Version)
 		return fmt.Errorf("failed to create semver constraint: %s", err)
 	}
 	if c.Check(version) {
-		fmt.Printf("\nChecking for failed migrations ... ")
+		fmt.Println("Checking for failed migrations... ")
 		var numFailedMigrations bytes.Buffer
 		err := run.Cmd(ctx, "docker", "exec", "pgsql",
 			"psql", "-U", "sg",
@@ -356,7 +356,7 @@ func migratorBaseString(ctx context.Context, migratorVersion *semver.Version) []
 
 // Check drift with docker run migrator, use latest migrator version
 func migratorDrift(ctx context.Context, verbose bool, version *semver.Version, db string, migratorArgs ...string) error {
-	fmt.Println("Checking for drift with docker run migrator ... ")
+	fmt.Println("Checking for drift with docker run migrator... ")
 	// Get latest migrator version
 	tag, err := getLatestMigrator(ctx, verbose)
 	if err != nil {
@@ -381,7 +381,7 @@ func migratorDrift(ctx context.Context, verbose bool, version *semver.Version, d
 
 // Check drift with docker run migrator
 func migratorUpgrade(ctx context.Context, verbose bool, vFrom, vTo *semver.Version, migratorArgs ...string) error {
-	fmt.Printf("\nPerforming MVU from %s to %s ... ", fmt.Sprintf("v%s", vFrom.String()), fmt.Sprintf("v%s", vTo.String()))
+	fmt.Printf("\nPerforming MVU from %s to %s... ", fmt.Sprintf("v%s", vFrom.String()), fmt.Sprintf("v%s", vTo.String()))
 	// Construct the docker run command for migrator
 	migratorBase := migratorBaseString(ctx, vTo)
 	migratorCmd := append(migratorBase, "upgrade", "--from="+fmt.Sprintf("v%s", vFrom.String()), "--to="+fmt.Sprintf("v%s", vTo.String()))
@@ -400,9 +400,15 @@ func migratorUpgrade(ctx context.Context, verbose bool, vFrom, vTo *semver.Versi
 // checkout a version tag
 func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Version) error {
 	fmt.Println("Checking out version " + fmt.Sprintf("v%s", version.String()))
+	if verbose {
 	err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Stream(os.Stdout)
 	if err != nil {
 		return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
+	}} else {
+		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Wait()
+		if err != nil {
+			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
+		}
 	}
 	return nil
 }
@@ -412,9 +418,15 @@ func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Versi
 // Prune docker volumes
 func dockerPrune(ctx context.Context, verbose bool) error {
 	fmt.Println("Pruning docker volumes...")
+	if verbose {
 	err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Stream(os.Stdout)
 	if err != nil {
 		return fmt.Errorf("failed to prune docker volumes: %s", err)
+	}} else {
+		err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Wait()
+		if err != nil {
+			return fmt.Errorf("failed to prune docker volumes: %s", err)
+		}
 	}
 	return nil
 }
