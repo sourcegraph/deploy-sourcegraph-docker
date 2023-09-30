@@ -478,7 +478,7 @@ func dockerClean(ctx context.Context, verbose bool) error {
 // This command has a 80 sec timeout and will check the migrator logs to display the failure if the timeout is reached.
 func composeUpTimeout(ctx context.Context, verbose bool, images ...string) error {
 	timeout := 80 * time.Second
-	tCtx, cancel := context.WithTimeout(context.Background(), timeout)
+	tCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
 	done := make(chan error)
