@@ -387,7 +387,7 @@ func migratorUpgrade(ctx context.Context, verbose bool, vFrom, vTo *semver.Versi
 	migratorCmd := append(migratorBase, "upgrade", "--from="+fmt.Sprintf("v%s", vFrom.String()), "--to="+fmt.Sprintf("v%s", vTo.String()))
 	migratorCmd = append(migratorCmd, migratorArgs...)
 	if verbose {
-		fmt.Println("Running", migratorCmd)
+		fmt.Println("Running...\n", migratorCmd)
 	}
 	// Run the constructed docker run migrator command
 	err := run.Cmd(ctx, migratorCmd...).Run().Stream(os.Stdout)
@@ -401,10 +401,11 @@ func migratorUpgrade(ctx context.Context, verbose bool, vFrom, vTo *semver.Versi
 func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Version) error {
 	fmt.Println("Checking out version " + fmt.Sprintf("v%s", version.String()))
 	if verbose {
-	err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Stream(os.Stdout)
-	if err != nil {
-		return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
-	}} else {
+		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Stream(os.Stdout)
+		if err != nil {
+			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
+		}
+	} else {
 		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
@@ -419,10 +420,11 @@ func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Versi
 func dockerPrune(ctx context.Context, verbose bool) error {
 	fmt.Println("Pruning docker volumes...")
 	if verbose {
-	err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Stream(os.Stdout)
-	if err != nil {
-		return fmt.Errorf("failed to prune docker volumes: %s", err)
-	}} else {
+		err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Stream(os.Stdout)
+		if err != nil {
+			return fmt.Errorf("failed to prune docker volumes: %s", err)
+		}
+	} else {
 		err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to prune docker volumes: %s", err)
@@ -472,10 +474,11 @@ func composeUp(ctx context.Context, verbose bool, images ...string) error {
 		return fmt.Errorf("failed to get absolute path for docker-compose: %s", err)
 	}
 	if verbose {
-	err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Stream(os.Stdout)
-	if err != nil {
-		return fmt.Errorf("failed to run docker-compose up: %w", err)
-	}} else {
+		err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Stream(os.Stdout)
+		if err != nil {
+			return fmt.Errorf("failed to run docker-compose up: %w", err)
+		}
+	} else {
 		err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose up: %w", err)
@@ -495,10 +498,11 @@ func composeDown(ctx context.Context, verbose bool, images ...string) error {
 		return fmt.Errorf("failed to get absolute path for docker-compose: %s", err)
 	}
 	if verbose {
-	err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Stream(os.Stdout)
-	if err != nil {
-		return fmt.Errorf("failed to run docker-compose down: %w", err)
-	}} else	{
+		err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Stream(os.Stdout)
+		if err != nil {
+			return fmt.Errorf("failed to run docker-compose down: %w", err)
+		}
+	} else {
 		err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose down: %w", err)
