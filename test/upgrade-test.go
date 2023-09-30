@@ -34,7 +34,7 @@ func main() {
 			{
 				Name:    "standard",
 				Aliases: []string{"std"},
-				Usage:   "Runs a standard upgrade test. between specified versions \n\nExample:\n\n./upgrade-test standard -vs 5.0.0,5.1.0",
+				Usage:   "Runs a standard upgrade test. between specified versions \n\nExample:\n\nupgrade-test standard -vs 5.0.0,5.1.0",
 				Flags: []cli.Flag{
 					&cli.StringSliceFlag{
 						Name:     "versions",
@@ -71,7 +71,12 @@ func main() {
 					}
 					// Remove the /tmp deploy-sourcegraph-docker repo after test completion or error
 					defer func(ctx context.Context) error {
-						err := run.Cmd(ctx, "rm", "-rf", "/tmp/deploy-sourcegraph-docker").Run().Wait()
+						err := dockerClean(ctx, verbose)
+						if err != nil {
+							return fmt.Errorf(err.Error())
+						}
+						fmt.Println("Cleaning up deploy-sourcegraph-docker repo...")
+						err = run.Cmd(ctx, "rm", "-rf", "/tmp/deploy-sourcegraph-docker").Run().Wait()
 						if err != nil {
 							return fmt.Errorf("Failed to remove deploy-sourcegraph-docker repo: %w", err)
 						}
@@ -86,7 +91,7 @@ func main() {
 			{
 				Name:    "multiversion",
 				Aliases: []string{"mvu"},
-				Usage:   "Runs a multiversion upgrade between two specified versions \n\nExample:\n\n./upgrade-test multiversion  -f 5.0.0 -t 5.1.0",
+				Usage:   "Runs a multiversion upgrade between two specified versions \n\nExample:\n\nupgrade-test multiversion  -f 5.0.0 -t 5.1.0",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:     "from",
@@ -119,7 +124,12 @@ func main() {
 					}
 					// Remove the /tmp deploy-sourcegraph-docker repo after test completion or error
 					defer func(ctx context.Context) error {
-						err := run.Cmd(ctx, "rm", "-rf", "/tmp/deploy-sourcegraph-docker").Run().Wait()
+						err := dockerClean(ctx, verbose)
+						if err != nil {
+							return fmt.Errorf(err.Error())
+						}
+						fmt.Println("Cleaning up deploy-sourcegraph-docker repo...")
+						err = run.Cmd(ctx, "rm", "-rf", "/tmp/deploy-sourcegraph-docker").Run().Wait()
 						if err != nil {
 							return fmt.Errorf("Failed to remove deploy-sourcegraph-docker repo: %w", err)
 						}
@@ -156,14 +166,14 @@ func initTest(ctx context.Context, verbose bool) error {
 	fmt.Println("Cloning deploy-sourcegraph-docker repo to /tmp/deploy-sourcegraph-docker")
 	if verbose {
 		err := run.Cmd(ctx, "git", "clone", "https://github.com/sourcegraph/deploy-sourcegraph-docker.git").
-		Dir("/tmp/deploy-sourcegraph-docker").
-		Run().Stream(os.Stdout)
+			Dir("/tmp").
+			Run().Stream(os.Stdout)
 		if err != nil {
 			log.Fatal("failed to clone deploy-sourcegraph-docker repo: ", err)
-		} 
+		}
 	} else {
 		err := run.Cmd(ctx, "git", "clone", "https://github.com/sourcegraph/deploy-sourcegraph-docker.git").
-		Dir("/tmp/deploy-sourcegraph-docker").Run()
+			Dir("/tmp/deploy-sourcegraph-docker").Run()
 		if err != nil {
 			log.Fatal("failed to clone deploy-sourcegraph-docker repo: ", err)
 		}
@@ -260,6 +270,9 @@ func testMultiversionUpgrade(ctx context.Context, verbose bool, from, to *semver
 	// Validate the migrator "upgrade" command accomplished required tasks
 	if err := validateUpgrade(ctx, verbose, to); err != nil {
 		return fmt.Errorf("Error validating upgrade: %s", err)
+	}
+	if err := composeDown(ctx, verbose); err != nil {
+		return fmt.Errorf("failed to run docker-compose down after upgrade: %s", err)
 	}
 	return nil
 }
@@ -396,15 +409,15 @@ func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Versi
 	fmt.Println("Checking out version " + fmt.Sprintf("v%s", version.String()))
 	if verbose {
 		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).
-		Dir("/tmp/deploy-sourcegraph-docker").
-		Run().Stream(os.Stdout)
+			Dir("/tmp/deploy-sourcegraph-docker").
+			Run().Stream(os.Stdout)
 		if err != nil {
 			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
 		}
 	} else {
 		err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).
-		Dir("/tmp/deploy-sourcegraph-docker").
-		Run().Wait()
+			Dir("/tmp/deploy-sourcegraph-docker").
+			Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
 		}
@@ -434,15 +447,25 @@ func dockerPrune(ctx context.Context, verbose bool) error {
 // Stop and clean all docker containers on init
 func dockerClean(ctx context.Context, verbose bool) error {
 	fmt.Println("Stopping and cleaning all docker containers...")
-	if verbose {
-		err := run.Cmd(ctx, "docker", "rm", "-f", "$(docker", "ps", "-aq)").Run().Stream(os.Stdout)
-		if err != nil {
-			return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
-		}
-	} else {
-		err := run.Cmd(ctx, "docker", "rm", "-f", "$(docker", "ps", "-aq)").Run().Wait()
-		if err != nil {
-			return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
+	// Get all docker containers to stop and clean
+	containers, err := run.Cmd(ctx, "docker", "ps", "-aq").Run().Lines()
+	if err != nil {
+		return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
+	}
+	// Don't clean if there are no containers
+	if len(containers) != 0 {
+		// construct the docker rm command for all containers
+		rmCmd := append([]string{"docker", "rm", "-f"}, containers...)
+		if verbose {
+			err = run.Cmd(ctx, rmCmd...).Run().Stream(os.Stdout)
+			if err != nil {
+				return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
+			}
+		} else {
+			err := run.Cmd(ctx, rmCmd...).Run().Wait()
+			if err != nil {
+				return fmt.Errorf("failed to stop and clean all docker containers: %s", err)
+			}
 		}
 	}
 	return nil
@@ -483,15 +506,15 @@ func composeUp(ctx context.Context, verbose bool, images ...string) error {
 	fmt.Println("Starting docker-compose up...")
 	if verbose {
 		err := run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).
-		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
-		Run().Stream(os.Stdout)
+			Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+			Run().Stream(os.Stdout)
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose up: %w", err)
 		}
 	} else {
 		err := run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).
-		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
-		Run().Wait()
+			Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+			Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose up: %w", err)
 		}
@@ -504,15 +527,15 @@ func composeDown(ctx context.Context, verbose bool, images ...string) error {
 	fmt.Println("Starting docker-compose down...")
 	if verbose {
 		err := run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).
-		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
-		Run().Stream(os.Stdout)
+			Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+			Run().Stream(os.Stdout)
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose down: %w", err)
 		}
 	} else {
 		err := run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).
-		Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
-		Run().Wait()
+			Dir("/tmp/deploy-sourcegraph-docker/docker-compose").
+			Run().Wait()
 		if err != nil {
 			return fmt.Errorf("failed to run docker-compose down: %w", err)
 		}
