@@ -26,9 +26,9 @@ func main() {
 		Usage: "Upgrade test is an upgrade smoke test for Sourcegraph's docker-compose deployment type.",
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
-				Name:     "verbose",
-				Aliases:  []string{"v"},
-				Usage:    "Stream verbose output to stdout.",
+				Name:    "verbose",
+				Aliases: []string{"v"},
+				Usage:   "Stream verbose output to stdout.",
 			},
 		},
 		Commands: []*cli.Command{
@@ -44,16 +44,15 @@ func main() {
 						Required: true,
 					},
 					&cli.BoolFlag{
-						Name:     "order-versions",
-						Aliases:  []string{"ovs"},
-						Usage:    "Order versions in the sequence provided by the user, before commencing upgrades.",
+						Name:    "order-versions",
+						Aliases: []string{"ovs"},
+						Usage:   "Order versions in the sequence provided by the user, before commencing upgrades.",
 					},
 				},
 				Action: func(cCtx *cli.Context) error {
 					ctx := cCtx.Context
 					// get flags
 					verbose := cCtx.Bool("verbose")
-					fmt.Println("Verbose mode: ", verbose)
 					order := cCtx.Bool("order-versions")
 					// Process user provided versions
 					userVersions := cCtx.StringSlice("versions")
@@ -67,7 +66,7 @@ func main() {
 						versions = append(versions, ver)
 					}
 
-					currentBranch, err := initTest(ctx)
+					currentBranch, err := initTest(ctx, verbose)
 					if err != nil {
 						return fmt.Errorf(err.Error())
 					}
@@ -83,7 +82,7 @@ func main() {
 						}
 						return nil
 					}(ctx)
-					if err := testStandardUpgrade(ctx, order, versions); err != nil {
+					if err := testStandardUpgrade(ctx, verbose, order, versions); err != nil {
 						return fmt.Errorf("Standard upgrade failed: %w", err)
 					}
 					return nil
@@ -109,6 +108,8 @@ func main() {
 				},
 				Action: func(cCtx *cli.Context) error {
 					ctx := cCtx.Context
+					// get flags
+					verbose := cCtx.Bool("verbose")
 					from, err := semver.NewVersion(cCtx.String("from"))
 					if err != nil {
 						return fmt.Errorf("Invalid 'from' version: %s", cCtx.String("from"))
@@ -117,7 +118,7 @@ func main() {
 					if err != nil {
 						return fmt.Errorf("Invalid 'to' version: %s", cCtx.String("to"))
 					}
-					currentBranch, err := initTest(ctx)
+					currentBranch, err := initTest(ctx, verbose)
 					if err != nil {
 						return fmt.Errorf("Failed to initialize env: %w", err)
 					}
@@ -134,7 +135,7 @@ func main() {
 						return nil
 					}(ctx)
 					// Test multiversion upgrade between specified versions
-					if err := testMultiversionUpgrade(ctx, from, to); err != nil {
+					if err := testMultiversionUpgrade(ctx, verbose, from, to); err != nil {
 						return fmt.Errorf("Multiversion upgrade failed: %w", err)
 					}
 					return nil
@@ -160,7 +161,7 @@ func main() {
 // Failures in any step will exit before the test begins.
 //
 // Warning this clears all containers/volumes on the host!
-func initTest(ctx context.Context) (string, error) {
+func initTest(ctx context.Context, verbose bool) (string, error) {
 	if err := checkRepo(ctx); err != nil {
 		log.Fatal("test running in wrong repo:", err)
 	}
@@ -176,36 +177,35 @@ func initTest(ctx context.Context) (string, error) {
 	currentBranch := strings.TrimSpace(string(out))
 
 	// Clear current docker environment
-	if err := composeDown(ctx); err != nil {
+	if err := composeDown(ctx, verbose); err != nil {
 		log.Fatal("failed to run docker-compose down during initialization: ", err)
 	}
-	if err := dockerPrune(ctx); err != nil {
+	if err := dockerPrune(ctx, verbose); err != nil {
 		log.Fatal("failed to run docker prune during initialization: ", err)
 	}
 	return currentBranch, err
 }
 
 // Standard upgrade test tests the migrator `up` command, iterating over a slice of versions in the order provided.
-func testStandardUpgrade(ctx context.Context, ordered bool, versions []*semver.Version) error {
+func testStandardUpgrade(ctx context.Context, verbose, ordered bool, versions []*semver.Version) error {
 	if ordered {
 		sort.Sort(semver.Collection(versions))
-		log.Println("Versions in order:", versions)
 	}
 	for _, version := range versions {
 		// git checkout version tag
-		if err := gitCheckoutVersion(ctx, version); err != nil {
+		if err := gitCheckoutVersion(ctx, verbose, version); err != nil {
 			return fmt.Errorf("failed to checkout version %s: %s", version, err)
 		}
 		// Bring up instance with migrator "up" default
-		if err := composeUpTimeout(ctx); err != nil {
+		if err := composeUpTimeout(ctx, verbose); err != nil {
 			return fmt.Errorf("failed to run docker-compose up at version %s: %s", version, err)
 		}
 		// Check for drift and other "up" operations
-		if err := validateUpgrade(ctx, version); err != nil {
+		if err := validateUpgrade(ctx, verbose, version); err != nil {
 			return fmt.Errorf("Error validating upgrade: %s", err)
 		}
 		// Bring down deployment
-		if err := composeDown(ctx); err != nil {
+		if err := composeDown(ctx, verbose); err != nil {
 			return fmt.Errorf("failed to run docker-compose down at version %s: %s", version, err)
 		}
 	}
@@ -213,31 +213,31 @@ func testStandardUpgrade(ctx context.Context, ordered bool, versions []*semver.V
 }
 
 // Multiversion upgrade test tests the migrator `upgrade` command.
-func testMultiversionUpgrade(ctx context.Context, from, to *semver.Version) error {
+func testMultiversionUpgrade(ctx context.Context, verbose bool, from, to *semver.Version) error {
 	// git checkout and initialize deployment
-	if err := gitCheckoutVersion(ctx, from); err != nil {
+	if err := gitCheckoutVersion(ctx, verbose, from); err != nil {
 		return fmt.Errorf("failed to checkout version %s: %s", from, err)
 	}
-	if err := composeUpTimeout(ctx); err != nil {
+	if err := composeUpTimeout(ctx, verbose); err != nil {
 		return fmt.Errorf("failed to run docker-compose up %s init: %s", fmt.Sprintf("v%s", from.String()), err)
 	}
 	// Check for schema drift init of "from" version
-	if err := migratorDrift(ctx, from, "frontend"); err != nil {
+	if err := migratorDrift(ctx, verbose, from, "frontend"); err != nil {
 		return fmt.Errorf("schema drift detected on initial deploy at %s: %s", fmt.Sprintf("v%s", from.String()), err)
 	}
-	if err := migratorDrift(ctx, from, "codeintel"); err != nil {
+	if err := migratorDrift(ctx, verbose, from, "codeintel"); err != nil {
 		return fmt.Errorf("schema drift detected on initial deploy at %s: %s", fmt.Sprintf("v%s", from.String()), err)
 	}
-	if err := migratorDrift(ctx, from, "codeinsights"); err != nil {
+	if err := migratorDrift(ctx, verbose, from, "codeinsights"); err != nil {
 		return fmt.Errorf("schema drift detected on initial deploy at %s: %s", fmt.Sprintf("v%s", from.String()), err)
 	}
 	// Bring down init deployment
-	if err := composeDown(ctx); err != nil {
+	if err := composeDown(ctx, verbose); err != nil {
 		return fmt.Errorf("failed to run docker-compose down at %s: %s", from, err)
 	}
 
 	// Start just the dbs to be targeted by migrator
-	if err := composeUp(ctx, "pgsql", "codeintel-db", "codeinsights-db"); err != nil {
+	if err := composeUp(ctx, verbose, "pgsql", "codeintel-db", "codeinsights-db"); err != nil {
 		return fmt.Errorf("failed to run docker-compose up for databases at %s: %s", fmt.Sprintf("v%s", from.String()), err)
 	}
 
@@ -249,23 +249,23 @@ func testMultiversionUpgrade(ctx context.Context, from, to *semver.Version) erro
 		return fmt.Errorf("failed to create semver constraint: %s", err)
 	}
 	if c.Check(to) {
-		if err := migratorUpgrade(ctx, from, to, "-ignore-migrator-update"); err != nil {
+		if err := migratorUpgrade(ctx, verbose, from, to, "-ignore-migrator-update"); err != nil {
 			return fmt.Errorf("multiversion upgrade from %s to %s failed: %s", from, to, err)
 		}
 	} else {
-		if err := migratorUpgrade(ctx, from, to); err != nil {
+		if err := migratorUpgrade(ctx, verbose, from, to); err != nil {
 			return fmt.Errorf("multiversion upgrade from %s to %s failed: %s", from, to, err)
 		}
 	}
 	// git checkout "to" version and start the deployment
-	if err := gitCheckoutVersion(ctx, to); err != nil {
+	if err := gitCheckoutVersion(ctx, verbose, to); err != nil {
 		return fmt.Errorf("failed to checkout version %s: %s", to, err)
 	}
-	if err := composeUpTimeout(ctx); err != nil {
+	if err := composeUpTimeout(ctx, verbose); err != nil {
 		return fmt.Errorf("failed to run final docker-compose up at %s: %s", to, err)
 	}
 	// Validate the migrator "upgrade" command accomplished required tasks
-	if err := validateUpgrade(ctx, to); err != nil {
+	if err := validateUpgrade(ctx, verbose, to); err != nil {
 		return fmt.Errorf("Error validating upgrade: %s", err)
 	}
 	return nil
@@ -275,7 +275,7 @@ func testMultiversionUpgrade(ctx context.Context, from, to *semver.Version) erro
 // - Check versions.version has been updated
 // - Check migration_logs for failures
 // - Check for schema drift
-func validateUpgrade(ctx context.Context, version *semver.Version) error {
+func validateUpgrade(ctx context.Context, verbose bool, version *semver.Version) error {
 	fmt.Printf("\nChecking version %s for version update, failed migrations, and drift.", fmt.Sprintf("v%s", version.String()))
 
 	// Validate pgsql database versions.version row was set correctly.
@@ -313,13 +313,13 @@ func validateUpgrade(ctx context.Context, version *semver.Version) error {
 	}
 
 	// Check for schema drift with docker run migrator ... command drift
-	if err := migratorDrift(ctx, version, "frontend"); err != nil {
+	if err := migratorDrift(ctx, verbose, version, "frontend"); err != nil {
 		return fmt.Errorf("schema drift detected after multiversion upgrade at %s: %s", fmt.Sprintf("v%s", version.String()), err)
 	}
-	if err := migratorDrift(ctx, version, "codeintel"); err != nil {
+	if err := migratorDrift(ctx, verbose, version, "codeintel"); err != nil {
 		return fmt.Errorf("schema drift detected after multiversion upgrade at %s: %s", fmt.Sprintf("v%s", version.String()), err)
 	}
-	if err := migratorDrift(ctx, version, "codeinsights"); err != nil {
+	if err := migratorDrift(ctx, verbose, version, "codeinsights"); err != nil {
 		return fmt.Errorf("schema drift detected after multiversion upgrade at %s: %s", fmt.Sprintf("v%s", version.String()), err)
 	}
 
@@ -355,10 +355,10 @@ func migratorBaseString(ctx context.Context, migratorVersion *semver.Version) []
 }
 
 // Check drift with docker run migrator, use latest migrator version
-func migratorDrift(ctx context.Context, version *semver.Version, db string, migratorArgs ...string) error {
+func migratorDrift(ctx context.Context, verbose bool, version *semver.Version, db string, migratorArgs ...string) error {
 	fmt.Println("Checking for drift with docker run migrator ... ")
 	// Get latest migrator version
-	tag, err := getLatestMigrator(ctx)
+	tag, err := getLatestMigrator(ctx, verbose)
 	if err != nil {
 		return fmt.Errorf("failed to select latest migrator version: %s", err)
 	}
@@ -366,6 +366,9 @@ func migratorDrift(ctx context.Context, version *semver.Version, db string, migr
 	migratorBase := migratorBaseString(ctx, tag)
 	migratorCmd := append(migratorBase, "drift", "--db="+db, "--version="+fmt.Sprintf("v%s", version.String()))
 	migratorCmd = append(migratorCmd, migratorArgs...)
+	if verbose {
+		fmt.Println("Running", strings.Join(migratorCmd, "\n"))
+	}
 	// Run the constructed docker run migrator command
 	err = run.Cmd(ctx, migratorCmd...).Run().Stream(os.Stdout)
 	if err != nil {
@@ -377,12 +380,15 @@ func migratorDrift(ctx context.Context, version *semver.Version, db string, migr
 }
 
 // Check drift with docker run migrator
-func migratorUpgrade(ctx context.Context, vFrom, vTo *semver.Version, migratorArgs ...string) error {
+func migratorUpgrade(ctx context.Context, verbose bool, vFrom, vTo *semver.Version, migratorArgs ...string) error {
 	fmt.Printf("\nPerforming MVU from %s to %s ... ", fmt.Sprintf("v%s", vFrom.String()), fmt.Sprintf("v%s", vTo.String()))
 	// Construct the docker run command for migrator
 	migratorBase := migratorBaseString(ctx, vTo)
 	migratorCmd := append(migratorBase, "upgrade", "--from="+fmt.Sprintf("v%s", vFrom.String()), "--to="+fmt.Sprintf("v%s", vTo.String()))
 	migratorCmd = append(migratorCmd, migratorArgs...)
+	if verbose {
+		fmt.Println("Running", migratorCmd)
+	}
 	// Run the constructed docker run migrator command
 	err := run.Cmd(ctx, migratorCmd...).Run().Stream(os.Stdout)
 	if err != nil {
@@ -392,7 +398,7 @@ func migratorUpgrade(ctx context.Context, vFrom, vTo *semver.Version, migratorAr
 }
 
 // checkout a version tag
-func gitCheckoutVersion(ctx context.Context, version *semver.Version) error {
+func gitCheckoutVersion(ctx context.Context, verbose bool, version *semver.Version) error {
 	fmt.Println("Checking out version " + fmt.Sprintf("v%s", version.String()))
 	err := run.Cmd(ctx, "git", "checkout", fmt.Sprintf("v%s", version.String())).Run().Stream(os.Stdout)
 	if err != nil {
@@ -404,7 +410,7 @@ func gitCheckoutVersion(ctx context.Context, version *semver.Version) error {
 // Docker commands
 
 // Prune docker volumes
-func dockerPrune(ctx context.Context) error {
+func dockerPrune(ctx context.Context, verbose bool) error {
 	fmt.Println("Pruning docker volumes...")
 	err := run.Cmd(ctx, "docker", "volume", "prune", "-a", "-f").Run().Stream(os.Stdout)
 	if err != nil {
@@ -418,7 +424,7 @@ func dockerPrune(ctx context.Context) error {
 // and the frontend waiting to initialize after migrator's successful completion.
 //
 // This command has a 80 sec timeout and will check the migrator logs to display the failure if the timeout is reached.
-func composeUpTimeout(ctx context.Context, images ...string) error {
+func composeUpTimeout(ctx context.Context, verbose bool, images ...string) error {
 	timeout := 80 * time.Second
 	tCtx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
@@ -426,7 +432,7 @@ func composeUpTimeout(ctx context.Context, images ...string) error {
 	done := make(chan error)
 
 	go func() {
-		err := composeUp(tCtx, images...)
+		err := composeUp(tCtx, verbose, images...)
 		done <- err
 	}()
 
@@ -444,7 +450,7 @@ func composeUpTimeout(ctx context.Context, images ...string) error {
 }
 
 // Docker compose up
-func composeUp(ctx context.Context, images ...string) error {
+func composeUp(ctx context.Context, verbose bool, images ...string) error {
 	fmt.Println("Starting docker-compose up...")
 	path, err := filepath.Abs("../docker-compose")
 	if !strings.Contains(path, "deploy-sourcegraph-docker/docker-compose") {
@@ -453,15 +459,21 @@ func composeUp(ctx context.Context, images ...string) error {
 	if err != nil {
 		return fmt.Errorf("failed to get absolute path for docker-compose: %s", err)
 	}
+	if verbose {
 	err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Stream(os.Stdout)
 	if err != nil {
-		return fmt.Errorf("failed to run docker-compose up: ", err)
+		return fmt.Errorf("failed to run docker-compose up: %w", err)
+	}} else {
+		err = run.Cmd(ctx, append([]string{"docker-compose", "up", "-d"}, images...)...).Dir(path).Run().Wait()
+		if err != nil {
+			return fmt.Errorf("failed to run docker-compose up: %w", err)
+		}
 	}
 	return nil
 }
 
 // Docker compose up
-func composeDown(ctx context.Context, images ...string) error {
+func composeDown(ctx context.Context, verbose bool, images ...string) error {
 	fmt.Println("Starting docker-compose down...")
 	path, err := filepath.Abs("../docker-compose")
 	if !strings.Contains(path, "deploy-sourcegraph-docker/docker-compose") {
@@ -470,22 +482,28 @@ func composeDown(ctx context.Context, images ...string) error {
 	if err != nil {
 		return fmt.Errorf("failed to get absolute path for docker-compose: %s", err)
 	}
+	if verbose {
 	err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Stream(os.Stdout)
 	if err != nil {
-		return fmt.Errorf("failed to run docker-compose down: ", err)
+		return fmt.Errorf("failed to run docker-compose down: %w", err)
+	}} else	{
+		err = run.Cmd(ctx, append([]string{"docker-compose", "down", "--remove-orphans"}, images...)...).Dir(path).Run().Wait()
+		if err != nil {
+			return fmt.Errorf("failed to run docker-compose down: %w", err)
+		}
 	}
 	return nil
 }
 
 //Version Handlers
 
-func getLatestMigrator(ctx context.Context) (*semver.Version, error) {
+func getLatestMigrator(ctx context.Context, verbose bool) (*semver.Version, error) {
 	tags, err := run.Cmd(ctx, "git", "for-each-ref", "--format", "'%(refname:short)'", "refs/tags").Run().Lines()
 	if err != nil {
 		return nil, err
 	}
+	// Loop through tags and find the latest semver tag
 	var latest *semver.Version
-
 	for _, tag := range tags {
 		v, err := semver.NewVersion(tag)
 		if err != nil {
@@ -501,6 +519,9 @@ func getLatestMigrator(ctx context.Context) (*semver.Version, error) {
 		return nil, errors.New("No valid semver tags found")
 	}
 
+	if verbose {
+		fmt.Println("Latest version found: " + latest.String())
+	}
 	return latest, nil
 }
 
