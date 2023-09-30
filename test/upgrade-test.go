@@ -367,7 +367,7 @@ func migratorDrift(ctx context.Context, verbose bool, version *semver.Version, d
 	migratorCmd := append(migratorBase, "drift", "--db="+db, "--version="+fmt.Sprintf("v%s", version.String()))
 	migratorCmd = append(migratorCmd, migratorArgs...)
 	if verbose {
-		fmt.Println("Running", strings.Join(migratorCmd, "\n"))
+		fmt.Println("Running... ", migratorCmd)
 	}
 	// Run the constructed docker run migrator command
 	err = run.Cmd(ctx, migratorCmd...).Run().Stream(os.Stdout)
