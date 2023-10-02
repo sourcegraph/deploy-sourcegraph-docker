@@ -169,22 +169,22 @@ func initTest(ctx context.Context, verbose bool) error {
 			Dir("/tmp").
 			Run().Stream(os.Stdout)
 		if err != nil {
-			log.Fatal("failed to clone deploy-sourcegraph-docker repo: ", err)
+			return fmt.Errorf("failed to clone deploy-sourcegraph-docker repo: %w", err)
 		}
 	} else {
 		err := run.Cmd(ctx, "git", "clone", "https://github.com/sourcegraph/deploy-sourcegraph-docker.git").
-			Dir("/tmp/deploy-sourcegraph-docker").Run()
+			Dir("/tmp").Run().Wait()
 		if err != nil {
-			log.Fatal("failed to clone deploy-sourcegraph-docker repo: ", err)
+			return fmt.Errorf("failed to clone deploy-sourcegraph-docker repo: %w", err)
 		}
 	}
 
 	// Clear current docker environment
 	if err := dockerClean(ctx, verbose); err != nil {
-		log.Fatal("failed to clean docker environment during initialization: ", err)
+		return fmt.Errorf("failed to clean docker environment during initialization: %w", err)
 	}
 	if err := dockerPrune(ctx, verbose); err != nil {
-		log.Fatal("failed to run docker prune during initialization: ", err)
+		return fmt.Errorf("failed to run docker prune during initialization: %w", err)
 	}
 	return nil
 }
