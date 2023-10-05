@@ -138,15 +138,10 @@ type testEnv struct {
 	cleanup func()
 }
 
-// initTestEnv ensures that the instance is running in a fresh environment with the latest git tags of the deploy-sourcegraph-docker repo.
-// This includes:
-// - Checking that the test is being run in the deploy-sourcegraph-docker repo
-// - Fetching latest git tags
-// - Getting current branch to reset to after test
-// - Checking that specified versions are valid tags
-// - Running docker-compose down to ensure there are no orphan containers around on init
-//
-// Failures in any step will exit before the test begins.
+// initTestEnv
+// - clones the deploy-sourcegraph-docker repo into a temp directory,
+// - prunes ALL docker volumes,
+// - kills all running containers
 //
 // Warning this clears all containers/volumes on the host!
 func initTestEnv(ctx context.Context, verbose bool) (*testEnv, error) {
