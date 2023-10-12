@@ -7,10 +7,10 @@ deploy_sourcegraph() {
 	if [[ "$TEST_TYPE" == "pure-docker-test" ]]; then
 		./test/volume-config.sh
 		timeout 600s ./pure-docker/deploy.sh
-			expect_containers="26"
+		expect_containers="25"
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
 		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
-		expect_containers="27"
+		expect_containers="26"
 	fi
 
 	echo "Giving containers 90s to start..."

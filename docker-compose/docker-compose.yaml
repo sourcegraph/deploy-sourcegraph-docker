@@ -141,7 +141,6 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
-      - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
@@ -154,7 +153,6 @@ services:
             { "Name": "searcher-0", "Host": "searcher-0:6060" },
             { "Name": "symbols-0", "Host": "symbols-0:6060" },
             { "Name": "repo-updater", "Host": "repo-updater:6060" },
-            { "Name": "github-proxy", "Host": "github-proxy:6060" },
             { "Name": "worker", "Host": "worker:6060" },
             { "Name": "zoekt-indexserver-0", "Host": "zoekt-indexserver-0:6072" },
             { "Name": "zoekt-webserver-0", "Host": "zoekt-webserver-0:6070", "DefaultPath": "/debug/requests/" }
@@ -198,7 +196,6 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
-      - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
@@ -236,7 +233,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
-      - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'gitserver-0:/data/repos'
     networks:
@@ -321,26 +317,6 @@ services:
       - sourcegraph
     restart: always
 
-  # Description: Rate-limiting proxy for the GitHub API.
-  #
-  # CPU: 1
-  # Memory: 1GB
-  # Disk: 1GB / non-persistent SSD (only for read-only config file)
-  # Ports exposed to other Sourcegraph services: 3180/TCP 6060/TCP
-  # Ports exposed to the public internet: none
-  #
-  github-proxy:
-    container_name: github-proxy
-    image: 'index.docker.io/sourcegraph/github-proxy:216430_2023-05-02_5.0-3cc9006de32c@sha256:30d4550f51febc1e32ec8af175ef8cce4d1706fd75468572da86f6da451f546f'
-    cpus: 1
-    mem_limit: '1g'
-    environment:
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
-    networks:
-      - sourcegraph
-    restart: always
-
   # Description: Handles conversion of uploaded precise code intelligence bundles.
   #
   # Ports exposed to other Sourcegraph services: 3188/TCP
@@ -380,7 +356,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
-      - 'GITHUB_BASE_URL=http://github-proxy:3180'
     volumes:
       - 'repo-updater:/mnt/cache'
     networks:
@@ -405,7 +380,6 @@ services:
       - 'SEARCHER_URL=http://searcher-0:3181'
       - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
-      - 'GITHUB_BASE_URL=http://github-proxy:3180'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
     volumes:
