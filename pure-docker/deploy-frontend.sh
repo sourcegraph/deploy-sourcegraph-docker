@@ -43,7 +43,7 @@ docker run --detach \
     -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
     -v $VOLUME:/mnt/cache \
     -p 0.0.0.0:$((3080 + $1)):3080 \
-    index.docker.io/sourcegraph/frontend:5.2.1@sha256:d22b4c373b8b2d7a8d0c9592cc449272fd29ee57e397bfbb22c58c0efa000370
+    index.docker.io/sourcegraph/frontend:5.2.2@sha256:baede3692eb629d5f9fd61155246415b6927914f1dbb53ff7f8de34102fe7127
 
 # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
 # lists which each allow you to specify more container instances for scaling

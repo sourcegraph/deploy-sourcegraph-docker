@@ -24,6 +24,6 @@ docker run --detach \
     -e 'OPENTELEMETRY_DISABLED=false' \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -v $VOLUME:/data/index \
-    index.docker.io/sourcegraph/indexed-searcher:5.2.1@sha256:11ee5bc6d4aadc0ba5b092549866de76a3af5c4241d105e91c5981fc7ce1a93f
+    index.docker.io/sourcegraph/indexed-searcher:5.2.2@sha256:d78fcda14d045bf1843bfb2b98c585dabbb44f7fb1a26334f45acf1449f07f5a
 
 echo "Deployed zoekt-webserver $1 service"
