@@ -20,7 +20,7 @@ docker run --detach \
     -e CODEINTEL_PGUSER=sg \
     -e CODEINTEL_PGHOST=codeintel-db \
     -e CODEINSIGHTS_PGDATASOURCE=postgres://postgres:password@codeinsights-db:5432/postgres \
-    index.docker.io/sourcegraph/migrator:5.2.2@sha256:24eb266b0f73d65c2dd249c110a415a027f8992433f6c07f2578b14e329a1b4c \
+    index.docker.io/sourcegraph/migrator:5.2.3@sha256:828757fe114013859fa9de2db27842510522c8544cb7cd4d3ae37204db787854 \
     up -db=all
 
 echo "Deployed migrator service"
