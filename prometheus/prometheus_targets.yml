@@ -3,7 +3,7 @@
     nodename: "sourcegraph-docker-compose-host"
     job: node
   targets:
-    - cadvisor:8080
+    - cadvisor:48080
     - sourcegraph-frontend-internal:6060
 - labels:
     nodename: "sourcegraph-docker-compose-host"

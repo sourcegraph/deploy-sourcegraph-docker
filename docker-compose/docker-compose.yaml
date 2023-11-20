@@ -513,8 +513,8 @@ services:
     networks:
       - sourcegraph
     restart: always
-    command:
-      - --port=8080
+    expose:
+      - 48080
 
   # Description: Publishes Prometheus metrics about the machine's hardware / operating system.
   #
