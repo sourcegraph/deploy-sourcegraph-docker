@@ -486,7 +486,7 @@ services:
   # Description: Publishes Prometheus metrics about Docker containers.
   #
   # Disk: none
-  # Ports exposed to other Sourcegraph services: 8080/TCP
+  # Ports exposed to other Sourcegraph services: 48080/TCP
   # Ports exposed to the public internet: none
   #
   cadvisor:
@@ -513,8 +513,8 @@ services:
     networks:
       - sourcegraph
     restart: always
-    command:
-      - --port=8080
+    expose:
+      - 48080
 
   # Description: Publishes Prometheus metrics about the machine's hardware / operating system.
   #
