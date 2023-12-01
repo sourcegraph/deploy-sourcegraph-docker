@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/sourcegraph/run v0.12.0
-	github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20231101211343-d046aeda10e4
+	github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20231201222234-568e5b2c1c71
 	github.com/sourcegraph/update-docker-tags v0.10.0
 	github.com/urfave/cli/v2 v2.25.7
 )

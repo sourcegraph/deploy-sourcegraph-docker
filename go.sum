@@ -48,6 +48,8 @@ github.com/sourcegraph/run v0.12.0 h1:3A8w5e8HIYPfafHekvmdmmh42RHKGVhmiTZAPJclg7
 github.com/sourcegraph/run v0.12.0/go.mod h1:PwaP936BTnAJC1cqR5rSbG5kOs/EWStTK3lqvMX5GUA=
 github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20231101211343-d046aeda10e4 h1:Mi4SkXsHkJBGrzbrarAU0gCT/GpwP4OnAVrqynAUjoQ=
 github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20231101211343-d046aeda10e4/go.mod h1:HpOGaRM0iHPNrEQvpB4/3E9dAUjutyhgjg9vrOOeXPY=
+github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20231201222234-568e5b2c1c71 h1:IWtSMZ15GKcBV5C/wORVPIP7UMzfK83rwfjsBzyHdQ8=
+github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20231201222234-568e5b2c1c71/go.mod h1:HpOGaRM0iHPNrEQvpB4/3E9dAUjutyhgjg9vrOOeXPY=
 github.com/sourcegraph/update-docker-tags v0.10.0 h1:KpY1HtvSt0FzDM/sR0jQF5StNbiPKpqmHhE0jpBEa0A=
 github.com/sourcegraph/update-docker-tags v0.10.0/go.mod h1:lCDsoUnk/ASDbm7UxE7tU3qAUhQxA7xykELHXcLeKFM=
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
