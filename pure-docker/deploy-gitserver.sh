@@ -24,6 +24,6 @@ docker run --detach \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -e 'GITHUB_BASE_URL=http://github-proxy:3180' \
     -v $VOLUME:/data/repos \
-    index.docker.io/sourcegraph/gitserver:5.2.4@sha256:b7f47aff11180e801637284601787ab15704f587f78cea4cc861fb2df86c11d5
+    index.docker.io/sourcegraph/gitserver:5.2.5@sha256:da1602a27f360b838da1348e59aa208ead9c56a3143382a2c874285800cbee8d
 
 echo "Deployed gitserver $1 service"
