@@ -1,0 +1,70 @@
+---
+meta:
+  productName: "deploy-sourcegraph-docker"
+  owners:
+    - "@sourcegraph/release"
+  repository: "github.com/sourcegraph/deploy-sourcegraph-docker"
+inputs:
+  releaseId: server
+requirements:
+  - name: "go"
+    cmd: "which go"
+    fixInstructions: "install golang"
+  - name: "GitHub cli exists"
+    cmd: "which gh"
+    fixInstructions: "install GitHub cli"
+internal:
+  create:
+    steps:
+      minor:
+          - name: docker:tags
+            cmd: |
+              ./tools/update-docker-tags.sh {{tag}}
+          - name: "git:branch"
+            cmd: |
+              branch="wb/wip_{{version}}"
+              git switch -c "${branch}"
+              git commit -am 'release-major: {{version}}' -m '{{config}}'
+      major:
+          - name: docker:tags
+            cmd: |
+              ./tools/update-docker-tags.sh {{tag}}
+          - name: "git:branch"
+            cmd: |
+              branch="wb/wip_{{version}}"
+              git switch -c "${branch}"
+              git commit -am 'release-major: {{version}}' -m '{{config}}'
+  finalize:
+    steps:
+      - name: "git:finalize"
+        cmd: |
+          git checkout wb/wip_{{version}}
+          git push origin wb/wip_{{version}}
+
+          gh pr create -f -t "PRETEND RELEASE - release-major: build {{version}}"
+
+          git switch -c "wb/release-{{version}}"
+          git push origin wb/release-{{version}}
+          git checkout -
+test:
+  steps:
+    - name: "foo"
+      cmd: |
+        echo "Test"
+
+promoteToPublic:
+  create:
+    steps:
+      - name: docker:tags
+        cmd: |
+          ./tools/update-docker-tags.sh {{tag}}
+      - name: "git:branch"
+        cmd: |
+          branch="wb/promote_wip_{{version}}"
+          git switch -c "${branch}"
+          git commit -am 'promote-release: {{version}}' -m '{{config}}'
+      - name: "git:push"
+        cmd: git push origin wb/promote_wip_{{version}}
+      - name: "GitHub:create PR"
+        cmd: |
+          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}"
