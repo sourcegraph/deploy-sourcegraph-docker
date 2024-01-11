@@ -17,6 +17,6 @@ docker run --detach \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore \
     -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
-    index.docker.io/sourcegraph/precise-code-intel-worker:5.2.5@sha256:fcb82856cdf2d3de19ab97bc5d5b8ff0a858bf7418cedd8baf74158fef1b99d9
+    index.docker.io/sourcegraph/precise-code-intel-worker:5.2.6@sha256:8778eb9a6eb03c6e76f4bd2094fe16f528db52561a1c38cb1373769cca4129b0
 
 echo "Deployed precise-code-intel-worker service"

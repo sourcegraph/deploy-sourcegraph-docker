@@ -7,7 +7,7 @@ services:
   #
   embeddings:
     container_name: embeddings
-    image: 'index.docker.io/sourcegraph/embeddings:5.2.5@sha256:907f7a5d028984461ee7ec52fa991d1664ccf8b7c7e43493ea99bbce2d52729b'
+    image: 'index.docker.io/sourcegraph/embeddings:5.2.6@sha256:fe6f763893cf768b01d94794d03077e8056802cb40c39720c515973feb91cacc'
     cpus: 4
     mem_limit: '64g'
     environment:
