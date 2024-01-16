@@ -35,3 +35,31 @@ steps:
     label: ":lock: security - checkov"
     agents: { queue: "standard" }
     soft_fail: true
+
+  - label: "Release: test"
+    if: "build.branch =~ /^wip_/"
+    command: |
+      wget https://storage.googleapis.com/buildkite_public_assets/sg-rfc795.tar.gz
+      tar zxf sg-rfc795.tar.gz
+      chmod +x ./sg-rfc795
+
+      ./sg-rfc795 release run test --workdir=. --config-from-commit
+
+  - wait
+
+  - label: "Release: finalize"
+    if: "build.branch =~ /^wip_/"
+    command: |
+      wget https://storage.googleapis.com/buildkite_public_assets/sg-rfc795.tar.gz
+      tar zxf sg-rfc795.tar.gz
+      chmod +x ./sg-rfc795
+
+      ./sg-rfc795 release run internal finalize --workdir=. --config-from-commit
+  - label: "Promote to public: finalize"
+    if: build.message =~ /^promote_release/ && build.branch =~ /^wip-release/
+    command: |
+      wget https://storage.googleapis.com/buildkite_public_assets/sg-rfc795.tar.gz
+      tar zxf sg-rfc795.tar.gz
+      chmod +x ./sg-rfc795
+
+      ./sg-rfc795 release run promote-to-public finalize --workdir=. --config-from-commit

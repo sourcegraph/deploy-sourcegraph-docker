@@ -16,35 +16,56 @@ requirements:
 internal:
   create:
     steps:
-      minor:
+      patch:
           - name: docker:tags
             cmd: |
+              # TODO: use {{tag}}
               ./tools/update-docker-tags.sh {{tag}}
           - name: "git:branch"
             cmd: |
-              branch="wb/wip_{{version}}"
+              branch="wip_{{version}}"
               git switch -c "${branch}"
-              git commit -am 'release-major: {{version}}' -m '{{config}}'
+              git commit -am 'release_patch: {{version}}' -m '{{config}}'
+              git push origin ${branch}
+          - name: "gh"
+            cmd: |
+              gh pr create -f -t "PRETEND RELEASE WIP: release_patch: build {{version}}"
+      minor:
+          - name: docker:tags
+            cmd: |
+              # TODO: use {{tag}}
+              ./tools/update-docker-tags.sh {{tag}}
+          - name: "git:branch"
+            cmd: |
+              branch="wip_{{version}}"
+              git switch -c "${branch}"
+              git commit -am 'release_minor: {{version}}' -m '{{config}}'
+              git push origin ${branch}
+          - name: "gh"
+            cmd: |
+              gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}"
       major:
           - name: docker:tags
             cmd: |
               ./tools/update-docker-tags.sh {{tag}}
           - name: "git:branch"
             cmd: |
-              branch="wb/wip_{{version}}"
+              branch="wip_{{version}}"
               git switch -c "${branch}"
-              git commit -am 'release-major: {{version}}' -m '{{config}}'
+              git commit -am 'release_major: {{version}}' -m '{{config}}'
+              git push origin ${branch}
+          - name: "gh"
+            cmd: |
+              gh pr create -f -t "PRETEND RELEASE WIP: release_major: build {{version}}"
   finalize:
     steps:
       - name: "git:finalize"
         cmd: |
-          git checkout wb/wip_{{version}}
-          git push origin wb/wip_{{version}}
-
-          gh pr create -f -t "PRETEND RELEASE - release-major: build {{version}}"
-
-          git switch -c "wb/release-{{version}}"
-          git push origin wb/release-{{version}}
+          set -e
+          branch="wip-release-{{version}}"
+          git switch -c "${branch}"
+          echo "pushing branch ${branch}"
+          git push origin "${branch}"
           git checkout -
 test:
   steps:
@@ -60,11 +81,23 @@ promoteToPublic:
           ./tools/update-docker-tags.sh {{tag}}
       - name: "git:branch"
         cmd: |
-          branch="wb/promote_wip_{{version}}"
+          branch="promote-release_{{version}}"
           git switch -c "${branch}"
           git commit -am 'promote-release: {{version}}' -m '{{config}}'
-      - name: "git:push"
-        cmd: git push origin wb/promote_wip_{{version}}
-      - name: "GitHub:create PR"
+          git push origin "${branch}"
+      - name: "gh"
         cmd: |
-          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}"
+          set -e
+          branch="wip-release-{{version}}"
+          # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
+          git fetch origin "${branch}"
+          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}"
+  finalize:
+    steps:
+      - name: git:tag
+        cmd: |
+          set -e
+          branch="wip-release-{{version}}"
+          git checkout "${branch}"
+          git tag wip-{{version}}
+          git push origin ${branch} --tags
