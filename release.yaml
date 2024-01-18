@@ -17,10 +17,16 @@ internal:
   create:
     steps:
       patch:
-          - name: docker:tags
+          - name: docker(compose):tags
             cmd: |
-              # TODO: use {{tag}}
-              ./tools/update-docker-tags.sh {{tag}}
+              set -e
+              registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+              sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+          - name: docker(shell):tags
+            cmd: |
+              set -e
+              registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+              sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
               branch="wip_{{version}}"
@@ -31,10 +37,16 @@ internal:
             cmd: |
               gh pr create -f -t "PRETEND RELEASE WIP: release_patch: build {{version}}"
       minor:
-          - name: docker:tags
+          - name: docker(compose):tags
             cmd: |
-              # TODO: use {{tag}}
-              ./tools/update-docker-tags.sh {{tag}}
+              set -e
+              registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+              sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+          - name: docker(shell):tags
+            cmd: |
+              set -e
+              registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+              sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
               branch="wip_{{version}}"
@@ -45,9 +57,16 @@ internal:
             cmd: |
               gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}"
       major:
-          - name: docker:tags
+          - name: docker(compose):tags
             cmd: |
-              ./tools/update-docker-tags.sh {{tag}}
+              set -e
+              registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+              sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+          - name: docker(shell):tags
+            cmd: |
+              set -e
+              registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+              sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
               branch="wip_{{version}}"
@@ -76,9 +95,16 @@ test:
 promoteToPublic:
   create:
     steps:
-      - name: docker:tags
+      - name: docker(compose):tags
         cmd: |
-          ./tools/update-docker-tags.sh {{tag}}
+          set -e
+          registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-public
+          sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+      - name: docker(shell):tags
+        cmd: |
+          set -e
+          registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-public
+          sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
       - name: "git:branch"
         cmd: |
           branch="promote-release_{{version}}"
