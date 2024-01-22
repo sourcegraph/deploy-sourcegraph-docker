@@ -145,7 +145,7 @@ type testEnv struct {
 //
 // Warning this clears all containers/volumes on the host!
 func initTestEnv(ctx context.Context, verbose bool) (*testEnv, error) {
-	fmt.Println("Initializing test environemt ...")
+	fmt.Println("Initializing test environment ...")
 	// Clear current docker environment
 	if err := dockerClean(ctx, verbose); err != nil {
 		return nil, fmt.Errorf("failed to clean docker environment during initialization: %w", err)
