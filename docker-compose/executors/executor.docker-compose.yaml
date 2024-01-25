@@ -2,7 +2,7 @@ version: '2.4'
 services:
   executor:
     container_name: executor
-    image: 'index.docker.io/sourcegraph/executor:5.2.6@sha256:50dff8b8051e117bb99bd5d761c0c6f95c52c737ee8bd78bd3136ec483140cfd'
+    image: 'index.docker.io/sourcegraph/executor:5.2.7@sha256:ad4eaf5b07b17a4fd5300b200fa6be9571030eb816bd7cd8cf02805e21afa831'
     cpus: 1
     mem_limit: '4g'
     # Run as root (required for docker daemon control)
