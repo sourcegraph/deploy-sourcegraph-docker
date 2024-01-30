@@ -27,6 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         use_private_ip = server['use_private_ip']
         username = server['username']
         ssh_key_path = server['ssh_key_path']
+        service_account = "e2e-builder@sourcegraph-ci.iam.gserviceaccount.com"
       else
         project_id = ENV['VAGRANT_GCP_PROJECT_ID'] || 'sourcegraph-server'
         external_ip = nil
@@ -56,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         cat << EOF >> /root/.profile
 export GIT_BRANCH=#{ENV['BUILDKITE_BRANCH']}
 export TEST_TYPE=#{ENV['TEST_TYPE']}
-export GCP_ACCESS_TOKEN=#{ENV['ACCESS_TOKEN']}
+export GCP_ACCESS_TOKEN=#{ENV['GCP_ACCESS_TOKEN']}
 EOF
         SHELL
 
