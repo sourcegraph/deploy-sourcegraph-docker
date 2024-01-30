@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         use_private_ip = server['use_private_ip']
         username = server['username']
         ssh_key_path = server['ssh_key_path']
-        service_accounts = server['server_accounts']
+        service_account = server['server_account']
       else
         project_id = ENV['VAGRANT_GCP_PROJECT_ID'] || 'sourcegraph-server'
         external_ip = nil
@@ -46,7 +46,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.network = server['network']
         g.external_ip = external_ip
         g.use_private_ip = use_private_ip
-        g.service_accounts = service_accounts
+        g.service_account = 'e2e-builder@sourcegraph-ci.iam.gserviceaccount.com'
         g.scopes = [
             "compute-rw"
         ]
