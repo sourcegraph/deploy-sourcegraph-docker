@@ -48,7 +48,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.use_private_ip = use_private_ip
         g.service_account = 'e2e-builder@sourcegraph-ci.iam.gserviceaccount.com'
         g.scopes = [
-            "compute-rw"
+            "compute-rw",
+            "storage-ro"
         ]
         o.ssh.username = username
         o.ssh.private_key_path = ssh_key_path
