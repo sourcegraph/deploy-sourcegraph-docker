@@ -20,6 +20,7 @@ for i in "${plugins[@]}"; do
 done
 
 trap cleanup EXIT
+export GCP_ACCESS_TOKEN=$(gcloud auth print-access-token)
 vagrant up "$box" --provider=google || exit_code=$?
 
 if [ "$exit_code" != 0 ]; then

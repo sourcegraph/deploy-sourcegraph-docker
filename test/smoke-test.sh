@@ -2,8 +2,9 @@
 set -euxfo pipefail
 
 configure_docker() {
-  gcloud auth configure-docker
-  gcloud auth configure-docker us-central1-docker.pkg.dev
+  echo "${GCP_ACCESS_TOKEN}" > /tmp/access_token
+  gcloud auth configure-docker --access-token-file=/tmp/access_token
+  gcloud auth configure-docker us-central1-docker.pkg.dev --access-token-file=/tmp/access_token
 }
 
 deploy_sourcegraph() {
