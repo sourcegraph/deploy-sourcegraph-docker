@@ -5,6 +5,7 @@ configure_docker() {
   echo "${GCP_ACCESS_TOKEN}" > /tmp/access_token
   gcloud auth configure-docker --access-token-file=/tmp/access_token
   gcloud auth configure-docker us-central1-docker.pkg.dev --access-token-file=/tmp/access_token
+  gcloud config set auth/access_token_file /tmp/access_token
 }
 
 deploy_sourcegraph() {
