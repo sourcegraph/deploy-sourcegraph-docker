@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
-set -euxo pipefail
+set -euo pipefail
 
 box="$1"
 exit_code=0
@@ -20,7 +20,7 @@ for i in "${plugins[@]}"; do
 done
 
 trap cleanup EXIT
-export GCP_ACCESS_TOKEN=$(gcloud auth print-access-token)
+export GCP_ACCESS_TOKEN=$(gcloud auth print-access-token --impersonate-service-account=e2e-builder@sourcegraph-ci.iam.gserviceaccount.com)
 vagrant up "$box" --provider=google || exit_code=$?
 
 if [ "$exit_code" != 0 ]; then
