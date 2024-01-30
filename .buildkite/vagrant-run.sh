@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
-set -euxo pipefail
+set -euo pipefail
 
 box="$1"
 exit_code=0
@@ -12,6 +12,7 @@ cleanup() {
 	vagrant destroy -f "$box"
 }
 
+echo --- ":vagrant: installing plugins"
 plugins=(vagrant-google vagrant-env vagrant-scp)
 for i in "${plugins[@]}"; do
 	if ! vagrant plugin list --no-tty | grep "$i"; then
@@ -20,6 +21,7 @@ for i in "${plugins[@]}"; do
 done
 
 trap cleanup EXIT
+echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?
 
 if [ "$exit_code" != 0 ]; then
