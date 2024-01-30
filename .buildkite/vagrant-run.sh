@@ -20,6 +20,8 @@ for i in "${plugins[@]}"; do
 done
 
 trap cleanup EXIT
+echo --- ":vagrant: starting box $box"
+echo "I AM $(whoami)"
 export GCP_ACCESS_TOKEN=$(gcloud auth print-access-token --impersonate-service-account=e2e-builder@sourcegraph-ci.iam.gserviceaccount.com)
 vagrant up "$box" --provider=google || exit_code=$?
 
