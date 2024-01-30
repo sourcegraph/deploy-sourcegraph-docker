@@ -3,9 +3,8 @@ set -euxfo pipefail
 
 configure_docker() {
   echo "${GCP_ACCESS_TOKEN}" > /tmp/access_token
-  cat /tmp/access_token | docker login \
-    -u oauth2accesstoken \
-    --password-stdin https://us-central1-docker.pkg.dev
+  cat /tmp/access_token
+  cat /tmp/access_token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
 }
 
 deploy_sourcegraph() {
