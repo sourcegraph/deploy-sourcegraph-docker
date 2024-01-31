@@ -45,6 +45,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.external_ip = external_ip
         g.use_private_ip = use_private_ip
         g.service_account = server['service_account']
+        g.labels = {
+          "team" => "dev-infra",
+          "type" => "vagrant"
+        }
         g.scopes = [
             "compute-rw",
             "storage-ro"
