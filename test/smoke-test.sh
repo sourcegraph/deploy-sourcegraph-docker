@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euxfo pipefail
 
+configure_docker() {
+  gcloud auth configure-docker
+  gcloud auth configure-docker us-central1-docker.pkg.dev
+}
+
 deploy_sourcegraph() {
 	cd $(dirname "${BASH_SOURCE[0]}")/..
 	#Deploy sourcegraph
@@ -64,6 +69,7 @@ catch_errors() {
 
 trap catch_errors EXIT
 
+configure_docker
 deploy_sourcegraph
 test_count
 test_containers

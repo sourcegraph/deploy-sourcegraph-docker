@@ -8,6 +8,7 @@
   network: default
   username: buildkite
   ssh_key_path: "~/.ssh/id_rsa"
+  service_account: e2e-builder@sourcegraph-ci.iam.gserviceaccount.com
   shell_commands:
    - "/deploy-sourcegraph-docker/test/smoke-test.sh"
 
