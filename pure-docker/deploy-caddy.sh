@@ -30,6 +30,6 @@ docker run --detach \
   -e SRC_FRONTEND_ADDRESSES="sourcegraph-frontend-0:3080" \
   -p 0.0.0.0:80:80 \
   -p 0.0.0.0:443:443 \
-  -v $VOLUME:/caddy-storage \
+  -v "$VOLUME:/caddy-storage" \
   --mount type=bind,source="$(pwd)"/../caddy/builtins/http.Caddyfile,target=/etc/caddy/Caddyfile \
   index.docker.io/caddy:2.7.6-alpine@sha256:80ca561981768b2c3568cc4bef3d4cd1f11c2a625c806bedeb8453aef98779a0
