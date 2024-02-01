@@ -35,7 +35,7 @@ internal:
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_patch: build {{version}}"
+              gh pr create -f -t "PRETEND RELEASE WIP: release_patch: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
       minor:
           - name: docker(compose):tags
             cmd: |
@@ -55,7 +55,7 @@ internal:
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}"
+              gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
       major:
           - name: docker(compose):tags
             cmd: |
@@ -75,7 +75,7 @@ internal:
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_major: build {{version}}"
+              gh pr create -f -t "PRETEND RELEASE WIP: release_major: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
   finalize:
     steps:
       - name: "git:finalize"
@@ -117,7 +117,7 @@ promoteToPublic:
           branch="wip-release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
-          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}"
+          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}" --body "Test plan: automated release PR, CI will perform additional checks"
   finalize:
     steps:
       - name: git:tag
