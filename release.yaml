@@ -81,7 +81,7 @@ internal:
       - name: "git:finalize"
         cmd: |
           set -e
-          branch="wip-release-{{version}}"
+          branch="wip_release-{{version}}"
           git switch -c "${branch}"
           echo "pushing branch ${branch}"
           git push origin "${branch}"
@@ -114,7 +114,7 @@ promoteToPublic:
       - name: "gh"
         cmd: |
           set -e
-          branch="wip-release-{{version}}"
+          branch="wip_release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
           gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}" --body "Test plan: automated release PR, CI will perform additional checks"
@@ -123,7 +123,7 @@ promoteToPublic:
       - name: git:tag
         cmd: |
           set -e
-          branch="wip-release-{{version}}"
+          branch="wip_release-{{version}}"
           git checkout "${branch}"
-          git tag wip-{{version}}
+          git tag wip_{{version}}
           git push origin ${branch} --tags
