@@ -23,6 +23,6 @@ docker run --detach \
     -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -v $VOLUME:/data/repos \
-    index.docker.io/sourcegraph/gitserver:187572_2022-12-06_cbecc5321c7d@sha256:87642b2f0cccbdcd661e470c8f7aa6c022ab03065a2c8ab565afc4b8829a4531
+    index.docker.io/sourcegraph/gitserver:5.3.0@sha256:d5fa43492a9b5e4a64c8b2cd5d3295f2afd1407755c3869f639c5d3f390310b7
 
 echo "Deployed gitserver $1 service"
