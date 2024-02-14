@@ -18,3 +18,4 @@ The above will deploy Sourcegraph on [http://localhost:8080](http://localhost:80
 ```
 
 The above will tear down the local Sourcegraph instance that was set up using the previous command.
+Hello World
