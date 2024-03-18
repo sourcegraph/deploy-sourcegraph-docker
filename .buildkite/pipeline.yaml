@@ -38,28 +38,23 @@ steps:
 
   - label: "Release: test"
     if: "build.branch =~ /^wip_/"
+    plugins:
+      - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
-      wget https://storage.googleapis.com/buildkite_public_assets/sg-rfc795.tar.gz
-      tar zxf sg-rfc795.tar.gz
-      chmod +x ./sg-rfc795
-
-      ./sg-rfc795 release run test --workdir=. --config-from-commit
+      sg release run test --workdir=. --config-from-commit
 
   - wait
 
   - label: "Release: finalize"
     if: "build.branch =~ /^wip_/"
+    plugins:
+      - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
-      wget https://storage.googleapis.com/buildkite_public_assets/sg-rfc795.tar.gz
-      tar zxf sg-rfc795.tar.gz
-      chmod +x ./sg-rfc795
+      sg release run internal finalize --workdir=. --config-from-commit
 
-      ./sg-rfc795 release run internal finalize --workdir=. --config-from-commit
   - label: "Promote to public: finalize"
     if: build.message =~ /^promote_release/ && build.branch =~ /^wip_release/
+    plugins:
+      - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
-      wget https://storage.googleapis.com/buildkite_public_assets/sg-rfc795.tar.gz
-      tar zxf sg-rfc795.tar.gz
-      chmod +x ./sg-rfc795
-
-      ./sg-rfc795 release run promote-to-public finalize --workdir=. --config-from-commit
+      sg release run promote-to-public finalize --workdir=. --config-from-commit
