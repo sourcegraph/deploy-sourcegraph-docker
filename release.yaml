@@ -21,12 +21,12 @@ internal:
             cmd: |
               set -e
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+              sg ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
           - name: docker(shell):tags
             cmd: |
               set -e
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
+              sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
               branch="wip_{{version}}"
@@ -41,12 +41,12 @@ internal:
             cmd: |
               set -e
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+              sg ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
           - name: docker(shell):tags
             cmd: |
               set -e
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
+              sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
               branch="wip_{{version}}"
@@ -61,12 +61,12 @@ internal:
             cmd: |
               set -e
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+              sg ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
           - name: docker(shell):tags
             cmd: |
               set -e
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
+              sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
               branch="wip_{{version}}"
@@ -99,12 +99,12 @@ promoteToPublic:
         cmd: |
           set -e
           registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-public
-          sg-rfc ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
+          sg ops update-images --registry ${registry} --kind compose --pin-tag {{tag}} docker-compose/
       - name: docker(shell):tags
         cmd: |
           set -e
           registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-public
-          sg-rfc ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
+          sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
       - name: "git:branch"
         cmd: |
           branch="promote-release_{{version}}"
