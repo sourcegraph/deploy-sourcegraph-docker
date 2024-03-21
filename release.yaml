@@ -5,7 +5,7 @@ meta:
     - "@sourcegraph/release"
   repository: "github.com/sourcegraph/deploy-sourcegraph-docker"
 inputs:
-  releaseId: server
+  - releaseId: server
 requirements:
   - name: "go"
     cmd: "which go"
@@ -29,13 +29,17 @@ internal:
               sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
-              branch="wip_{{version}}"
+              set -e
+              branch="internal/release-{{version}}"
               git switch -c "${branch}"
               git commit -am 'release_patch: {{version}}' -m '{{config}}'
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_patch: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create \
+                --fill \
+                --title "(internal) release_patch: build {{version}}" \
+                --body "Test plan: automated release PR, CI will perform additional checks" 
       minor:
           - name: docker(compose):tags
             cmd: |
@@ -49,13 +53,17 @@ internal:
               sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
-              branch="wip_{{version}}"
+              set -e
+              branch="internal/release-{{version}}"
               git switch -c "${branch}"
               git commit -am 'release_minor: {{version}}' -m '{{config}}'
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create \
+                --fill \
+                --title "(internal) release_minor: build {{version}}" \
+                --body "Test plan: automated release PR, CI will perform additional checks"
       major:
           - name: docker(compose):tags
             cmd: |
@@ -69,26 +77,30 @@ internal:
               sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
-              branch="wip_{{version}}"
+              set -e
+              branch="internal/release-{{version}}"
               git switch -c "${branch}"
               git commit -am 'release_major: {{version}}' -m '{{config}}'
               git push origin ${branch}
           - name: "gh"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_major: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create \
+                --fill \
+                --title "(internal) release_major: build {{version}}" \
+                --body "Test plan: automated release PR, CI will perform additional checks"
   finalize:
     steps:
       - name: "git:finalize"
         cmd: |
           set -e
-          branch="wip_release-{{version}}"
+          branch="release-{{version}}"
           git switch -c "${branch}"
           echo "pushing branch ${branch}"
           git push origin "${branch}"
           git checkout -
 test:
   steps:
-    - name: "foo"
+    - name: "Placeholder"
       cmd: |
         echo "Test"
 
@@ -107,23 +119,28 @@ promoteToPublic:
           sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
       - name: "git:branch"
         cmd: |
-          branch="promote-release_{{version}}"
+          branch="promote/release-{{version}}"
           git switch -c "${branch}"
           git commit -am 'promote-release: {{version}}' -m '{{config}}'
           git push origin "${branch}"
-      - name: "gh"
+      - name: "github:pr"
         cmd: |
           set -e
-          branch="wip_release-{{version}}"
+          branch="internal/release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
-          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}" --body "Test plan: automated release PR, CI will perform additional checks"
+          gh pr create \
+            --fill \
+            --title "(promote) release: build {{version}}" \
+            --base "${branch}" \
+            --body "Test plan: automated release PR, CI will perform additional checks"
   finalize:
     steps:
       - name: git:tag
         cmd: |
           set -e
-          branch="wip_release-{{version}}"
+          branch="promote/release-{{version}}"
           git checkout "${branch}"
-          git tag wip_{{version}}
+          # TODO remove after QA
+          git tag QA-{{version}}
           git push origin ${branch} --tags
