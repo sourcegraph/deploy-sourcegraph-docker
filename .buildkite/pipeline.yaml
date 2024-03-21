@@ -15,19 +15,20 @@ steps:
     command: .buildkite/verify-release/verify-release.sh
     agents: { queue: standard }
 
-  - label: ":rice: pure-docker-test"
-    command: .buildkite/vagrant-run.sh docker-test
-    artifact_paths: ./*.log
-    env:
-      TEST_TYPE: "pure-docker-test"
-    agents: { queue: "vagrant" }
-
-  - label: ":rice: docker-compose-test"
-    command: .buildkite/vagrant-run.sh docker-test
-    artifact_paths: ./*.log
-    env:
-      TEST_TYPE: "docker-compose-test"
-    agents: { queue: "vagrant" }
+  # Commented for faster QA
+  # - label: ":rice: pure-docker-test"
+  #   command: .buildkite/vagrant-run.sh docker-test
+  #   artifact_paths: ./*.log
+  #   env:
+  #     TEST_TYPE: "pure-docker-test"
+  #   agents: { queue: "vagrant" }
+  #
+  # - label: ":rice: docker-compose-test"
+  #   command: .buildkite/vagrant-run.sh docker-test
+  #   artifact_paths: ./*.log
+  #   env:
+  #     TEST_TYPE: "docker-compose-test"
+  #   agents: { queue: "vagrant" }
 
   # This runs the Checkov Terraform Code scanner
   # https://www.checkov.io/

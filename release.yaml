@@ -43,6 +43,7 @@ internal:
                 --fill \
                 --title "(internal) release_patch: build {{version}}" \
                 --body "Test plan: automated release PR, CI will perform additional checks" 
+              echo "🚢 Please check the associated CI build to ensure the process completed".
       minor:
           - name: docker(compose):tags
             cmd: |
@@ -67,6 +68,7 @@ internal:
                 --fill \
                 --title "(internal) release_minor: build {{version}}" \
                 --body "Test plan: automated release PR, CI will perform additional checks"
+              echo "🚢 Please check the associated CI build to ensure the process completed".
       major:
           - name: docker(compose):tags
             cmd: |
@@ -97,7 +99,7 @@ internal:
       - name: "git:finalize"
         cmd: |
           set -e
-          branch="release-{{version}}"
+          branch="ready/release-{{version}}"
           git switch -c "${branch}"
           echo "pushing branch ${branch}"
           git push origin "${branch}"
@@ -111,6 +113,12 @@ test:
 promoteToPublic:
   create:
     steps:
+      - name: "git"
+        cmd: |
+          set -e
+          branch="ready/release-{{version}}"
+          git fetch origin "${branch}"
+          git switch "${branch}"
       - name: docker(compose):tags
         cmd: |
           set -e
@@ -130,7 +138,7 @@ promoteToPublic:
       - name: "github:pr"
         cmd: |
           set -e
-          branch="internal/release-{{version}}"
+          branch="ready/release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
           gh pr create \
