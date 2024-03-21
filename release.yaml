@@ -5,7 +5,7 @@ meta:
     - "@sourcegraph/release"
   repository: "github.com/sourcegraph/deploy-sourcegraph-docker"
 inputs:
-  releaseId: server
+  - releaseId: server
 requirements:
   - name: "go"
     cmd: "which go"
@@ -14,6 +14,9 @@ requirements:
     cmd: "which gh"
     fixInstructions: "install GitHub cli"
 internal:
+  # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
+  # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
+  # with, please update this file as well.
   create:
     steps:
       patch:
@@ -29,13 +32,18 @@ internal:
               sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
-              branch="wip_{{version}}"
+              set -e
+              branch="internal/release-{{version}}"
               git switch -c "${branch}"
               git commit -am 'release_patch: {{version}}' -m '{{config}}'
               git push origin ${branch}
-          - name: "gh"
+          - name: "github:pr"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_patch: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create \
+                --fill \
+                --title "(internal) release_patch: build {{version}}" \
+                --body "Test plan: automated release PR, CI will perform additional checks" 
+              echo "🚢 Please check the associated CI build to ensure the process completed".
       minor:
           - name: docker(compose):tags
             cmd: |
@@ -49,13 +57,18 @@ internal:
               sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
-              branch="wip_{{version}}"
+              set -e
+              branch="internal/release-{{version}}"
               git switch -c "${branch}"
               git commit -am 'release_minor: {{version}}' -m '{{config}}'
               git push origin ${branch}
-          - name: "gh"
+          - name: "github:pr"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_minor: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create \
+                --fill \
+                --title "(internal) release_minor: build {{version}}" \
+                --body "Test plan: automated release PR, CI will perform additional checks"
+              echo "🚢 Please check the associated CI build to ensure the process completed".
       major:
           - name: docker(compose):tags
             cmd: |
@@ -69,32 +82,47 @@ internal:
               sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
           - name: "git:branch"
             cmd: |
-              branch="wip_{{version}}"
+              set -e
+              branch="internal/release-{{version}}"
               git switch -c "${branch}"
               git commit -am 'release_major: {{version}}' -m '{{config}}'
               git push origin ${branch}
-          - name: "gh"
+          - name: "github:pr"
             cmd: |
-              gh pr create -f -t "PRETEND RELEASE WIP: release_major: build {{version}}" --body "Test plan: automated release PR, CI will perform additional checks"
+              gh pr create \
+                --fill \
+                --title "(internal) release_major: build {{version}}" \
+                --body "Test plan: automated release PR, CI will perform additional checks"
+              echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
     steps:
       - name: "git:finalize"
         cmd: |
           set -e
-          branch="wip_release-{{version}}"
-          git switch -c "${branch}"
-          echo "pushing branch ${branch}"
-          git push origin "${branch}"
-          git checkout -
+          # branch="ready/release-{{version}}"
+          # git switch -c "${branch}"
+          # echo "pushing branch ${branch}"
+          # git push origin "${branch}"
+          # git checkout -
+          branch="internal/release-{{version}}"
+          cat << EOF | buildkite-agent annotate --style info
+          Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
+          EOF
 test:
   steps:
-    - name: "foo"
+    - name: "Placeholder"
       cmd: |
         echo "Test"
 
 promoteToPublic:
   create:
     steps:
+      - name: "git"
+        cmd: |
+          set -e
+          branch="internal/release-{{version}}"
+          git fetch origin "${branch}"
+          git switch "${branch}"
       - name: docker(compose):tags
         cmd: |
           set -e
@@ -107,23 +135,32 @@ promoteToPublic:
           sg ops update-images --registry ${registry} --kind shell --pin-tag {{tag}} pure-docker/
       - name: "git:branch"
         cmd: |
-          branch="promote-release_{{version}}"
+          branch="promote/release-{{version}}"
           git switch -c "${branch}"
           git commit -am 'promote-release: {{version}}' -m '{{config}}'
           git push origin "${branch}"
-      - name: "gh"
+      - name: "github:pr"
         cmd: |
           set -e
-          branch="wip_release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
-          gh pr create -f -t "PRETEND PROMOTE RELEASE - release: build {{version}}" --base "${branch}" --body "Test plan: automated release PR, CI will perform additional checks"
+          gh pr create \
+            --fill \
+            --title "(promote) release: build {{version}}" \
+            --body "Test plan: automated release PR, CI will perform additional checks"
+          echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
     steps:
       - name: git:tag
         cmd: |
           set -e
-          branch="wip_release-{{version}}"
+          branch="promote/release-{{version}}"
+          saved_branch="release-{{version}}"
           git checkout "${branch}"
-          git tag wip_{{version}}
-          git push origin ${branch} --tags
+          git switch -c "${saved_branch}"
+          # TODO remove after QA
+          git tag QA-{{version}}
+          git push origin ${saved_branch} --tags
+          cat << EOF | buildkite-agent annotate --style info
+          Promoted release is **publicly available** through a git tag at [\`QA-$version\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$version).
+          EOF

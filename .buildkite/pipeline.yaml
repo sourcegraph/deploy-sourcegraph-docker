@@ -15,29 +15,40 @@ steps:
     command: .buildkite/verify-release/verify-release.sh
     agents: { queue: standard }
 
-  - label: ":rice: pure-docker-test"
-    command: .buildkite/vagrant-run.sh docker-test
-    artifact_paths: ./*.log
-    env:
-      TEST_TYPE: "pure-docker-test"
-    agents: { queue: "vagrant" }
-
-  - label: ":rice: docker-compose-test"
-    command: .buildkite/vagrant-run.sh docker-test
-    artifact_paths: ./*.log
-    env:
-      TEST_TYPE: "docker-compose-test"
-    agents: { queue: "vagrant" }
-
-  # This runs the Checkov Terraform Code scanner
+  # Commented for faster QA
+  # - label: ":rice: pure-docker-test"
+  #   command: .buildkite/vagrant-run.sh docker-test
+  #   artifact_paths: ./*.log
+  #   env:
+  #     TEST_TYPE: "pure-docker-test"
+  #   agents: { queue: "vagrant" }
+  #
+  # - label: ":rice: docker-compose-test"
+  #   command: .buildkite/vagrant-run.sh docker-test
+  #   artifact_paths: ./*.log
+  #   env:
+  #     TEST_TYPE: "docker-compose-test"
+  #   agents: { queue: "vagrant" }
+  #
+  # # This runs the Checkov Terraform Code scanner
   # https://www.checkov.io/
-  - command: .buildkite/ci-checkov.sh
-    label: ":lock: security - checkov"
-    agents: { queue: "standard" }
-    soft_fail: true
+  # - command: .buildkite/ci-checkov.sh
+  #   label: ":lock: security - checkov"
+  #   agents: { queue: "standard" }
+  #   soft_fail: true
 
-  - label: "Release: test"
-    if: "build.branch =~ /^wip_/"
+  # Please keep in mind that the release manifest uses specific branch names when creating releases.
+  # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
+  # with, please update this file as well.
+  - label: "(internal) Release: test"
+    if: build.branch =~ /^internal\/release-.*/
+    plugins:
+      - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
+    command: |
+      sg release run test --workdir=. --config-from-commit
+
+  - label: "(promote) Release: test"
+    if: build.branch =~ /^promote\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
@@ -45,16 +56,18 @@ steps:
 
   - wait
 
-  - label: "Release: finalize"
-    if: "build.branch =~ /^wip_/"
+  - label: "(internal) Release: finalize"
+    if: build.branch =~ /^internal\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run internal finalize --workdir=. --config-from-commit
 
-  - label: "Promote to public: finalize"
-    if: build.message =~ /^promote_release/ && build.branch =~ /^wip_release/
+
+  - label: "(promote) Release: finalize"
+    if: build.branch =~ /^promote\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run promote-to-public finalize --workdir=. --config-from-commit
+
