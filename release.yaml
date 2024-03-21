@@ -104,7 +104,7 @@ internal:
           echo "pushing branch ${branch}"
           git push origin "${branch}"
           git checkout -
-          buildkite-agent 'Internal release is ready for promotion under the branch [`' "${branch}" '`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/${branch})' --style 'success'
+          buildkite-agent annotate 'Internal release is ready for promotion under the branch [`' "${branch}" '`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/${branch})' --style 'success'
 test:
   steps:
     - name: "Placeholder"
@@ -159,4 +159,4 @@ promoteToPublic:
           # TODO remove after QA
           git tag QA-{{version}}
           git push origin ${branch} --tags
-          buildkite-agent 'Promoted release is **publicly available** at [`' "QA-${version}" '`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/${version})' --style 'success'
+          buildkite-agent annotate 'Promoted release is **publicly available** at [`' "QA-${version}" '`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/${version})' --style 'success'
