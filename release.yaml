@@ -142,13 +142,11 @@ promoteToPublic:
       - name: "github:pr"
         cmd: |
           set -e
-          base_branch="ready/release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
           gh pr create \
             --fill \
             --title "(promote) release: build {{version}}" \
-            --base "${base_branch}" \
             --body "Test plan: automated release PR, CI will perform additional checks"
           echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
@@ -157,7 +155,9 @@ promoteToPublic:
         cmd: |
           set -e
           branch="promote/release-{{version}}"
+          saved_branch="release-{{version}}"
           git checkout "${branch}"
+          git switch -c "${saved_branch}"
           # TODO remove after QA
           git tag QA-{{version}}
           git push origin ${branch} --tags
