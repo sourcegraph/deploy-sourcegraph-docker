@@ -105,7 +105,7 @@ internal:
           git push origin "${branch}"
           git checkout -
 
-          cat << EOF | buildkite-agent annotate --style success
+          cat << EOF | buildkite-agent annotate --style info
           Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
           EOF
 test:
@@ -162,4 +162,6 @@ promoteToPublic:
           # TODO remove after QA
           git tag QA-{{version}}
           git push origin ${branch} --tags
-          buildkite-agent annotate 'Promoted release is **publicly available** at [`' "QA-${version}" '`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/${version})' --style 'success'
+          cat << EOF | buildkite-agent annotate --style info
+          Promoted release is **publicly available** through a git tag at [\`QA-$version\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$version).
+          EOF
