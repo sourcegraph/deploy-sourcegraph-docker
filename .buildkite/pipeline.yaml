@@ -37,7 +37,7 @@ steps:
     soft_fail: true
 
   - label: "Release: test"
-    if: "build.branch =~ /^wip_/"
+    if: "build.branch =~ /^internal\/release-.*/"
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
@@ -45,15 +45,23 @@ steps:
 
   - wait
 
+  - label: "Release: test"
+    if: "build.branch =~ /^promote\/release-.*/"
+    plugins:
+      - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
+    command: |
+      sg release run test --workdir=. --config-from-commit
+
+
   - label: "Release: finalize"
-    if: "build.branch =~ /^wip_/"
+    if: "build.branch =~ /^promote\/release-.*/"
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run internal finalize --workdir=. --config-from-commit
 
   - label: "Promote to public: finalize"
-    if: build.message =~ /^promote_release/ && build.branch =~ /^wip_release/
+    if: "build.branch =~ /^promote\/release-.*/"
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
