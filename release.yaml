@@ -104,6 +104,7 @@ internal:
           echo "pushing branch ${branch}"
           git push origin "${branch}"
           git checkout -
+          buildkite-agent annotate "Internal release is ready for promotion under the branch [`${branch}](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/${branch})` style" --style 'success' --context 'ctx-success'
 test:
   steps:
     - name: "Placeholder"
@@ -141,6 +142,7 @@ promoteToPublic:
           branch="ready/release-{{version}}"
           # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
           git fetch origin "${branch}"
+          git switch "${branch}"
           gh pr create \
             --fill \
             --title "(promote) release: build {{version}}" \
@@ -157,3 +159,4 @@ promoteToPublic:
           # TODO remove after QA
           git tag QA-{{version}}
           git push origin ${branch} --tags
+          buildkite-agent annotate "Promoted release is publicly available at [`QA-${version}](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/QA-${version})` style" --style 'success' --context 'ctx-success'

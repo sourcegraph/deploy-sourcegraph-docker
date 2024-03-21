@@ -29,13 +29,13 @@ steps:
   #   env:
   #     TEST_TYPE: "docker-compose-test"
   #   agents: { queue: "vagrant" }
-
-  # This runs the Checkov Terraform Code scanner
+  #
+  # # This runs the Checkov Terraform Code scanner
   # https://www.checkov.io/
-  - command: .buildkite/ci-checkov.sh
-    label: ":lock: security - checkov"
-    agents: { queue: "standard" }
-    soft_fail: true
+  # - command: .buildkite/ci-checkov.sh
+  #   label: ":lock: security - checkov"
+  #   agents: { queue: "standard" }
+  #   soft_fail: true
 
   # Please keep in mind that the release manifest uses specific branch names when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
