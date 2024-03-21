@@ -34,7 +34,7 @@ internal:
               git switch -c "${branch}"
               git commit -am 'release_patch: {{version}}' -m '{{config}}'
               git push origin ${branch}
-          - name: "gh"
+          - name: "github:pr"
             cmd: |
               gh pr create \
                 --fill \
@@ -58,7 +58,7 @@ internal:
               git switch -c "${branch}"
               git commit -am 'release_minor: {{version}}' -m '{{config}}'
               git push origin ${branch}
-          - name: "gh"
+          - name: "github:pr"
             cmd: |
               gh pr create \
                 --fill \
@@ -82,7 +82,7 @@ internal:
               git switch -c "${branch}"
               git commit -am 'release_major: {{version}}' -m '{{config}}'
               git push origin ${branch}
-          - name: "gh"
+          - name: "github:pr"
             cmd: |
               gh pr create \
                 --fill \
