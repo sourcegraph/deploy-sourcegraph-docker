@@ -14,6 +14,9 @@ requirements:
     cmd: "which gh"
     fixInstructions: "install GitHub cli"
 internal:
+  # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
+  # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
+  # with, please update this file as well.
   create:
     steps:
       patch:
@@ -88,6 +91,7 @@ internal:
                 --fill \
                 --title "(internal) release_major: build {{version}}" \
                 --body "Test plan: automated release PR, CI will perform additional checks"
+              echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
     steps:
       - name: "git:finalize"
