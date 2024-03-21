@@ -134,6 +134,7 @@ promoteToPublic:
             --title "(promote) release: build {{version}}" \
             --base "${branch}" \
             --body "Test plan: automated release PR, CI will perform additional checks"
+          echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
     steps:
       - name: git:tag
