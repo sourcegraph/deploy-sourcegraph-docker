@@ -61,7 +61,7 @@ steps:
       sg release run internal finalize --workdir=. --config-from-commit
 
   - label: "Promote to public: finalize"
-    if: "build.branch =~ /^promote\/release-.*/"
+    if: build.branch =~ /^promote\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
