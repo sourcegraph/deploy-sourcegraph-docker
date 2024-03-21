@@ -99,12 +99,12 @@ internal:
       - name: "git:finalize"
         cmd: |
           set -e
-          branch="ready/release-{{version}}"
-          git switch -c "${branch}"
-          echo "pushing branch ${branch}"
-          git push origin "${branch}"
-          git checkout -
-
+          # branch="ready/release-{{version}}"
+          # git switch -c "${branch}"
+          # echo "pushing branch ${branch}"
+          # git push origin "${branch}"
+          # git checkout -
+          branch="internal/release-{{version}}"
           cat << EOF | buildkite-agent annotate --style info
           Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
           EOF
