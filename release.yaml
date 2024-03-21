@@ -160,7 +160,7 @@ promoteToPublic:
           git switch -c "${saved_branch}"
           # TODO remove after QA
           git tag QA-{{version}}
-          git push origin ${branch} --tags
+          git push origin ${saved_branch} --tags
           cat << EOF | buildkite-agent annotate --style info
           Promoted release is **publicly available** through a git tag at [\`QA-$version\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$version).
           EOF
