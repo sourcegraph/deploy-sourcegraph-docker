@@ -106,7 +106,14 @@ internal:
           # git push origin "${branch}"
           # git checkout -
           branch="internal/release-{{version}}"
-          gh pr comment "$branch" --body ":green_circle: Internal release is ready from promotion.\n:warning: Do not delete close that pull-request or delete the branch if you intend to promote that release."
+
+          # Post a comment on the PR.
+          cat << EOF | gh pr comment "$branch" --body-file -
+          - :green_circle: Interal release is ready for promotion!
+          - :warning: Do not close/merge that pull request or delete the associated branch if you intend to promote it.
+          EOF
+
+          # Post an annotation.
           cat << EOF | buildkite-agent annotate --style info
           Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
           EOF
