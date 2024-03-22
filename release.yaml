@@ -41,6 +41,7 @@ internal:
             cmd: |
               gh pr create \
                 --fill \
+                --draft \
                 --title "(internal) release_patch: build {{version}}" \
                 --body "Test plan: automated release PR, CI will perform additional checks" 
               echo "🚢 Please check the associated CI build to ensure the process completed".
@@ -66,6 +67,7 @@ internal:
             cmd: |
               gh pr create \
                 --fill \
+                --draft \
                 --title "(internal) release_minor: build {{version}}" \
                 --body "Test plan: automated release PR, CI will perform additional checks"
               echo "🚢 Please check the associated CI build to ensure the process completed".
