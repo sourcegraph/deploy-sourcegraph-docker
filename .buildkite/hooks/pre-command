@@ -26,6 +26,5 @@ fi
 trap remove_pidfile EXIT
 echo $$ > "$PIDFILE"
 
-
 echo "Installing asdf dependencies as defined in '${WORKDIR}/.tool-versions':"
 asdf install
