@@ -174,27 +174,27 @@ promoteToPublic:
           # Create the final branch holding the tagged commit
           git checkout "${promote_branch}"
           git switch -c "${release_branch}"
-          # TODO remove after QA
-          git tag QA-{{version}}
+
+          git tag {{version}}
           git push origin ${release_branch} --tags
 
           # Web URL to the tag
-          tag_url="https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/QA-{{version}}"
+          tag_url="https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}"
 
           # Annotate PRs 
           cat << EOF | gh pr comment "$internal_branch" --body-file -
           - :green_circle: Release has been promoted, see tag: $tag_url.
-          - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (\`$release_branch\`).
+          - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (i.e. \`$release_branch\`).
           - :arrow_right: You can safely close that PR and delete its a associated branch.
           EOF
 
           cat << EOF | gh pr comment "$promote_branch" --body-file -
           - :green_circle: Release has been promoted, see tag: $tag_url.
-          - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (\`$release_branch\`).
+          - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (i.e. \`$release_branch\`).
           - :arrow_right: You can safely close that PR and delete its a associated branch.
           EOF
 
           # Annotate build
           cat << EOF | buildkite-agent annotate --style info
-          Promoted release is **publicly available** through a git tag at [\`QA-{{version}}\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/QA-{{version}}).
+          Promoted release is **publicly available** through a git tag at [\`{{version}}\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}).
           EOF
