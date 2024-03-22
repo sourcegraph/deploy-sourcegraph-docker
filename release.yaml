@@ -102,11 +102,7 @@ internal:
       - name: "git:finalize"
         cmd: |
           set -eu
-          # branch="ready/release-{{version}}"
-          # git switch -c "${branch}"
-          # echo "pushing branch ${branch}"
-          # git push origin "${branch}"
-          # git checkout -
+
           branch="internal/release-{{version}}"
 
           # Post a comment on the PR.
