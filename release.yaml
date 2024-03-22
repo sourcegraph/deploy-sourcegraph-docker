@@ -183,7 +183,7 @@ promoteToPublic:
           git push origin ${release_branch} --tags
 
           # Web URL to the tag
-          tag_url="https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$version"
+          tag_url="https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/QA-{{version}}"
 
           # Annotate PRs 
           cat << EOF | gh pr comment "$internal_branch" --body-file -
@@ -200,5 +200,5 @@ promoteToPublic:
 
           # Annotate build
           cat << EOF | buildkite-agent annotate --style info
-          Promoted release is **publicly available** through a git tag at [\`QA-$version\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$version).
+          Promoted release is **publicly available** through a git tag at [\`QA-{{version}}\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/QA-{{version}}).
           EOF
