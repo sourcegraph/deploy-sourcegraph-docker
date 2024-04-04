@@ -43,7 +43,7 @@ internal:
                 --fill \
                 --draft \
                 --title "(internal) release_patch: build {{version}}" \
-                --body "Test plan: automated release PR, CI will perform additional checks" 
+                --body "Test plan: automated release PR, CI will perform additional checks"
               echo "🚢 Please check the associated CI build to ensure the process completed".
       minor:
           - name: docker(compose):tags
@@ -133,12 +133,12 @@ promoteToPublic:
       - name: docker(compose):tags
         cmd: |
           set -eu
-          registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-public
+          registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} docker-compose/
       - name: docker(shell):tags
         cmd: |
           set -eu
-          registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-public
+          registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} pure-docker/
       - name: "git:branch"
         cmd: |
@@ -181,7 +181,7 @@ promoteToPublic:
           # Web URL to the tag
           tag_url="https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}"
 
-          # Annotate PRs 
+          # Annotate PRs
           cat << EOF | gh pr comment "$internal_branch" --body-file -
           - :green_circle: Release has been promoted, see tag: $tag_url.
           - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (i.e. \`$release_branch\`).
