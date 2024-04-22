@@ -13,6 +13,10 @@ requirements:
   - name: "GitHub cli exists"
     cmd: "which gh"
     fixInstructions: "install GitHub cli"
+  - name: "Docker username"
+    env: "DOCKER_USERNAME"
+  - name: "Docker password"
+    env: "DOCKER_PASSWORD"
 internal:
   # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
@@ -24,12 +28,12 @@ internal:
             cmd: |
               set -eu
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} docker-compose/
+              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD   docker-compose/
           - name: docker(shell):tags
             cmd: |
               set -eu
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} pure-docker/
+              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD  pure-docker/
           - name: "git:branch"
             cmd: |
               set -eu
@@ -50,12 +54,12 @@ internal:
             cmd: |
               set -eu
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} docker-compose/
+              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
           - name: docker(shell):tags
             cmd: |
               set -eu
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} pure-docker/
+              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
           - name: "git:branch"
             cmd: |
               set -eu
@@ -76,12 +80,12 @@ internal:
             cmd: |
               set -eu
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} docker-compose/
+              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
           - name: docker(shell):tags
             cmd: |
               set -eu
               registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
-              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} pure-docker/
+              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
           - name: "git:branch"
             cmd: |
               set -eu
@@ -134,12 +138,12 @@ promoteToPublic:
         cmd: |
           set -eu
           registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} docker-compose/
+          sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
       - name: docker(shell):tags
         cmd: |
           set -eu
           registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} pure-docker/
+          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
       - name: "git:branch"
         cmd: |
           set -eu
