@@ -13,6 +13,9 @@ requirements:
   - name: "GitHub cli exists"
     cmd: "which gh"
     fixInstructions: "install GitHub cli"
+  - name: "GH auth status"
+    cmd: "gh auth status"
+    fixInstructions: "gh auth login"
 internal:
   # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
