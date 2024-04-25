@@ -143,7 +143,7 @@ promoteToPublic:
         cmd: |
           set -eu
           registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
+          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
       - name: "git:branch"
         cmd: |
           set -eu
