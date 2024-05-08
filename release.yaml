@@ -197,7 +197,7 @@ promoteToPublic:
     steps:
       - name: 'Promote on release registry'
         cmd: |
-          echo "Promoting sourcegraph/sourcegraph {{version}} release on release registry"
+          echo "Promoting deploy-sourcegraph-docker {{version}} release on release registry"
           body=$(wget --content-on-error -O- --header="Content-Type: application/json" --header="Authorization: ${RELEASE_REGISTRY_TOKEN}" --post-data '' "https://releaseregistry.sourcegraph.com/v1/releases/docker/{{version}}/promote")
           exit_code=$?
 
