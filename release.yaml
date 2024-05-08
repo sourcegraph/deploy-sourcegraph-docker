@@ -7,6 +7,9 @@ meta:
 inputs:
   - releaseId: server
 requirements:
+  # We use wget here, because curl --fail-with-body was introduced in a version ulterior to what we can have on the CI agents.
+  - name: "wget"
+    cmd: "wget --help"
   - name: "go"
     cmd: "which go"
     fixInstructions: "install golang"
@@ -20,6 +23,7 @@ requirements:
   - name: "GH auth status"
     cmd: "gh auth status"
     fixInstructions: "gh auth login"
+
 internal:
   # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
@@ -122,6 +126,27 @@ internal:
           cat << EOF | buildkite-agent annotate --style info
           Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
           EOF
+      
+      - name: 'Register on release registry'
+        cmd: |
+          echo "Registering internal deploy-sourcegraph-docker {{version}} release on release registry"
+          body=$(wget --content-on-error -O- --header="Content-Type: application/json" --header="Authorization: ${RELEASE_REGISTRY_TOKEN}" --post-data '{
+              "name": "docker",
+              "version": "{{version}}",
+              "git_sha": "'${COMMIT_SHA}'"
+            }' "https://releaseregistry.sourcegraph.com/v1/releases")
+          exit_code=$?
+
+          if [ $exit_code != 0 ]; then
+            echo "❌ Failed to create release in release registry, got:"
+            echo "--- raw body ---"
+            echo $body
+            echo "--- raw body ---"
+            exit $exit_code
+          else
+            echo "Release created, see:"
+            echo $body
+          fi
 test:
   steps:
     - name: "Placeholder"
@@ -169,6 +194,22 @@ promoteToPublic:
           echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
     steps:
+      - name: 'Promote on release registry'
+        cmd: |
+          echo "Promoting sourcegraph/sourcegraph {{version}} release on release registry"
+          body=$(wget --content-on-error -O- --header="Content-Type: application/json" --header="Authorization: ${RELEASE_REGISTRY_TOKEN}" --post-data '' "https://releaseregistry.sourcegraph.com/v1/releases/docker/{{version}}/promote")
+          exit_code=$?
+
+          if [ $exit_code != 0 ]; then
+            echo "❌ Failed to promote release on release registry, got:"
+            echo "--- raw body ---"
+            echo $body
+            echo "--- raw body ---"
+            exit $exit_code
+          else
+            echo "Release promoted, see:"
+            echo $body
+          fi
       - name: git:tag
         cmd: |
           set -eu
