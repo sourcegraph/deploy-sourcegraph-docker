@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver"
-	"github.com/urfave/cli/v2"
-
 	"github.com/sourcegraph/run"
+	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v3"
 )
 
 // This is the main entry point for a docker-compose upgrade test tool intended for use within CI/CD pipelines, but also usable by developers for quick smoke tests
@@ -74,6 +74,64 @@ func main() {
 					if err := testStandardUpgrade(ctx, env, verbose, order, versions); err != nil {
 						return fmt.Errorf("Standard upgrade failed: %w", err)
 					}
+					return nil
+				},
+			},
+			{
+				Name:    "std-candidate",
+				Aliases: []string{"std"},
+				Usage:   "Runs a standard upgrade test. between specified versions \n\nExample:\n\nupgrade-test standard -vs 5.0.0,5.1.0",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "from",
+						Usage:    "The version to start the upgrade from.",
+						Required: true,
+					},
+					&cli.BoolFlag{
+						Name:    "build-images",
+						Usage:   "Trigger a bazel build via `sg build images ...` before starting upgrade.",
+					},
+				},
+				Action: func(cCtx *cli.Context) error {
+					ctx := cCtx.Context
+					// get flags
+					verbose := cCtx.Bool("verbose")
+					fromTag := cCtx.String("from")
+
+					// TODO
+					build := cCtx.Bool("build-images")
+					if build {
+						fmt.Println("Building images...")
+					}
+
+					fmt.Println("verbose: ", verbose, "fromTag: ", fromTag)
+
+					// Process user provided versions
+					ver, err := semver.NewVersion(fromTag)
+					if err != nil {
+						return fmt.Errorf("invalid version: %s", fromTag)
+					}
+
+					// TODO configure env setup and test to run on candidate.
+					env, err := initTestEnv(ctx, verbose)
+					if err != nil {
+						return fmt.Errorf("failed to initialize env: %w", err)
+					}
+					defer env.cleanup()
+
+					fmt.Println("env.dcDir: ", env.dcDir)
+					str, err := run.Cmd(ctx, "ls").Dir(env.dcDir).Run().String()
+					fmt.Println(str)
+
+					if err := env.setCandidate(ver); err != nil {
+						return fmt.Errorf("failed to set candidate: %w", err)
+					}
+
+					// // TODO
+					// // adjust to take a single version and no order flag 
+					// if err := testStandardUpgrade(ctx, env, verbose, order, versions); err != nil {
+					// 	return fmt.Errorf("Standard upgrade failed: %w", err)
+					// }
 					return nil
 				},
 			},
@@ -215,6 +273,38 @@ func (env *testEnv) gitCheckoutVersion(version *semver.Version) error {
 			return fmt.Errorf("failed to checkout version %s: %s", fmt.Sprintf("v%s", version.String()), err)
 		}
 	}
+	return nil
+}
+
+// Alter docker-compose file to use candidate images
+// TODO
+func (env *testEnv) setCandidate(version *semver.Version) error {
+	// Select file docker compose file from build env 
+	dc, err := os.ReadFile(fmt.Sprintf("%s/docker-compose.yaml", env.dcDir))
+	if err != nil {
+		return fmt.Errorf("failed to set candidate tags on docker-compose yaml: %w", err)
+	}
+
+	var compose map[string]any
+	if err := yaml.Unmarshal(dc, &compose); err != nil {
+		return err
+	}
+
+	// Marshall docker compose services 
+	services, ok := compose["services"].(map[string]any)
+	if !ok {
+		return errors.New("invalid services")
+	}
+	// Loop through services and set candidate image tag
+	for name, _ := range services {
+		service, ok := services[name].(map[string]any)
+		if !ok {
+			return errors.New("invalid service")
+		}
+		fmt.Println(service["image"])
+	}
+	fmt.Println("\n\n")
+
 	return nil
 }
 
