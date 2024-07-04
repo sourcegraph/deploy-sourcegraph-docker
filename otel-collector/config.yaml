@@ -4,8 +4,8 @@
 receivers:
   otlp:
     protocols:
-      grpc: # port 4317
-      http: # port 4318
+      grpc: # port 4320
+      http: # port 4321
 
 exporters:
   # Add your exporter(s) configuration here. For each exporter, make sure it is enabled

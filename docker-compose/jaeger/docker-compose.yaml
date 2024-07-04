@@ -10,7 +10,7 @@ services:
   #
   jaeger:
     container_name: jaeger
-    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:216430_2023-05-02_5.0-3cc9006de32c@sha256:ec73cff6ea398d96241a9451634fc83682292b0175cc63c09f1f866cf03beb8d'
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:281057_2024-07-04_5.4-b98c7d084d30:3ff2c29a456f4b275a46ca413eb38c84ee9df6109460691b13a798aecee038a0'
     cpus: 0.5
     mem_limit: '512m'
     ports:
@@ -18,6 +18,8 @@ services:
       - '0.0.0.0:16686:16686'
       # Collector port
       - '0.0.0.0:14250:14250'
+      - '0.0.0.0:4320:4320' # gRPC port
+      - '0.0.0.0:4321:4321' # HTTP port
       # Agent ports
       - '0.0.0.0:5778:5778'
       - '0.0.0.0:6831:6831'
@@ -25,14 +27,18 @@ services:
     networks:
       - sourcegraph
     restart: always
-    command: ['--memory.max-traces=20000']
+    command: ['--memory.max-traces=20000', "--sampling.strategies-file=/etc/jaeger/sampling_strategies.json", "--collector.otlp.enabled" ]
     environment:
       - 'SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json'
+      - 'COLLECTOR_OTLP_ENABLED=true'
+      - 'JAEGER_OTLP_GRPC_PORT=4320'
+      - 'JAEGER_OTLP_HTTP_PORT=4321'
 
   # Configure collector to send traces to Jaeger
   otel-collector:
     environment:
       - JAEGER_HOST=jaeger
+      - JAEGER_OTLP_GRPC_PORT=4320
     command: ['--config', '/etc/otel-collector/configs/jaeger.yaml']
 
   # Let frontend proxy to Jaeger interface
