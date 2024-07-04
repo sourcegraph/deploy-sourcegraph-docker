@@ -4,7 +4,7 @@ services:
   # (https://www.jaegertracing.io/docs/1.17/getting-started/#all-in-one) for distributed tracing.
   #
   # Disk: none
-  # Ports exposed to other Sourcegraph services: 5778/TCP 6831/UDP 6832/UDP 14250/TCP
+  # Ports exposed to other Sourcegraph services: 5778/TCP 6831/UDP 6832/UDP 14250/TCP 4320/UDP 4321/UDP
   # Ports exposed to the public internet: none
   # Ports exposed to site admins only: 16686/HTTP
   #
