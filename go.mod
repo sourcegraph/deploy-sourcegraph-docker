@@ -1,11 +1,13 @@
 module github.com/sourcegraph/deploy-sourcegraph-docker
 
-go 1.19
+go 1.22.4
+
+toolchain go1.22.6
 
 require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/sourcegraph/run v0.12.0
-	github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20240222005846-e3158c0c2717
+	github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20240809131708-2df3a40744d4
 	github.com/sourcegraph/update-docker-tags v0.10.0
 	github.com/urfave/cli/v2 v2.25.7
 )
