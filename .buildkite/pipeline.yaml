@@ -1,6 +1,7 @@
 $schema: "http://json.schemastore.org/buildkite"
 env:
-  IMAGE: "e2e-0040635f0-2022-03-16t17-33-08z"
+  # Build this image in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
+  IMAGE: "e2e-db8a40720-2024-08-26t08-44-10z"
   VAGRANT_RUN_ENV: "CI"
 steps:
   - label: ":docker:"
