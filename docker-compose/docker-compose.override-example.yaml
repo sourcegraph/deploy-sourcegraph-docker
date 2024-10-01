@@ -5,8 +5,6 @@ services:
 
   sourcegraph-frontend-0:
     ports:
-      - '0.0.0.0:80:3080'
-      - '0.0.0.0:443:3080'
       - '0.0.0.0:7080:3080'
 
   grafana:
