@@ -1,4 +1,13 @@
 services:
+
+  caddy:
+    scale: 0
+
+  sourcegraph-frontend-0:
+    ports:
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
+
   grafana:
     environment:
       - 'PGHOST=${PGHOST}'
