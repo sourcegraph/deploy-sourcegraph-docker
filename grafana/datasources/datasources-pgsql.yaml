@@ -4,9 +4,9 @@ datasources:
   - name: pgsql
     type: postgres
     url: $PGHOST:$PGPORT
-    user: $PGUSER
+    user: $PGGRAFANAUSER
     database: $PGDATABASE
     secureJsonData:
-      password: $PGPASSWORD
+      password: $PGGRAFANAPASSWORD
     jsonData:
       sslmode: $PGSSLMODE

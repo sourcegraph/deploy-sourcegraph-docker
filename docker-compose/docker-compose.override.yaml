@@ -1,0 +1,9 @@
+services:
+  grafana:
+    environment:
+      - 'PGHOST=${PGHOST}'
+      - 'PGPORT=${PGPORT}'
+      - 'PGDATABASE=${PGDATABASE}'
+      - 'PGGRAFANAUSER=${PGGRAFANAUSER}'
+      - 'PGGRAFANAPASSWORD=${PGGRAFANAPASSWORD}'
+      - 'PGSSLMODE=${PGSSLMODE}'
