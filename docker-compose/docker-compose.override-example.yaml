@@ -8,6 +8,7 @@ services:
       - '0.0.0.0:7080:3080'
 
   grafana:
+    image: us-central1-docker.pkg.dev/sourcegraph-ci/cloud-ephemeral/grafana:marc-cody-airgapped-analytics-grafana-datasource_00128_2024-10-01_5.7-12d445189b0b
     environment:
       - 'PGHOST=${PGHOST}'
       - 'PGPORT=${PGPORT}'
