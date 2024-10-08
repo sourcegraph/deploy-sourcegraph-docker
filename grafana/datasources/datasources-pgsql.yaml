@@ -1,0 +1,12 @@
+apiVersion: 1
+
+datasources:
+  - name: pgsql
+    type: postgres
+    url: $PGHOST:$PGPORT
+    user: $PGGRAFANAUSER
+    database: $PGDATABASE
+    secureJsonData:
+      password: $PGGRAFANAPASSWORD
+    jsonData:
+      sslmode: $PGSSLMODE
