@@ -3,10 +3,10 @@ apiVersion: 1
 datasources:
   - name: pgsql
     type: postgres
-    url: $PGHOST:$PGPORT
-    user: $PGGRAFANAUSER
-    database: $PGDATABASE
+    url: $GRAFANA_PGSQL_HOST:$GRAFANA_PGSQL_PORT
+    user: $GRAFANA_PGSQL_USER
+    database: $GRAFANA_PGSQL_DATABASE
     secureJsonData:
-      password: $PGGRAFANAPASSWORD
+      password: $GRAFANA_PGSQL_PASSWORD
     jsonData:
-      sslmode: $PGSSLMODE
+      sslmode: $GRAFANA_PGSQL_SSLMODE
