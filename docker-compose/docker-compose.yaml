@@ -553,7 +553,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-12-alpine:5.9.1590@sha256:3d5dd36e3af6b643903f507422be19ed1cb1f5f71c4541572d4a8a252e81aeb8'
+    image: 'index.docker.io/sourcegraph/postgresql-16:insiders'
     cpus: 4
     mem_limit: '4g'
     shm_size: '1g'
@@ -600,7 +600,7 @@ services:
   #
   codeintel-db:
     container_name: codeintel-db
-    image: 'index.docker.io/sourcegraph/codeintel-db:5.9.1590@sha256:3d5dd36e3af6b643903f507422be19ed1cb1f5f71c4541572d4a8a252e81aeb8'
+    image: 'index.docker.io/sourcegraph/postgresql-16:insiders'
     cpus: 4
     mem_limit: '4g'
     shm_size: '1g'
@@ -647,7 +647,7 @@ services:
   #
   codeinsights-db:
     container_name: codeinsights-db
-    image: 'index.docker.io/sourcegraph/codeinsights-db:5.9.1590@sha256:4e75b2c463ce1ef3bfeec4bb71a16693df02005e66b9e697859ce61064e08f42'
+    image: 'index.docker.io/sourcegraph/postgresql-16-codeinsights:insiders'
     cpus: 4
     mem_limit: '2g'
     shm_size: '1g'
