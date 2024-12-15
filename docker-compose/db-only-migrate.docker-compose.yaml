@@ -13,7 +13,7 @@ services:
   #
   pgsql:
     container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgres-12-alpine:5.10.2832@sha256:019bb4090f2bc20218887f5fd1bcfaa122ca090460f5803e1df4f6637947cb26'
+    image: 'index.docker.io/sourcegraph/postgresql-16:5.10.2832@sha256:7a637a98960cb7d3ac6705c7f7335874c005ed9f0c68bfaa0e5eebf2d7f71e94'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
@@ -30,7 +30,7 @@ services:
 
   codeintel-db:
     container_name: codeintel-db
-    image: 'index.docker.io/sourcegraph/codeintel-db:5.10.2832@sha256:019bb4090f2bc20218887f5fd1bcfaa122ca090460f5803e1df4f6637947cb26'
+    image: 'index.docker.io/sourcegraph/postgresql-16:5.10.2832@sha256:7a637a98960cb7d3ac6705c7f7335874c005ed9f0c68bfaa0e5eebf2d7f71e94'
     cpus: 4
     mem_limit: '2g'
     healthcheck:
