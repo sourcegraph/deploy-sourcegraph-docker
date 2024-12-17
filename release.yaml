@@ -247,3 +247,47 @@ promoteToPublic:
           cat << EOF | buildkite-agent annotate --style info
           Promoted release is **publicly available** through a git tag at [\`{{version}}\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}).
           EOF
+
+      - name: "update main with latest version"
+      - name: "git"
+        cmd: |
+          set -eu
+          branch="promote/release-{{version}}-update-main"
+          echo "Checking out origin/main"
+          git fetch origin main
+          git switch main
+          echo "Creating branch origin/${branch}"
+          git switch -c "${branch}"
+
+      - name: docker(compose):tags
+        cmd: |
+          set -eu
+          registry=index.docker.io/sourcegraph
+          sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
+
+      - name: docker(shell):tags
+        cmd: |
+          set -eu
+          registry=index.docker.io/sourcegraph
+          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
+
+      - name: "git:branch"
+        cmd: |
+          set -eu
+          branch="promote/release-{{version}}-update-main"
+          git commit -am 'prep update main: {{version}}' -m 'update main with latest release'
+          git push origin "${branch}"
+
+      - name: "github:pr"
+        cmd: |
+          set -eu
+          internal_branch="promote/release-{{version}}-update-main"
+          # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
+          git fetch origin "${internal_branch}"
+          gh pr create \
+            --fill \
+            --draft \
+            --base "$internal_branch" \
+            --title "Update main: build {{version}}" \
+            --body "Test plan: automated release PR, CI will perform additional checks"
+          echo "🚢 Please check the associated CI build to ensure the process completed".
