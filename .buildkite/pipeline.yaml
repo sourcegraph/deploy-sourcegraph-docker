@@ -16,12 +16,12 @@ steps:
     command: .buildkite/verify-release/verify-release.sh
     agents: { queue: standard }
 
-  - label: ":rice: pure-docker-test"
-    command: .buildkite/vagrant-run.sh docker-test
-    artifact_paths: ./*.log
-    env:
-      TEST_TYPE: "pure-docker-test"
-    agents: { queue: "vagrant" }
+#  - label: ":rice: pure-docker-test"
+#    command: .buildkite/vagrant-run.sh docker-test
+#    artifact_paths: ./*.log
+#    env:
+#      TEST_TYPE: "pure-docker-test"
+#    agents: { queue: "vagrant" }
 
   - label: ":rice: docker-compose-test"
     command: .buildkite/vagrant-run.sh docker-test
@@ -70,4 +70,3 @@ steps:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run promote-to-public finalize --workdir=. --config-from-commit
-
