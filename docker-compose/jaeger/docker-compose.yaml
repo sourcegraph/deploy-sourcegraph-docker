@@ -27,18 +27,20 @@ services:
     networks:
       - sourcegraph
     restart: always
-    command: ['--memory.max-traces=20000', "--sampling.strategies-file=/etc/jaeger/sampling_strategies.json", "--collector.otlp.enabled" ]
-    environment:
-      - 'SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json'
-      - 'COLLECTOR_OTLP_ENABLED=true'
-      - 'JAEGER_OTLP_GRPC_PORT=4320'
-      - 'JAEGER_OTLP_HTTP_PORT=4321'
+    command: [
+      '--memory.max-traces=20000', 
+      "--sampling.strategies-file=/etc/jaeger/sampling_strategies.json", 
+      "--collector.otlp.enabled",
+      "--collector.otlp.grpc.host-port=:4320",
+      "--collector.otlp.http.host-port=:4321"
+    ]
 
   # Configure collector to send traces to Jaeger
   otel-collector:
     environment:
       - JAEGER_HOST=jaeger
       - JAEGER_OTLP_GRPC_PORT=4320
+      - JAEGER_OTLP_HTTP_PORT=4321
     command: ['--config', '/etc/otel-collector/configs/jaeger.yaml']
 
   # Let frontend proxy to Jaeger interface
