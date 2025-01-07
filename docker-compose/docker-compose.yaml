@@ -157,6 +157,9 @@ services:
             { "Name": "zoekt-indexserver-0", "Host": "zoekt-indexserver-0:6072" },
             { "Name": "zoekt-webserver-0", "Host": "zoekt-webserver-0:6070", "DefaultPath": "/debug/requests/" }
           ]
+      - SSL_CERT_FILE=/etc/ssl/certs/combined-ca-certificates.crt
+      - HTTPS_PROXY=http://nginx-proxy:8888
+      - NO_PROXY='blobstore,caddy,cadvisor,codeintel-db,codeintel-db-exporter,codeinsights-db,codeinsights-db-exporter,sourcegraph-frontend-0,sourcegraph-frontend-internal,gitserver-0,grafana,migrator,node-exporter,otel-collector,pgsql,pgsql-exporter,precise-code-intel-worker,prometheus,redis-cache,redis-store,repo-updater,searcher-0,symbols-0,syntect-server,worker,zoekt-indexserver-0,zoekt-webserver-0,localhost,127.0.0.1'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:3080/healthz' -O /dev/null || exit 1"
       interval: 10s
@@ -165,6 +168,7 @@ services:
       start_period: 300s
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
+      - './nginx-proxy/certs/combined-ca-certificates.crt:/etc/ssl/certs/combined-ca-certificates.crt:ro'
     networks:
       - sourcegraph
     restart: always
@@ -764,6 +768,22 @@ services:
     volumes:
       - '../otel-collector/config.yaml:/etc/otel-collector/config.yaml'
 
+  # Description: Proxies and logs outbound HTTP requests from sourcegraph-frontend
+  #
+  # Ports exposed to other Sourcegraph services: 8888/TCP
+  # Ports exposed to the public internet: none
+  nginx-proxy:
+    image: nginx:latest
+    container_name: nginx-proxy
+    volumes:
+      - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx-logs:/var/log/nginx
+      - ./nginx-proxy/certs:/etc/nginx/certs
+    ports:
+      - "8888:8888"
+    networks:
+      - sourcegraph
+
 volumes:
   caddy:
   gitserver-0:
@@ -782,5 +802,6 @@ volumes:
   sourcegraph-frontend-internal-0:
   symbols-0:
   zoekt-0-shared:
+  nginx-logs:
 networks:
   sourcegraph:
