@@ -6,7 +6,7 @@ This repository is the deployment reference for [deploying Sourcegraph with Dock
 
 > 🚨 IMPORTANT: When upgrading Sourcegraph, please check [upgrading docs](https://docs.sourcegraph.com/admin/updates/docker_compose) to check if any manual migrations are necessary.
 >
-> The `master` branch tracks development. Use the branch of this repository corresponding to the
+> The `main` branch tracks development. Use the branch of this repository corresponding to the
 > version of Sourcegraph you wish to deploy, e.g. `git checkout 3.19`.
 
 For product and [pricing](https://about.sourcegraph.com/pricing/) information, visit
