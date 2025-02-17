@@ -443,7 +443,7 @@ services:
   #
   prometheus:
     container_name: prometheus
-    image: 'index.docker.io/sourcegraph/prometheus:6.0.0@sha256:86a315720fd9813d9ef9746d92e637bc20cd9ebd90da78d8cc6906062252891f'
+    image: 'index.docker.io/sourcegraph/prometheus:6.0.2687@sha256:913345db876650ed945395833738df983b7d06d5da656c6c07541deefe6b60d0'
     cpus: 4
     mem_limit: '8g'
     volumes:
