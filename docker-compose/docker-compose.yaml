@@ -388,6 +388,31 @@ services:
       - sourcegraph
     restart: always
 
+  # Description: High level syntax analysis
+  #
+  # Disk: none
+  # Ports exposed to other Sourcegraph services: 3188/TCP
+  # Ports exposed to the public internet: none
+  #
+  syntactic-code-intel-worker:
+    container_name: syntactic-code-intel-worker
+    image: 'index.docker.io/sourcegraph/syntactic-code-intel-worker:6.0.0@sha256:50bdeb38b196f0fc21404969016bf8263f78144292e905867e93480f66c8251c'
+    cpus: 2
+    mem_limit: '4g'
+    environment:
+      - 'SYNTACTIC_CODE_INTEL_UPLOAD_BACKEND=blobstore'
+      - 'SYNTACTIC_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
+      - 'SYNTACTIC_CODE_INTEL_UPLOAD_WORKER_ADDR=3188'
+    healthcheck:
+      test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    networks:
+      - sourcegraph
+    restart: always
+
   # Description: Backend for syntax highlighting operations.
   #
   # Disk: none
