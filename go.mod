@@ -7,7 +7,7 @@ require (
 	github.com/sourcegraph/run v0.12.0
 	github.com/sourcegraph/sourcegraph/dev/ci/images v0.0.0-20240222005846-e3158c0c2717
 	github.com/sourcegraph/update-docker-tags v0.10.0
-	github.com/urfave/cli/v2 v2.25.7
+	github.com/urfave/cli/v2 v2.27.6
 )
 
 require (
