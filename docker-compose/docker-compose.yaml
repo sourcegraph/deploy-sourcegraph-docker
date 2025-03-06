@@ -406,7 +406,7 @@ services:
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
       - 'SYNTACTIC_CODE_INTEL_WORKER_ADDR=127.0.0.1:3288'
     healthcheck:
-      test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
+      test: "wget -q 'http://127.0.0.1:3288/healthz' -O /dev/null || exit 1"
       interval: 5s
       timeout: 15s
       retries: 3
