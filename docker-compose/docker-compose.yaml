@@ -470,7 +470,7 @@ services:
   # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
   grafana:
     container_name: grafana
-    image: 'index.docker.io/sourcegraph/grafana:6.3.3@sha256:2f68b9b1542e7d75459d983b606d2fdd1c11a75610464e3d7a6ced4f3ac474bf'
+    image: 'index.docker.io/sourcegraph/grafana:6.1.1295@sha256:f3064b8a498a9c2346a089bc7076eccc9b317013a3d042ac0a825f76c50f6c88'
     cpus: 1
     mem_limit: '1g'
     volumes:
