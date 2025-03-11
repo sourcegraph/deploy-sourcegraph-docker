@@ -15,7 +15,7 @@ deploy_sourcegraph() {
 		expect_containers="25"
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
 		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
-		expect_containers="26"
+		expect_containers="27"
 	fi
 
 	echo "Giving containers 90s to start..."
