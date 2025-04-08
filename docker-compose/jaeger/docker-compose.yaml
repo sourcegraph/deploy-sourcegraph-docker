@@ -10,7 +10,7 @@ services:
   #
   jaeger:
     container_name: jaeger
-    image: 'us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal/jaeger-all-in-one:6.2.1106@sha256:327fc57c434e7aa857d03d18ce263d8ddc86f42f6ff61af4f2ae27f61facc38f'
+    image: 'index.docker.io/sourcegraph/jaeger-all-in-one:6.2.1106@sha256:c1ee8d613be75032066a9da24f54ebae19eacb63e42338e920abd6383ce168a6'
     cpus: 0.5
     mem_limit: '512m'
     ports:
