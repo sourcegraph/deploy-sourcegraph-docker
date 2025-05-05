@@ -139,7 +139,6 @@ services:
       - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
@@ -152,7 +151,6 @@ services:
             { "Name": "gitserver-0", "Host": "gitserver-0:6060" },
             { "Name": "searcher-0", "Host": "searcher-0:6060" },
             { "Name": "symbols-0", "Host": "symbols-0:6060" },
-            { "Name": "repo-updater", "Host": "repo-updater:6060" },
             { "Name": "worker", "Host": "worker:6060" },
             { "Name": "zoekt-indexserver-0", "Host": "zoekt-indexserver-0:6072" },
             { "Name": "zoekt-webserver-0", "Host": "zoekt-webserver-0:6070", "DefaultPath": "/debug/requests/" }
@@ -194,7 +192,6 @@ services:
       - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'GRAFANA_SERVER_URL=http://grafana:3000'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
@@ -338,26 +335,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 60s
-    networks:
-      - sourcegraph
-    restart: always
-
-  # Description: Handles repository metadata (not Git data) lookups and updates from external code hosts and other similar services.
-  #
-  # Disk: 128GB / non-persistent SSD
-  # Ports exposed to other Sourcegraph services: 3182/TCP 6060/TCP
-  # Ports exposed to the public internet: none
-  #
-  repo-updater:
-    container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:6.1.2889@sha256:95e8a28bd2d13270a5d0ab80eae5e8aac44913bd421fb92cf45d5550c4874fbc'
-    cpus: 4
-    mem_limit: '4g'
-    environment:
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
-    volumes:
-      - 'repo-updater:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -802,7 +779,6 @@ volumes:
   prometheus-v2:
   redis-cache:
   redis-store:
-  repo-updater:
   worker:
   searcher-0:
   sourcegraph-frontend-0:
