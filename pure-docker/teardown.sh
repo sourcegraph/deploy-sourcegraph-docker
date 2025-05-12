@@ -25,7 +25,6 @@ docker rm -f redis-cache &>/dev/null || true &
 docker rm -f redis-store &>/dev/null || true &
 docker rm -f worker &>/dev/null || true &
 docker rm -f $(addresses "searcher-" $NUM_SEARCHER "") &>/dev/null || true &
-docker rm -f $(addresses "symbols-" $NUM_SYMBOLS "") &>/dev/null || true &
 docker rm -f syntect-server &>/dev/null || true &
 docker rm -f $(addresses "zoekt-indexserver-" $NUM_INDEXED_SEARCH "") &>/dev/null || true &
 docker rm -f $(addresses "zoekt-webserver-" $NUM_INDEXED_SEARCH "") &>/dev/null || true &

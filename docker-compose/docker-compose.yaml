@@ -118,7 +118,7 @@ services:
   # Ports exposed to other Sourcegraph services: 6060/TCP, 3080 (HTTP), and/or 3443 (HTTPS)
   # Ports exposed to the public internet: none
   #
-  # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
+  # Note: SRC_GIT_SERVERS, and SEARCHER_URL are space-separated
   # lists which each allow you to specify more container instances for scaling
   # purposes. Be sure to also apply such a change here to the frontend-internal
   # service.
@@ -136,7 +136,6 @@ services:
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
@@ -150,7 +149,6 @@ services:
             { "Name": "frontend-internal-0", "Host": "sourcegraph-frontend-internal:6060" },
             { "Name": "gitserver-0", "Host": "gitserver-0:6060" },
             { "Name": "searcher-0", "Host": "searcher-0:6060" },
-            { "Name": "symbols-0", "Host": "symbols-0:6060" },
             { "Name": "worker", "Host": "worker:6060" },
             { "Name": "zoekt-indexserver-0", "Host": "zoekt-indexserver-0:6072" },
             { "Name": "zoekt-webserver-0", "Host": "zoekt-webserver-0:6070", "DefaultPath": "/debug/requests/" }
@@ -189,7 +187,6 @@ services:
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
@@ -355,7 +352,6 @@ services:
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
@@ -409,32 +405,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
-    networks:
-      - sourcegraph
-    restart: always
-
-  # Description: Backend for symbols operations.
-  #
-  # Disk: 128GB / non-persistent SSD
-  # Ports exposed to other Sourcegraph services: 3184/TCP 6060/TCP
-  # Ports exposed to the public internet: none
-  #
-  symbols-0:
-    container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:6.1.2889@sha256:0ffea2e2d7641decf87587a2c0fbcedb172d876f71a10da4cd3e72b566ce12b4'
-    cpus: 2
-    mem_limit: '4g'
-    environment:
-      - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
-    healthcheck:
-      test: "wget -q 'http://127.0.0.1:3184/healthz' -O /dev/null || exit 1"
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
-    volumes:
-      - 'symbols-0:/mnt/cache'
     networks:
       - sourcegraph
     restart: always
@@ -781,7 +751,6 @@ volumes:
   searcher-0:
   sourcegraph-frontend-0:
   sourcegraph-frontend-internal-0:
-  symbols-0:
   zoekt-0-shared:
 networks:
   sourcegraph:
