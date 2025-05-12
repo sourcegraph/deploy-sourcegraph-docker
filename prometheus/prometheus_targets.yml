@@ -53,11 +53,6 @@
     - searcher-0:6060
 - labels:
     nodename: "sourcegraph-docker-compose-host"
-    job: symbols
-  targets:
-    - symbols-0:6060
-- labels:
-    nodename: "sourcegraph-docker-compose-host"
     job: pgsql
   targets:
     - pgsql-exporter:9187
