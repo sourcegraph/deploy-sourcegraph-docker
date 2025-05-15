@@ -136,6 +136,7 @@ services:
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
+      - 'INDEXED_SEARCH_INDEXER=zoekt-indexserver-0:6072'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
