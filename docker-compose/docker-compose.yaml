@@ -118,7 +118,7 @@ services:
   # Ports exposed to other Sourcegraph services: 6060/TCP, 3080 (HTTP), and/or 3443 (HTTPS)
   # Ports exposed to the public internet: none
   #
-  # Note: SRC_GIT_SERVERS, SEARCHER_URL, and SYMBOLS_URL are space-separated
+  # Note: SRC_GIT_SERVERS, and SEARCHER_URL are space-separated
   # lists which each allow you to specify more container instances for scaling
   # purposes. Be sure to also apply such a change here to the frontend-internal
   # service.
@@ -136,10 +136,9 @@ services:
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
+      - 'INDEXED_SEARCH_INDEXER=zoekt-indexserver-0:6072'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'REPO_UPDATER_URL=http://repo-updater:3182'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
@@ -151,8 +150,6 @@ services:
             { "Name": "frontend-internal-0", "Host": "sourcegraph-frontend-internal:6060" },
             { "Name": "gitserver-0", "Host": "gitserver-0:6060" },
             { "Name": "searcher-0", "Host": "searcher-0:6060" },
-            { "Name": "symbols-0", "Host": "symbols-0:6060" },
-            { "Name": "repo-updater", "Host": "repo-updater:6060" },
             { "Name": "worker", "Host": "worker:6060" },
             { "Name": "zoekt-indexserver-0", "Host": "zoekt-indexserver-0:6072" },
             { "Name": "zoekt-webserver-0", "Host": "zoekt-webserver-0:6070", "DefaultPath": "/debug/requests/" }
@@ -191,11 +188,10 @@ services:
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SRC_SYNTECT_SERVER=http://syntect-server:9238'
       - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
+      - 'INDEXED_SEARCH_INDEXER=zoekt-indexserver-0:6072'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'REPO_UPDATER_URL=http://repo-updater:3182'
-      - 'GRAFANA_SERVER_URL=http://grafana:3000'
+      - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'PROMETHEUS_URL=http://prometheus:9090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
@@ -378,7 +374,6 @@ services:
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'SYMBOLS_URL=http://symbols-0:3184'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
@@ -504,8 +499,6 @@ services:
       - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
       - '../grafana/dashboards:/sg_grafana_additional_dashboards'
-    ports:
-      - '0.0.0.0:3370:3370'
     networks:
       - sourcegraph
     restart: always
@@ -802,12 +795,10 @@ volumes:
   prometheus-v2:
   redis-cache:
   redis-store:
-  repo-updater:
   worker:
   searcher-0:
   sourcegraph-frontend-0:
   sourcegraph-frontend-internal-0:
-  symbols-0:
   zoekt-0-shared:
 networks:
   sourcegraph:

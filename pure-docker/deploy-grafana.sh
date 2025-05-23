@@ -17,7 +17,6 @@ docker run --detach \
     --restart=always \
     --cpus=1 \
     --memory=1g \
-    -p 0.0.0.0:3370:3370 \
     -v $VOLUME:/var/lib/grafana \
     -v $(pwd)/../grafana/datasources:/sg_config_grafana/provisioning/datasources \
     -v $(pwd)/../grafana/dashboards:/sg_grafana_additional_dashboards \
