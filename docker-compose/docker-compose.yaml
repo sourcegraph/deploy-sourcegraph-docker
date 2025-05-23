@@ -350,7 +350,7 @@ services:
   #
   repo-updater:
     container_name: repo-updater
-    image: 'index.docker.io/sourcegraph/repo-updater:6.1.2889@sha256:95e8a28bd2d13270a5d0ab80eae5e8aac44913bd421fb92cf45d5550c4874fbc'
+    image: 'index.docker.io/sourcegraph/repo-updater:6.3.4167@sha256:b348d65ba159501386a444af6a94566620711a4767909a4f01c07b8e6ba454bb'
     cpus: 4
     mem_limit: '4g'
     environment:
@@ -444,7 +444,7 @@ services:
   #
   symbols-0:
     container_name: symbols-0
-    image: 'index.docker.io/sourcegraph/symbols:6.1.2889@sha256:0ffea2e2d7641decf87587a2c0fbcedb172d876f71a10da4cd3e72b566ce12b4'
+    image: 'index.docker.io/sourcegraph/symbols:6.3.4167@sha256:caecea6f17d1f03cde25ba2ec6fa315a5b0e2e27e6bc0b13bdfc2499c3a8b783'
     cpus: 2
     mem_limit: '4g'
     environment:
