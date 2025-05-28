@@ -7,6 +7,8 @@ source ./replicas.sh
 # Ports exposed to other Sourcegraph services: 3288/TCP
 # Ports exposed to the public internet: none
 #
+# NOTE: Keep in sync with https://github.com/sourcegraph/deploy-sourcegraph-docker/blob/main/docker-compose/docker-compose.yaml#L372
+#
 docker run --detach \
     --name=syntactic-code-intel-worker \
     --network=sourcegraph \
