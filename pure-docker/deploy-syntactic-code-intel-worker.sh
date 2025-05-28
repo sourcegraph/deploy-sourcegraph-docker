@@ -15,9 +15,9 @@ docker run --detach \
     --restart=always \
     --cpus=2 \
     --memory=4g \
-    -e SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090 \
-    -e PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore \
-    -e PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000 \
+    -e 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090' \
+    -e 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore' \
+    -e 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000' \
     -e 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317' \
     -e 'SYNTACTIC_CODE_INTEL_WORKER_ADDR=:3288' \
     index.docker.io/sourcegraph/syntactic-code-intel-worker:6.1.1295@sha256:c6e2b097b8f16394e339588e208c43587f1fa6a35cb44e9759622c448ddc1445
