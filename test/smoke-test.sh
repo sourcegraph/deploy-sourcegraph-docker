@@ -17,7 +17,7 @@ deploy_sourcegraph() {
 		timeout 600s ./pure-docker/deploy.sh
 		expect_containers="23"
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
-		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
+    docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
 		expect_containers="25"
 	fi
 
