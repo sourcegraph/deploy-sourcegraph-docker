@@ -62,6 +62,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         cat << EOF >> /root/.profile
 export GIT_BRANCH=#{ENV['BUILDKITE_BRANCH']}
 export TEST_TYPE=#{ENV['TEST_TYPE']}
+export DOCKER_USERNAME=#{ENV['DOCKER_USERNAME']}
+export DOCKER_PASSWORD=#{ENV['DOCKER_PASSWORD']}
 EOF
         SHELL
 

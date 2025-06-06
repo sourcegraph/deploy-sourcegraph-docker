@@ -2,6 +2,9 @@
 set -euxfo pipefail
 
 configure_docker() {
+  if [ -n "${DOCKER_USERNAME}" ] && [ -n "${DOCKER_PASSWORD}" ]; then
+    docker login -u "${DOCKER_USERNAME}" --password-stdin <<<"$DOCKER_PASSWORD"
+  fi
   gcloud auth configure-docker
   gcloud auth configure-docker us-central1-docker.pkg.dev
 }
@@ -14,7 +17,7 @@ deploy_sourcegraph() {
 		timeout 600s ./pure-docker/deploy.sh
 		expect_containers="23"
 	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
-		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
+    docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
 		expect_containers="25"
 	fi
 
