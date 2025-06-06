@@ -15,6 +15,7 @@ cleanup() {
 echo --- ":vagrant: installing plugins"
 plugins=(vagrant-google vagrant-env vagrant-scp)
 for i in "${plugins[@]}"; do
+  vagrant plugin list --no-tty
 	if ! vagrant plugin list --no-tty | grep "$i"; then
 		vagrant plugin install "$i"
 	fi
