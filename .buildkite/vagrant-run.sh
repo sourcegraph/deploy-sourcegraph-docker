@@ -13,23 +13,20 @@ cleanup() {
 }
 
 echo --- ":vagrant: installing plugins"
-plugins=("vagrant-google --plugin-version '2.7.0'" vagrant-env vagrant-scp)
-for i in "${plugins[@]}"; do
-  vagrant plugin list --no-tty
-	if ! vagrant plugin list --no-tty | grep "$i"; then
-		vagrant plugin install "$i"
-	fi
-done
+vagrant --version
+vagrant plugin install vagrant-google --plugin-version '2.7.0'
+vagrant plugin install vagrant-env
+vagrant plugin install vagrant-scp
 
 trap cleanup EXIT
 
-echo --- ":bug: fixing dotenv"
-echo "see fix: https://github.com/hashicorp/vagrant/issues/13550"
-sed -i -e 's/exists?/exist?/g' /var/lib/buildkite-agent/.vagrant.d/gems/3.3.8/gems/dotenv-0.11.1/lib/dotenv.rb
+# echo --- ":bug: fixing dotenv"
+# echo "see fix: https://github.com/hashicorp/vagrant/issues/13550"
+# sed -i -e 's/exists?/exist?/g' /var/lib/buildkite-agent/.vagrant.d/gems/3.3.8/gems/dotenv-0.11.1/lib/dotenv.rb
 
 echo --- ":lock: builder account key"
 KEY_PATH="/tmp/e2e-builder.json"
-if [ ! -f ${KEY_PATH} ];
+if [ ! -f ${KEY_PATH} ]; then
   gcloud secrets versions access latest --secret=e2e-builder-sa-key --quiet --project=sourcegraph-ci > "${KEY_PATH}"
 fi
 export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
