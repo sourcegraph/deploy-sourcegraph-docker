@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
-# Set this to fail on the install 
+# Set this to fail on the install
 set -euxo pipefail
-
-# Install and run the plugin for checkov
-# Use the full path to run pip3.10
-pip3 install checkov
 
 # List of checks we do not want to run here
 # This is a living list and will see additions and mostly removals over time.
@@ -19,7 +15,7 @@ echo "==========================================================================
 # Set not to fail on non-zero exit code
 set +e
 # Run checkov
-python3 -m checkov.main --skip-check $SKIP_CHECKS --quiet --framework terraform --compact -d .
+checkov --skip-check $SKIP_CHECKS --quiet --framework terraform --compact -d .
 
 # Options
 # --quiet: Only show failing tests
