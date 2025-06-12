@@ -13,14 +13,20 @@ cleanup() {
 }
 
 echo --- ":vagrant: installing plugins"
-plugins=(vagrant-google vagrant-env vagrant-scp)
-for i in "${plugins[@]}"; do
-	if ! vagrant plugin list --no-tty | grep "$i"; then
-		vagrant plugin install "$i"
-	fi
-done
+vagrant --version
+vagrant plugin install vagrant-google --plugin-version '2.7.0'
+vagrant plugin install vagrant-env
+vagrant plugin install vagrant-scp
 
 trap cleanup EXIT
+
+echo --- ":lock: builder account key"
+KEY_PATH="/tmp/e2e-builder.json"
+if [ ! -f ${KEY_PATH} ]; then
+  gcloud secrets versions access latest --secret=e2e-builder-sa-key --quiet --project=sourcegraph-ci > "${KEY_PATH}"
+fi
+export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
+
 echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?
 
