@@ -10,9 +10,6 @@ requirements:
   # We use wget here, because curl --fail-with-body was introduced in a version ulterior to what we can have on the CI agents.
   - name: "wget"
     cmd: "wget --help"
-  - name: "go"
-    cmd: "which go"
-    fixInstructions: "install golang"
   - name: "GitHub cli exists"
     cmd: "which gh"
     fixInstructions: "install GitHub cli"
