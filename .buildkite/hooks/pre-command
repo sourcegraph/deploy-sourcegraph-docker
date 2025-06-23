@@ -27,4 +27,9 @@ trap remove_pidfile EXIT
 echo $$ > "$PIDFILE"
 
 echo "Installing asdf dependencies as defined in '${WORKDIR}/.tool-versions':"
-asdf install
+if [ ! -f ".use_mise" ]; then
+  asdf install
+else
+  mise install
+  eval "$(mise activate)"
+fi
