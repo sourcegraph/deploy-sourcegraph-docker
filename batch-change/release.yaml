@@ -1,0 +1,226 @@
+meta:
+  productName: "deploy-sourcegraph-docker"
+  owners:
+    - "@sourcegraph/release"
+  repository: "github.com/sourcegraph/deploy-sourcegraph-docker"
+
+inputs:
+  - releaseId: server
+
+requirements:
+  # We use wget here, because curl --fail-with-body was introduced in a version ulterior to what we can have on the CI agents.
+  - name: "wget"
+    cmd: "wget --help"
+  - name: "GitHub cli exists"
+    cmd: "which gh"
+    fixInstructions: "install GitHub cli"
+  - name: "Docker username"
+    env: "DOCKER_USERNAME"
+  - name: "Docker password"
+    env: "DOCKER_PASSWORD"
+  - name: "GH auth status"
+    cmd: "gh auth status"
+    fixInstructions: "gh auth login"
+
+internal:
+  # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
+  # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
+  # with, please update this file as well.
+  create:
+    steps:
+      patch:
+        - name: docker(compose):tags
+          cmd: |
+            set -eu
+            registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+            sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
+        - name: docker(shell):tags
+          cmd: |
+            set -eu
+            registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+            sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
+      minor:
+        - name: docker(compose):tags
+          cmd: |
+            set -eu
+            registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+            sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
+        - name: docker(shell):tags
+          cmd: |
+            set -eu
+            registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+            sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
+      major:
+        - name: docker(compose):tags
+          cmd: |
+            set -eu
+            registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+            sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
+        - name: docker(shell):tags
+          cmd: |
+            set -eu
+            registry=us-central1-docker.pkg.dev/sourcegraph-ci/rfc795-internal
+            sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
+  finalize:
+    steps:
+      - name: "git:finalize"
+        cmd: |
+          set -eu
+
+          branch="internal/release-{{version}}"
+
+          # Post a comment on the PR.
+          cat << EOF | gh pr comment "$branch" --body-file -
+          - :green_circle: Internal release is ready for promotion!
+          - :warning: Do not close/merge that pull request or delete the associated branch if you intend to promote it.
+          EOF
+
+          # Post an annotation.
+          cat << EOF | buildkite-agent annotate --style info
+          Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
+          EOF
+      
+      - name: 'Register on release registry'
+        cmd: |
+          echo "Registering internal deploy-sourcegraph-docker {{version}} release on release registry"
+          COMMIT_SHA=$(git rev-parse HEAD)
+          body=$(wget --content-on-error -O- --header="Content-Type: application/json" --header="Authorization: ${RELEASE_REGISTRY_TOKEN}" --post-data '{
+              "name": "docker",
+              "version": "{{version}}",
+              "git_sha": "'${COMMIT_SHA}'"
+            }' "https://releaseregistry.sourcegraph.com/v1/releases")
+          exit_code=$?
+
+          if [ $exit_code != 0 ]; then
+            echo "❌ Failed to create release in release registry, got:"
+            echo "--- raw body ---"
+            echo $body
+            echo "--- raw body ---"
+            exit $exit_code
+          else
+            echo "Release created, see:"
+            echo $body
+          fi
+
+test:
+  steps:
+    - name: "Placeholder"
+      cmd: |
+        echo "Test"
+
+promoteToPublic:
+  create:
+    steps:
+      - name: "git"
+        cmd: |
+          set -eu
+          branch="internal/release-{{version}}"
+          git fetch origin "${branch}"
+          git switch "${branch}"
+      - name: docker(compose):tags
+        cmd: |
+          set -eu
+          registry=index.docker.io/sourcegraph
+          sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
+      - name: docker(shell):tags
+        cmd: |
+          set -eu
+          registry=index.docker.io/sourcegraph
+          sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
+  finalize:
+    steps:
+      - name: 'Promote on release registry'
+        cmd: |
+          echo "Promoting deploy-sourcegraph-docker {{version}} release on release registry"
+          body=$(wget --content-on-error -O- --header="Content-Type: application/json" --header="Authorization: ${RELEASE_REGISTRY_TOKEN}" --post-data '' "https://releaseregistry.sourcegraph.com/v1/releases/docker/{{version}}/promote")
+          exit_code=$?
+
+          if [ $exit_code != 0 ]; then
+            echo "❌ Failed to promote release on release registry, got:"
+            echo "--- raw body ---"
+            echo $body
+            echo "--- raw body ---"
+            exit $exit_code
+          else
+            echo "Release promoted, see:"
+            echo $body
+          fi
+      - name: git:tag
+        cmd: |
+          set -eu
+
+          # Branches
+          internal_branch="internal/release-{{version}}"
+          promote_branch="promote/release-{{version}}"
+          release_branch="release-{{version}}"
+
+          # Create the final branch holding the tagged commit
+          git checkout "${promote_branch}"
+          git switch -c "${release_branch}"
+
+          git tag {{version}}
+          git push origin ${release_branch} --tags
+
+          # Web URL to the tag
+          tag_url="https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}"
+
+          # Annotate PRs
+          cat << EOF | gh pr comment "$internal_branch" --body-file -
+          - :green_circle: Release has been promoted, see tag: $tag_url.
+          - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (i.e. \`$release_branch\`).
+          - :arrow_right: You can safely close that PR and delete its associated branch.
+          EOF
+
+          cat << EOF | gh pr comment "$promote_branch" --body-file -
+          - :green_circle: Release has been promoted, see tag: $tag_url.
+          - :no_entry: Do not under any circumstance delete the branch holding the tagged commit (i.e. \`$release_branch\`).
+          - :arrow_right: You can safely close that PR and delete its associated branch.
+          EOF
+
+          # Annotate build
+          cat << EOF | buildkite-agent annotate --style info
+          Promoted release is **publicly available** through a git tag at [\`{{version}}\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}).
+          EOF
+
+      - name: "update main with latest version"
+        cmd: |
+          set -eu
+          branch="promote/release-{{version}}-update-main"
+          echo "Checking out origin/main"
+          git fetch origin main
+          git switch main
+          echo "Creating branch origin/${branch}"
+          git switch -c "${branch}"
+
+      - name: docker(compose):tags
+        cmd: |
+          set -eu
+          registry=index.docker.io/sourcegraph
+          sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
+
+      - name: docker(shell):tags
+        cmd: |
+          set -eu
+          registry=index.docker.io/sourcegraph
+          sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
+
+      - name: "git:branch"
+        cmd: |
+          set -eu
+          branch="promote/release-{{version}}-update-main"
+          git commit -am 'prep update main: {{version}}' -m 'update main with latest release'
+          git push origin "${branch}"
+
+      - name: "github:pr"
+        cmd: |
+          set -eu
+          internal_branch="promote/release-{{version}}-update-main"
+          # we need to fetch from origin just in case this branch doesn't exist locally, so that the PR can find the base
+          git fetch origin main
+          gh pr create \
+            --fill \
+            --draft \
+            --base "main" \
+            --title "Update main: build {{version}}" \
+            --body "Test plan: automated release PR, CI will perform additional checks"
+          echo "🚢 Please check the associated CI build to ensure the process completed"
