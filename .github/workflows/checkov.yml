@@ -1,0 +1,27 @@
+name: security
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  checkov-job:
+    runs-on: ubuntu-latest
+    name: checkov-action
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@v12.1347.0
+        with:
+          directory: .
+          skip_check: CKV_GHA_7,CKV_K8S_10,CKV_K8S_11,CKV_K8S_12,CKV_K8S_13,CKV_K8S_14,CKV_K8S_15,CKV_K8S_16,CKV_K8S_17,CKV_K8S_20,CKV_K8S_21,CKV_K8S_22,CKV_K8S_23,CKV_K8S_25,CKV_K8S_26,CKV_K8S_28,CKV_K8S_29,CKV_K8S_30,CKV_K8S_31,CKV_K8S_32,CKV_K8S_35,CKV_K8S_36,CKV_K8S_37,CKV_K8S_38,CKV_K8S_40,CKV_K8S_43,CKV_K8S_7,CKV_K8S_8,CKV_K8S_9,CKV_SECRET_4
+          quiet: true # optional: display only failed checks
+          soft_fail: false # optional: do not return an error code if there are failed checks
+          framework: all # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+          output_format: github_failed_only # optional: the output format, one of: cli, json, junitxml, github_failed_only, or sarif. Default: sarif
+          download_external_modules: false # optional: download external terraform modules from public git repositories and terraform registry
+          log_level: ERROR # optional: set log level. Default WARNING
