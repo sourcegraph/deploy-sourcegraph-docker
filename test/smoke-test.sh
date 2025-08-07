@@ -2,11 +2,13 @@
 set -euxfo pipefail
 
 configure_docker() {
+  set +x
   if [ -n "${DOCKER_USERNAME}" ] && [ -n "${DOCKER_PASSWORD}" ]; then
     docker login -u "${DOCKER_USERNAME}" --password-stdin <<<"$DOCKER_PASSWORD"
   fi
+  set -x
   gcloud auth configure-docker
-  gcloud auth configure-docker us-central1-docker.pkg.dev
+  gcloud auth configure-docker us-central1-docker.pkg.dev,us-docker.pkg.dev
 }
 
 deploy_sourcegraph() {

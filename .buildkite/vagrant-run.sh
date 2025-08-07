@@ -26,6 +26,8 @@ if [ ! -f ${KEY_PATH} ]; then
   gcloud secrets versions access latest --secret=e2e-builder-sa-key --quiet --project=sourcegraph-ci > "${KEY_PATH}"
 fi
 export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
+export DOCKER_USERNAME=sourcegraph
+export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
 
 echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?
