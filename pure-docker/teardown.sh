@@ -15,6 +15,7 @@ docker rm -f $(addresses "gitserver-" $NUM_GITSERVER "") &>/dev/null || true &
 docker rm -f grafana &>/dev/null || true
 docker rm -f jaeger &>/dev/null || true
 docker rm -f precise-code-intel-worker &>/dev/null || true
+docker rm -f syntactic-code-intel-worker &>/dev/null || true
 docker rm -f pgsql &>/dev/null || true &
 docker rm -f codeintel-db &>/dev/null || true &
 docker rm -f codeinsights-db &>/dev/null || true &
