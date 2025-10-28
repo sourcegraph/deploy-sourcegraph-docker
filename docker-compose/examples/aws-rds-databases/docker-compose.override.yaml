@@ -1,0 +1,142 @@
+# Docker Compose override file for customers using AWS IAM authentication to databases on RDS
+# See https://sourcegraph.com/docs/admin/external_services/postgres#usage-with-aws-rds-iam-auth
+
+
+
+## Reusable blocks of environment variables
+
+# For all containers, which connect to any of the databases
+x-database-env-var-rds-iam-auth: &database-env-var-rds-iam-auth
+
+  # Using AWS RDS IAM authentication, not a password, so instruct the psql library to refresh the token
+  PG_CONNECTION_UPDATER: EC2_ROLE_CREDENTIALS
+
+# For both migrator and frontend
+x-database-env-vars: &database-env-vars
+
+  <<: *database-env-var-rds-iam-auth
+
+  # NOTE: Must clear / override the PGDATASOURCE env vars, otherwise frontends don't start up
+  PGHOST: example-database-pgsql.cluster-example.us-west-2.rds.amazonaws.com
+  PGPORT: 5432
+  PGSSLMODE: require
+  PGDATABASE: sg
+  PGUSER: sg
+  PGPASSWORD: ""
+  PGDATASOURCE: ""
+
+  CODEINTEL_PGHOST: example-database-codeintel.cluster-example.us-west-2.rds.amazonaws.com
+  CODEINTEL_PGPORT: 5432
+  CODEINTEL_PGSSLMODE: require
+  CODEINTEL_PGDATABASE: codeintel
+  CODEINTEL_PGUSER: sg
+  CODEINTEL_PGPASSWORD: ""
+  CODEINTEL_PGDATASOURCE: ""
+
+  CODEINSIGHTS_PGHOST: example-database-codeinsights.cluster-example.us-west-2.rds.amazonaws.com
+  CODEINSIGHTS_PGPORT: 5432
+  CODEINSIGHTS_PGSSLMODE: require
+  CODEINSIGHTS_PGDATABASE: codeinsights
+  CODEINSIGHTS_PGUSER: sg
+  CODEINSIGHTS_PGPASSWORD: ""
+  CODEINSIGHTS_PGDATASOURCE: ""
+
+
+
+## Overrides for services defined in the base docker-compose.yaml files
+services:
+
+
+  gitserver-0:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-var-rds-iam-auth
+
+
+  migrator:
+
+    # !reset drops the depends_on config entirely, so that migrator will start up without the database containers
+    depends_on: !reset []
+
+    # !override drops all env vars from earlier compose files, then defines new ones, to ensure no other env vars are in the mix
+    environment: !override
+      <<: *database-env-vars
+
+    # Normal startup of migrator should only ever use the default "up" command, no additional args
+    # Overriding the command should only to be used to make specific changes, on single startups, only when needed, only when directed by Sourcegraph Customer Support Engineering
+    # If you find that your migrator needs (an) additional arg(s) to run, there's something wrong with your databases; please open a support ticket by emailing support@sourcegraph.com
+
+    # AWS RDS requires super admin permissions to install some of the extensions that Sourcegraph requires, ex. pg_stat_statements
+    # Install the needed extensions by running these queries, as an admin user, against their respective databases
+    # https://github.com/sourcegraph/artifacts/blob/main/migrations/frontend/1680296731_squashed_migrations_privileged/up.sql
+    # https://github.com/sourcegraph/artifacts/blob/main/migrations/codeintel/1679010276_squashed_migrations_privileged/up.sql
+    # https://github.com/sourcegraph/artifacts/blob/main/migrations/codeinsights/1675347548_squashed_migrations_privileged/up.sql
+    # After the extensions are successfully installed, manually mark these migrations as completed,
+    # by uncommenting these commands, one at a time, and running `docker compose up migrator` each time,
+    # then comment the last one out, and run the normal `docker compose up -d --remove-orphans` command, for a normal startup
+    # command: ["add-log", "-db=frontend", "-version=1680296731"]
+    # command: ["add-log", "-db=codeintel", "-version=1679010276"]
+    # command: ["add-log", "-db=codeinsights", "-version=1675347548"]
+
+    # If you do fall a few versions behind, here's the command to run a multi-version upgrade
+    # See https://sourcegraph.com/docs/admin/deploy/docker-compose/upgrade#multi-version-upgrades
+    # command: ["upgrade", "--from=v6.4.0", "--to=v6.9.1277"]
+
+    # Do not skip the drift check, or use other args, without instruction from Sourcegraph Customer Support Engineering
+    # If migrator fails to start up due to drift detected, or other issues, please open a support ticket by emailing support@sourcegraph.com
+
+
+  precise-code-intel-worker:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-var-rds-iam-auth
+
+
+  searcher-0:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-var-rds-iam-auth
+
+
+  sourcegraph-frontend-0:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-vars
+
+
+  sourcegraph-frontend-internal:
+    # !override drops all depends_on from earlier compose files, then defines new ones,
+    # to ensure it doesn't wait for the database containers, but also doesn't skip the dependency on migrator
+    depends_on: !override
+      migrator:
+        condition: service_completed_successfully
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-vars
+
+
+  syntactic-code-intel-worker:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-var-rds-iam-auth
+
+
+  worker:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *database-env-var-rds-iam-auth
+      # Add additional env vars, as needed
+      # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_ENABLED: true
+      # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_ORGANIZATIONS: true
+      # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_USERS: true
+
+
+## Disable services
+
+  # Drop built-in database services and volumes from the base compose file
+  pgsql: !reset {}
+  pgsql-exporter: !reset {}
+  codeintel-db: !reset {}
+  codeintel-db-exporter: !reset {}
+  codeinsights-db: !reset {}
+  codeinsights-db-exporter: !reset {}

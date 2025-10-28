@@ -1,0 +1,18 @@
+# Docker Compose override snippet for customers using AWS ALBs to terminate TLS,
+# and do not need TLS between the ALB and their Sourcegraph intance
+
+
+## Overrides for services defined in the base docker-compose.yaml files
+services:
+
+  sourcegraph-frontend-0:
+
+    # Add port 80, for ALB target group, in place of Caddy
+    ports:
+      - "0.0.0.0:80:3080"
+
+
+## Disable services
+
+  # Disable Caddy, because we're using an ALB for TLS termination
+  caddy: !reset {}
