@@ -1,0 +1,59 @@
+# Docker Compose override example of how to configure external databases
+
+x-env-vars-database: &env-vars-database
+
+  CODEINSIGHTS_PGDATABASE: sg
+  CODEINSIGHTS_PGDATASOURCE: ""
+  CODEINSIGHTS_PGHOST: codeinsights.postgres.example.com
+  CODEINSIGHTS_PGPASSWORD: super_long_secure_password
+  CODEINSIGHTS_PGPORT: 5432
+  CODEINSIGHTS_PGSSLMODE: require
+  CODEINSIGHTS_PGUSER: sg
+
+  CODEINTEL_PGDATABASE: sg
+  CODEINTEL_PGDATASOURCE: ""
+  CODEINTEL_PGHOST: codeintel.postgres.example.com
+  CODEINTEL_PGPASSWORD: super_long_secure_password
+  CODEINTEL_PGPORT: 5432
+  CODEINTEL_PGSSLMODE: require
+  CODEINTEL_PGUSER: sg
+
+  PGDATABASE: sg
+  PGDATASOURCE: ""
+  PGHOST: pgsql.postgres.example.com
+  PGPASSWORD: super_long_secure_password
+  PGPORT: 5432
+  PGSSLMODE: require
+  PGUSER: sg
+
+# Uncomment if using AWS RDS with IAM authentication
+# PG_CONNECTION_UPDATER: EC2_ROLE_CREDENTIALS
+# AWS_STS_REGIONAL_ENDPOINTS: regional
+
+
+services:
+
+  migrator:
+    depends_on: !reset [] # Remove the dependency on the built-in Postgres databases
+    environment: !override
+      <<: *env-vars-database
+
+  sourcegraph-frontend-0:
+    environment:
+      <<: *env-vars-database
+
+  sourcegraph-frontend-internal:
+    depends_on: !override
+      migrator:
+        condition: service_completed_successfully
+    environment:
+      <<: *env-vars-database
+
+
+  # Disable built-in databases
+  codeinsights-db-exporter: !reset {}
+  codeinsights-db: !reset {}
+  codeintel-db-exporter: !reset {}
+  codeintel-db: !reset {}
+  pgsql-exporter: !reset {}
+  pgsql: !reset {}
