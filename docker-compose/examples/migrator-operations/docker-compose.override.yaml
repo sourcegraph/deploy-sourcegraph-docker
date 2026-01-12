@@ -1,0 +1,40 @@
+## Overrides for services defined in the base docker-compose.yaml files
+services:
+
+  migrator:
+
+    ################################################################################
+    # Normal startup of migrator should only ever use the default "up" command, no additional args
+    # Overriding the command should only to be used to make specific changes, on single startups, only when needed, only when directed by Sourcegraph Customer Support Engineering
+    # If you find that your migrator needs (an) additional arg(s) to run, there's something wrong with your databases; please open a support ticket by emailing support@sourcegraph.com
+    command: ["up"]
+    ################################################################################
+
+
+    ################################################################################
+    # Initializing new databases
+
+    # AWS RDS, and some other DMBSs require super admin permissions to install some of the extensions that Sourcegraph requires, ex. pg_stat_statements
+
+    # Install the needed extensions by running these queries, as an admin user, against their respective databases
+    # https://github.com/sourcegraph/artifacts/blob/main/migrations/frontend/1680296731_squashed_migrations_privileged/up.sql
+    # https://github.com/sourcegraph/artifacts/blob/main/migrations/codeintel/1679010276_squashed_migrations_privileged/up.sql
+    # https://github.com/sourcegraph/artifacts/blob/main/migrations/codeinsights/1675347548_squashed_migrations_privileged/up.sql
+
+    # After the extensions are successfully installed, manually mark these migrations as completed,
+    # by uncommenting these commands, one at a time, and running `docker compose up migrator` each time,
+    # then comment the last one out, and run the normal `docker compose up -d --remove-orphans` command, for a normal startup
+    # command: ["add-log", "-db=frontend", "-version=1680296731"]
+    # command: ["add-log", "-db=codeintel", "-version=1679010276"]
+    # command: ["add-log", "-db=codeinsights", "-version=1675347548"]
+    ################################################################################
+
+
+    ################################################################################
+    # Multi-version upgrades
+    # See https://sourcegraph.com/docs/admin/deploy/docker-compose/upgrade#multi-version-upgrades
+    # command: ["upgrade", "--from=v6.4.0", "--to=v6.9.1277"]
+
+    # Do not skip the drift check, or use other args, without instruction from Sourcegraph Customer Support Engineering
+    # If migrator fails to start up due to drift detected, or other issues, please open a support ticket by emailing support@sourcegraph.com
+    ################################################################################
