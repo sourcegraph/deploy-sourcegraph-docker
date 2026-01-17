@@ -163,12 +163,14 @@ promoteToPublic:
       - name: docker(compose):tags
         cmd: |
           set -eu
-          registry=index.docker.io/sourcegraph
+          # Use external GAR registry to get consistent SHA256s after monorepo promotion
+          registry=us-docker.pkg.dev/sourcegraph-images/external
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
       - name: docker(shell):tags
         cmd: |
           set -eu
-          registry=index.docker.io/sourcegraph
+          # Use external GAR registry to get consistent SHA256s after monorepo promotion  
+          registry=us-docker.pkg.dev/sourcegraph-images/external
           sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
       - name: "git:branch"
         cmd: |
@@ -259,13 +261,15 @@ promoteToPublic:
       - name: docker(compose):tags
         cmd: |
           set -eu
-          registry=index.docker.io/sourcegraph
+          # Use external GAR registry to maintain consistency with promoted images
+          registry=us-docker.pkg.dev/sourcegraph-images/external
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
 
       - name: docker(shell):tags
         cmd: |
           set -eu
-          registry=index.docker.io/sourcegraph
+          # Use external GAR registry to maintain consistency with promoted images
+          registry=us-docker.pkg.dev/sourcegraph-images/external
           sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
 
       - name: "git:branch"
