@@ -9,13 +9,11 @@ pushd "$(dirname "${BASH_SOURCE[0]}")"/../..
 WORKDIR=$(pwd)
 PIDFILE=/var/lock/dobackup.pid
 
-remove_pidfile()
-{
+remove_pidfile() {
   rm -f "$PIDFILE"
 }
 
-another_instance()
-{
+another_instance() {
   echo "There is another instance running, skipping"
   exit 0
 }
@@ -24,7 +22,10 @@ if [ -f "$PIDFILE" ]; then
   kill -0 "$(cat $PIDFILE)" && another_instance
 fi
 trap remove_pidfile EXIT
-echo $$ > "$PIDFILE"
+echo $$ >"$PIDFILE"
+
+echo "Install plugins??"
+cat "${WORKDIR}/.tool-versions" | cut -d' ' -f1 | grep "^[^\#]" | xargs -i asdf plugin add {}
 
 echo "Installing asdf dependencies as defined in '${WORKDIR}/.tool-versions':"
 if [ ! -f ".use_mise" ]; then
