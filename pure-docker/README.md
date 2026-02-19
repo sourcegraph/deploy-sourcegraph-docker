@@ -1,5 +1,7 @@
 # Pure-Docker Sourcegraph cluster deployment reference
 
+> ⚠️ **Deprecation Notice:** The pure-Docker deployment method is planned for deprecation.
+
 ## Deploying
 
 First clone the repository, then:
