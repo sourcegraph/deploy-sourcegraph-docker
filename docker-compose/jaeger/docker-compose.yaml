@@ -1,10 +1,10 @@
 version: '2.4'
 services:
   # Description: Jaeger all-in-one instance
-  # (https://www.jaegertracing.io/docs/1.17/getting-started/#all-in-one) for distributed tracing.
+  # (https://www.jaegertracing.io/docs/2.16/getting-started/) for distributed tracing.
   #
   # Disk: none
-  # Ports exposed to other Sourcegraph services: 5778/TCP 6831/UDP 6832/UDP 14250/TCP 4317/UDP 4321/UDP
+  # Ports exposed to other Sourcegraph services: 5778/TCP 4317/TCP 4318/TCP
   # Ports exposed to the public internet: none
   # Ports exposed to site admins only: 16686/HTTP
   #
@@ -16,23 +16,15 @@ services:
     ports:
       # Query port
       - '0.0.0.0:16686:16686'
-      # Collector port
-      - '0.0.0.0:14250:14250'
-      - '0.0.0.0:4317:4317' # gRPC port
-      - '0.0.0.0:4321:4321' # HTTP port
-      # Agent ports
+      # OTLP ports
+      - '0.0.0.0:4317:4317' # gRPC
+      - '0.0.0.0:4318:4318' # HTTP
+      # Remote sampling
       - '0.0.0.0:5778:5778'
-      - '0.0.0.0:6831:6831'
-      - '0.0.0.0:6832:6832'
     networks:
       - sourcegraph
     restart: always
-    command: ['--memory.max-traces=20000', "--sampling.strategies-file=/etc/jaeger/sampling_strategies.json", "--collector.otlp.enabled" ]
-    environment:
-      - 'SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json'
-      - 'COLLECTOR_OTLP_ENABLED=true'
-      - 'JAEGER_OTLP_GRPC_PORT=4317'
-      - 'JAEGER_OTLP_HTTP_PORT=4321'
+    command: ['--config=/etc/jaeger/jaeger-config.yaml']
 
   # Configure collector to send traces to Jaeger
   otel-collector:
