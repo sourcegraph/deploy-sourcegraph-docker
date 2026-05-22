@@ -34,33 +34,18 @@ internal:
             set -eu
             registry=us-docker.pkg.dev/sourcegraph-images/internal
             sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
-        - name: docker(shell):tags
-          cmd: |
-            set -eu
-            registry=us-docker.pkg.dev/sourcegraph-images/internal
-            sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
       minor:
         - name: docker(compose):tags
           cmd: |
             set -eu
             registry=us-docker.pkg.dev/sourcegraph-images/internal
             sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
-        - name: docker(shell):tags
-          cmd: |
-            set -eu
-            registry=us-docker.pkg.dev/sourcegraph-images/internal
-            sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
       major:
         - name: docker(compose):tags
           cmd: |
             set -eu
             registry=us-docker.pkg.dev/sourcegraph-images/internal
             sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
-        - name: docker(shell):tags
-          cmd: |
-            set -eu
-            registry=us-docker.pkg.dev/sourcegraph-images/internal
-            sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
   finalize:
     steps:
       - name: "git:finalize"
@@ -122,11 +107,6 @@ promoteToPublic:
           set -eu
           registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
-      - name: docker(shell):tags
-        cmd: |
-          set -eu
-          registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
   finalize:
     steps:
       - name: 'Promote on release registry'
@@ -197,12 +177,6 @@ promoteToPublic:
           set -eu
           registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../docker-compose/
-
-      - name: docker(shell):tags
-        cmd: |
-          set -eu
-          registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind pure-docker --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD ../pure-docker/
 
       - name: "git:branch"
         cmd: |

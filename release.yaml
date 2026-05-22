@@ -33,11 +33,6 @@ internal:
               set -eu
               registry=us-docker.pkg.dev/sourcegraph-images/internal
               sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD   docker-compose/
-          - name: docker(shell):tags
-            cmd: |
-              set -eu
-              registry=us-docker.pkg.dev/sourcegraph-images/internal
-              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD  pure-docker/
           - name: "git:branch"
             cmd: |
               set -eu
@@ -59,11 +54,6 @@ internal:
               set -eu
               registry=us-docker.pkg.dev/sourcegraph-images/internal
               sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-          - name: docker(shell):tags
-            cmd: |
-              set -eu
-              registry=us-docker.pkg.dev/sourcegraph-images/internal
-              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
           - name: "git:branch"
             cmd: |
               set -eu
@@ -85,11 +75,6 @@ internal:
               set -eu
               registry=us-docker.pkg.dev/sourcegraph-images/internal
               sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-          - name: docker(shell):tags
-            cmd: |
-              set -eu
-              registry=us-docker.pkg.dev/sourcegraph-images/internal
-              sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
           - name: "git:branch"
             cmd: |
               set -eu
@@ -165,11 +150,6 @@ promoteToPublic:
           set -eu
           registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-      - name: docker(shell):tags
-        cmd: |
-          set -eu
-          registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
       - name: "git:branch"
         cmd: |
           set -eu
@@ -261,12 +241,6 @@ promoteToPublic:
           set -eu
           registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-
-      - name: docker(shell):tags
-        cmd: |
-          set -eu
-          registry=index.docker.io/sourcegraph
-          sg ops update-images --registry ${registry} --kind shell --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD pure-docker/
 
       - name: "git:branch"
         cmd: |

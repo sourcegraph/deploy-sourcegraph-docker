@@ -29,16 +29,6 @@ We've made our deployment configurations open source to better serve our custome
 
 [Open an issue (in sourcegraph/sourcegraph)](https://github.com/sourcegraph/sourcegraph/issues/new?assignees=&labels=deploy-sourcegraph&template=deploy-sourcegraph.md&title=%5Bdeploy-sourcegraph%5D) or contact us (support@sourcegraph.com), we are happy to help!
 
-## Pure-Docker Sourcegraph cluster deployment reference
-
-> ⚠️ **Deprecation Notice:** The pure-Docker deployment method is planned for deprecation.
-
-What if your organization wants a multi-machine deployment without using Kubernetes?
-What if you use a different container management platform, for example?
-Anyone using a container management platform other than Kubernetes (Netflix's [Titus](https://netflix.github.io/titus/), Apache's [Mesos](http://mesos.apache.org/documentation/latest/docker-containerizer/), etc.) can use our [Pure-Docker Sourcegraph cluster deployment reference](./pure-docker/README.md) to deploy Sourcegraph.
-
----
-
 ### Contributing 
 
 #### Releasing 
