@@ -14,11 +14,7 @@ configure_docker() {
 deploy_sourcegraph() {
 	cd $(dirname "${BASH_SOURCE[0]}")/..
 	#Deploy sourcegraph
-	if [[ "$TEST_TYPE" == "pure-docker-test" ]]; then
-		./test/volume-config.sh
-		timeout 600s ./pure-docker/deploy.sh
-		expect_containers="24"
-	elif [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
+	if [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
 		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
 		expect_containers="25"
 	fi

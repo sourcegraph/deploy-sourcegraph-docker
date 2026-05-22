@@ -16,14 +16,14 @@ gcloud auth application-default login
   - `VAGRANT_GCP_PROJECT_ID`: Project to run on. (default: `sourcegraph-server`)
   - `VAGRANT_SSH_USER`: Your SSH user ID as specified in GCP metadata. (default: `ENV['USER']`)
   - `VAGRANT_SSH_KEY`: Path to your SSH Keys as specified in GCP metadata. (default: `~/.ssh/id_rsa`)
-  - `TEST_TYPE`:  Deployment type to test, `pure-docker-test` or `docker-compose-test`.
+  - `TEST_TYPE`:  Deployment type to test, `docker-compose-test`.
 ```
 .buildkite/vagrant-run.sh docker-test
 ```
 
-This command will start a GCP instance, upload your local copy of the reposistory and run the relevant smoke test for each deployment type, [pure-docker-test](test/pure-docker/smoke-test.sh) or [docker-compose-test](test/docker-compose/smoke-test.sh).
+This command will start a GCP instance, upload your local copy of the reposistory and run the relevant smoke test for the docker-compose deployment type.
 
-To run any additional tests or commands, edit [servers.yaml](test/pure-docker/servers.yaml) and add the commands to the `shell_commands` list, eg:
+To run any additional tests or commands, edit the servers.yaml and add the commands to the `shell_commands` list, eg:
 ```
 shell_commands:
     - [...]
