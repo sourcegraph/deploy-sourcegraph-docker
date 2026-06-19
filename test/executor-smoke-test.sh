@@ -6,6 +6,8 @@ set -euo pipefail
 # Requires: a running Sourcegraph docker-compose stack (from smoke-test.sh or manual start).
 # This script creates a site admin account, configures executor access, starts an executor
 # container, and verifies it registers with the Sourcegraph instance.
+#
+# Dependencies: curl, jq, docker compose
 
 FRONTEND_URL="${FRONTEND_URL:-http://localhost:80}"
 EXECUTOR_TOKEN="executor-smoke-test-token"
@@ -13,22 +15,14 @@ ADMIN_EMAIL="smoke-test@sourcegraph.com"
 ADMIN_USERNAME="smoke-admin"
 ADMIN_PASSWORD="smoke-test-password-123!"
 COMPOSE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../docker-compose" && pwd)"
-COOKIE_JAR=$(mktemp)
-TOKEN_FILE=$(mktemp)
-
-cleanup() {
-    rm -f "$COOKIE_JAR" "$TOKEN_FILE"
-}
-trap cleanup EXIT
 
 echo "=== Executor Smoke Test ==="
 
 # Step 1: Create initial site admin account
 echo "Step 1: Creating site admin account..."
-INIT_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${FRONTEND_URL}/-/site-init" \
+INIT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${FRONTEND_URL}/-/site-init" \
     -H 'Content-Type: application/json' \
     -d "{\"email\":\"${ADMIN_EMAIL}\",\"username\":\"${ADMIN_USERNAME}\",\"password\":\"${ADMIN_PASSWORD}\"}")
-INIT_STATUS=$(echo "$INIT_RESPONSE" | tail -1)
 if [ "$INIT_STATUS" = "200" ] || [ "$INIT_STATUS" = "201" ]; then
     echo "  Site admin created"
 elif [ "$INIT_STATUS" = "409" ]; then
@@ -37,35 +31,47 @@ else
     echo "  Warning: site-init returned HTTP $INIT_STATUS, attempting to continue"
 fi
 
-# Step 2: Sign in and get session cookie
+# Step 2: Sign in and extract session cookie
 echo "Step 2: Signing in..."
-curl -s -c "$COOKIE_JAR" -X POST "${FRONTEND_URL}/-/sign-in" \
+SESSION_COOKIE=$(curl -s -D - -o /dev/null -X POST "${FRONTEND_URL}/-/sign-in" \
     -H 'Content-Type: application/json' \
-    -d "{\"email\":\"${ADMIN_EMAIL}\",\"password\":\"${ADMIN_PASSWORD}\"}"
+    -d "{\"email\":\"${ADMIN_EMAIL}\",\"password\":\"${ADMIN_PASSWORD}\"}" \
+    | tr -d '\r' | grep -i '^Set-Cookie: sgs=' | sed 's/^Set-Cookie: \([^;]*\).*/\1/')
+
+if [ -z "$SESSION_COOKIE" ]; then
+    echo "  FAILED: Could not obtain session cookie"
+    exit 1
+fi
+echo "  Signed in"
 
 # Step 3: Create access token
 echo "Step 3: Creating access token..."
-curl -s -b "$COOKIE_JAR" -X POST "${FRONTEND_URL}/.api/graphql" \
+TOKEN=$(curl -s --cookie "$SESSION_COOKIE" -X POST "${FRONTEND_URL}/.api/graphql" \
     -H 'Content-Type: application/json' \
     -d '{"query":"mutation { createAccessToken(user: \"VXNlcjox\", scopes: [\"user:all\"], note: \"executor-smoke-test\") { token } }"}' \
-    | python3 -c "import sys,json; print(json.loads(sys.stdin.read())['data']['createAccessToken']['token'])" > "$TOKEN_FILE"
+    | jq -r '.data.createAccessToken.token')
+
+if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+    echo "  FAILED: Could not create access token"
+    exit 1
+fi
 echo "  Access token created"
 
 # Step 4: Update site config with executor access token
 echo "Step 4: Configuring executor access token in site config..."
-TOKEN=$(cat "$TOKEN_FILE")
 LAST_ID=$(curl -s -X POST "${FRONTEND_URL}/.api/graphql" \
     -H "Authorization: token $TOKEN" \
     -H 'Content-Type: application/json' \
     -d '{"query":"{ site { configuration { id } } }"}' \
-    | python3 -c "import sys,json; print(json.loads(sys.stdin.read())['data']['site']['configuration']['id'])")
+    | jq -r '.data.site.configuration.id')
 
-NEW_CONFIG=$(python3 -c "import json; print(json.dumps(json.dumps({'auth.providers': [{'type': 'builtin'}], 'executors.accessToken': '${EXECUTOR_TOKEN}'})))")
+NEW_CONFIG=$(jq -n --arg token "$EXECUTOR_TOKEN" \
+    '{"auth.providers": [{"type": "builtin"}], "executors.accessToken": $token} | tojson')
 
-curl -s -X POST "${FRONTEND_URL}/.api/graphql" \
+curl -s -o /dev/null -X POST "${FRONTEND_URL}/.api/graphql" \
     -H "Authorization: token $TOKEN" \
     -H 'Content-Type: application/json' \
-    -d "{\"query\":\"mutation UpdateSiteConfig(\$input: String!) { updateSiteConfiguration(lastID: $LAST_ID, input: \$input) }\", \"variables\":{\"input\":$NEW_CONFIG}}" > /dev/null
+    --data-raw "{\"query\":\"mutation UpdateSiteConfig(\$input: String!) { updateSiteConfiguration(lastID: $LAST_ID, input: \$input) }\", \"variables\":{\"input\":$NEW_CONFIG}}"
 echo "  Site config updated"
 
 # Step 5: Start executor container
@@ -87,9 +93,9 @@ for i in $(seq 1 $MAX_ATTEMPTS); do
         -H "Authorization: token $TOKEN" \
         -H 'Content-Type: application/json' \
         -d '{"query":"{ executors(query: \"\", active: false) { totalCount } }"}' \
-        | python3 -c "import sys,json; print(json.loads(sys.stdin.read())['data']['executors']['totalCount'])" 2>/dev/null || echo "0")
+        | jq -r '.data.executors.totalCount // 0')
 
-    if [ "$COUNT" -ge 1 ]; then
+    if [ "$COUNT" -ge 1 ] 2>/dev/null; then
         echo "  Executor registered after $((i * 5))s"
         echo ""
         echo "=== EXECUTOR SMOKE TEST PASSED ==="
