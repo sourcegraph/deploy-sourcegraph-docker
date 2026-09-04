@@ -1,4 +1,5 @@
 $schema: "http://json.schemastore.org/buildkite"
+agents: { queue: beta }
 env:
   # Build this image in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
   IMAGE: "e2e-db8a40720-2024-08-26t08-44-10z"
