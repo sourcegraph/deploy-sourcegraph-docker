@@ -303,7 +303,7 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
-      test: "wget -q 'http://127.0.0.1:3181/healthz' -O /dev/null || exit 1"
+      test: "wget -q 'http://127.0.0.1:6060/ready' -O /dev/null || exit 1"
       interval: 5s
       timeout: 10s
       retries: 3
