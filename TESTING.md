@@ -2,12 +2,12 @@
 
 Developers can test using [Vagrant](https://www.vagrantup.com) and your Sourcegraph GCP account.
 
-- Use [these](https://www.vagrantup.com/docs/index) instructions to install `Vagrant` on your local machine. Once sucessfully installed, install the required plugin:
+- Use [these](https://www.vagrantup.com/docs/index) instructions to install `Vagrant` on your local machine. Once successfully installed, install the required plugin:
 ```
 vagrant plugin install vagrant-google
 ```
 
-- Ensure your credentials are correct by excecuting the command below and following the prompts:
+- Ensure your credentials are correct by executing the command below and following the prompts:
 ```
 gcloud auth application-default login
 ```
@@ -21,7 +21,7 @@ gcloud auth application-default login
 .buildkite/vagrant-run.sh docker-test
 ```
 
-This command will start a GCP instance, upload your local copy of the reposistory and run the relevant smoke test for the docker-compose deployment type.
+This command will start a GCP instance, upload your local copy of the repository and run the relevant smoke test for the docker-compose deployment type.
 
 To run any additional tests or commands, edit the servers.yaml and add the commands to the `shell_commands` list, eg:
 ```
