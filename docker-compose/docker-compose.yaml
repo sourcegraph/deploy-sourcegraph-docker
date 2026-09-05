@@ -315,7 +315,7 @@ services:
 
   # Description: Handles conversion of uploaded precise code intelligence bundles.
   #
-  # Ports exposed to other Sourcegraph services: 3188/TCP
+  # Ports exposed to other Sourcegraph services: 6060/TCP
   # Ports exposed to the public internet: none
   #
   precise-code-intel-worker:
@@ -329,7 +329,7 @@ services:
       - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
-      test: "wget -q 'http://127.0.0.1:3188/healthz' -O /dev/null || exit 1"
+      test: "wget -q 'http://127.0.0.1:6060/ready' -O /dev/null || exit 1"
       interval: 5s
       timeout: 5s
       retries: 3
