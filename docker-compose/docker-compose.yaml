@@ -127,6 +127,7 @@ services:
     image: 'index.docker.io/sourcegraph/frontend:6.1.2889@sha256:43dad562a65d08842659abdd06cf3c92d3745cc9e18c3762e458b78028a86e1e'
     cpus: 4
     mem_limit: '8g'
+    env_file: sourcegraph-uploads.env
     environment:
       - DEPLOY_TYPE=docker-compose
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
@@ -180,6 +181,7 @@ services:
     image: 'index.docker.io/sourcegraph/frontend:6.1.2889@sha256:43dad562a65d08842659abdd06cf3c92d3745cc9e18c3762e458b78028a86e1e'
     cpus: 4
     mem_limit: '8g'
+    env_file: sourcegraph-uploads.env
     environment:
       - DEPLOY_TYPE=docker-compose
       - PGHOST=pgsql
@@ -226,6 +228,7 @@ services:
     image: 'index.docker.io/sourcegraph/gitserver:6.1.2889@sha256:282142b7886f58b0ea7251575c92d5c837ff8649d5831c9c52745ebed6f3af4f'
     cpus: 4
     mem_limit: '8g'
+    env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
@@ -299,6 +302,7 @@ services:
     image: 'index.docker.io/sourcegraph/searcher:6.1.2889@sha256:66f633e4e666d65684915087009bdbdb8a46dad6eccb4c307a6de141e0225be6'
     cpus: 2
     mem_limit: '2g'
+    env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
@@ -323,6 +327,7 @@ services:
     image: 'index.docker.io/sourcegraph/precise-code-intel-worker:6.1.2889@sha256:2a8ec49e080ff19e6f05f92c39cfc67ac50b8e2ff5aba4dcbd7451bba1e8d539'
     cpus: 2
     mem_limit: '4g'
+    env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
@@ -349,6 +354,7 @@ services:
     image: 'index.docker.io/sourcegraph/worker:6.1.2889@sha256:1ef615670e315edda8511ab1e06ffd27b98129bc962bf06aca455c7731baf482'
     cpus: 4
     mem_limit: '4g'
+    env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
@@ -374,6 +380,7 @@ services:
     image: 'index.docker.io/sourcegraph/syntactic-code-intel-worker:6.1.1295@sha256:c6e2b097b8f16394e339588e208c43587f1fa6a35cb44e9759622c448ddc1445'
     cpus: 2
     mem_limit: '4g'
+    env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
