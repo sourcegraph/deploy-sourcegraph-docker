@@ -11,6 +11,7 @@ x-proxy-env-vars: &proxy-env-vars
   HTTPS_PROXY: http://proxy.example.com:8080
 
   # Skip the proxy for local traffic
+  # Add your internal code hosts, auth providers, image registries, etc. which are reachable without the proxy
   # If a container fails its health check after adding the proxy, also add the Docker network's CIDR range, ex. 172.16.0.0/12
   # Each line needs a trailing comma, as YAML folds these lines into one line, separated by spaces
   NO_PROXY: >-
@@ -54,9 +55,10 @@ services:
     environment:
       <<: *proxy-env-vars
 
-  gitserver-0:
-    environment:
-      <<: *proxy-env-vars
+  # Uncomment if connections to code hosts outside your private network need to use the proxy
+  # gitserver-0:
+  #   environment:
+  #     <<: *proxy-env-vars
 
   worker:
     environment:
