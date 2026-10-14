@@ -1,0 +1,49 @@
+# Docker Compose override file for routing outbound HTTP(S) traffic through an HTTP proxy
+# ex. telemetry, pings, update checks, and license verification to services.sourcegraph.com,
+# and connections to code hosts, auth providers, and LLM providers outside your private network
+# See https://sourcegraph.com/docs/self-hosted/private-network#http-proxy-configuration
+
+
+## Reusable block of environment variables
+
+# For all containers which initiate outbound connections
+x-proxy-env-vars: &proxy-env-vars
+
+  HTTP_PROXY: http://proxy.example.com:8080
+  HTTPS_PROXY: http://proxy.example.com:8080
+
+  # Bypass the proxy for traffic between Sourcegraph's own containers
+  # If a container fails its health check after adding the proxy, also add the Docker network's CIDR range, ex. 172.16.0.0/12
+  NO_PROXY: blobstore,caddy,cadvisor,codeinsights-db,codeinsights-db-exporter,codeintel-db,codeintel-db-exporter,gitserver-0,grafana,migrator,node-exporter,otel-collector,pgsql,pgsql-exporter,precise-code-intel-worker,prometheus,redis-cache,redis-store,searcher-0,sourcegraph-frontend-0,sourcegraph-frontend-internal,syntactic-code-intel-worker,syntect-server,worker,zoekt-indexserver-0,zoekt-webserver-0,localhost,127.0.0.1
+
+
+services:
+
+  migrator:
+    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
+    environment:
+      <<: *proxy-env-vars
+
+  sourcegraph-frontend-0:
+    environment:
+      <<: *proxy-env-vars
+      # To proxy only pings and update checks, instead of all outbound traffic,
+      # set this var alone, and drop the HTTP_PROXY / HTTPS_PROXY / NO_PROXY vars
+      # TELEMETRY_HTTP_PROXY: http://proxy.example.com:8080
+
+  sourcegraph-frontend-internal:
+    environment:
+      <<: *proxy-env-vars
+
+  gitserver-0:
+    environment:
+      <<: *proxy-env-vars
+
+  worker:
+    environment:
+      <<: *proxy-env-vars
+
+  # If running executors from executors/executor.docker-compose.yaml
+  # executor:
+  #   environment:
+  #     <<: *proxy-env-vars
