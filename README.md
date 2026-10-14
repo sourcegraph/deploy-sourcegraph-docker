@@ -9,10 +9,6 @@ This repository is the deployment reference for [deploying Sourcegraph with Dock
 > The `main` branch tracks development. Use the tag of this repository corresponding to the
 > version of Sourcegraph you wish to deploy, e.g. `git checkout v8.1.0`.
 
-For product and [pricing](https://about.sourcegraph.com/pricing/) information, visit
-[about.sourcegraph.com](https://about.sourcegraph.com) or [contact
-us](https://about.sourcegraph.com/contact/sales) for more information.
-
 ## Is Docker Compose the right deployment type for me?
 
 Please see [our docs](https://sourcegraph.com/docs/self-hosted/deploy) for comparisons of deployment types and our resource estimator.
