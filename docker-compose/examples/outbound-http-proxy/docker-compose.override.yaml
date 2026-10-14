@@ -12,7 +12,36 @@ x-proxy-env-vars: &proxy-env-vars
 
   # Skip the proxy for local traffic
   # If a container fails its health check after adding the proxy, also add the Docker network's CIDR range, ex. 172.16.0.0/12
-  NO_PROXY: blobstore,caddy,cadvisor,codeinsights-db,codeinsights-db-exporter,codeintel-db,codeintel-db-exporter,gitserver-0,grafana,migrator,node-exporter,otel-collector,pgsql,pgsql-exporter,precise-code-intel-worker,prometheus,redis-cache,redis-store,searcher-0,sourcegraph-frontend-0,sourcegraph-frontend-internal,syntactic-code-intel-worker,syntect-server,worker,zoekt-indexserver-0,zoekt-webserver-0,localhost,127.0.0.1
+  # Each line needs a trailing comma, as YAML folds these lines into one line, separated by spaces
+  NO_PROXY: >-
+    blobstore,
+    caddy,
+    cadvisor,
+    codeinsights-db,
+    codeinsights-db-exporter,
+    codeintel-db,
+    codeintel-db-exporter,
+    gitserver-0,
+    grafana,
+    migrator,
+    node-exporter,
+    otel-collector,
+    pgsql,
+    pgsql-exporter,
+    precise-code-intel-worker,
+    prometheus,
+    redis-cache,
+    redis-store,
+    searcher-0,
+    sourcegraph-frontend-0,
+    sourcegraph-frontend-internal,
+    syntactic-code-intel-worker,
+    syntect-server,
+    worker,
+    zoekt-indexserver-0,
+    zoekt-webserver-0,
+    localhost,
+    127.0.0.1
 
 
 services:
