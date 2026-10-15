@@ -1,25 +1,25 @@
 ---
 meta:
-  productName: "deploy-sourcegraph-docker"
+  productName: 'deploy-sourcegraph-docker'
   owners:
-    - "@sourcegraph/release"
-  repository: "github.com/sourcegraph/deploy-sourcegraph-docker"
+    - '@sourcegraph/release'
+  repository: 'github.com/sourcegraph/deploy-sourcegraph-docker'
 inputs:
   - releaseId: server
 requirements:
   # We use wget here, because curl --fail-with-body was introduced in a version ulterior to what we can have on the CI agents.
-  - name: "wget"
-    cmd: "wget --help"
-  - name: "GitHub cli exists"
-    cmd: "which gh"
-    fixInstructions: "install GitHub cli"
-  - name: "Docker username"
-    env: "DOCKER_USERNAME"
-  - name: "Docker password"
-    env: "DOCKER_PASSWORD"
-  - name: "GH auth status"
-    cmd: "gh auth status"
-    fixInstructions: "gh auth login"
+  - name: 'wget'
+    cmd: 'wget --help'
+  - name: 'GitHub cli exists'
+    cmd: 'which gh'
+    fixInstructions: 'install GitHub cli'
+  - name: 'Docker username'
+    env: 'DOCKER_USERNAME'
+  - name: 'Docker password'
+    env: 'DOCKER_PASSWORD'
+  - name: 'GH auth status'
+    cmd: 'gh auth status'
+    fixInstructions: 'gh auth login'
 
 internal:
   # Please keep in mind that the CI pipeline uses the branch names defined below when creating releases.
@@ -28,71 +28,71 @@ internal:
   create:
     steps:
       patch:
-          - name: docker(compose):tags
-            cmd: |
-              set -eu
-              registry=us-docker.pkg.dev/sourcegraph-images/internal
-              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD   docker-compose/
-          - name: "git:branch"
-            cmd: |
-              set -eu
-              branch="internal/release-{{version}}"
-              git switch -c "${branch}"
-              git commit -am 'release_patch: {{version}}' -m '{{config}}'
-              git push origin ${branch}
-          - name: "github:pr"
-            cmd: |
-              gh pr create \
-                --fill \
-                --draft \
-                --title "(internal) release_patch: build {{version}}" \
-                --body "Test plan: automated release PR, CI will perform additional checks"
-              echo "🚢 Please check the associated CI build to ensure the process completed".
+        - name: docker(compose):tags
+          cmd: |
+            set -eu
+            registry=us-docker.pkg.dev/sourcegraph-images/internal
+            sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD   docker-compose/
+        - name: 'git:branch'
+          cmd: |
+            set -eu
+            branch="internal/release-{{version}}"
+            git switch -c "${branch}"
+            git commit -am 'release_patch: {{version}}' -m '{{config}}'
+            git push origin ${branch}
+        - name: 'github:pr'
+          cmd: |
+            gh pr create \
+              --fill \
+              --draft \
+              --title "(internal) release_patch: build {{version}}" \
+              --body "Test plan: automated release PR, CI will perform additional checks"
+            echo "🚢 Please check the associated CI build to ensure the process completed".
       minor:
-          - name: docker(compose):tags
-            cmd: |
-              set -eu
-              registry=us-docker.pkg.dev/sourcegraph-images/internal
-              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-          - name: "git:branch"
-            cmd: |
-              set -eu
-              branch="internal/release-{{version}}"
-              git switch -c "${branch}"
-              git commit -am 'release_minor: {{version}}' -m '{{config}}'
-              git push origin ${branch}
-          - name: "github:pr"
-            cmd: |
-              gh pr create \
-                --fill \
-                --draft \
-                --title "(internal) release_minor: build {{version}}" \
-                --body "Test plan: automated release PR, CI will perform additional checks"
-              echo "🚢 Please check the associated CI build to ensure the process completed".
+        - name: docker(compose):tags
+          cmd: |
+            set -eu
+            registry=us-docker.pkg.dev/sourcegraph-images/internal
+            sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
+        - name: 'git:branch'
+          cmd: |
+            set -eu
+            branch="internal/release-{{version}}"
+            git switch -c "${branch}"
+            git commit -am 'release_minor: {{version}}' -m '{{config}}'
+            git push origin ${branch}
+        - name: 'github:pr'
+          cmd: |
+            gh pr create \
+              --fill \
+              --draft \
+              --title "(internal) release_minor: build {{version}}" \
+              --body "Test plan: automated release PR, CI will perform additional checks"
+            echo "🚢 Please check the associated CI build to ensure the process completed".
       major:
-          - name: docker(compose):tags
-            cmd: |
-              set -eu
-              registry=us-docker.pkg.dev/sourcegraph-images/internal
-              sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-          - name: "git:branch"
-            cmd: |
-              set -eu
-              branch="internal/release-{{version}}"
-              git switch -c "${branch}"
-              git commit -am 'release_major: {{version}}' -m '{{config}}'
-              git push origin ${branch}
-          - name: "github:pr"
-            cmd: |
-              gh pr create \
-                --fill \
-                --draft \
-                --title "(internal) release_major: build {{version}}" \
-                --body "Test plan: automated release PR, CI will perform additional checks"
-              echo "🚢 Please check the associated CI build to ensure the process completed".
+        - name: docker(compose):tags
+          cmd: |
+            set -eu
+            registry=us-docker.pkg.dev/sourcegraph-images/internal
+            sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
+        - name: 'git:branch'
+          cmd: |
+            set -eu
+            branch="internal/release-{{version}}"
+            git switch -c "${branch}"
+            git commit -am 'release_major: {{version}}' -m '{{config}}'
+            git push origin ${branch}
+        - name: 'github:pr'
+          cmd: |
+            gh pr create \
+              --fill \
+              --draft \
+              --title "(internal) release_major: build {{version}}" \
+              --body "Test plan: automated release PR, CI will perform additional checks"
+            echo "🚢 Please check the associated CI build to ensure the process completed".
   finalize:
     steps:
-      - name: "git:finalize"
+      - name: 'git:finalize'
         cmd: |
           set -eu
 
@@ -108,7 +108,7 @@ internal:
           cat << EOF | buildkite-agent annotate --style info
           Internal release is ready for promotion under the branch [\`$branch\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/$branch).
           EOF
-      
+
       - name: 'Register on release registry'
         cmd: |
           echo "Registering internal deploy-sourcegraph-docker {{version}} release on release registry"
@@ -132,14 +132,14 @@ internal:
           fi
 test:
   steps:
-    - name: "Placeholder"
+    - name: 'Placeholder'
       cmd: |
         echo "Test"
 
 promoteToPublic:
   create:
     steps:
-      - name: "git"
+      - name: 'git'
         cmd: |
           set -eu
           branch="internal/release-{{version}}"
@@ -150,14 +150,14 @@ promoteToPublic:
           set -eu
           registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
-      - name: "git:branch"
+      - name: 'git:branch'
         cmd: |
           set -eu
           branch="promote/release-{{version}}"
           git switch -c "${branch}"
           git commit -am 'promote-release: {{version}}' -m '{{config}}'
           git push origin "${branch}"
-      - name: "github:pr"
+      - name: 'github:pr'
         cmd: |
           set -eu
           internal_branch="internal/release-{{version}}"
@@ -225,8 +225,8 @@ promoteToPublic:
           Promoted release is **publicly available** through a git tag at [\`{{version}}\`](https://github.com/sourcegraph/deploy-sourcegraph-docker/tree/{{version}}).
           EOF
 
-      - name: "update main with latest version"
-      - name: "git"
+      - name: 'update main with latest version'
+      - name: 'git'
         cmd: |
           set -eu
           branch="promote/release-{{version}}-update-main"
@@ -242,14 +242,14 @@ promoteToPublic:
           registry=index.docker.io/sourcegraph
           sg ops update-images --registry ${registry} --kind compose --pin-tag {{inputs.server.tag}} --docker-username $DOCKER_USERNAME --docker-password $DOCKER_PASSWORD docker-compose/
 
-      - name: "git:branch"
+      - name: 'git:branch'
         cmd: |
           set -eu
           branch="promote/release-{{version}}-update-main"
           git commit -am 'prep update main: {{version}}' -m 'update main with latest release'
           git push origin "${branch}"
 
-      - name: "github:pr"
+      - name: 'github:pr'
         cmd: |
           set -eu
           # Create PR to merge release updates into main branch

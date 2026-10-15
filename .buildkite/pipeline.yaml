@@ -1,37 +1,37 @@
-$schema: "http://json.schemastore.org/buildkite"
+$schema: 'http://json.schemastore.org/buildkite'
 env:
   # GCP VM image for the Vagrant smoke test. Build it in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
-  IMAGE: "e2e-db8a40720-2024-08-26t08-44-10z"
-  VAGRANT_RUN_ENV: "CI"
+  IMAGE: 'e2e-db8a40720-2024-08-26t08-44-10z'
+  VAGRANT_RUN_ENV: 'CI'
 steps:
-  - label: ":docker:"
+  - label: ':docker:'
     command: .buildkite/validate-docker-compose.sh
-    agents: { queue: "vagrant" }
+    agents: { queue: 'vagrant' }
 
-  - label: ":lipstick:"
+  - label: ':lipstick:'
     command: .buildkite/prettier-check.sh
-    agents: { queue: "vagrant" }
+    agents: { queue: 'vagrant' }
 
-  - label: ":git: :sleuth_or_spy:"
+  - label: ':git: :sleuth_or_spy:'
     command: .buildkite/verify-release/verify-release.sh
     agents: { queue: standard }
 
-  - label: ":rice: docker-compose-test"
+  - label: ':rice: docker-compose-test'
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
-    agents: { queue: "vagrant" }
+    agents: { queue: 'vagrant' }
 
   # Please keep in mind that the release manifest uses specific branch names when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
   # with, please update this file as well.
-  - label: "(internal) Release: test"
+  - label: '(internal) Release: test'
     if: build.branch =~ /^internal\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run test --workdir=. --config-from-commit
 
-  - label: "(promote) Release: test"
+  - label: '(promote) Release: test'
     if: build.branch =~ /^promote\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
@@ -40,18 +40,16 @@ steps:
 
   - wait
 
-  - label: "(internal) Release: finalize"
+  - label: '(internal) Release: finalize'
     if: build.branch =~ /^internal\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run internal finalize --workdir=. --config-from-commit
 
-
-  - label: "(promote) Release: finalize"
+  - label: '(promote) Release: finalize'
     if: build.branch =~ /^promote\/release-.*/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
       sg release run promote-to-public finalize --workdir=. --config-from-commit
-
