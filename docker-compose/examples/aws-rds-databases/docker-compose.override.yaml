@@ -1,19 +1,15 @@
 # Docker Compose override file for customers using AWS IAM authentication to databases on RDS
 # See https://sourcegraph.com/docs/self-hosted/external-services/postgres#usage-with-aws-rds-iam-auth
 
-
-
 ## Reusable blocks of environment variables
 
 # For all containers, which connect to any of the databases
+# Using AWS RDS IAM authentication, not a password, so instruct the psql library to refresh the token
 x-database-env-var-rds-iam-auth: &database-env-var-rds-iam-auth
-
-  # Using AWS RDS IAM authentication, not a password, so instruct the psql library to refresh the token
   PG_CONNECTION_UPDATER: EC2_ROLE_CREDENTIALS
 
 # For both migrator and frontend
 x-database-env-vars: &database-env-vars
-
   <<: *database-env-var-rds-iam-auth
 
   # NOTE: Must clear / override the PGDATASOURCE env vars, otherwise frontends don't start up
@@ -22,39 +18,33 @@ x-database-env-vars: &database-env-vars
   PGSSLMODE: require
   PGDATABASE: sg
   PGUSER: sg
-  PGPASSWORD: ""
-  PGDATASOURCE: ""
+  PGPASSWORD: ''
+  PGDATASOURCE: ''
 
   CODEINTEL_PGHOST: example-database-codeintel.cluster-example.us-west-2.rds.amazonaws.com
   CODEINTEL_PGPORT: 5432
   CODEINTEL_PGSSLMODE: require
   CODEINTEL_PGDATABASE: codeintel
   CODEINTEL_PGUSER: sg
-  CODEINTEL_PGPASSWORD: ""
-  CODEINTEL_PGDATASOURCE: ""
+  CODEINTEL_PGPASSWORD: ''
+  CODEINTEL_PGDATASOURCE: ''
 
   CODEINSIGHTS_PGHOST: example-database-codeinsights.cluster-example.us-west-2.rds.amazonaws.com
   CODEINSIGHTS_PGPORT: 5432
   CODEINSIGHTS_PGSSLMODE: require
   CODEINSIGHTS_PGDATABASE: codeinsights
   CODEINSIGHTS_PGUSER: sg
-  CODEINSIGHTS_PGPASSWORD: ""
-  CODEINSIGHTS_PGDATASOURCE: ""
-
-
+  CODEINSIGHTS_PGPASSWORD: ''
+  CODEINSIGHTS_PGDATASOURCE: ''
 
 ## Overrides for services defined in the base docker-compose.yaml files
 services:
-
-
   gitserver-0:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
       <<: *database-env-var-rds-iam-auth
 
-
   migrator:
-
     # !reset drops the depends_on config entirely, so that migrator will start up without the database containers
     depends_on: !reset []
 
@@ -85,24 +75,20 @@ services:
     # Do not skip the drift check, or use other args, without instruction from Sourcegraph Customer Support Engineering
     # If migrator fails to start up due to drift detected, or other issues, please open a support ticket by emailing support@sourcegraph.com
 
-
   precise-code-intel-worker:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
       <<: *database-env-var-rds-iam-auth
-
 
   searcher-0:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
       <<: *database-env-var-rds-iam-auth
 
-
   sourcegraph-frontend-0:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
       <<: *database-env-vars
-
 
   sourcegraph-frontend-internal:
     # !override drops all depends_on from earlier compose files, then defines new ones,
@@ -114,12 +100,10 @@ services:
     environment:
       <<: *database-env-vars
 
-
   syntactic-code-intel-worker:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
       <<: *database-env-var-rds-iam-auth
-
 
   worker:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
@@ -130,8 +114,7 @@ services:
       # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_ORGANIZATIONS: true
       # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_USERS: true
 
-
-## Disable services
+  ## Disable services
 
   # Drop built-in database services and volumes from the base compose file
   pgsql: !reset {}
