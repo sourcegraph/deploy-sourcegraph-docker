@@ -1,4 +1,4 @@
-# This file contains the pgsql service definition (the primary Sourcegraph database deployment), 
+# This file contains the pgsql service definition (the primary Sourcegraph database deployment),
 # as well as the codeintel-db service definition (a separate postgres deployment). Both run postgres.
 # This file is used for database-only operations such as backup and restore.
 # See https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/operations
