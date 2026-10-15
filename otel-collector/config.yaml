@@ -15,14 +15,14 @@ exporters:
 
 extensions:
   health_check:
-    endpoint: ":13133"
+    endpoint: ':13133'
   zpages:
-    endpoint: "localhost:55679"
+    endpoint: 'localhost:55679'
 
 service:
   telemetry:
     metrics:
-      address: ":8888"
+      address: ':8888'
   pipelines:
     traces:
       exporters:

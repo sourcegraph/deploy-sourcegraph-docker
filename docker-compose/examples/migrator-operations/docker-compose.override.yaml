@@ -1,15 +1,12 @@
 ## Overrides for services defined in the base docker-compose.yaml files
 services:
-
   migrator:
-
     ################################################################################
     # Normal startup of migrator should only ever use the default "up" command, no additional args
     # Overriding the command should only to be used to make specific changes, on single startups, only when needed, only when directed by Sourcegraph Customer Support Engineering
     # If you find that your migrator needs (an) additional arg(s) to run, there's something wrong with your databases; please open a support ticket by emailing support@sourcegraph.com
-    command: ["up"]
+    command: ['up']
     ################################################################################
-
 
     ################################################################################
     # Initializing new databases
@@ -28,7 +25,6 @@ services:
     # command: ["add-log", "-db=codeintel", "-version=1679010276"]
     # command: ["add-log", "-db=codeinsights", "-version=1675347548"]
     ################################################################################
-
 
     ################################################################################
     # Multi-version upgrades
