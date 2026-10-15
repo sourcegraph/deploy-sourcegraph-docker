@@ -13,7 +13,3 @@ Please see [our docs](https://sourcegraph.com/docs/self-hosted/deploy) for compa
 ## Support
 
 Please contact us at support@sourcegraph.com
-
-## Contributing
-
-See [TESTING.md](TESTING.md) for how to run smoke tests
