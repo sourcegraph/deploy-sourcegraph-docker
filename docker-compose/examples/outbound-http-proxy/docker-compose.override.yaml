@@ -60,6 +60,13 @@ services:
   #   environment:
   #     <<: *proxy-env-vars
 
+  # The default `up` command makes no outbound connections
+  # `drift`, `upgrade`, and `downgrade` check releaseregistry.sourcegraph.com for a newer migrator version,
+  # and storage.googleapis.com for schema descriptions
+  migrator:
+    environment:
+      <<: *proxy-env-vars
+
   worker:
     environment:
       <<: *proxy-env-vars
