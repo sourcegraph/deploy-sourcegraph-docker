@@ -41,7 +41,7 @@ steps:
       sg release run test --workdir=. --config-from-commit
 
   - label: "(promote) Release: test"
-    if: build.branch =~ /^promote\/release-.*/
+    if: build.branch =~ /^promote\/release-.*/ && build.branch !~ /-update-main$/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
@@ -58,7 +58,7 @@ steps:
 
 
   - label: "(promote) Release: finalize"
-    if: build.branch =~ /^promote\/release-.*/
+    if: build.branch =~ /^promote\/release-.*/ && build.branch !~ /-update-main$/
     plugins:
       - ssh://git@github.com/sourcegraph/sg-buildkite-plugin.git#main: ~
     command: |
