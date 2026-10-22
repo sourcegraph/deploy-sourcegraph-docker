@@ -201,7 +201,16 @@ promoteToPublic:
           git checkout "${promote_branch}"
           git switch -c "${release_branch}"
 
-          git tag {{version}}
+          # A retried finalize finds its own tag; only a tag elsewhere is an error
+          if tagged=$(git rev-parse -q --verify "refs/tags/{{version}}^{commit}"); then
+            if [ "${tagged}" != "$(git rev-parse HEAD)" ]; then
+              echo "Tag {{version}} already exists at ${tagged}, not at ${promote_branch} ($(git rev-parse HEAD))" >&2
+              exit 1
+            fi
+            echo "Tag {{version}} already points at ${promote_branch}, not recreating it"
+          else
+            git tag {{version}}
+          fi
           git push origin ${release_branch} --tags
 
           # Web URL to the tag
