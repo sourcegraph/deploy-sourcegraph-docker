@@ -1,36 +1,15 @@
-# Sourcegraph with Docker Compose
+# Deploy Sourcegraph via Docker Compose
 
 [![sourcegraph: search](https://img.shields.io/badge/sourcegraph-search-brightgreen.svg)](https://sourcegraph.com/github.com/sourcegraph/deploy-sourcegraph-docker) [![Build status](https://badge.buildkite.com/e60f9ffcafd68882d3db6fe5e33567e3a111d391a554d50d82.svg)](https://buildkite.com/sourcegraph/deploy-sourcegraph-docker)
 
-This repository is the deployment reference for [deploying Sourcegraph with Docker Compose](https://docs.sourcegraph.com/admin/install/docker-compose).
+This repository is the deployment reference for [deploying Sourcegraph with Docker Compose](https://sourcegraph.com/docs/self-hosted/deploy/docker-compose).
 
-> 🚨 IMPORTANT: When upgrading Sourcegraph, please check [upgrading docs](https://docs.sourcegraph.com/admin/updates/docker_compose) to check if any manual migrations are necessary.
->
-> The `main` branch tracks development. Use the branch of this repository corresponding to the
-> version of Sourcegraph you wish to deploy, e.g. `git checkout 3.19`.
-
-For product and [pricing](https://about.sourcegraph.com/pricing/) information, visit
-[about.sourcegraph.com](https://about.sourcegraph.com) or [contact
-us](https://about.sourcegraph.com/contact/sales) for more information. If you're just starting out,
-we recommend running Sourcegraph as a [single Docker
-container](https://docs.sourcegraph.com/#quickstart-guide) or using [Docker
-Compose](https://docs.sourcegraph.com/admin/install/docker-compose). Migrating to Sourcegraph on
-Kubernetes is easy later.
+🚨 IMPORTANT: When upgrading Sourcegraph, please check the [upgrade docs](https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/upgrade) and [changelog](https://sourcegraph.com/changelog/self-hosted/docker-compose), then use the tag matching the Sourcegraph version, e.g. `git checkout v8.1.0`
 
 ## Is Docker Compose the right deployment type for me?
 
-Please see [our docs](https://docs.sourcegraph.com/admin/install) for comparisons of deployment types and our resource estimator.
+Please see [our docs](https://sourcegraph.com/docs/self-hosted/deploy) for comparisons of our deployment types
 
-## Contributing
+## Support
 
-We've made our deployment configurations open source to better serve our customers' needs. If there is anything we can do to make deploying Sourcegraph easier just [open an issue (in sourcegraph/sourcegraph)](https://github.com/sourcegraph/sourcegraph/issues/new?assignees=&labels=deploy-sourcegraph-docker&title=%5Bdeploy-sourcegraph-docker%5D) or a pull request and we will respond promptly!
-
-## Questions & Issues
-
-[Open an issue (in sourcegraph/sourcegraph)](https://github.com/sourcegraph/sourcegraph/issues/new?assignees=&labels=deploy-sourcegraph&template=deploy-sourcegraph.md&title=%5Bdeploy-sourcegraph%5D) or contact us (support@sourcegraph.com), we are happy to help!
-
-### Contributing 
-
-#### Releasing 
-
-Please see the [documentation](https://go/releases).
+Please contact us at support@sourcegraph.com
