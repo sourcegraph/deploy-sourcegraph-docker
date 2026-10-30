@@ -32,7 +32,7 @@ services:
 
     ################################################################################
     # Multi-version upgrades
-    # See https://sourcegraph.com/docs/admin/deploy/docker-compose/upgrade#multi-version-upgrades
+    # See https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/upgrade#multi-version-upgrades
     # command: ["upgrade", "--from=v6.4.0", "--to=v6.9.1277"]
 
     # Do not skip the drift check, or use other args, without instruction from Sourcegraph Customer Support Engineering
