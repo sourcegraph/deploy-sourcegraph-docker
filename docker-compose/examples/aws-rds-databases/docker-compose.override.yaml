@@ -1,5 +1,5 @@
 # Docker Compose override file for customers using AWS IAM authentication to databases on RDS
-# See https://sourcegraph.com/docs/admin/external_services/postgres#usage-with-aws-rds-iam-auth
+# See https://sourcegraph.com/docs/self-hosted/external-services/postgres#usage-with-aws-rds-iam-auth
 
 
 
@@ -79,7 +79,7 @@ services:
     # command: ["add-log", "-db=codeinsights", "-version=1675347548"]
 
     # If you do fall a few versions behind, here's the command to run a multi-version upgrade
-    # See https://sourcegraph.com/docs/admin/deploy/docker-compose/upgrade#multi-version-upgrades
+    # See https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/upgrade#multi-version-upgrades
     # command: ["upgrade", "--from=v6.4.0", "--to=v6.9.1277"]
 
     # Do not skip the drift check, or use other args, without instruction from Sourcegraph Customer Support Engineering
