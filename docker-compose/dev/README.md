@@ -8,7 +8,7 @@ This folder includes a helper script, [run.sh](./run.sh), that will run the `doc
 Example usage:
 
 ```sh
-./run.sh up -d 
+./run.sh up -d
 ```
 
 The above will deploy Sourcegraph on [http://localhost:8080](http://localhost:8080) with the indicated overlays.
