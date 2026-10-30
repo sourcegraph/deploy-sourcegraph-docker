@@ -11,7 +11,7 @@ exporters:
   # Add your exporter(s) configuration here. For each exporter, make sure it is enabled
   # in the service configuration below.
   # Refer to our OpenTelemetry docs for information on how to configure different exporters:
-  # https://docs.sourcegraph.com/admin/observability/opentelemetry
+  # https://sourcegraph.com/docs/self-hosted/observability/opentelemetry
 
 extensions:
   health_check:
