@@ -1,3 +1,3 @@
 # Security Policy
 
-Our security policy is documented at <https://sourcegraph.com/security>.
+Please find our security policy at <https://sourcegraph.com/security>
