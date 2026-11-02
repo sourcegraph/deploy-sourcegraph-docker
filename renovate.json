@@ -1,34 +1,18 @@
 {
-  "$schema": "http://json.schemastore.org/renovate",
-  "extends": ["config:base"],
-  "prHourlyLimit": 5,
-  "schedule": ["before 3am on Monday"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>sourcegraph/renovate-config", "schedule:weekly", "group:allNonMajor"],
   "packageRules": [
     {
-      "packagePatterns": ["^index.docker.io/sourcegraph/"],
-      "excludePackageNames": ["index.docker.io/sourcegraph/grafana", "index.docker.io/sourcegraph/prometheus"],
-      "groupName": "Sourcegraph Docker images",
-      "versionScheme": "semver",
-      "ignoreUnstable": false,
-      "semanticCommits": false,
-      "automerge": true
+      "description": "Sourcegraph image tags are set by the release process (release.yaml), not Renovate",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["index.docker.io/sourcegraph/**"],
+      "enabled": false
     },
     {
-      "packageNames": ["index.docker.io/sourcegraph/grafana", "index.docker.io/sourcegraph/prometheus"],
-      "groupName": "Sourcegraph Prometheus / Grafana Docker images",
-      "allowedVersions": "<10.0",
-      "versionScheme": "semver",
-      "ignoreUnstable": false,
-      "semanticCommits": false,
-      "automerge": true
-    },
-    {
-      "groupName": "Sourcegraph Docker images list",
-      "packagePatterns": ["github.com/sourcegraph/sourcegraph/enterprise/dev/ci/images"],
-      "allowedVersions": "~=0.0.0",
-      "automerge": true
+      "description": "The shared preset disables Go; this repo's Go is CI tooling that should stay current",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["require"],
+      "enabled": true
     }
-  ],
-  "masterIssue": true,
-  "pinDigests": true
+  ]
 }
