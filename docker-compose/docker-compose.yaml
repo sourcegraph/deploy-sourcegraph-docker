@@ -142,8 +142,6 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'PROMETHEUS_URL=http://prometheus:9090'
-      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
-      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - |
         SRC_PROF_SERVICES=
           [
@@ -195,8 +193,6 @@ services:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'GRAFANA_SERVER_URL=http://grafana:3370'
       - 'PROMETHEUS_URL=http://prometheus:9090'
-      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
-      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
@@ -330,8 +326,6 @@ services:
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
-      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:6060/ready' -O /dev/null || exit 1"
@@ -361,8 +355,6 @@ services:
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
       - 'SEARCHER_URL=http://searcher-0:3181'
       - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
-      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
-      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
     volumes:
       - 'worker:/mnt/cache'
     networks:
@@ -383,8 +375,6 @@ services:
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
-      - 'PRECISE_CODE_INTEL_UPLOAD_BACKEND=blobstore'
-      - 'PRECISE_CODE_INTEL_UPLOAD_AWS_ENDPOINT=http://blobstore:9000'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
       test: "wget -q 'http://127.0.0.1:6060/ready' -O /dev/null || exit 1"
