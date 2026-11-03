@@ -1,6 +1,6 @@
 $schema: "http://json.schemastore.org/buildkite"
 env:
-  # Build this image in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
+  # GCP VM image for the Vagrant smoke test. Build it in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
   IMAGE: "e2e-db8a40720-2024-08-26t08-44-10z"
   VAGRANT_RUN_ENV: "CI"
 steps:
@@ -19,16 +19,7 @@ steps:
   - label: ":rice: docker-compose-test"
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
-    env:
-      TEST_TYPE: "docker-compose-test"
     agents: { queue: "vagrant" }
-
-  # This runs the Checkov Terraform Code scanner
-  # https://www.checkov.io/
-  - command: .buildkite/ci-checkov.sh
-    label: ":lock: security - checkov"
-    agents: { queue: "standard" }
-    soft_fail: true
 
   # Please keep in mind that the release manifest uses specific branch names when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing

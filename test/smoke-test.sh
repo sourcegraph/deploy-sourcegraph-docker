@@ -11,13 +11,11 @@ configure_docker() {
   gcloud auth configure-docker us-central1-docker.pkg.dev,us-docker.pkg.dev
 }
 
+expect_containers="25"
+
 deploy_sourcegraph() {
 	cd $(dirname "${BASH_SOURCE[0]}")/..
-	#Deploy sourcegraph
-	if [[ "$TEST_TYPE" == "docker-compose-test" ]]; then
-		docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
-		expect_containers="25"
-	fi
+	docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
 
 	echo "Giving containers 90s to start..."
 	sleep 90
