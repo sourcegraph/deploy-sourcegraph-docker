@@ -33,7 +33,7 @@ services:
       - CODEINTEL_PGSSLMODE=disable
 
       # If you are not running code insights, please see:
-      # https://docs.sourcegraph.com/admin/install/docker-compose/operations#database-migrations for more information
+      # https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/operations#database-migrations for more information
       # for information on how to configure Sourcegraph migrations
       - CODEINSIGHTS_PGHOST=codeinsights-db
       - CODEINSIGHTS_PGPORT=5432
