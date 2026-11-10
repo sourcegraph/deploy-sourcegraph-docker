@@ -4,7 +4,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euo pipefail
 
 box="$1"
-exit_code=0
 
 pushd "test"
 
@@ -29,15 +28,20 @@ export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
 export DOCKER_USERNAME=sourcegraph
 export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
 
-echo --- ":vagrant: starting box $box"
-vagrant up "$box" --provider=google || exit_code=$?
+for attempt in 1 2; do
+	echo --- ":vagrant: starting box $box, attempt $attempt of 2"
+	exit_code=0
+	vagrant up "$box" --provider=google || exit_code=$?
+	[ "$exit_code" = 0 ] && break
 
-if [ "$exit_code" != 0 ]; then
-	# A VM which stopped answering SSH did not fail the test, and has no logs to copy
-	if ! vagrant ssh "$box" --no-tty --command true -- -o ConnectTimeout=15; then
-		echo "Lost the SSH connection to $box, so the test has no result. pipeline.yaml retries exit status 75 on a new VM"
-		exit 75
+	# A VM which stopped answering SSH did not fail the test, and has no logs to copy,
+	# so run the test again on a new VM
+	if vagrant ssh "$box" --no-tty --command true -- -o ConnectTimeout=15; then
+		vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
+		break
 	fi
-	vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
-	exit $exit_code
-fi
+	echo "Lost the SSH connection to $box"
+	vagrant destroy -f "$box"
+done
+
+exit "$exit_code"

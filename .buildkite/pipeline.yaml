@@ -16,11 +16,6 @@ steps:
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     agents: { queue: "vagrant" }
-    # vagrant-run.sh exits 75 when it loses its SSH connection to the test VM
-    retry:
-      automatic:
-        - exit_status: 75
-          limit: 1
 
   # Please keep in mind that the release manifest uses specific branch names when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
