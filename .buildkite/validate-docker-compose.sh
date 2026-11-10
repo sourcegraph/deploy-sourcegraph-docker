@@ -12,6 +12,8 @@ docker compose --file docker-compose.yaml --file jaeger/docker-compose.yaml conf
 docker compose --file docker-compose.yaml --file jaeger/docker-compose.yaml --file dev/docker-compose.yaml config --quiet
 docker compose --file docker-compose.yaml --file executors/executor.docker-compose.yaml config --quiet
 docker compose --file executors/executor.docker-compose.yaml config --quiet
+# The combination the smoke test deploys
+docker compose --file docker-compose.yaml --file jaeger/docker-compose.yaml --file executors/executor.docker-compose.yaml --file ../test/docker-compose.override.yaml config --quiet
 for override in examples/*/docker-compose.override.yaml; do
 	docker compose --file docker-compose.yaml --file "$override" config --quiet
 done
