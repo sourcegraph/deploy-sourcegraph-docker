@@ -20,7 +20,7 @@ steps:
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     agents: { queue: "vagrant" }
-    # vagrant-run.sh deletes VMs older than an hour, so no job may run that long
+    # vagrant-run.sh deletes VMs and disks older than an hour, so no job may run that long
     timeout_in_minutes: 30
     if: build.branch == "main"
 
