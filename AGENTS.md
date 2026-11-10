@@ -5,19 +5,24 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 ## Layout
 
 - `docker-compose/docker-compose.yaml`: the base file every customer runs. It mounts the service configuration in `caddy/`, `pgsql/`, `codeintel-db/`, `codeinsights-db/`, `grafana/`, `prometheus/`, and `otel-collector/`.
-- `docker-compose/db-only-migrate.docker-compose.yaml`: a copy of the `pgsql` and `codeintel-db` services for backup and restore. Make every change to those two services in both files.
+- `docker-compose/db-only-migrate.docker-compose.yaml`: starts only the `pgsql` and `codeintel-db` services, for backup and restore. It `extends` both from the base file, so change them there.
 - `docker-compose/examples/`: example override files. `docker-compose/executors/` and `docker-compose/jaeger/` are optional extra compose files. `docker-compose/dev/` is an overlay for developing this repository.
-- `test/` and `.buildkite/`: the smoke test and the CI pipeline.
+- `test/` and `.buildkite/`: the smoke tests and the CI pipeline.
 - `release.yaml`: the release steps that `sg release` runs.
 
 ## Checks
 
-- `.tool-versions` pins Node, Yarn, and the GitHub CLI; CI installs them with mise.
-- Validate the base file with `docker compose -f docker-compose/docker-compose.yaml config -q`. CI runs the same check in `.buildkite/validate-docker-compose.sh` with the standalone `docker-compose` binary, so the base file must stay valid for that binary. CI validates no other compose file.
+- `.tool-versions` pins Node, Yarn, the GitHub CLI, and shellcheck; CI installs them with mise.
+- `.buildkite/validate-docker-compose.sh` runs `docker compose config` on every compose file, in each combination the docs say to run. Add a line to it for every new compose file or combination.
 - Check formatting with `yarn && yarn run prettier-check`; `yarn run prettier` rewrites the files. Prettier covers only JavaScript and JSON files. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
-- The `docker-compose-test` step in `.buildkite/pipeline.yaml` starts the base file on a GCP VM and runs `test/smoke-test.sh`. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run `.buildkite/vagrant-run.sh docker-test` yourself only when a person asks.
-- `test/smoke-test.sh` compares the number of running containers with `expect_containers`. Update that number in the same pull request that adds or removes a service.
-- CI does not run `test/executor-smoke-test.sh`. Run it against a running deployment when you change `docker-compose/executors/`.
+- CI runs shellcheck on every shell script: `git ls-files -z '*.sh' .buildkite/hooks | xargs -0 shellcheck`.
+- The `docker-compose-test` step runs `.buildkite/smoke-test-vm.sh`, which boots a GCP VM from the image named in `IMAGE` in `.buildkite/pipeline.yaml`, runs the two tests below on it, and deletes it. The step reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run the script yourself only when a person asks. Branches which only change Markdown files skip the step.
+  - `test/smoke-test.sh` starts the base file, `jaeger/`, `executors/`, and `test/docker-compose.override.yaml`, then checks that every service has a running container, no container restarted, the health checks pass, and the frontend and Jaeger respond. It counts the services itself, so a new service in those files needs no change to the test. Add a new optional compose file to its `compose_files`.
+  - `test/executor-smoke-test.sh` checks that the executor registers with the frontend.
+- If the VM stops answering SSH, the script runs the tests once more on a new VM. A test failure is not retried, and the step uploads every container's logs as artifacts.
+- GCP deletes each VM an hour after it starts, and the script deletes the VMs and disks which older jobs left behind. Keep the step's `timeout_in_minutes` under an hour.
+- The VM image is built from `gcp/images/e2e` in sourcegraph/infrastructure. The release branches name their image too, so leave old images in place.
+- The CI agents' queue is still named `vagrant`. Release branches up to `8.1.x` run the smoke test with Vagrant (`.buildkite/vagrant-run.sh`), so a CI change on `main` does not backport cleanly.
 
 ## Conventions
 
