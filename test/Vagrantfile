@@ -57,17 +57,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         o.ssh.private_key_path = ssh_key_path
       end
 
-      srv.vm.provision 'shell', inline: <<-SHELL
-        #!/usr/bin/env bash
-        cat << EOF >> /root/.profile
-export GIT_BRANCH=#{ENV['BUILDKITE_BRANCH']}
-export DOCKER_USERNAME=#{ENV['DOCKER_USERNAME']}
-export DOCKER_PASSWORD=#{ENV['DOCKER_PASSWORD']}
-EOF
-        SHELL
-
       server['shell_commands'].each do |sh|
-        srv.vm.provision 'shell', inline: sh
+        srv.vm.provision 'shell', inline: sh, env: ENV.slice('DOCKER_USERNAME', 'DOCKER_PASSWORD')
       end
     end
   end

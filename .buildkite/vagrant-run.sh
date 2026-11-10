@@ -5,7 +5,7 @@ set -euo pipefail
 
 box="$1"
 exit_code=0
-KEY_PATH="/tmp/e2e-builder.json"
+KEY_PATH="$(mktemp)"
 
 pushd "test"
 
@@ -28,7 +28,10 @@ request_deletion() (
 
 # Fall back to a blocking destroy, so a failed deletion request cannot leak a VM
 cleanup() {
-	request_deletion "name=${VAGRANT_INSTANCE_NAME}" || vagrant destroy -f "$box"
+	deletion_status=0
+	request_deletion "name=${VAGRANT_INSTANCE_NAME}" || vagrant destroy -f "$box" || deletion_status=$?
+	rm -f "$KEY_PATH"
+	return "$deletion_status"
 }
 
 echo --- ":vagrant: installing plugins"
@@ -39,12 +42,10 @@ vagrant --version
 trap cleanup EXIT
 
 echo --- ":lock: builder account key"
-if [ ! -f ${KEY_PATH} ]; then
-  gcloud secrets versions access latest --secret=e2e-builder-sa-key --quiet --project=sourcegraph-ci > "${KEY_PATH}"
-fi
+gcloud secrets versions access latest --secret=e2e-builder-sa-key --quiet --project=sourcegraph-ci > "${KEY_PATH}"
 export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
-export DOCKER_USERNAME=sourcegraph
-export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
+DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
+export DOCKER_USERNAME=sourcegraph DOCKER_PASSWORD
 
 echo --- ":wastebasket: deleting VMs and disks left behind by jobs which died before their cleanup"
 # The smoke test step times out after 30 minutes, so a VM or disk older than an hour has no job
