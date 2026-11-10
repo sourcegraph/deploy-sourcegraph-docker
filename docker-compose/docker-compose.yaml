@@ -16,6 +16,8 @@ services:
     image: 'index.docker.io/sourcegraph/migrator:8.1.2687@sha256:c5bf0f81f3b07f7769f694525bef0a2d547a554f99113115a33b0925a16ef5ea'
     cpus: 0.5
     mem_limit: '500m'
+    security_opt:
+      - no-new-privileges:true
     command: ['up']
     environment:
       - PGHOST=pgsql
@@ -72,6 +74,8 @@ services:
     image: 'index.docker.io/sourcegraph/caddy:8.1.2687@sha256:d488fa30cc07318c5651dda193994c46d7eea5ab11be74467ee0bec3135b26e9'
     cpus: 4
     mem_limit: '4g'
+    security_opt:
+      - no-new-privileges:true
     environment:
       - 'XDG_DATA_HOME=/caddy-storage/data'
       - 'XDG_CONFIG_HOME=/caddy-storage/config'
@@ -127,6 +131,8 @@ services:
     image: 'index.docker.io/sourcegraph/frontend:8.1.2687@sha256:192083e614e002fc18d3a80372c6b8d706d8a389086566510ba6fbced651a2eb'
     cpus: 4
     mem_limit: '8g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - DEPLOY_TYPE=docker-compose
@@ -179,6 +185,8 @@ services:
     image: 'index.docker.io/sourcegraph/frontend:8.1.2687@sha256:192083e614e002fc18d3a80372c6b8d706d8a389086566510ba6fbced651a2eb'
     cpus: 4
     mem_limit: '8g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - DEPLOY_TYPE=docker-compose
@@ -224,6 +232,8 @@ services:
     image: 'index.docker.io/sourcegraph/gitserver:8.1.2687@sha256:03c984acc6e69ed015ecf01402cf22f7b8b90582a0791a48adf695df8b97bd39'
     cpus: 4
     mem_limit: '8g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -248,6 +258,8 @@ services:
     image: 'index.docker.io/sourcegraph/search-indexer:8.1.2687@sha256:1a53fc78048963cf2badc8e8b43fc606d62a2323d36bd631eb01e33910dd22cd'
     cpus: 8
     mem_limit: '16g'
+    security_opt:
+      - no-new-privileges:true
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
@@ -271,6 +283,8 @@ services:
     image: 'index.docker.io/sourcegraph/indexed-searcher:8.1.2687@sha256:4f9b1d38da5f6168ee91ed5e2d9c42f851148b12e1a71ee5040f566b6d663837'
     cpus: 8
     mem_limit: '50g'
+    security_opt:
+      - no-new-privileges:true
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'OPENTELEMETRY_DISABLED=false'
@@ -298,6 +312,8 @@ services:
     image: 'index.docker.io/sourcegraph/searcher:8.1.2687@sha256:acfbc9c127ebdbd4053ac835bcf90093f9d8bf4834a6275a549384db4eacd66f'
     cpus: 2
     mem_limit: '2g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -323,6 +339,8 @@ services:
     image: 'index.docker.io/sourcegraph/precise-code-intel-worker:8.1.2687@sha256:560ef1edc769959af11f24d220b0dbd5c5c798be1d635e6e4fe06ff560b7835c'
     cpus: 2
     mem_limit: '4g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -348,6 +366,8 @@ services:
     image: 'index.docker.io/sourcegraph/worker:8.1.2687@sha256:5aa40853fc6a8223c373f291ce940f7258d2e882e8ffca7e31af04ec2f2f7922'
     cpus: 4
     mem_limit: '4g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -372,6 +392,8 @@ services:
     image: 'index.docker.io/sourcegraph/syntactic-code-intel-worker:8.1.2687@sha256:702609626636fd06c204a8a7e18941eb13df096784cea732d1c036069866cc40'
     cpus: 2
     mem_limit: '4g'
+    security_opt:
+      - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -397,6 +419,8 @@ services:
     image: 'index.docker.io/sourcegraph/syntax-highlighter:8.1.2687@sha256:9bbe53c18c2d864358ba95e4c89d000df60759e5d9fc0814b30d576efde55d95'
     cpus: 4
     mem_limit: '6g'
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
       interval: 5s
@@ -418,6 +442,8 @@ services:
     image: 'index.docker.io/sourcegraph/prometheus:8.1.2687@sha256:6e52e5c1b47f21b31384a52155553be4d625fa410e07ab45a8f6faed7172a907'
     cpus: 4
     mem_limit: '8g'
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - 'prometheus-v2:/prometheus'
       - '../prometheus:/sg_prometheus_add_ons'
@@ -445,6 +471,8 @@ services:
     image: 'index.docker.io/sourcegraph/grafana:8.1.2687@sha256:c24d2f1647dc59e499cface18fba62aff1bc0de152ea95036c8d876d35f5da74'
     cpus: 1
     mem_limit: '1g'
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
@@ -464,6 +492,8 @@ services:
     image: 'index.docker.io/sourcegraph/cadvisor:8.1.2687@sha256:a3fb6767d9640fe79af99540bd826fe631913696f9ade91ff750a34268b24921'
     cpus: 1
     mem_limit: '1g'
+    security_opt:
+      - no-new-privileges:true
     # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
     # `cadvisor` requires root privileges in order to display provisioning metrics.
     # These metrics provide critical information to help you scale the Sourcegraph deployment.
@@ -497,6 +527,8 @@ services:
     image: 'index.docker.io/sourcegraph/node-exporter:8.1.2687@sha256:acddf959e6545a8b1952aa4272a3c4e2bea8090038c59c9aa9bb03e68419afeb'
     cpus: .5
     mem_limit: '1g'
+    security_opt:
+      - no-new-privileges:true
     pid: 'host'
     volumes:
       - /proc:/host/proc:ro
@@ -526,6 +558,8 @@ services:
     image: 'index.docker.io/sourcegraph/postgresql-16:8.1.2687@sha256:cc810cd21f1df7776aa270f49bdd50a4ec3375623ffae1f0238c20dec054bf03'
     cpus: 4
     mem_limit: '4g'
+    security_opt:
+      - no-new-privileges:true
     shm_size: '1g'
     healthcheck:
       test: '/liveness.sh'
@@ -554,6 +588,8 @@ services:
     image: 'index.docker.io/sourcegraph/postgres_exporter:8.1.2687@sha256:bd55116d35a5cfad9da760ebdf467166deaac550be44b915e407beace9b0ef3d'
     cpus: 0.1
     mem_limit: '50m'
+    security_opt:
+      - no-new-privileges:true
     networks:
       - sourcegraph
     restart: always
@@ -573,6 +609,8 @@ services:
     image: 'index.docker.io/sourcegraph/postgresql-16:8.1.2687@sha256:cc810cd21f1df7776aa270f49bdd50a4ec3375623ffae1f0238c20dec054bf03'
     cpus: 4
     mem_limit: '4g'
+    security_opt:
+      - no-new-privileges:true
     shm_size: '1g'
     healthcheck:
       test: '/liveness.sh'
@@ -601,6 +639,8 @@ services:
     image: 'index.docker.io/sourcegraph/postgres_exporter:8.1.2687@sha256:bd55116d35a5cfad9da760ebdf467166deaac550be44b915e407beace9b0ef3d'
     cpus: 0.1
     mem_limit: '50m'
+    security_opt:
+      - no-new-privileges:true
     networks:
       - sourcegraph
     restart: always
@@ -620,6 +660,8 @@ services:
     image: 'index.docker.io/sourcegraph/postgresql-16-codeinsights:8.1.2687@sha256:b7e2df5a6a63e323987eeaca23fe9f05278d4c97f96f1994b89dac3c60dedcd3'
     cpus: 4
     mem_limit: '2g'
+    security_opt:
+      - no-new-privileges:true
     shm_size: '1g'
     environment:
       - POSTGRES_PASSWORD=password
@@ -653,6 +695,8 @@ services:
     image: 'index.docker.io/sourcegraph/postgres_exporter:8.1.2687@sha256:bd55116d35a5cfad9da760ebdf467166deaac550be44b915e407beace9b0ef3d'
     cpus: 0.1
     mem_limit: '50m'
+    security_opt:
+      - no-new-privileges:true
     networks:
       - sourcegraph
     restart: always
@@ -672,6 +716,8 @@ services:
     image: 'index.docker.io/sourcegraph/blobstore:8.1.2687@sha256:7407a048bdfbd6e635874963b9f075f9e514d5b10ddd26cda76597a0bcd59ab2'
     cpus: 1
     mem_limit: '1g'
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/']
       interval: 10s
@@ -695,6 +741,8 @@ services:
     image: 'index.docker.io/sourcegraph/redis-cache:8.1.2687@sha256:41035baa91623dff4275a5d496eb916c46bee260301d9991bbd1914c09c217f8'
     cpus: 1
     mem_limit: '7g'
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - 'redis-cache:/redis-data'
     networks:
@@ -711,6 +759,8 @@ services:
     image: 'index.docker.io/sourcegraph/redis-store:8.1.2687@sha256:b733fceadfa1863671ab11704e354573241217c4aa604aba64533c7bae101127'
     cpus: 1
     mem_limit: '7g'
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - 'redis-store:/redis-data'
     networks:
@@ -726,6 +776,8 @@ services:
     image: 'index.docker.io/sourcegraph/opentelemetry-collector:8.1.2687@sha256:beb7d1bb58a7fda06952975f1f7c9351bffded72de358db50e810e3c13260d40'
     cpus: 1
     mem_limit: '1g'
+    security_opt:
+      - no-new-privileges:true
     networks:
       - sourcegraph
     restart: always
