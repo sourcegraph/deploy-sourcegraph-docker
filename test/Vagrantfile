@@ -36,8 +36,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       srv.vm.provider :google do |g, o|
         g.machine_type = server['machine_type']
-        # The default, pd-standard, is slow to boot from and to pull images onto
-        g.disk_type = 'pd-balanced'
         g.image = ENV['IMAGE']
         g.image_project_id = 'sourcegraph-ci'
         g.google_project_id = project_id
