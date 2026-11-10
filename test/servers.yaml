@@ -11,7 +11,7 @@
   service_account: e2e-builder@sourcegraph-ci.iam.gserviceaccount.com
   shell_commands:
    - "/deploy-sourcegraph-docker/test/smoke-test.sh"
-   # The VM image has no jq
-   - "apt-get update --quiet && apt-get install --quiet --yes jq"
+   # The VM image has no jq. Skip /etc/apt/sources.list.d: the image lacks the key for its Chrome repository, so a full update fails
+   - "apt-get update --quiet --option Dir::Etc::sourceparts=- && apt-get install --quiet --yes jq"
    - "/deploy-sourcegraph-docker/test/executor-smoke-test.sh"
 
