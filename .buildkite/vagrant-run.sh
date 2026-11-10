@@ -33,6 +33,11 @@ echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?
 
 if [ "$exit_code" != 0 ]; then
+	# A VM which stopped answering SSH did not fail the test, and has no logs to copy
+	if ! vagrant ssh "$box" --no-tty --command true -- -o ConnectTimeout=15; then
+		echo "Lost the SSH connection to $box, so the test has no result. pipeline.yaml retries exit status 75 on a new VM"
+		exit 75
+	fi
 	vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
 	exit $exit_code
 fi
