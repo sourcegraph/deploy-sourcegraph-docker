@@ -17,6 +17,7 @@ services:
     mem_limit: '500m'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     command: ['up']
     environment:
       - PGHOST=pgsql
@@ -75,6 +76,7 @@ services:
     mem_limit: '4g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     environment:
       - 'XDG_DATA_HOME=/caddy-storage/data'
       - 'XDG_CONFIG_HOME=/caddy-storage/config'
@@ -132,6 +134,7 @@ services:
     mem_limit: '8g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - DEPLOY_TYPE=docker-compose
@@ -166,6 +169,9 @@ services:
       start_period: 300s
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
+    tmpfs:
+      - '/home/sourcegraph'
+      - '/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -186,6 +192,7 @@ services:
     mem_limit: '8g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - DEPLOY_TYPE=docker-compose
@@ -203,6 +210,9 @@ services:
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
+    tmpfs:
+      - '/home/sourcegraph'
+      - '/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -233,12 +243,15 @@ services:
     mem_limit: '8g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     volumes:
       - 'gitserver-0:/data/repos'
+    tmpfs:
+      - '/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -259,6 +272,7 @@ services:
     mem_limit: '16g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
@@ -284,6 +298,7 @@ services:
     mem_limit: '50g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     environment:
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'OPENTELEMETRY_DISABLED=false'
@@ -313,6 +328,7 @@ services:
     mem_limit: '2g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -324,6 +340,8 @@ services:
       retries: 3
     volumes:
       - 'searcher-0:/mnt/cache'
+    tmpfs:
+      - '/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -340,6 +358,7 @@ services:
     mem_limit: '4g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -350,6 +369,9 @@ services:
       timeout: 5s
       retries: 3
       start_period: 60s
+    volumes:
+      # On disk, not tmpfs: a tmpfs counts against mem_limit, and uploads can be several GB
+      - 'precise-code-intel-worker-tmp:/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -367,6 +389,7 @@ services:
     mem_limit: '4g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -393,6 +416,7 @@ services:
     mem_limit: '4g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     env_file: sourcegraph-uploads.env
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
@@ -403,6 +427,9 @@ services:
       timeout: 15s
       retries: 3
       start_period: 60s
+    volumes:
+      # On disk, not tmpfs: a tmpfs counts against mem_limit, and repository archives can be several GB
+      - 'syntactic-code-intel-worker-tmp:/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -420,6 +447,7 @@ services:
     mem_limit: '6g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
       interval: 5s
@@ -473,6 +501,7 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     volumes:
       - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
@@ -494,6 +523,7 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
     # `cadvisor` requires root privileges in order to display provisioning metrics.
     # These metrics provide critical information to help you scale the Sourcegraph deployment.
@@ -529,6 +559,7 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     pid: 'host'
     volumes:
       - /proc:/host/proc:ro
@@ -560,6 +591,7 @@ services:
     mem_limit: '4g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     shm_size: '1g'
     healthcheck:
       test: '/liveness.sh'
@@ -570,6 +602,8 @@ services:
     volumes:
       - 'pgsql:/data/'
       - '../pgsql/conf:/conf/'
+    tmpfs:
+      - '/var/run/postgresql'
     networks:
       - sourcegraph
     restart: always
@@ -590,6 +624,7 @@ services:
     mem_limit: '50m'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     networks:
       - sourcegraph
     restart: always
@@ -611,6 +646,7 @@ services:
     mem_limit: '4g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     shm_size: '1g'
     healthcheck:
       test: '/liveness.sh'
@@ -621,6 +657,8 @@ services:
     volumes:
       - 'codeintel-db:/data/'
       - '../codeintel-db/conf:/conf/'
+    tmpfs:
+      - '/var/run/postgresql'
     networks:
       - sourcegraph
     restart: always
@@ -641,6 +679,7 @@ services:
     mem_limit: '50m'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     networks:
       - sourcegraph
     restart: always
@@ -662,6 +701,7 @@ services:
     mem_limit: '2g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     shm_size: '1g'
     environment:
       - POSTGRES_PASSWORD=password
@@ -677,6 +717,8 @@ services:
     volumes:
       - 'codeinsights-db:/var/lib/postgresql/data/'
       - '../codeinsights-db/conf:/conf/'
+    tmpfs:
+      - '/var/run/postgresql'
     networks:
       - sourcegraph
     restart: always
@@ -697,6 +739,7 @@ services:
     mem_limit: '50m'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     networks:
       - sourcegraph
     restart: always
@@ -718,6 +761,7 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/']
       interval: 10s
@@ -726,6 +770,8 @@ services:
       start_period: 15s
     volumes:
       - 'blobstore:/data'
+    tmpfs:
+      - '/tmp'
     networks:
       - sourcegraph
     restart: always
@@ -743,6 +789,7 @@ services:
     mem_limit: '7g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     volumes:
       - 'redis-cache:/redis-data'
     networks:
@@ -761,6 +808,7 @@ services:
     mem_limit: '7g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     volumes:
       - 'redis-store:/redis-data'
     networks:
@@ -778,6 +826,7 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     networks:
       - sourcegraph
     restart: always
@@ -794,6 +843,7 @@ volumes:
   codeintel-db:
   codeinsights-db:
   blobstore:
+  precise-code-intel-worker-tmp:
   prometheus-v2:
   redis-cache:
   redis-store:
@@ -801,6 +851,7 @@ volumes:
   searcher-0:
   sourcegraph-frontend-0:
   sourcegraph-frontend-internal-0:
+  syntactic-code-intel-worker-tmp:
   zoekt-0-shared:
 networks:
   sourcegraph:
