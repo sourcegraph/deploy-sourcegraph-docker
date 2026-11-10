@@ -11,12 +11,20 @@ configure_docker() {
   gcloud auth configure-docker us-central1-docker.pkg.dev,us-docker.pkg.dev
 }
 
+# Every service a customer can deploy, started and checked by the same commands
+compose_files=(
+	--file docker-compose/docker-compose.yaml
+	--file docker-compose/jaeger/docker-compose.yaml
+	--file docker-compose/executors/executor.docker-compose.yaml
+	--file test/docker-compose.override.yaml
+)
+
 deploy_sourcegraph() {
 	cd "$(dirname "${BASH_SOURCE[0]}")/.."
 	docker-compose version
 	# `up` pulls images one at a time, `pull` pulls them in parallel
-	docker-compose --file docker-compose/docker-compose.yaml pull --quiet
-	docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
+	docker-compose "${compose_files[@]}" pull --quiet
+	docker-compose "${compose_files[@]}" up -d -t 600
 }
 
 wait_until_healthy() {
@@ -36,7 +44,7 @@ wait_until_healthy() {
 test_count() {
 	echo "TEST: Every service has a running container"
 	# migrator exits when it is done, every other service keeps running
-	expect_containers=$(docker-compose --file docker-compose/docker-compose.yaml config --services | grep --count --invert-match '^migrator$')
+	expect_containers=$(docker-compose "${compose_files[@]}" config --services | grep --count --invert-match '^migrator$')
 	containers_count=$(docker ps --filter status=running --format '{{.Names}}' | wc -l)
 	if [[ "$containers_count" -ne "$expect_containers" ]]; then
 		docker ps --all --format '{{.Names}}: {{.Status}}'
@@ -57,6 +65,9 @@ test_containers() {
 	echo "TEST: Checking frontend is accessible"
 	curl -f http://localhost:80
 	curl -f http://localhost:80/healthz
+
+	echo "TEST: Checking Jaeger is accessible"
+	curl --fail --silent --show-error --location --output /dev/null http://localhost:16686/-/debug/jaeger/
 
 	echo "ALL TESTS PASSED"
 }
