@@ -3,7 +3,7 @@ set -euxfo pipefail
 
 configure_docker() {
   set +x
-  if [ -n "${DOCKER_USERNAME}" ] && [ -n "${DOCKER_PASSWORD}" ]; then
+  if [ -n "${DOCKER_USERNAME:-}" ] && [ -n "${DOCKER_PASSWORD:-}" ]; then
     docker login -u "${DOCKER_USERNAME}" --password-stdin <<<"$DOCKER_PASSWORD"
   fi
   set -x
@@ -11,10 +11,8 @@ configure_docker() {
   gcloud auth configure-docker us-central1-docker.pkg.dev,us-docker.pkg.dev
 }
 
-expect_containers="25"
-
 deploy_sourcegraph() {
-	cd $(dirname "${BASH_SOURCE[0]}")/..
+	cd "$(dirname "${BASH_SOURCE[0]}")/.."
 	docker-compose version
 	# `up` pulls images one at a time, `pull` pulls them in parallel
 	docker-compose --file docker-compose/docker-compose.yaml pull --quiet
@@ -36,30 +34,19 @@ wait_until_healthy() {
 }
 
 test_count() {
-	echo "TEST: Number of expected containers created"
-	containers_count=$(docker ps --format '{{.Names}}' | wc -l)
+	echo "TEST: Every service has a running container"
+	# migrator exits when it is done, every other service keeps running
+	expect_containers=$(docker-compose --file docker-compose/docker-compose.yaml config --services | grep --count --invert-match '^migrator$')
+	containers_count=$(docker ps --filter status=running --format '{{.Names}}' | wc -l)
 	if [[ "$containers_count" -ne "$expect_containers" ]]; then
-		docker ps --format '{{.Names}}'
+		docker ps --all --format '{{.Names}}: {{.Status}}'
 		echo
-		echo "TEST FAILURE: expected $expect_containers containers, found $containers_count"
+		echo "TEST FAILURE: expected $expect_containers running containers, found $containers_count"
 		exit 1
 	fi
 }
 
 test_containers() {
-	echo "TEST: Checking every 10s that containers are running for 5 minutes..."
-	for i in {0..1}; do
-		containers=$(docker ps --format '{{.Names}}' | xargs -I{} -n1 sh -c "printf '{}: ' && docker inspect --format '{{.State.Status}}' {}")
-		containers_running=$(echo "$containers" | grep -c "running")
-		if [[ "$containers_running" -ne "$expect_containers" ]]; then
-			containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
-			echo "TEST FAILURE: expected $expect_containers containers running, found $containers_running. The following containers are failing: $containers_failing"
-			exit 1
-		fi
-		echo "Containers running OK.. waiting 10s"
-		sleep 1
-	done
-
 	echo "TEST: No container has restarted"
 	restarted_containers=$(docker ps --quiet | xargs docker inspect --format '{{.Name}} restarted {{.RestartCount}} times' | grep -v ' restarted 0 times' || true)
 	if [[ -n "$restarted_containers" ]]; then
