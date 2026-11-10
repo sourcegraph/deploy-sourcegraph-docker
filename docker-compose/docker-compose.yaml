@@ -170,8 +170,8 @@ services:
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
     tmpfs:
-      # Owned by the image's sourcegraph user; a tmpfs is owned by root by default
-      - '/home/sourcegraph:uid=100,gid=101'
+      # mode=1777: a tmpfs is owned by root, not by the image's user
+      - '/home/sourcegraph:mode=1777'
       - '/tmp'
     networks:
       - sourcegraph
@@ -212,8 +212,8 @@ services:
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
     tmpfs:
-      # Owned by the image's sourcegraph user; a tmpfs is owned by root by default
-      - '/home/sourcegraph:uid=100,gid=101'
+      # mode=1777: a tmpfs is owned by root, not by the image's user
+      - '/home/sourcegraph:mode=1777'
       - '/tmp'
     networks:
       - sourcegraph
@@ -605,8 +605,8 @@ services:
       - 'pgsql:/data/'
       - '../pgsql/conf:/conf/'
     tmpfs:
-      # Owned by the image's postgres user; a tmpfs is owned by root by default
-      - '/var/run/postgresql:uid=999,gid=999'
+      # mode=1777: a tmpfs is owned by root, not by the image's user
+      - '/var/run/postgresql:mode=1777'
     networks:
       - sourcegraph
     restart: always
@@ -661,8 +661,8 @@ services:
       - 'codeintel-db:/data/'
       - '../codeintel-db/conf:/conf/'
     tmpfs:
-      # Owned by the image's postgres user; a tmpfs is owned by root by default
-      - '/var/run/postgresql:uid=999,gid=999'
+      # mode=1777: a tmpfs is owned by root, not by the image's user
+      - '/var/run/postgresql:mode=1777'
     networks:
       - sourcegraph
     restart: always
@@ -722,8 +722,8 @@ services:
       - 'codeinsights-db:/var/lib/postgresql/data/'
       - '../codeinsights-db/conf:/conf/'
     tmpfs:
-      # Owned by the image's postgres user; a tmpfs is owned by root by default
-      - '/var/run/postgresql:uid=999,gid=999'
+      # mode=1777: a tmpfs is owned by root, not by the image's user
+      - '/var/run/postgresql:mode=1777'
     networks:
       - sourcegraph
     restart: always
