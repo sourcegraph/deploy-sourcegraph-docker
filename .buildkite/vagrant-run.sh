@@ -4,6 +4,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euo pipefail
 
 box="$1"
+exit_code=0
 
 pushd "test"
 
@@ -28,20 +29,28 @@ export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
 export DOCKER_USERNAME=sourcegraph
 export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
 
-for attempt in 1 2; do
-	echo --- ":vagrant: starting box $box, attempt $attempt of 2"
-	exit_code=0
-	vagrant up "$box" --provider=google || exit_code=$?
-	[ "$exit_code" = 0 ] && break
+ssh_answers() {
+	vagrant ssh "$box" --no-tty --command true -- -o ConnectTimeout=15
+}
 
-	# A VM which stopped answering SSH did not fail the test, and has no logs to copy,
-	# so run the test again on a new VM
-	if vagrant ssh "$box" --no-tty --command true -- -o ConnectTimeout=15; then
-		vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
-		break
-	fi
-	echo "Lost the SSH connection to $box"
-	vagrant destroy -f "$box"
-done
+echo --- ":vagrant: starting box $box"
+vagrant up "$box" --provider=google || exit_code=$?
 
-exit "$exit_code"
+# vagrant up gives up when the VM stops answering SSH, which is not a test failure.
+# Retry the SSH connection to the same VM, then sync the repo and run the test on it
+if [ "$exit_code" != 0 ] && ! ssh_answers; then
+	for attempt in {1..10}; do
+		echo "$box does not answer SSH, retry $attempt of 10 in 15 seconds"
+		sleep 15
+		if ssh_answers; then
+			exit_code=0
+			vagrant provision "$box" || exit_code=$?
+			break
+		fi
+	done
+fi
+
+if [ "$exit_code" != 0 ]; then
+	vagrant scp "${box}:/deploy-sourcegraph-docker/*.log" ../
+	exit $exit_code
+fi
