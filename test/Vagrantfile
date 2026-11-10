@@ -46,8 +46,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.service_account = server['service_account']
         g.labels = {
           "team" => "dev-infra",
-          "type" => "vagrant"
-        }
+          "type" => "vagrant",
+          # .buildkite/vagrant-run.sh deletes VMs by this label
+          "buildkite-job-id" => ENV['BUILDKITE_JOB_ID']
+        }.compact
         g.scopes = [
             "compute-rw",
             "storage-ro"

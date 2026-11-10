@@ -9,18 +9,18 @@ KEY_PATH="/tmp/e2e-builder.json"
 
 pushd "test"
 
-# Ask GCP to delete the VM, without waiting the 1-2 minutes the deletion takes
+# Ask GCP to delete the VMs matching a filter, without waiting the 1-2 minutes a deletion takes
 request_instance_deletion() (
 	export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE="$KEY_PATH"
-	instance_name="$(cat ".vagrant/machines/${box}/google/id" 2>/dev/null)" &&
-		instance_url="$(gcloud compute instances list --project=sourcegraph-ci --filter="name=${instance_name}" --format="value(selfLink)")" &&
-		curl --fail --silent --show-error --output /dev/null --request DELETE \
-			--header "Authorization: Bearer $(gcloud auth print-access-token)" "$instance_url"
+	gcloud compute instances list --project=sourcegraph-ci --filter="$1" --format="value(selfLink)" | tee /dev/stderr |
+		xargs --no-run-if-empty --max-args=1 curl --fail --silent --show-error --output /dev/null \
+			--request DELETE --header "Authorization: Bearer $(gcloud auth print-access-token)"
 )
 
+# Find this job's VM by its label, because Vagrant only knows about the VM once GCP has finished creating it.
 # Fall back to a blocking destroy, so a failed deletion request cannot leak a VM
 cleanup() {
-	request_instance_deletion || vagrant destroy -f "$box"
+	request_instance_deletion "labels.buildkite-job-id=${BUILDKITE_JOB_ID}" || vagrant destroy -f "$box"
 }
 
 echo --- ":vagrant: installing plugins"
@@ -37,6 +37,10 @@ fi
 export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
 export DOCKER_USERNAME=sourcegraph
 export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
+
+echo --- ":wastebasket: deleting VMs left behind by jobs which died before their cleanup"
+# The smoke test step times out after 30 minutes, so a VM older than an hour has no job
+request_instance_deletion "labels.buildkite-job-id:* AND creationTimestamp<-PT1H" || echo "Could not delete stale VMs"
 
 echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?
