@@ -21,10 +21,16 @@ compose_files=(
 
 deploy_sourcegraph() {
 	cd "$(dirname "${BASH_SOURCE[0]}")/.."
-	docker-compose version
+	# The Ubuntu 20.04 VM image only has the standalone docker-compose 1.29.2
+	if docker compose version; then
+		compose=(docker compose)
+	else
+		compose=(docker-compose)
+		docker-compose version
+	fi
 	# `up` pulls images one at a time, `pull` pulls them in parallel
-	docker-compose "${compose_files[@]}" pull --quiet
-	docker-compose "${compose_files[@]}" up -d -t 600
+	"${compose[@]}" "${compose_files[@]}" pull --quiet
+	"${compose[@]}" "${compose_files[@]}" up -d -t 600
 }
 
 wait_until_healthy() {
@@ -44,7 +50,7 @@ wait_until_healthy() {
 test_count() {
 	echo "TEST: Every service has a running container"
 	# migrator exits when it is done, every other service keeps running
-	expect_containers=$(docker-compose "${compose_files[@]}" config --services | grep --count --invert-match '^migrator$')
+	expect_containers=$("${compose[@]}" "${compose_files[@]}" config --services | grep --count --invert-match '^migrator$')
 	containers_count=$(docker ps --filter status=running --format '{{.Names}}' | wc -l)
 	if [[ "$containers_count" -ne "$expect_containers" ]]; then
 		docker ps --all --format '{{.Names}}: {{.Status}}'
@@ -72,20 +78,18 @@ test_containers() {
 	echo "ALL TESTS PASSED"
 }
 
-catch_errors() {
-	count=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -c -v Up) || true
-	if [[ $count -ne 0 ]]; then
-		containers_failing=$(docker ps --format '{{.Names}}:{{.Status}}' | grep -v Up | cut -f 1 -d :)
-		echo
-		for cf in $containers_failing; do
-			echo "$cf is failing. Review the log files uploaded as artefacts to see errors."
-			docker logs -t "$cf" >"$cf".log 2>&1
+# On failure, save every container's logs, which the CI step uploads as artifacts
+save_logs_on_failure() {
+	exit_code=$?
+	if [[ $exit_code -ne 0 ]]; then
+		docker ps --all --format '{{.Names}}: {{.Status}}'
+		for container in $(docker ps --all --format '{{.Names}}'); do
+			docker logs --timestamps "$container" >"$container.log" 2>&1 || true
 		done
-		exit 1
 	fi
 }
 
-trap catch_errors EXIT
+trap save_logs_on_failure EXIT
 
 configure_docker
 deploy_sourcegraph
