@@ -13,7 +13,6 @@ servers = YAML.load_file('servers.yaml')
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
   servers.each do |server|
-    config.env.enable
     config.vm.define server['name'] do |srv|
       srv.vm.box = server['box']
       srv.vm.synced_folder '../', '/deploy-sourcegraph-docker'
