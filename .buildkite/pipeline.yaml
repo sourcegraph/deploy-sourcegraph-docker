@@ -12,11 +12,18 @@ steps:
     command: .buildkite/prettier-check.sh
     agents: { queue: "vagrant" }
 
-  - label: ":rice: docker-compose-test"
+  # Builds on main always run the smoke test. if_changed compares against origin/main,
+  # so it finds no changes in a commit which is already on main, unless it is the newest
+  - &smoke_test
+    label: ":rice: docker-compose-test"
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     agents: { queue: "vagrant" }
-    # Skip the smoke test on builds which only change docs
+    if: build.branch == pipeline.default_branch
+
+  # Builds on other branches skip the smoke test if they only change docs
+  - <<: *smoke_test
+    if: build.branch != pipeline.default_branch
     if_changed:
       include: "**"
       exclude: "**.md"
