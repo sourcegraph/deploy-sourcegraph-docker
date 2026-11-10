@@ -60,6 +60,13 @@ test_containers() {
 		sleep 1
 	done
 
+	echo "TEST: No container has restarted"
+	restarted_containers=$(docker ps --quiet | xargs docker inspect --format '{{.Name}} restarted {{.RestartCount}} times' | grep -v ' restarted 0 times' || true)
+	if [[ -n "$restarted_containers" ]]; then
+		echo "TEST FAILURE: $restarted_containers"
+		exit 1
+	fi
+
 	echo "TEST: Checking frontend is accessible"
 	curl -f http://localhost:80
 	curl -f http://localhost:80/healthz
