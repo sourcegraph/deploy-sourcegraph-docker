@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This repository is the deployment reference for [Sourcegraph with Docker Compose](https://sourcegraph.com/docs/self-hosted/deploy/docker-compose). Customers merge each release tag into their own copy of this repository, run `docker-compose/docker-compose.yaml`, and keep their changes in a `docker-compose.override.yaml` file. The repository holds configuration and a few shell scripts, no application code.
+This repository is the deployment reference for [Sourcegraph with Docker Compose](https://sourcegraph.com/docs/self-hosted/deploy/docker-compose). Customers run `docker-compose/docker-compose.yaml` at a release tag: they check the tag out in a clone of this repository, or merge it into their own fork. We recommend they keep their changes in a `docker-compose.override.yaml` file. The repository holds configuration and a few shell scripts, no application code.
 
 ## Layout
 
