@@ -22,8 +22,12 @@ compose_files=(
 deploy_sourcegraph() {
 	cd "$(dirname "${BASH_SOURCE[0]}")/.."
 	docker compose version
-	# `up` pulls images one at a time, `pull` pulls them in parallel
-	docker compose "${compose_files[@]}" pull --quiet
+	# `up` pulls images one at a time, `pull` pulls them in parallel.
+	# Docker Hub times out now and then; `up` pulls whatever is still missing after three attempts
+	for _ in 1 2 3; do
+		docker compose "${compose_files[@]}" pull --quiet && break
+		sleep 10
+	done
 	docker compose "${compose_files[@]}" up -d -t 600
 }
 
