@@ -169,9 +169,9 @@ services:
       start_period: 300s
     volumes:
       - 'sourcegraph-frontend-0:/mnt/cache'
+      # A volume, not a tmpfs: a volume takes the image directory's owner, a tmpfs is owned by root
+      - 'sourcegraph-frontend-0-home:/home/sourcegraph'
     tmpfs:
-      # mode=1777: a tmpfs is owned by root, not by the image's user
-      - '/home/sourcegraph:mode=1777'
       - '/tmp'
     networks:
       - sourcegraph
@@ -211,9 +211,9 @@ services:
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     volumes:
       - 'sourcegraph-frontend-internal-0:/mnt/cache'
+      # A volume, not a tmpfs: a volume takes the image directory's owner, a tmpfs is owned by root
+      - 'sourcegraph-frontend-internal-0-home:/home/sourcegraph'
     tmpfs:
-      # mode=1777: a tmpfs is owned by root, not by the image's user
-      - '/home/sourcegraph:mode=1777'
       - '/tmp'
     networks:
       - sourcegraph
@@ -604,9 +604,8 @@ services:
     volumes:
       - 'pgsql:/data/'
       - '../pgsql/conf:/conf/'
-    tmpfs:
-      # mode=1777: a tmpfs is owned by root, not by the image's user
-      - '/var/run/postgresql:mode=1777'
+      # A volume, not a tmpfs: a volume takes the image directory's owner, a tmpfs is owned by root
+      - 'pgsql-socket:/var/run/postgresql'
     networks:
       - sourcegraph
     restart: always
@@ -660,9 +659,8 @@ services:
     volumes:
       - 'codeintel-db:/data/'
       - '../codeintel-db/conf:/conf/'
-    tmpfs:
-      # mode=1777: a tmpfs is owned by root, not by the image's user
-      - '/var/run/postgresql:mode=1777'
+      # A volume, not a tmpfs: a volume takes the image directory's owner, a tmpfs is owned by root
+      - 'codeintel-db-socket:/var/run/postgresql'
     networks:
       - sourcegraph
     restart: always
@@ -721,9 +719,8 @@ services:
     volumes:
       - 'codeinsights-db:/var/lib/postgresql/data/'
       - '../codeinsights-db/conf:/conf/'
-    tmpfs:
-      # mode=1777: a tmpfs is owned by root, not by the image's user
-      - '/var/run/postgresql:mode=1777'
+      # A volume, not a tmpfs: a volume takes the image directory's owner, a tmpfs is owned by root
+      - 'codeinsights-db-socket:/var/run/postgresql'
     networks:
       - sourcegraph
     restart: always
@@ -845,8 +842,11 @@ volumes:
   gitserver-0:
   grafana:
   pgsql:
+  pgsql-socket:
   codeintel-db:
+  codeintel-db-socket:
   codeinsights-db:
+  codeinsights-db-socket:
   blobstore:
   precise-code-intel-worker-tmp:
   prometheus-v2:
@@ -855,7 +855,9 @@ volumes:
   worker:
   searcher-0:
   sourcegraph-frontend-0:
+  sourcegraph-frontend-0-home:
   sourcegraph-frontend-internal-0:
+  sourcegraph-frontend-internal-0-home:
   syntactic-code-intel-worker-tmp:
   zoekt-0-shared:
 networks:
