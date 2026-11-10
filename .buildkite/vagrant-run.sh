@@ -9,18 +9,26 @@ KEY_PATH="/tmp/e2e-builder.json"
 
 pushd "test"
 
-# Ask GCP to delete the VMs matching a filter, without waiting the 1-2 minutes a deletion takes
-request_instance_deletion() (
+# Vagrant creates a disk, then a VM, both with this name, and only knows about them once GCP has finished
+# creating the VM. Naming them after the job lets the cleanup find them if the job is cancelled before that
+instance_name_prefix="${box}-job-"
+export VAGRANT_INSTANCE_NAME="${instance_name_prefix}${BUILDKITE_JOB_ID}"
+
+# Ask GCP to delete the VMs matching a filter, and the matching disks which no VM uses,
+# without waiting the 1-2 minutes a deletion takes. GCP deletes a VM's disk with the VM
+request_deletion() (
 	export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE="$KEY_PATH"
-	gcloud compute instances list --project=sourcegraph-ci --filter="$1" --format="value(selfLink)" | tee /dev/stderr |
+	{
+		gcloud compute instances list --project=sourcegraph-ci --filter="$1" --format="value(selfLink)" &&
+			gcloud compute disks list --project=sourcegraph-ci --filter="($1) AND -users:*" --format="value(selfLink)"
+	} | tee /dev/stderr |
 		xargs --no-run-if-empty --max-args=1 curl --fail --silent --show-error --output /dev/null \
 			--request DELETE --header "Authorization: Bearer $(gcloud auth print-access-token)"
 )
 
-# Find this job's VM by its label, because Vagrant only knows about the VM once GCP has finished creating it.
 # Fall back to a blocking destroy, so a failed deletion request cannot leak a VM
 cleanup() {
-	request_instance_deletion "labels.buildkite-job-id=${BUILDKITE_JOB_ID}" || vagrant destroy -f "$box"
+	request_deletion "name=${VAGRANT_INSTANCE_NAME}" || vagrant destroy -f "$box"
 }
 
 echo --- ":vagrant: installing plugins"
@@ -38,9 +46,9 @@ export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
 export DOCKER_USERNAME=sourcegraph
 export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
 
-echo --- ":wastebasket: deleting VMs left behind by jobs which died before their cleanup"
-# The smoke test step times out after 30 minutes, so a VM older than an hour has no job
-request_instance_deletion "labels.buildkite-job-id:* AND creationTimestamp<-PT1H" || echo "Could not delete stale VMs"
+echo --- ":wastebasket: deleting VMs and disks left behind by jobs which died before their cleanup"
+# The smoke test step times out after 30 minutes, so a VM or disk older than an hour has no job
+request_deletion "name~^${instance_name_prefix} AND creationTimestamp<-PT1H" || echo "Could not delete stale VMs and disks"
 
 echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?

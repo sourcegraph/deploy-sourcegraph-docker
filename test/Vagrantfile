@@ -39,17 +39,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         g.image = ENV['IMAGE']
         g.image_project_id = 'sourcegraph-ci'
         g.google_project_id = project_id
-        g.name = "#{server['name']}-"+"#{Time.now.to_i}"+"#{rand(100000)}"
+        # .buildkite/vagrant-run.sh names the VM after its job, so it can delete the VM by name
+        g.name = ENV['VAGRANT_INSTANCE_NAME'] || "#{server['name']}-"+"#{Time.now.to_i}"+"#{rand(100000)}"
         g.network = server['network']
         g.external_ip = external_ip
         g.use_private_ip = use_private_ip
         g.service_account = server['service_account']
         g.labels = {
           "team" => "dev-infra",
-          "type" => "vagrant",
-          # .buildkite/vagrant-run.sh deletes VMs by this label
-          "buildkite-job-id" => ENV['BUILDKITE_JOB_ID']
-        }.compact
+          "type" => "vagrant"
+        }
         g.scopes = [
             "compute-rw",
             "storage-ro"
