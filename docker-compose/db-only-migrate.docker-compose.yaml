@@ -1,54 +1,20 @@
-# This file contains the pgsql service definition (the primary Sourcegraph database deployment), 
-# as well as the codeintel-db service definition (a separate postgres deployment). Both run postgres.
-# This file is used for database-only operations such as backup and restore.
+# This file starts only the pgsql service (the primary Sourcegraph database),
+# and the codeintel-db service (a separate Postgres deployment).
+# It is used for database-only operations such as backup and restore.
 # See https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/operations
 #
-# 🚨This file MUST be kept in sync with the pgsql definition in docker-compose/docker-compose.yaml
+# Both services are defined in docker-compose.yaml, so this file cannot drift from it
 version: '2.4'
 services:
-  # Description: PostgreSQL database for various data.
-  #
-  # Disk: 128GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
-  # Ports exposed to the public internet: none
-  #
   pgsql:
-    container_name: pgsql
-    image: 'index.docker.io/sourcegraph/postgresql-16:8.1.2687@sha256:cc810cd21f1df7776aa270f49bdd50a4ec3375623ffae1f0238c20dec054bf03'
-    cpus: 4
-    mem_limit: '2g'
-    security_opt:
-      - no-new-privileges:true
-    healthcheck:
-      test: '/liveness.sh'
-      interval: 10s
-      timeout: 1s
-      retries: 3
-      start_period: 15s
-    volumes:
-      - 'pgsql:/data/'
-    networks:
-      - sourcegraph
-    restart: always
+    extends:
+      file: docker-compose.yaml
+      service: pgsql
 
   codeintel-db:
-    container_name: codeintel-db
-    image: 'index.docker.io/sourcegraph/postgresql-16:8.1.2687@sha256:cc810cd21f1df7776aa270f49bdd50a4ec3375623ffae1f0238c20dec054bf03'
-    cpus: 4
-    mem_limit: '2g'
-    security_opt:
-      - no-new-privileges:true
-    healthcheck:
-      test: '/liveness.sh'
-      interval: 10s
-      timeout: 1s
-      retries: 3
-      start_period: 15s
-    volumes:
-      - 'codeintel-db:/data/'
-    networks:
-      - sourcegraph
-    restart: always
+    extends:
+      file: docker-compose.yaml
+      service: codeintel-db
 
 volumes:
   pgsql:
