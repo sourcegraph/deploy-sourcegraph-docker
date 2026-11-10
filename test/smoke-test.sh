@@ -15,10 +15,24 @@ expect_containers="25"
 
 deploy_sourcegraph() {
 	cd $(dirname "${BASH_SOURCE[0]}")/..
+	docker-compose version
+	# `up` pulls images one at a time, `pull` pulls them in parallel
+	docker-compose --file docker-compose/docker-compose.yaml pull --quiet
 	docker-compose --file docker-compose/docker-compose.yaml up -d -t 600
+}
 
-	echo "Giving containers 90s to start..."
-	sleep 90
+wait_until_healthy() {
+	echo "Waiting up to 5 minutes for the frontend to respond, and container health checks to pass..."
+	for _ in {1..60}; do
+		if curl --fail --silent --output /dev/null http://localhost:80/healthz &&
+			[[ -z "$(docker ps --quiet --filter health=starting --filter health=unhealthy)" ]]; then
+			return
+		fi
+		sleep 5
+	done
+	docker ps --format '{{.Names}}: {{.Status}}'
+	echo "TEST FAILURE: containers were not healthy after 5 minutes"
+	exit 1
 }
 
 test_count() {
@@ -70,5 +84,6 @@ trap catch_errors EXIT
 
 configure_docker
 deploy_sourcegraph
+wait_until_healthy
 test_count
 test_containers
