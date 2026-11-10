@@ -24,8 +24,21 @@ deploy_sourcegraph() {
 	docker compose version
 	# `up` pulls images one at a time, `pull` pulls them in parallel
 	docker compose "${compose_files[@]}" pull --quiet
-	# --wait returns when every container is running, and healthy if it has a health check
-	docker compose "${compose_files[@]}" up -d -t 600 --wait --wait-timeout 300
+	docker compose "${compose_files[@]}" up -d -t 600
+}
+
+wait_until_healthy() {
+	echo "Waiting up to 5 minutes for the frontend to respond, and container health checks to pass..."
+	for _ in {1..60}; do
+		if curl --fail --silent --output /dev/null http://localhost:80/healthz &&
+			[[ -z "$(docker ps --quiet --filter health=starting --filter health=unhealthy)" ]]; then
+			return
+		fi
+		sleep 5
+	done
+	docker ps --format '{{.Names}}: {{.Status}}'
+	echo "TEST FAILURE: containers were not healthy after 5 minutes"
+	exit 1
 }
 
 test_count() {
@@ -74,5 +87,6 @@ trap save_logs_on_failure EXIT
 
 configure_docker
 deploy_sourcegraph
+wait_until_healthy
 test_count
 test_containers
