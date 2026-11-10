@@ -22,11 +22,11 @@ steps:
     agents: { queue: "vagrant" }
     # vagrant-run.sh deletes VMs and disks older than an hour, so no job may run that long
     timeout_in_minutes: 30
-    if: build.branch == "main"
+    if: build.branch == "throwaway-acts-as-main"
 
   # Builds on other branches skip the smoke test if they only change docs
   - <<: *smoke_test
-    if: build.branch != "main"
+    if: build.branch != "throwaway-acts-as-main"
     if_changed:
       include: "**"
       exclude: "**.md"
