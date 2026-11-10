@@ -16,8 +16,7 @@ steps:
     agents: { queue: "vagrant" }
 
   # Builds on main always run the smoke test. if_changed compares against origin/main,
-  # so it finds no changes in a commit which is already on main, unless it is the newest.
-  # The branch is named here, because the Buildkite pipeline's default branch is still "master"
+  # so it finds no changes in a commit which is already on main, unless it is the newest
   - &smoke_test
     label: ":rice: docker-compose-test"
     command: .buildkite/smoke-test-vm.sh
