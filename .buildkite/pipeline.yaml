@@ -12,10 +12,21 @@ steps:
     command: .buildkite/prettier-check.sh
     agents: { queue: "vagrant" }
 
-  - label: ":rice: docker-compose-test"
+  # Builds on main always run the smoke test. if_changed compares against origin/main,
+  # so it finds no changes in a commit which is already on main, unless it is the newest
+  - &smoke_test
+    label: ":rice: docker-compose-test"
     command: .buildkite/vagrant-run.sh docker-test
     artifact_paths: ./*.log
     agents: { queue: "vagrant" }
+    if: build.branch == "main"
+
+  # Builds on other branches skip the smoke test if they only change docs
+  - <<: *smoke_test
+    if: build.branch != "main"
+    if_changed:
+      include: "**"
+      exclude: "**.md"
 
   # Please keep in mind that the release manifest uses specific branch names when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing
