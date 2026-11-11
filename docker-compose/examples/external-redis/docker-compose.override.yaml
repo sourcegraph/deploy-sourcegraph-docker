@@ -1,0 +1,47 @@
+# Docker Compose override example of how to configure external Redis
+# See https://sourcegraph.com/docs/self-hosted/external-services/redis
+
+# Each value is either host:port, or a Redis URL, ex. redis://:password@redis.example.com:6379/0
+# Use rediss:// for a TLS connection
+x-env-vars-redis: &env-vars-redis
+
+  REDIS_CACHE_ENDPOINT: redis-cache.example.com:6379
+  REDIS_STORE_ENDPOINT: redis-store.example.com:6379
+
+
+# Every service which connects to Redis needs these variables
+# Services without them try to connect to the built-in redis-cache and redis-store containers
+services:
+
+  sourcegraph-frontend-0:
+    environment:
+      <<: *env-vars-redis
+
+  sourcegraph-frontend-internal:
+    environment:
+      <<: *env-vars-redis
+
+  gitserver-0:
+    environment:
+      <<: *env-vars-redis
+
+  searcher-0:
+    environment:
+      <<: *env-vars-redis
+
+  worker:
+    environment:
+      <<: *env-vars-redis
+
+  precise-code-intel-worker:
+    environment:
+      <<: *env-vars-redis
+
+  syntactic-code-intel-worker:
+    environment:
+      <<: *env-vars-redis
+
+
+  # Disable built-in Redis
+  redis-cache: !reset {}
+  redis-store: !reset {}
