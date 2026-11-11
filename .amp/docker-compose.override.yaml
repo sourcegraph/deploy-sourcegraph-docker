@@ -1,0 +1,13 @@
+# Changes the Docker Compose deployment for an Amp orb. .amp/sourcegraph.sh sets both variables
+services:
+  # Publishes only the port Amp chose for the service. Amp checks ports as a user who cannot open port 80,
+  # and the portal proxy in the orb already listens on port 443
+  caddy:
+    ports: !override
+      - '${PORT:?}:80'
+  # Connects the executor from docker-compose/executors/ to Sourcegraph,
+  # with the token .amp/sourcegraph.sh also sets as executors.accessToken in the site configuration
+  executor:
+    environment:
+      - EXECUTOR_FRONTEND_PASSWORD=${EXECUTOR_TOKEN:?}
+      - EXECUTOR_QUEUE_NAME=batches

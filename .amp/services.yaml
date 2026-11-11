@@ -3,9 +3,10 @@
 services:
   sourcegraph:
     command: .amp/sourcegraph.sh
-    # The host port Caddy publishes in docker-compose/docker-compose.yaml
-    port: 80
     health: /healthz
-    portal:
-      title: Sourcegraph
-      description: Sign in as admin. The password is in ~/.config/sourcegraph/admin-password in the orb. Ask Amp for it, or read it in the Terminal tab.
+    # .amp/sourcegraph.sh adds the Sourcegraph link, with the admin password in its note
+    portals:
+      - url: /admin/executors
+        title: Executors
+      - url: /-/debug/jaeger/
+        title: Jaeger
