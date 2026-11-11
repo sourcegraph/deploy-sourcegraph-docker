@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Prepares an Amp orb (https://ampcode.com/docs/orbs) to run Sourcegraph with Docker Compose.
+# Amp saves the result as a snapshot for new orbs, so this only installs and downloads.
+# .amp/services.yaml starts Sourcegraph.
+set -euo pipefail
+
+step() { echo "==> $* (${SECONDS}s)"; }
+
+step 'Start Docker'
+sudo systemctl enable --now docker
+
+if ! sudo docker compose version >/dev/null 2>&1; then
+	step 'Install Docker Compose'
+	sudo apt-get update
+	sudo apt-get install -y docker-compose-plugin
+fi
+
+step 'Pull images'
+pull_images() { sudo docker compose --file docker-compose/docker-compose.yaml pull --quiet; }
+# Docker Hub times out now and then
+pull_images || { sleep 10 && pull_images; }
+
+step 'Write guidance for agents'
+guidance_file="$HOME/.config/amp/AGENTS.md"
+guidance_heading='## Sourcegraph in this orb'
+if ! grep --fixed-strings --line-regexp --quiet "$guidance_heading" "$guidance_file" 2>/dev/null; then
+	mkdir -p "$(dirname "$guidance_file")"
+	cat >>"$guidance_file" <<EOF
+
+$guidance_heading
+
+- \`amp orb services ensure\` starts Sourcegraph from \`docker-compose/docker-compose.yaml\` and prints its portal URL.
+- The first site admin is \`admin\`. Its password is in \`~/.config/sourcegraph/admin-password\`.
+  When you start Sourcegraph for the user, give them the portal URL, the username, and the password.
+- \`amp orb service logs sourcegraph\` shows the logs of every container.
+- Docker needs \`sudo\`, such as \`sudo docker compose --file docker-compose/docker-compose.yaml ps\`.
+EOF
+fi
+
+step 'Done'

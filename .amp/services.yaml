@@ -1,0 +1,11 @@
+# Services Amp runs in an orb: https://ampcode.com/docs/orbs/portals
+# `amp orb services ensure` starts them, and so does opening the Portal tab
+services:
+  sourcegraph:
+    command: .amp/sourcegraph.sh
+    # The host port Caddy publishes in docker-compose/docker-compose.yaml
+    port: 80
+    health: /healthz
+    portal:
+      title: Sourcegraph
+      description: Sign in as admin. The password is in ~/.config/sourcegraph/admin-password in the orb. Ask Amp for it, or read it in the Terminal tab.
