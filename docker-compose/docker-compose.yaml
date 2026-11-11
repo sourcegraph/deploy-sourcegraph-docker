@@ -443,6 +443,7 @@ services:
     mem_limit: '8g'
     security_opt:
       - no-new-privileges:true
+    read_only: true
     volumes:
       - 'prometheus-v2:/prometheus'
       - '../prometheus:/sg_prometheus_add_ons'
