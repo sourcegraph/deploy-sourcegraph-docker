@@ -12,18 +12,21 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 
 ## Checks
 
-CI runs these on every branch. `.tool-versions` pins Node and the GitHub CLI; CI installs them with mise. `renovate.json` turns Renovate off so that these tools are upgraded together with the `sourcegraph/sourcegraph` monorepo, not on their own.
+CI runs these on every branch. `.tool-versions` pins Node, the GitHub CLI, and shellcheck; CI installs them with mise. `renovate.json` turns Renovate off so that these tools are upgraded together with the `sourcegraph/sourcegraph` monorepo, not on their own.
 
-- **Compose files:** `.buildkite/validate-docker-compose.sh` runs `docker-compose config` on the base file, with the standalone `docker-compose` binary, so the base file must stay valid for that binary. CI validates no other Compose file.
+- **Compose files:** `.buildkite/validate-docker-compose.sh` runs `docker compose config` on every Compose file, in each combination the docs say to run. Add a line to it for every new Compose file or combination.
 - **Formatting:** `npm ci && npm run prettier-check`; `npm run prettier` rewrites the files. Prettier formats the JavaScript and JSON files; the repository has no other file type its glob matches. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
+- **Shell scripts:** `git ls-files -z '*.sh' .buildkite/hooks | xargs -0 shellcheck`.
 - **Smoke test:** the `docker-compose-test` step runs `.buildkite/vagrant-run.sh docker-test`. See below.
+
+Use `docker compose` (v2) in scripts and docs, not `docker-compose`.
 
 ## Smoke test
 
-`.buildkite/vagrant-run.sh` uses Vagrant to boot a GCP VM from the image named in `IMAGE` in `.buildkite/pipeline.yaml`, runs `test/smoke-test.sh` on it, and deletes it. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run the script yourself only when a person asks.
+`.buildkite/vagrant-run.sh` uses Vagrant to boot a GCP VM from the image named in `IMAGE` in `.buildkite/pipeline.yaml`, runs the two tests below on it, and deletes it. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run the script yourself only when a person asks.
 
-- `test/smoke-test.sh` starts the base file with `docker compose up --wait`, which fails if any container reports `unhealthy`. It then checks that every service has a running container, no container restarted, and the frontend responds. It counts the services itself, so a new long-running service needs no change to the test. A new service which exits when it is done, like `migrator`, must be left out of the count.
-- CI does not run `test/executor-smoke-test.sh`. Run it against a running deployment when you change `docker-compose/executors/`.
+- `test/smoke-test.sh` starts the base file, `jaeger/`, `executors/`, and `test/docker-compose.override.yaml` with `docker compose up --wait`, which fails if any container reports `unhealthy`. It then checks that every service has a running container, no container restarted, and the frontend and Jaeger respond. It counts the services itself, so a new long-running service in those files needs no change to the test. A new service which exits when it is done, like `migrator`, must be left out of the count. Add a new optional Compose file to its `compose_files`.
+- `test/executor-smoke-test.sh` checks that the executor registers with the frontend.
 - A service which is not ready until another service is needs a `start_period` on its health check, or `--wait` fails.
 - A test failure is not retried, and the step uploads every container's logs as artifacts. Only the image pull is retried: `test/smoke-test.sh` tries `docker compose pull` three times.
 - A branch which only changes files listed in the step's `if_changed` `exclude` skips the step. Builds on `main` always run it. When the smoke test starts reading a file on that list, remove it from the list.
