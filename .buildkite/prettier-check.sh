@@ -3,5 +3,5 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euxo pipefail
 
-yarn
-yarn run prettier-check
+npm ci
+npm run prettier-check
