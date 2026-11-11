@@ -322,6 +322,8 @@ services:
       interval: 5s
       timeout: 10s
       retries: 3
+      # searcher is not ready until sourcegraph-frontend-internal is, which waits for the migrator
+      start_period: 300s
     volumes:
       - 'searcher-0:/mnt/cache'
     networks:
