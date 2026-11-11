@@ -34,10 +34,10 @@ compose=(sudo docker compose --env-file "$compose_variables"
 "${compose[@]}" up --detach
 "${compose[@]}" up --detach --wait sourcegraph-frontend-0
 
-# Sourcegraph refuses this request once it has a user, so only the first start configures the site below
-site_init_status=$(curl --silent --output /dev/null --write-out '%{http_code}' --request POST "$frontend_url/-/site-init" \
+# Sourcegraph refuses this request once it has a user, so a restart keeps the first admin
+curl --silent --output /dev/null --request POST "$frontend_url/-/site-init" \
 	--header 'Content-Type: application/json' \
-	--data "{\"email\":\"$admin_email\",\"username\":\"$admin_username\",\"password\":\"$admin_password\"}")
+	--data "{\"email\":\"$admin_email\",\"username\":\"$admin_username\",\"password\":\"$admin_password\"}"
 
 # Stop here if the admin cannot sign in. The session cookie also authorizes the GraphQL requests below
 cookie_jar=$(mktemp)
@@ -49,19 +49,23 @@ curl --silent --fail --output /dev/null --cookie-jar "$cookie_jar" --request POS
 	--header 'Content-Type: application/json' \
 	--data "{\"email\":\"$admin_email\",\"password\":\"$admin_password\"}"
 
-if [[ "$site_init_status" == 200 ]]; then
-	# Prints the response, and fails if it has errors
-	graphql() {
-		curl --silent --fail --cookie "$cookie_jar" --header 'Content-Type: application/json' --data "$1" "$frontend_url/.api/graphql" |
-			jq --exit-status 'select(.errors == null)'
-	}
-	configuration_id=$(graphql '{"query":"{ site { configuration { id } } }"}' | jq '.data.site.configuration.id')
+# Prints the response, and fails if it has errors
+graphql() {
+	curl --silent --fail --cookie "$cookie_jar" --header 'Content-Type: application/json' --data "$1" "$frontend_url/.api/graphql" |
+		jq --exit-status 'select(.errors == null)'
+}
+# The site configuration is JSON with comments, so drop whole-line comments and trailing commas to read it
+site=$(graphql '{"query":"{ site { configuration { id effectiveContents } } }"}' | jq '.data.site.configuration |
+	{id, contents: (.effectiveContents | gsub("(?m)^\\s*//.*$"; "") | gsub(",(?=\\s*[]}])"; "") | fromjson? // null)}')
+# Configure the site only while it has no executor token, so restarts keep later changes.
+# Leave it alone if it does not parse
+if jq --exit-status '.contents != null and (.contents | has("executors.accessToken") | not)' <<<"$site" >/dev/null; then
 	# Lets the executor connect, and gives Sourcegraph its portal URL
-	site_configuration=$(jq --null-input --arg token "$executor_token" --arg url "$PUBLIC_URL" \
-		'{"externalURL": $url, "auth.providers": [{"type": "builtin"}], "executors.accessToken": $token}')
-	graphql "$(jq --null-input --argjson id "$configuration_id" --arg input "$site_configuration" \
+	site_configuration=$(jq --arg token "$executor_token" --arg url "$PUBLIC_URL" \
+		'.contents + {"externalURL": $url, "executors.accessToken": $token}' <<<"$site")
+	graphql "$(jq --arg input "$site_configuration" \
 		'{query: "mutation($id: Int!, $input: String!) { updateSiteConfiguration(lastID: $id, input: $input) }",
-		variables: {id: $id, input: $input}}')" >/dev/null
+		variables: {id, input: $input}}' <<<"$site")" >/dev/null
 fi
 
 # Shows the sign-in in the Portal tab, as a note next to the Sourcegraph link, until the service stops
