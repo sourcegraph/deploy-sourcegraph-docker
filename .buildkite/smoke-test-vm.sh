@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Runs test/smoke-test.sh on a new GCP VM booted from $IMAGE, then deletes the VM
+# Runs test/smoke-test.sh and test/executor-smoke-test.sh on a new GCP VM booted from $IMAGE,
+# then deletes the VM
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 set -euo pipefail
@@ -96,13 +97,16 @@ for retry in {1..10}; do
 done
 
 if [ "$exit_code" = 0 ]; then
-	echo --- ":docker: running the smoke test"
+	echo --- ":docker: running the smoke tests"
 	# Runs as root on the VM. The Docker Hub password comes over stdin, so it does not show in the VM's process list
 	remote_script='
 set -euo pipefail
 read -r DOCKER_PASSWORD
 export DOCKER_USERNAME=sourcegraph DOCKER_PASSWORD
 /deploy-sourcegraph-docker/test/smoke-test.sh
+# The Ubuntu 20.04 VM image has no jq. Skip /etc/apt/sources.list.d: that image lacks the key for its Chrome repository, so a full update fails
+command -v jq >/dev/null || { apt-get update --quiet --option Dir::Etc::sourceparts=- && apt-get install --quiet --yes jq; }
+/deploy-sourcegraph-docker/test/executor-smoke-test.sh
 '
 	# shellcheck disable=SC2029 # remote_script is quoted here, to run on the VM
 	ssh "${ssh_options[@]}" "$remote" "sudo bash -c $(printf %q "$remote_script")" <<<"$DOCKER_PASSWORD" || exit_code=$?

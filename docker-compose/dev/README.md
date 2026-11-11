@@ -3,7 +3,7 @@
 For use developing Sourcegraph's docker-compose deployment only.
 For deployments, refer to the official [Sourcegraph with Docker Compose](https://sourcegraph.com/docs/self-hosted/deploy/docker-compose) documentation.
 
-This folder includes a helper script, [run.sh](./run.sh), that will run the `docker-compose` command (with any provided arguments) while automatically specifying the appropriate set of overlays.
+This folder includes a helper script, [run.sh](./run.sh), that will run the `docker compose` command (with any provided arguments) while automatically specifying the appropriate set of overlays.
 
 Example usage:
 

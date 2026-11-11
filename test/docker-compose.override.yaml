@@ -1,0 +1,8 @@
+version: '2.4'
+services:
+  # The executor exits unless both are set.
+  # executor-smoke-test.sh sets this password as `executors.accessToken` in the site config
+  executor:
+    environment:
+      - EXECUTOR_FRONTEND_PASSWORD=executor-smoke-test-token
+      - EXECUTOR_QUEUE_NAME=batches
