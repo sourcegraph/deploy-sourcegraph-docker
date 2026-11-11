@@ -1,8 +1,7 @@
 $schema: "http://json.schemastore.org/buildkite"
 env:
-  # GCP VM image for the Vagrant smoke test. Build it in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
+  # GCP VM image for the smoke test. Build it in sourcegraph/infrastructure by running `make e2e` in `gcp/images`
   IMAGE: "e2e-db8a40720-2024-08-26t08-44-10z"
-  VAGRANT_RUN_ENV: "CI"
 steps:
   - label: ":docker:"
     command: .buildkite/validate-docker-compose.sh
@@ -20,9 +19,11 @@ steps:
   # so it finds no changes in a commit which is already on main, unless it is the newest
   - &smoke_test
     label: ":rice: docker-compose-test"
-    command: .buildkite/vagrant-run.sh docker-test
+    command: .buildkite/smoke-test-vm.sh
     artifact_paths: ./*.log
     agents: { queue: "vagrant" }
+    # smoke-test-vm.sh deletes VMs and disks older than an hour, so no job may run that long
+    timeout_in_minutes: 30
     if: build.branch == "main"
 
   # Builds on other branches skip the smoke test if they only change files it does not read.
