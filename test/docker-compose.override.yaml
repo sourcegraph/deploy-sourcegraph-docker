@@ -4,5 +4,6 @@ services:
   executor:
     environment:
       - EXECUTOR_FRONTEND_PASSWORD=executor-smoke-test-token
-      # Every queue. The base file leaves EXECUTOR_QUEUE_NAME empty, which the executor requires with this
+      # Every queue; executor-smoke-test.sh checks for these names.
+      # The base file leaves EXECUTOR_QUEUE_NAME empty, which the executor requires with this
       - EXECUTOR_QUEUE_NAMES=batches,batches-hooks,codeintel

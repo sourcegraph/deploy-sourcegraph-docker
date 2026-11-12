@@ -6,7 +6,7 @@ set -euo pipefail
 # Requires: a running Sourcegraph docker-compose stack with an executor container
 # (from smoke-test.sh or manual start).
 # This script creates a site admin account, configures executor access, and verifies
-# the executor registers with the Sourcegraph instance.
+# the executor registers with the Sourcegraph instance, with every queue.
 #
 # Dependencies: curl, jq, docker
 
@@ -15,6 +15,8 @@ EXECUTOR_TOKEN=$(docker exec executor printenv EXECUTOR_FRONTEND_PASSWORD)
 ADMIN_EMAIL="smoke-test@sourcegraph.com"
 ADMIN_USERNAME="smoke-admin"
 ADMIN_PASSWORD="smoke-test-password-123!"
+# The queues test/docker-compose.override.yaml gives the executor, sorted
+EXPECTED_QUEUE_NAMES="batches,batches-hooks,codeintel"
 
 echo "=== Executor Smoke Test ==="
 
@@ -78,14 +80,23 @@ echo "  Site config updated"
 echo "Step 5: Waiting for executor to register..."
 MAX_ATTEMPTS=24
 for i in $(seq 1 $MAX_ATTEMPTS); do
-    COUNT=$(curl -s -X POST "${FRONTEND_URL}/.api/graphql" \
+    EXECUTORS=$(curl -s -X POST "${FRONTEND_URL}/.api/graphql" \
         -H "Authorization: token $TOKEN" \
         -H 'Content-Type: application/json' \
-        -d '{"query":"{ executors(query: \"\", active: false) { totalCount } }"}' \
-        | jq -r '.data.executors.totalCount // 0')
+        -d '{"query":"{ executors(query: \"\", active: false) { totalCount nodes { queueNames } } }"}')
+    COUNT=$(jq -r '.data.executors.totalCount // 0' <<<"$EXECUTORS")
 
     if [ "$COUNT" -ge 1 ] 2>/dev/null; then
         echo "  Executor registered after $((i * 5))s"
+        # One line per executor: its queue names, sorted
+        QUEUE_NAMES=$(jq -r '.data.executors.nodes[] | .queueNames // [] | sort | join(",")' <<<"$EXECUTORS")
+        if ! grep --quiet --line-regexp --fixed-strings "$EXPECTED_QUEUE_NAMES" <<<"$QUEUE_NAMES"; then
+            echo ""
+            echo "=== EXECUTOR SMOKE TEST FAILED ==="
+            echo "No executor serves the queues \"$EXPECTED_QUEUE_NAMES\". Registered: \"$QUEUE_NAMES\""
+            exit 1
+        fi
+        echo "  Executor serves the queues $EXPECTED_QUEUE_NAMES"
         echo ""
         echo "=== EXECUTOR SMOKE TEST PASSED ==="
         exit 0
