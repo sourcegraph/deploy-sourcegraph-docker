@@ -60,9 +60,15 @@ site=$(graphql '{"query":"{ site { configuration { id effectiveContents } } }"}'
 # Configure the site only while it has no executor token, so restarts keep later changes.
 # Leave it alone if it does not parse
 if jq --exit-status '.contents != null and (.contents | has("executors.accessToken") | not)' <<<"$site" >/dev/null; then
-	# Lets the executor connect, and gives Sourcegraph its portal URL
-	site_configuration=$(jq --arg token "$executor_token" --arg url "$PUBLIC_URL" \
-		'.contents + {"externalURL": $url, "executors.accessToken": $token}' <<<"$site")
+	# Gives Sourcegraph its portal URL, lets the executor and the containers it starts connect,
+	# lets code intelligence jobs be queued, and sends traces to Jaeger
+	site_configuration=$(jq --arg url "${PUBLIC_URL%/}" --arg token "$executor_token" '.contents + {
+		"externalURL": $url,
+		"executors.accessToken": $token,
+		"executors.frontendURL": "http://host.docker.internal",
+		"codeIntelAutoIndexing.enabled": true,
+		"observability.tracing": {"urlTemplate": "{{ .ExternalURL }}/-/debug/jaeger/trace/{{ .TraceID }}"}
+	}' <<<"$site")
 	graphql "$(jq --arg input "$site_configuration" \
 		'{query: "mutation($id: Int!, $input: String!) { updateSiteConfiguration(lastID: $id, input: $input) }",
 		variables: {id, input: $input}}' <<<"$site")" >/dev/null
