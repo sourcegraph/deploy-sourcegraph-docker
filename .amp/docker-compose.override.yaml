@@ -15,3 +15,8 @@ services:
       - EXECUTOR_QUEUE_NAMES=batches,batches-hooks,codeintel
       # Lets the containers the executor starts reach Caddy at host.docker.internal, the executors.frontendURL
       - EXECUTOR_DOCKER_ADD_HOST_GATEWAY=true
+  # Docker refuses a CPU limit above the CPUs in the orb, and an a1.medium orb has 4
+  zoekt-indexserver-0:
+    cpus: 4
+  zoekt-webserver-0:
+    cpus: 4
