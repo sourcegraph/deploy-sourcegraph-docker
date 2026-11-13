@@ -78,5 +78,10 @@ fi
 amp orb portal "$PORT" --name "$portal_name" --title Sourcegraph \
 	--description "Sign in as $admin_username with the password $admin_password"
 
+# Free the disk that images and volumes of earlier versions hold.
+# Every container of this deployment exists by now, so Docker keeps their images and volumes
+sudo docker image prune --all --force | tail -n 1
+sudo docker volume prune --all --force | tail -n 1
+
 # Stay in the foreground. Stopping the service stops the containers
 "${compose[@]}" up
