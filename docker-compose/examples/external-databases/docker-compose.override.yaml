@@ -26,9 +26,7 @@ x-env-vars-database: &env-vars-database
   PGSSLMODE: require
   PGUSER: sg
 
-# Uncomment if using AWS RDS with IAM authentication
-# PG_CONNECTION_UPDATER: EC2_ROLE_CREDENTIALS
-# AWS_STS_REGIONAL_ENDPOINTS: regional
+# For AWS RDS with IAM authentication, use ../aws-rds-databases/docker-compose.override.yaml instead
 
 
 services:

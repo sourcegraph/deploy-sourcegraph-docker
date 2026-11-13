@@ -118,13 +118,14 @@ services:
   # Description: Serves the frontend of Sourcegraph via HTTP(S).
   #
   # Disk: 128GB / non-persistent SSD
-  # Ports exposed to other Sourcegraph services: 6060/TCP, 3080 (HTTP), and/or 3443 (HTTPS)
+  # Ports exposed to other Sourcegraph services: 6060/TCP, 3080 (HTTP)
   # Ports exposed to the public internet: none
   #
-  # Note: SRC_GIT_SERVERS, and SEARCHER_URL are space-separated
-  # lists which each allow you to specify more container instances for scaling
-  # purposes. Be sure to also apply such a change here to the frontend-internal
-  # service.
+  # Note: SRC_GIT_SERVERS, SEARCHER_URL, INDEXED_SEARCH_SERVERS, and INDEXED_SEARCH_INDEXER
+  # each take either a space-separated list of addresses, or a number of replicas,
+  # ex. SRC_GIT_SERVERS=2 is the same as SRC_GIT_SERVERS=gitserver-0:3178 gitserver-1:3178.
+  # Only the two frontend services read them; be sure to apply the same change to the
+  # frontend-internal service.
   sourcegraph-frontend-0:
     container_name: sourcegraph-frontend-0
     image: 'index.docker.io/sourcegraph/frontend:8.2.0@sha256:00adad80d2a9e49c586d6735a1ddbc2e89fc06d6af0a3b668aefbcb7802f2e95'
@@ -357,7 +358,7 @@ services:
   # Description: Manages background processes.
   #
   # Disk: 128GB / non-persistent SSD
-  # Ports exposed to other Sourcegraph services: 3189/TCP 6060/TCP
+  # Ports exposed to other Sourcegraph services: 3189/TCP 6060/TCP 6996/TCP (executor metrics)
   # Ports exposed to the public internet: none
   #
   worker:
@@ -371,9 +372,6 @@ services:
     environment:
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
-      - 'SRC_GIT_SERVERS=gitserver-0:3178'
-      - 'SEARCHER_URL=http://searcher-0:3181'
-      - 'INDEXED_SEARCH_SERVERS=zoekt-webserver-0:6070'
     volumes:
       - 'worker:/mnt/cache'
     networks:
@@ -463,8 +461,8 @@ services:
   # Add the following environment variables if you wish to use an auth proxy with Grafana:
   #
   # 'GF_AUTH_PROXY_ENABLED=true'
-  # 'GF_AUTH_PROXY_HEADER_NAME='X-Forwarded-User'
-  # 'GF_SERVER_ROOT_URL='https://grafana.example.com'
+  # 'GF_AUTH_PROXY_HEADER_NAME=X-Forwarded-User'
+  # 'GF_SERVER_ROOT_URL=https://grafana.example.com'
   grafana:
     container_name: grafana
     image: 'index.docker.io/sourcegraph/grafana:8.2.0@sha256:fd478ac1a5ce4552bfc388984a559548b5b7ea8001c2e65adcfb7e292bb54784'
@@ -493,7 +491,7 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
-    # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
+    # You may set `privileged` to `false` and `cadvisor` will run with reduced privileges.
     # `cadvisor` requires root privileges in order to display provisioning metrics.
     # These metrics provide critical information to help you scale the Sourcegraph deployment.
     # If you would like to bring your own infrastructure monitoring & alerting solution,
@@ -549,7 +547,7 @@ services:
   # Description: PostgreSQL database for various data.
   #
   # Disk: 128GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to other Sourcegraph services: 5432/TCP
   # Ports exposed to the public internet: none
   #
   pgsql:
@@ -600,7 +598,7 @@ services:
   #
   # Disk: 128GB / persistent SSD
   # Network: 1Gbps
-  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to other Sourcegraph services: 5432/TCP
   # Ports exposed to the public internet: none
   #
   codeintel-db:
@@ -651,7 +649,7 @@ services:
   #
   # Disk: 128GB / persistent SSD
   # Network: 1Gbps
-  # Ports exposed to other Sourcegraph services: 5432/TCP 9187/TCP
+  # Ports exposed to other Sourcegraph services: 5432/TCP
   # Ports exposed to the public internet: none
   #
   codeinsights-db:
@@ -732,7 +730,7 @@ services:
   # Description: Redis for storing short-lived caches.
   #
   # Disk: 128GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
+  # Ports exposed to other Sourcegraph services: 6379/TCP
   # Ports exposed to the public internet: none
   #
   redis-cache:
@@ -750,7 +748,7 @@ services:
   # Description: Redis for storing semi-persistent data like user sessions.
   #
   # Disk: 128GB / persistent SSD
-  # Ports exposed to other Sourcegraph services: 6379/TCP 9121/TCP
+  # Ports exposed to other Sourcegraph services: 6379/TCP
   # Ports exposed to the public internet: none
   #
   redis-store:
