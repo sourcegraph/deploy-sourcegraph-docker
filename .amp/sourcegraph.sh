@@ -8,17 +8,16 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 frontend_url="http://localhost:${PORT}"
 admin_username='admin'
 admin_email='admin@example.com'
+# The same in every orb, so nobody has to look it up
+admin_password='Sourcegraph123'
 secrets_directory="$HOME/.config/sourcegraph"
 
-# Each orb makes its own secrets, so the repository holds none
-make_secret() {
-	if [[ ! -f "$secrets_directory/$1" ]]; then
-		(umask 077 && mkdir -p "$secrets_directory" && openssl rand -hex 16 >"$secrets_directory/$1")
-	fi
-	cat "$secrets_directory/$1"
-}
-admin_password=$(make_secret admin-password)
-executor_token=$(make_secret executor-token)
+# Each orb makes its own executor token
+executor_token_file="$secrets_directory/executor-token"
+if [[ ! -f "$executor_token_file" ]]; then
+	(umask 077 && mkdir -p "$secrets_directory" && openssl rand -hex 16 >"$executor_token_file")
+fi
+executor_token=$(<"$executor_token_file")
 
 # Variables for .amp/docker-compose.override.yaml. A file keeps the token out of the sudo log
 compose_variables="$secrets_directory/compose.env"

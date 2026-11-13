@@ -26,7 +26,7 @@ $guidance_heading
 
 - \`amp orb services ensure\` starts Sourcegraph with Jaeger and an executor, from the Compose files in
   \`docker-compose/\`, \`docker-compose/jaeger/\`, and \`docker-compose/executors/\`, and prints its portal URL.
-- The first site admin is \`admin\`. Its password is in \`~/.config/sourcegraph/admin-password\`.
+- The first site admin is \`admin\`, with the password \`Sourcegraph123\`.
   When you start Sourcegraph for the user, give them the portal URL, the username, and the password.
 - \`amp orb service logs sourcegraph\` shows the logs of every container.
   After changing a Compose file, run \`amp orb service restart sourcegraph\`.
