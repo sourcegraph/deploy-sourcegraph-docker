@@ -1,0 +1,20 @@
+# caddy/builtins/http.Caddyfile, changed so Sourcegraph loads in the orb's Portal tab, which shows it in an iframe.
+# Sourcegraph refuses requests from an iframe, and tells browsers not to show its pages in one.
+# This turns off Sourcegraph's clickjacking protection, which is fine only for a disposable test deployment
+:80
+
+# The health check in .amp/services.yaml: 404 until .amp/sourcegraph.sh has set up the site admin and site configuration
+handle /-/amp-ready {
+	root * /amp-ready
+	rewrite * /ready
+	file_server
+}
+
+handle {
+	reverse_proxy {
+		to {$SRC_FRONTEND_ADDRESSES}
+		trusted_proxies 0.0.0.0/0
+		header_up -Sec-Fetch-Dest
+		header_down -X-Frame-Options
+	}
+}
