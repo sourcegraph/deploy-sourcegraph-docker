@@ -199,7 +199,7 @@ promoteToPublic:
 
           # Create the final branch holding the tagged commit
           git checkout "${promote_branch}"
-          git switch -c "${release_branch}"
+          git switch -C "${release_branch}"
 
           # A retried finalize finds its own tag; only a tag elsewhere is an error
           if tagged=$(git rev-parse -q --verify "refs/tags/{{version}}^{commit}"); then
