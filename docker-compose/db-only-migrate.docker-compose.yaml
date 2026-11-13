@@ -23,7 +23,10 @@ services:
 
 volumes:
   pgsql:
+  pgsql-socket:
   codeintel-db:
+  codeintel-db-socket:
   codeinsights-db:
+  codeinsights-db-socket:
 networks:
   sourcegraph:

@@ -8,6 +8,7 @@ services:
     user: root
     # Run with privileged capabilities (required for docker daemon control)
     privileged: true
+    read_only: true
     environment:
       # Refer to https://sourcegraph.com/docs/self-hosted/executors/executors-config on how to populate these variables
       - EXECUTOR_FRONTEND_URL=http://sourcegraph-frontend-0:3080
@@ -27,6 +28,9 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
       # Mount volume for workspaces shared by executor and launched containers
       - '/scratch:/scratch'
+    tmpfs:
+      # The git, docker, and src commands the executor runs do not inherit TMPDIR
+      - '/tmp'
     networks:
       - sourcegraph
     restart: always
