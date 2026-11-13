@@ -6,10 +6,10 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 frontend_url="http://localhost:${PORT}"
-admin_username='admin'
-admin_email='admin@example.com'
-# The same in every orb, so nobody has to look it up
-admin_password='Sourcegraph123'
+# The first site admin, from the Amp project's environment variables, so it is the same in every orb
+admin_username=${SOURCEGRAPH_ADMIN_USERNAME:?"Set it in the Amp project's environment variables"}
+admin_email=${SOURCEGRAPH_ADMIN_EMAIL:?"Set it in the Amp project's environment variables"}
+admin_password=${SOURCEGRAPH_ADMIN_PASSWORD:?"Set it in the Amp project's environment variables"}
 secrets_directory="$HOME/.config/sourcegraph"
 
 # Each orb makes its own executor token
@@ -38,7 +38,8 @@ compose=(sudo docker compose --env-file "$compose_variables"
 # Sourcegraph refuses this request once it has a user, so a restart keeps the first admin
 curl --silent --output /dev/null --request POST "$frontend_url/-/site-init" \
 	--header 'Content-Type: application/json' \
-	--data "{\"email\":\"$admin_email\",\"username\":\"$admin_username\",\"password\":\"$admin_password\"}"
+	--data "$(jq --null-input --arg email "$admin_email" --arg username "$admin_username" \
+		--arg password "$admin_password" '{$email, $username, $password}')"
 
 # Stop here if the admin cannot sign in. The session cookie also authorizes the GraphQL requests below
 cookie_jar=$(mktemp)
@@ -48,7 +49,7 @@ trap 'rm -f "$cookie_jar" ".amp/portals/$portal_name.json"' EXIT
 trap exit TERM
 curl --silent --fail --output /dev/null --cookie-jar "$cookie_jar" --request POST "$frontend_url/-/sign-in" \
 	--header 'Content-Type: application/json' \
-	--data "{\"email\":\"$admin_email\",\"password\":\"$admin_password\"}"
+	--data "$(jq --null-input --arg email "$admin_email" --arg password "$admin_password" '{$email, $password}')"
 
 # Prints the response, and fails if it has errors
 graphql() {
