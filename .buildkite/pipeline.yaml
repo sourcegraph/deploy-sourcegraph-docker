@@ -21,12 +21,34 @@ steps:
     agents: { queue: "vagrant" }
     if: build.branch == "main"
 
-  # Builds on other branches skip the smoke test if they only change docs
+  # Builds on other branches skip the smoke test if they only change files it does not read.
+  # New files run it, until someone adds them here
   - <<: *smoke_test
     if: build.branch != "main"
     if_changed:
       include: "**"
-      exclude: "**.md"
+      exclude:
+        # Docs, including the PR template and READMEs in mounted directories
+        - "**.md"
+        # GitHub Actions, editor and repository settings
+        - ".github/**"
+        - ".vscode/**"
+        - ".gitignore"
+        - "renovate.json"
+        # Release manifests
+        - "release.yaml"
+        - "batch-change/**"
+        # Prettier inputs, which the :lipstick: step checks
+        - ".prettierignore"
+        - "prettier.config.js"
+        - "package.json"
+        - "package-lock.json"
+        # Compose files the smoke test does not start
+        - "docker-compose/db-only-migrate.docker-compose.yaml"
+        - "docker-compose/dev/**"
+        - "docker-compose/examples/**"
+        # Caddyfiles the base file leaves commented out
+        - "caddy/builtins/https.*"
 
   # Please keep in mind that the release manifest uses specific branch names when creating releases.
   # Therefore, if you update them, or if you decide to change how we detect what kind of build we're dealing

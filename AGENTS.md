@@ -24,7 +24,7 @@ CI runs these on every branch. `.tool-versions` pins Node and the GitHub CLI; CI
 
 - `test/smoke-test.sh` starts the base file, and compares the number of running containers with `expect_containers`. Update that number in the same pull request that adds or removes a service.
 - CI does not run `test/executor-smoke-test.sh`. Run it against a running deployment when you change `docker-compose/executors/`.
-- A branch which only changes Markdown files skips the step. Builds on `main` always run it.
+- A branch which only changes files listed in the step's `if_changed` `exclude` skips the step. Builds on `main` always run it. When the smoke test starts reading a file on that list, remove it from the list.
 - The VM image is built from `gcp/images/e2e` in sourcegraph/infrastructure.
 
 ## Conventions
