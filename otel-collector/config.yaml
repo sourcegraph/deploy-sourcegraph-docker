@@ -1,13 +1,21 @@
-# This is the template configuration for OpenTelemetry collector, and is not used by default.
+# This is the default configuration for the OpenTelemetry collector.
 # It is mounted to '/etc/otel-collector/config.yaml' in the otel-collector container.
 
 receivers:
   otlp:
     protocols:
-      grpc: # port 4317
-      http: # port 4321
+      # The collector only listens on localhost by default, which other containers cannot reach
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
 
 exporters:
+  # Logs a sample of the received traces to the container's output
+  debug:
+    verbosity: basic
+    sampling_initial: 5
+    sampling_thereafter: 200
   # Add your exporter(s) configuration here. For each exporter, make sure it is enabled
   # in the service configuration below.
   # Refer to our OpenTelemetry docs for information on how to configure different exporters:
@@ -22,12 +30,20 @@ extensions:
 service:
   telemetry:
     metrics:
-      address: ":8888"
+      # Prometheus scrapes the collector's own metrics from port 8888
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: "0.0.0.0"
+                port: 8888
+                without_type_suffix: true
+                without_units: true
   pipelines:
     traces:
       exporters:
-        # Add the name of your exporter(s) here, e.g.:
-        # - logging
+        # Add the name of your exporter(s) here
+        - debug
       receivers:
         - otlp # Do not remove this receiver
   extensions:

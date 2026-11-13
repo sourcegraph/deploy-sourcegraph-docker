@@ -3,18 +3,14 @@
 
 
 
-## Reusable blocks of environment variables
+## Reusable block of environment variables
 
-# For all containers, which connect to any of the databases
-x-database-env-var-rds-iam-auth: &database-env-var-rds-iam-auth
+# For migrator and both frontends, the only services which read these
+# The other services get their database connection strings from frontend
+x-database-env-vars: &database-env-vars
 
   # Using AWS RDS IAM authentication, not a password, so instruct the psql library to refresh the token
   PG_CONNECTION_UPDATER: EC2_ROLE_CREDENTIALS
-
-# For both migrator and frontend
-x-database-env-vars: &database-env-vars
-
-  <<: *database-env-var-rds-iam-auth
 
   # NOTE: Must clear / override the PGDATASOURCE env vars, otherwise frontends don't start up
   PGHOST: example-database-pgsql.cluster-example.us-west-2.rds.amazonaws.com
@@ -46,11 +42,6 @@ x-database-env-vars: &database-env-vars
 ## Overrides for services defined in the base docker-compose.yaml files
 services:
 
-
-  gitserver-0:
-    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
-    environment:
-      <<: *database-env-var-rds-iam-auth
 
 
   migrator:
@@ -86,18 +77,6 @@ services:
     # If migrator fails to start up due to drift detected, or other issues, please open a support ticket by emailing support@sourcegraph.com
 
 
-  precise-code-intel-worker:
-    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
-    environment:
-      <<: *database-env-var-rds-iam-auth
-
-
-  searcher-0:
-    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
-    environment:
-      <<: *database-env-var-rds-iam-auth
-
-
   sourcegraph-frontend-0:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
@@ -113,22 +92,6 @@ services:
     # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
     environment:
       <<: *database-env-vars
-
-
-  syntactic-code-intel-worker:
-    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
-    environment:
-      <<: *database-env-var-rds-iam-auth
-
-
-  worker:
-    # Add / merge the env vars, to only overwrite the ones we need, and leave the others intact
-    environment:
-      <<: *database-env-var-rds-iam-auth
-      # Add additional env vars, as needed
-      # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_ENABLED: true
-      # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_ORGANIZATIONS: true
-      # TELEMETRY_GATEWAY_EXPORTER_USERMETADATA_EXPORT_USERS: true
 
 
 ## Disable services

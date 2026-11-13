@@ -3,7 +3,7 @@ services:
   # (https://www.jaegertracing.io/docs/2.16/getting-started/) for distributed tracing.
   #
   # Disk: none
-  # Ports exposed to other Sourcegraph services: 5778/TCP 4317/TCP 4318/TCP
+  # Ports exposed to other Sourcegraph services: 4317/TCP (OTLP gRPC) 16686/HTTP
   # Ports exposed to the public internet: none
   # Ports exposed to site admins only: 16686/HTTP
   #
@@ -17,11 +17,6 @@ services:
     ports:
       # Query port
       - '0.0.0.0:16686:16686'
-      # OTLP ports
-      - '0.0.0.0:4317:4317' # gRPC
-      - '0.0.0.0:4318:4318' # HTTP
-      # Remote sampling
-      - '0.0.0.0:5778:5778'
     networks:
       - sourcegraph
     restart: always
