@@ -3,18 +3,20 @@ set -euo pipefail
 
 # Executor smoke test for deploy-sourcegraph-docker
 #
-# Requires: a running Sourcegraph docker-compose stack (from smoke-test.sh or manual start).
-# This script creates a site admin account, configures executor access, starts an executor
-# container, and verifies it registers with the Sourcegraph instance.
+# Requires: a running Sourcegraph docker-compose stack with an executor container
+# (from smoke-test.sh or manual start).
+# This script creates a site admin account, configures executor access, and verifies
+# the executor registers with the Sourcegraph instance, with every queue.
 #
-# Dependencies: curl, jq, docker compose
+# Dependencies: curl, jq, docker
 
 FRONTEND_URL="${FRONTEND_URL:-http://localhost:80}"
-EXECUTOR_TOKEN="executor-smoke-test-token"
+EXECUTOR_TOKEN=$(docker exec executor printenv EXECUTOR_FRONTEND_PASSWORD)
 ADMIN_EMAIL="smoke-test@sourcegraph.com"
 ADMIN_USERNAME="smoke-admin"
 ADMIN_PASSWORD="smoke-test-password-123!"
-COMPOSE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../docker-compose" && pwd)"
+# The queues test/docker-compose.override.yaml gives the executor, sorted
+EXPECTED_QUEUE_NAMES="batches,batches-hooks,codeintel"
 
 echo "=== Executor Smoke Test ==="
 
@@ -74,29 +76,27 @@ curl -s -o /dev/null -X POST "${FRONTEND_URL}/.api/graphql" \
     --data-raw "{\"query\":\"mutation UpdateSiteConfig(\$input: String!) { updateSiteConfiguration(lastID: $LAST_ID, input: \$input) }\", \"variables\":{\"input\":$NEW_CONFIG}}"
 echo "  Site config updated"
 
-# Step 5: Start executor container
-echo "Step 5: Starting executor container..."
-EXECUTOR_CONTAINER=$(docker compose \
-    -f "${COMPOSE_DIR}/docker-compose.yaml" \
-    -f "${COMPOSE_DIR}/executors/executor.docker-compose.yaml" \
-    run -d \
-    -e "EXECUTOR_FRONTEND_PASSWORD=${EXECUTOR_TOKEN}" \
-    -e EXECUTOR_QUEUE_NAME=batches \
-    executor 2>&1 | tail -1)
-echo "  Executor container started: ${EXECUTOR_CONTAINER:0:12}"
-
-# Step 6: Wait for executor to register
-echo "Step 6: Waiting for executor to register..."
+# Step 5: Wait for executor to register
+echo "Step 5: Waiting for executor to register..."
 MAX_ATTEMPTS=24
 for i in $(seq 1 $MAX_ATTEMPTS); do
-    COUNT=$(curl -s -X POST "${FRONTEND_URL}/.api/graphql" \
+    EXECUTORS=$(curl -s -X POST "${FRONTEND_URL}/.api/graphql" \
         -H "Authorization: token $TOKEN" \
         -H 'Content-Type: application/json' \
-        -d '{"query":"{ executors(query: \"\", active: false) { totalCount } }"}' \
-        | jq -r '.data.executors.totalCount // 0')
+        -d '{"query":"{ executors(query: \"\", active: false) { totalCount nodes { queueNames } } }"}')
+    COUNT=$(jq -r '.data.executors.totalCount // 0' <<<"$EXECUTORS")
 
     if [ "$COUNT" -ge 1 ] 2>/dev/null; then
         echo "  Executor registered after $((i * 5))s"
+        # One line per executor: its queue names, sorted
+        QUEUE_NAMES=$(jq -r '.data.executors.nodes[] | .queueNames // [] | sort | join(",")' <<<"$EXECUTORS")
+        if ! grep --quiet --line-regexp --fixed-strings "$EXPECTED_QUEUE_NAMES" <<<"$QUEUE_NAMES"; then
+            echo ""
+            echo "=== EXECUTOR SMOKE TEST FAILED ==="
+            echo "No executor serves the queues \"$EXPECTED_QUEUE_NAMES\". Registered: \"$QUEUE_NAMES\""
+            exit 1
+        fi
+        echo "  Executor serves the queues $EXPECTED_QUEUE_NAMES"
         echo ""
         echo "=== EXECUTOR SMOKE TEST PASSED ==="
         exit 0
@@ -110,8 +110,8 @@ echo "=== EXECUTOR SMOKE TEST FAILED ==="
 echo "Executor did not register within $((MAX_ATTEMPTS * 5))s"
 echo ""
 echo "Container status:"
-docker inspect "$EXECUTOR_CONTAINER" --format '{{.State.Status}} (exit code: {{.State.ExitCode}})' 2>/dev/null || echo "  Container not found"
+docker inspect executor --format '{{.State.Status}} (exit code: {{.State.ExitCode}})' 2>/dev/null || echo "  Container not found"
 echo ""
 echo "Container logs:"
-docker logs "$EXECUTOR_CONTAINER" 2>&1 | tail -20 || echo "  No logs available"
+docker logs executor 2>&1 | tail -20 || echo "  No logs available"
 exit 1

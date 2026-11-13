@@ -12,6 +12,10 @@ steps:
     command: .buildkite/prettier-check.sh
     agents: { queue: "vagrant" }
 
+  - label: ":bash:"
+    command: git ls-files -z '*.sh' .buildkite/hooks | xargs -0 shellcheck
+    agents: { queue: "vagrant" }
+
   # Builds on main always run the smoke test. if_changed compares against origin/main,
   # so it finds no changes in a commit which is already on main, unless it is the newest
   - &smoke_test

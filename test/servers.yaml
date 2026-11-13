@@ -11,4 +11,7 @@
   service_account: e2e-builder@sourcegraph-ci.iam.gserviceaccount.com
   shell_commands:
    - "/deploy-sourcegraph-docker/test/smoke-test.sh"
+   # The Ubuntu 20.04 VM image has no jq. Skip /etc/apt/sources.list.d: that image lacks the key for its Chrome repository, so a full update fails
+   - "command -v jq >/dev/null || { apt-get update --quiet --option Dir::Etc::sourceparts=- && apt-get install --quiet --yes jq; }"
+   - "/deploy-sourcegraph-docker/test/executor-smoke-test.sh"
 
