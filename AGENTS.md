@@ -12,7 +12,7 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 
 ## Checks
 
-- `.tool-versions` pins Node and the GitHub CLI; CI installs them with mise.
+- `.tool-versions` pins Node and the GitHub CLI; CI installs them with mise. `renovate.json` turns Renovate off so that these tools are upgraded together with the `sourcegraph/sourcegraph` monorepo, not on their own.
 - Validate the base file with `docker compose -f docker-compose/docker-compose.yaml config -q`. CI runs the same check in `.buildkite/validate-docker-compose.sh` with the standalone `docker-compose` binary, so the base file must stay valid for that binary. CI validates no other compose file.
 - Check formatting with `npm ci && npm run prettier-check`; `npm run prettier` rewrites the files. Prettier covers only JavaScript and JSON files. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
 - The `docker-compose-test` step in `.buildkite/pipeline.yaml` starts the base file on a GCP VM and runs `test/smoke-test.sh`. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run `.buildkite/vagrant-run.sh docker-test` yourself only when a person asks.
@@ -22,7 +22,7 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 ## Conventions
 
 - Customer override files refer to the base file's service names, volume names, published ports, and environment variable names. Describe every rename or removal of one in the pull request description.
-- Every `image:` has the form `index.docker.io/sourcegraph/<name>:<version>@sha256:<digest>`. The release process sets the versions and digests (`sg ops update-images` in `release.yaml`) and brings them to `main` in "Update main: build v…" pull requests. Leave them unchanged; Renovate is turned off for these images for the same reason.
+- Every `image:` has the form `index.docker.io/sourcegraph/<name>:<version>@sha256:<digest>`. The release process sets the versions and digests (`sg ops update-images` in `release.yaml`) and brings them to `main` in "Update main: build v…" pull requests. Leave them unchanged.
 - `.github/PULL_REQUEST_TEMPLATE.md` requires a "Test plan" section in every pull request description.
 
 ## Branches and releases
