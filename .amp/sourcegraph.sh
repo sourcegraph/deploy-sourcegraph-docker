@@ -22,9 +22,16 @@ executor_token=$(<"$executor_token_file")
 # The token last written to the site configuration, which shows it only as REDACTED
 configured_token_file="$secrets_directory/configured-executor-token"
 
+# Caddy serves this file at /-/amp-ready, the health check in .amp/services.yaml, so Amp reports the service
+# ready only once the site admin exists and the site is configured
+ready_directory="$secrets_directory/ready"
+mkdir -p "$ready_directory"
+rm -f "$ready_directory/ready"
+
 # Variables for .amp/docker-compose.override.yaml. A file keeps the token out of the sudo log
 compose_variables="$secrets_directory/compose.env"
-(umask 077 && printf 'PORT=%s\nEXECUTOR_TOKEN=%s\n' "$PORT" "$executor_token" >"$compose_variables")
+(umask 077 && printf 'PORT=%s\nEXECUTOR_TOKEN=%s\nREADY_DIRECTORY=%s\n' "$PORT" "$executor_token" "$ready_directory" \
+	>"$compose_variables")
 compose=(sudo docker compose --env-file "$compose_variables"
 	--file docker-compose/docker-compose.yaml
 	--file docker-compose/jaeger/docker-compose.yaml
@@ -38,7 +45,7 @@ compose+=(--file .amp/docker-compose.override.yaml)
 # When Amp stops the service, or a step fails, stop the containers and remove these files
 cookie_jar=$(mktemp)
 portal_name=sourcegraph-admin
-trap '"${compose[@]}" stop; rm -f "$cookie_jar" ".amp/portals/$portal_name.json"' EXIT
+trap 'rm -f "$ready_directory/ready"; "${compose[@]}" stop; rm -f "$cookie_jar" ".amp/portals/$portal_name.json"' EXIT
 trap exit TERM
 
 # Start every service, then wait until the frontend is healthy.
@@ -56,9 +63,12 @@ post() {
 credentials=$(jq --null-input --arg email "$admin_email" --arg username "$admin_username" \
 	--arg password "$admin_password" '{$email, $username, $password}')
 # Sign in, or create the first site admin, which also signs in. The session authorizes the GraphQL requests below
-if ! post /-/sign-in "$credentials" >/dev/null 2>&1 && ! post /-/site-init "$credentials"; then
-	echo "Could not sign in as $admin_username, or create that site admin. Sourcegraph creates only the first one," \
-		"so after changing the SOURCEGRAPH_ADMIN_* variables, change that user to match" >&2
+if ! sign_in_error=$(post /-/sign-in "$credentials" 2>&1) &&
+	! site_init_error=$(post /-/site-init "$credentials" 2>&1); then
+	echo "Could not sign in as $admin_username: ${sign_in_error//$'\n'/ }" >&2
+	echo "Could not create that site admin: ${site_init_error//$'\n'/ }" >&2
+	echo "Sourcegraph creates only the first site admin, so after changing the SOURCEGRAPH_ADMIN_* variables," \
+		"change that user to match" >&2
 	exit 1
 fi
 
@@ -96,6 +106,7 @@ fi
 # Shows the sign-in in the Portal tab, as a note next to the Sourcegraph link, until the service stops
 amp orb portal "$PORT" --name "$portal_name" --title Sourcegraph \
 	--description "Sign in as $admin_username with the password $admin_password"
+touch "$ready_directory/ready"
 
 # Free the disk that images of earlier versions hold, once the deployment's images change.
 # Every container of this deployment exists by now, so Docker keeps their images.

@@ -3,7 +3,8 @@
 services:
   sourcegraph:
     command: .amp/sourcegraph.sh
-    health: /healthz
+    # Served by Caddy once .amp/sourcegraph.sh has created the site admin and configured the site
+    health: /-/amp-ready
     # .amp/sourcegraph.sh adds the Sourcegraph link, with the admin password in its note
     portals:
       - url: /admin/executors
