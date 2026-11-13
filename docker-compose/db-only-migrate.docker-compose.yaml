@@ -4,7 +4,6 @@
 # See https://sourcegraph.com/docs/self-hosted/deploy/docker-compose/operations
 #
 # 🚨This file MUST be kept in sync with the pgsql definition in docker-compose/docker-compose.yaml
-version: '2.4'
 services:
   # Description: PostgreSQL database for various data.
   #
