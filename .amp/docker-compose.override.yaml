@@ -6,6 +6,9 @@ services:
     ports: !override
       - '${PORT:?}:80'
       - '80:80'
+    # Relative to docker-compose/, the directory of the first Compose file
+    volumes:
+      - '../.amp/Caddyfile:/etc/caddy/Caddyfile'
   # Connects the executor from docker-compose/executors/ to Sourcegraph,
   # with the token .amp/sourcegraph.sh also sets as executors.accessToken in the site configuration
   executor:
