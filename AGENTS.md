@@ -12,9 +12,9 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 
 ## Checks
 
-- `.tool-versions` pins Node, Yarn, and the GitHub CLI; CI installs them with mise.
+- `.tool-versions` pins Node and the GitHub CLI; CI installs them with mise.
 - Validate the base file with `docker compose -f docker-compose/docker-compose.yaml config -q`. CI runs the same check in `.buildkite/validate-docker-compose.sh` with the standalone `docker-compose` binary, so the base file must stay valid for that binary. CI validates no other compose file.
-- Check formatting with `yarn && yarn run prettier-check`; `yarn run prettier` rewrites the files. Prettier covers only JavaScript and JSON files. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
+- Check formatting with `npm ci && npm run prettier-check`; `npm run prettier` rewrites the files. Prettier covers only JavaScript and JSON files. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
 - The `docker-compose-test` step in `.buildkite/pipeline.yaml` starts the base file on a GCP VM and runs `test/smoke-test.sh`. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run `.buildkite/vagrant-run.sh docker-test` yourself only when a person asks.
 - `test/smoke-test.sh` compares the number of running containers with `expect_containers`. Update that number in the same pull request that adds or removes a service.
 - CI does not run `test/executor-smoke-test.sh`. Run it against a running deployment when you change `docker-compose/executors/`.
@@ -28,5 +28,5 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 ## Branches and releases
 
 - `main` tracks development. Each release is a tag such as `v8.1.0`.
-- To copy a pull request to a release branch such as `8.1.x`, add the label `backport 8.1.x` to it. `.github/workflows/backport.yml` opens the backport pull request once the original merges.
+- To copy a pull request to a release branch such as `8.2.x`, add the label `backport 8.2.x` to it. `.github/workflows/backport.yml` opens the backport pull request once the original merges.
 - The release tooling owns the branches named `internal/release-*`, `promote/release-*`, and `release-v*`, and the `v*` tags. Do not create, push to, or delete them: CI runs the release steps on a branch whose name starts with `internal/release-` or `promote/release-`, and each `release-v*` branch holds the commit of a tag that customers deploy.
