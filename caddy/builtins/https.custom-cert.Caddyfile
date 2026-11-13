@@ -5,12 +5,6 @@
 
 {$SRC_SITE_ADDRESS}
 
-# Redirects all HTTP traffic to HTTPS (using custom SSL certificates disables the automatic HTTPS feature of Caddy, see https://caddyserver.com/docs/automatic-https)
-@http {
-	protocol http
-}
-redir @http https://{host}{uri}
-
 tls /sourcegraph.pem /sourcegraph.key
 
 # Add the reverse proxies IPs (or IP CIDR ranges) to the trusted_proxies list.

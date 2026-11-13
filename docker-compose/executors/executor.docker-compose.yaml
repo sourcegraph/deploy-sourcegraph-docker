@@ -19,9 +19,6 @@ services:
       - EXECUTOR_DOCKER_HOST_MOUNT_PATH=/scratch
       # Note: Must match right-hand side of scratch volume mount
       - TMPDIR=/scratch
-      # Run as root (required for docker daemon control)
-      - UID=1000
-      - GID=1000
     volumes:
       # Mount docker socket
       - '/var/run/docker.sock:/var/run/docker.sock'
