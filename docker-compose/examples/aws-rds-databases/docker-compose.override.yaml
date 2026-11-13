@@ -97,6 +97,7 @@ services:
 ## Disable services
 
   # Drop built-in database services and volumes from the base compose file
+  # Prometheus still lists the three removed exporters as targets, and shows them as down; this is expected
   pgsql: !reset {}
   pgsql-exporter: !reset {}
   codeintel-db: !reset {}

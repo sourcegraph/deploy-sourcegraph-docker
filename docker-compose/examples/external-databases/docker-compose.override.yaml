@@ -49,6 +49,7 @@ services:
 
 
   # Disable built-in databases
+  # Prometheus still lists the three removed exporters as targets, and shows them as down; this is expected
   codeinsights-db-exporter: !reset {}
   codeinsights-db: !reset {}
   codeintel-db-exporter: !reset {}
