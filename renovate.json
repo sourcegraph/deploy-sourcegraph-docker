@@ -1,12 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>sourcegraph/renovate-config", "schedule:weekly", "group:allNonMajor"],
-  "packageRules": [
-    {
-      "description": "Sourcegraph image tags are set by the release process (release.yaml), not Renovate",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["index.docker.io/sourcegraph/**"],
-      "enabled": false
-    }
-  ]
+  "enabled": false
 }
