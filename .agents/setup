@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Prepares an Amp orb (https://ampcode.com/docs/orbs) to run Sourcegraph with Docker Compose.
-# Amp saves the result as a snapshot for new orbs, so this only installs and downloads.
+# Amp saves the result as a snapshot for new orbs, so this only installs.
 # .amp/services.yaml starts Sourcegraph.
 set -euo pipefail
 
@@ -14,14 +14,6 @@ if ! sudo docker compose version >/dev/null 2>&1; then
 	sudo apt-get update
 	sudo apt-get install -y docker-compose-plugin
 fi
-
-step 'Pull images'
-pull_images() {
-	sudo docker compose --file docker-compose/docker-compose.yaml --file docker-compose/jaeger/docker-compose.yaml \
-		--file docker-compose/executors/executor.docker-compose.yaml pull --quiet
-}
-# Docker Hub times out now and then
-pull_images || { sleep 10 && pull_images; }
 
 step 'Write guidance for agents'
 guidance_file="$HOME/.config/amp/AGENTS.md"

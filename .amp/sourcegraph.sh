@@ -30,8 +30,9 @@ compose=(sudo docker compose --env-file "$compose_variables"
 	--file .amp/docker-compose.override.yaml)
 
 # Start every service, then wait until the frontend is healthy.
-# Waiting for every service fails, because searcher-0 reports unhealthy for a few seconds while it starts
-"${compose[@]}" up --detach
+# Waiting for every service fails, because searcher-0 reports unhealthy for a few seconds while it starts.
+# The first start pulls the images, and Docker Hub times out now and then
+"${compose[@]}" up --detach || { sleep 10 && "${compose[@]}" up --detach; }
 "${compose[@]}" up --detach --wait sourcegraph-frontend-0
 
 # Sourcegraph refuses this request once it has a user, so a restart keeps the first admin
