@@ -30,9 +30,10 @@ compose=(sudo docker compose --env-file "$compose_variables"
 
 # Start every service, then wait until the frontend is healthy.
 # Waiting for every service fails, because searcher-0 reports unhealthy for a few seconds while it starts.
-# The first start pulls the images, and Docker Hub times out now and then
-"${compose[@]}" up --detach || { sleep 10 && "${compose[@]}" up --detach; }
-"${compose[@]}" up --detach --wait sourcegraph-frontend-0
+# The first start pulls the images, and Docker Hub times out now and then.
+# --remove-orphans removes the containers of services the Compose files no longer have, such as after a rename
+"${compose[@]}" up --remove-orphans --detach || { sleep 10 && "${compose[@]}" up --remove-orphans --detach; }
+"${compose[@]}" up --remove-orphans --detach --wait sourcegraph-frontend-0
 
 # Sourcegraph refuses this request once it has a user, so a restart keeps the first admin
 curl --silent --output /dev/null --request POST "$frontend_url/-/site-init" \
@@ -84,4 +85,4 @@ sudo docker image prune --all --force | tail -n 1
 sudo docker volume prune --all --force | tail -n 1
 
 # Stay in the foreground. Stopping the service stops the containers
-"${compose[@]}" up
+"${compose[@]}" up --remove-orphans
