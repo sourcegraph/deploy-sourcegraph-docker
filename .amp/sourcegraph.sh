@@ -6,6 +6,7 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 frontend_url="http://localhost:${PORT}"
+portal_url=${PUBLIC_URL%/}
 # The first site admin, from the Amp project's environment variables, so it is the same in every orb
 admin_username=${SOURCEGRAPH_ADMIN_USERNAME:?"Set it in the Amp project's environment variables"}
 admin_email=${SOURCEGRAPH_ADMIN_EMAIL:?"Set it in the Amp project's environment variables"}
@@ -14,10 +15,12 @@ secrets_directory="$HOME/.config/sourcegraph"
 
 # Each orb makes its own executor token
 executor_token_file="$secrets_directory/executor-token"
-if [[ ! -f "$executor_token_file" ]]; then
+if [[ ! -s "$executor_token_file" ]]; then
 	(umask 077 && mkdir -p "$secrets_directory" && openssl rand -hex 16 >"$executor_token_file")
 fi
 executor_token=$(<"$executor_token_file")
+# The token last written to the site configuration, which shows it only as REDACTED
+configured_token_file="$secrets_directory/configured-executor-token"
 
 # Variables for .amp/docker-compose.override.yaml. A file keeps the token out of the sudo log
 compose_variables="$secrets_directory/compose.env"
@@ -25,8 +28,18 @@ compose_variables="$secrets_directory/compose.env"
 compose=(sudo docker compose --env-file "$compose_variables"
 	--file docker-compose/docker-compose.yaml
 	--file docker-compose/jaeger/docker-compose.yaml
-	--file docker-compose/executors/executor.docker-compose.yaml
-	--file .amp/docker-compose.override.yaml)
+	--file docker-compose/executors/executor.docker-compose.yaml)
+# Naming files turns off Compose's own pick-up of the override file customers keep their changes in
+if [[ -f docker-compose/docker-compose.override.yaml ]]; then
+	compose+=(--file docker-compose/docker-compose.override.yaml)
+fi
+compose+=(--file .amp/docker-compose.override.yaml)
+
+# When Amp stops the service, or a step fails, stop the containers and remove these files
+cookie_jar=$(mktemp)
+portal_name=sourcegraph-admin
+trap '"${compose[@]}" stop; rm -f "$cookie_jar" ".amp/portals/$portal_name.json"' EXIT
+trap exit TERM
 
 # Start every service, then wait until the frontend is healthy.
 # Waiting for every service fails, because searcher-0 reports unhealthy for a few seconds while it starts.
@@ -35,36 +48,39 @@ compose=(sudo docker compose --env-file "$compose_variables"
 "${compose[@]}" up --remove-orphans --detach || { sleep 10 && "${compose[@]}" up --remove-orphans --detach; }
 "${compose[@]}" up --remove-orphans --detach --wait sourcegraph-frontend-0
 
-# Sourcegraph refuses this request once it has a user, so a restart keeps the first admin
-curl --silent --output /dev/null --request POST "$frontend_url/-/site-init" \
-	--header 'Content-Type: application/json' \
-	--data "$(jq --null-input --arg email "$admin_email" --arg username "$admin_username" \
-		--arg password "$admin_password" '{$email, $username, $password}')"
+# Posts JSON, keeps the session cookie, and prints Sourcegraph's reason when it refuses
+post() {
+	curl --silent --show-error --fail-with-body --cookie-jar "$cookie_jar" \
+		--header 'Content-Type: application/json' --data "$2" "$frontend_url$1"
+}
+credentials=$(jq --null-input --arg email "$admin_email" --arg username "$admin_username" \
+	--arg password "$admin_password" '{$email, $username, $password}')
+# Sign in, or create the first site admin, which also signs in. The session authorizes the GraphQL requests below
+if ! post /-/sign-in "$credentials" >/dev/null 2>&1 && ! post /-/site-init "$credentials"; then
+	echo "Could not sign in as $admin_username, or create that site admin. Sourcegraph creates only the first one," \
+		"so after changing the SOURCEGRAPH_ADMIN_* variables, change that user to match" >&2
+	exit 1
+fi
 
-# Stop here if the admin cannot sign in. The session cookie also authorizes the GraphQL requests below
-cookie_jar=$(mktemp)
-portal_name=sourcegraph-admin
-trap 'rm -f "$cookie_jar" ".amp/portals/$portal_name.json"' EXIT
-# When Amp stops the service, wait for Docker Compose to stop the containers, then remove the files above
-trap exit TERM
-curl --silent --fail --output /dev/null --cookie-jar "$cookie_jar" --request POST "$frontend_url/-/sign-in" \
-	--header 'Content-Type: application/json' \
-	--data "$(jq --null-input --arg email "$admin_email" --arg password "$admin_password" '{$email, $password}')"
-
-# Prints the response, and fails if it has errors
+# Prints the response, and fails with its errors
 graphql() {
-	curl --silent --fail --cookie "$cookie_jar" --header 'Content-Type: application/json' --data "$1" "$frontend_url/.api/graphql" |
-		jq --exit-status 'select(.errors == null)'
+	curl --silent --show-error --fail-with-body --cookie "$cookie_jar" --header 'Content-Type: application/json' \
+		--data "$1" "$frontend_url/.api/graphql" |
+		jq --exit-status 'if .errors then "GraphQL errors: \(.errors)\n" | halt_error else . end'
 }
 # The site configuration is JSON with comments, so drop whole-line comments and trailing commas to read it
 site=$(graphql '{"query":"{ site { configuration { id effectiveContents } } }"}' | jq '.data.site.configuration |
 	{id, contents: (.effectiveContents | gsub("(?m)^\\s*//.*$"; "") | gsub(",(?=\\s*[]}])"; "") | fromjson? // null)}')
-# Configure the site only while it has no executor token, so restarts keep later changes.
-# Leave it alone if it does not parse
-if jq --exit-status '.contents != null and (.contents | has("executors.accessToken") | not)' <<<"$site" >/dev/null; then
+# Configure the site when it has no executor token, has an older one, or has another portal URL.
+# Otherwise leave it alone, so restarts keep later changes and its comments
+if jq --exit-status '.contents == null' <<<"$site" >/dev/null; then
+	echo 'Could not parse the site configuration, so left it alone' >&2
+elif [[ "$executor_token" != "$(cat "$configured_token_file" 2>/dev/null)" ]] ||
+	jq --exit-status --arg url "$portal_url" \
+		'.contents | (has("executors.accessToken") | not) or .externalURL != $url' <<<"$site" >/dev/null; then
 	# Gives Sourcegraph its portal URL, lets the executor and the containers it starts connect,
 	# lets code intelligence jobs be queued, and sends traces to Jaeger
-	site_configuration=$(jq --arg url "${PUBLIC_URL%/}" --arg token "$executor_token" '.contents + {
+	site_configuration=$(jq --arg url "$portal_url" --arg token "$executor_token" '.contents + {
 		"externalURL": $url,
 		"executors.accessToken": $token,
 		"executors.frontendURL": "http://host.docker.internal",
@@ -74,16 +90,22 @@ if jq --exit-status '.contents != null and (.contents | has("executors.accessTok
 	graphql "$(jq --arg input "$site_configuration" \
 		'{query: "mutation($id: Int!, $input: String!) { updateSiteConfiguration(lastID: $id, input: $input) }",
 		variables: {id, input: $input}}' <<<"$site")" >/dev/null
+	(umask 077 && cp "$executor_token_file" "$configured_token_file")
 fi
 
 # Shows the sign-in in the Portal tab, as a note next to the Sourcegraph link, until the service stops
 amp orb portal "$PORT" --name "$portal_name" --title Sourcegraph \
 	--description "Sign in as $admin_username with the password $admin_password"
 
-# Free the disk that images and volumes of earlier versions hold.
-# Every container of this deployment exists by now, so Docker keeps their images and volumes
-sudo docker image prune --all --force | tail -n 1
-sudo docker volume prune --all --force | tail -n 1
+# Free the disk that images of earlier versions hold, once the deployment's images change.
+# Every container of this deployment exists by now, so Docker keeps their images.
+# Not on every start, because that also removes the images of executor jobs, which then pull again
+images_file="$secrets_directory/images"
+images=$("${compose[@]}" config --images | sort)
+if [[ "$images" != "$(cat "$images_file" 2>/dev/null)" ]]; then
+	sudo docker image prune --all --force | tail -n 1
+	echo "$images" >"$images_file"
+fi
 
 # Stay in the foreground. Stopping the service stops the containers
 "${compose[@]}" up --remove-orphans
