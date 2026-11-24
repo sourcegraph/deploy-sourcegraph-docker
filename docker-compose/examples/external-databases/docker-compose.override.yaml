@@ -37,7 +37,6 @@ services:
     depends_on: !reset [] # Remove the dependency on the built-in Postgres databases
     environment: !override
       <<: *env-vars-database
-      DEPLOY_TYPE: docker-compose
 
   sourcegraph-frontend-0:
     environment:
