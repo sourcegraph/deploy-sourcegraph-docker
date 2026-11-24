@@ -61,6 +61,7 @@ services:
     # !override drops all env vars from earlier compose files, then defines new ones, to ensure no other env vars are in the mix
     environment: !override
       <<: *database-env-vars
+      DEPLOY_TYPE: docker-compose
 
     # Normal startup of migrator should only ever use the default "up" command, no additional args
     # Overriding the command should only to be used to make specific changes, on single startups, only when needed, only when directed by Sourcegraph Customer Support Engineering

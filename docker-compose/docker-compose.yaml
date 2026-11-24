@@ -19,6 +19,7 @@ services:
       - no-new-privileges:true
     command: ['up']
     environment:
+      - DEPLOY_TYPE=docker-compose
       - PGHOST=pgsql
       - PGPORT=5432
       - PGUSER=sg
@@ -76,6 +77,7 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'XDG_DATA_HOME=/caddy-storage/data'
       - 'XDG_CONFIG_HOME=/caddy-storage/config'
       - 'SRC_FRONTEND_ADDRESSES=sourcegraph-frontend-0:3080'
@@ -235,6 +237,7 @@ services:
       - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     volumes:
@@ -260,6 +263,7 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'SRC_FRONTEND_INTERNAL=http://sourcegraph-frontend-internal:3090'
       - 'OPENTELEMETRY_DISABLED=false'
@@ -285,6 +289,7 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'HOSTNAME=zoekt-webserver-0:6070'
       - 'OPENTELEMETRY_DISABLED=false'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
@@ -315,6 +320,7 @@ services:
       - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
@@ -342,6 +348,7 @@ services:
       - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
@@ -396,6 +403,7 @@ services:
       - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
     healthcheck:
@@ -421,6 +429,8 @@ services:
     mem_limit: '6g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     healthcheck:
       test: "wget -q 'http://127.0.0.1:9238/health' -O /dev/null || exit 1"
       interval: 5s
@@ -453,6 +463,7 @@ services:
       - sourcegraph
     restart: always
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
 
   # Description: Dashboards and graphs for Prometheus metrics.
@@ -473,6 +484,8 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     volumes:
       - 'grafana:/var/lib/grafana'
       - '../grafana/datasources:/sg_config_grafana/provisioning/datasources'
@@ -494,6 +507,8 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     # You may set `privileged` to `false and `cadvisor` will run with reduced privileges.
     # `cadvisor` requires root privileges in order to display provisioning metrics.
     # These metrics provide critical information to help you scale the Sourcegraph deployment.
@@ -529,6 +544,8 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     pid: 'host'
     volumes:
       - /proc:/host/proc:ro
@@ -561,6 +578,8 @@ services:
     security_opt:
       - no-new-privileges:true
     shm_size: '1g'
+    environment:
+      - DEPLOY_TYPE=docker-compose
     healthcheck:
       test: '/liveness.sh'
       interval: 10s
@@ -594,6 +613,7 @@ services:
       - sourcegraph
     restart: always
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'DATA_SOURCE_NAME=postgres://sg:@pgsql:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/queries.yaml'
 
@@ -612,6 +632,8 @@ services:
     security_opt:
       - no-new-privileges:true
     shm_size: '1g'
+    environment:
+      - DEPLOY_TYPE=docker-compose
     healthcheck:
       test: '/liveness.sh'
       interval: 10s
@@ -645,6 +667,7 @@ services:
       - sourcegraph
     restart: always
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'DATA_SOURCE_NAME=postgres://sg:@codeintel-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_intel_queries.yaml'
 
@@ -664,6 +687,7 @@ services:
       - no-new-privileges:true
     shm_size: '1g'
     environment:
+      - DEPLOY_TYPE=docker-compose
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
@@ -701,6 +725,7 @@ services:
       - sourcegraph
     restart: always
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'DATA_SOURCE_NAME=postgres://postgres:password@codeinsights-db:5432/?sslmode=disable'
       - 'PG_EXPORTER_EXTEND_QUERY_PATH=/config/code_insights_queries.yaml'
 
@@ -718,6 +743,8 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://127.0.0.1:9000/']
       interval: 10s
@@ -743,6 +770,8 @@ services:
     mem_limit: '7g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     volumes:
       - 'redis-cache:/redis-data'
     networks:
@@ -761,6 +790,8 @@ services:
     mem_limit: '7g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     volumes:
       - 'redis-store:/redis-data'
     networks:
@@ -778,6 +809,8 @@ services:
     mem_limit: '1g'
     security_opt:
       - no-new-privileges:true
+    environment:
+      - DEPLOY_TYPE=docker-compose
     networks:
       - sourcegraph
     restart: always
