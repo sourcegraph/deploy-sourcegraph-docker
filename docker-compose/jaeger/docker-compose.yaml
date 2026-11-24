@@ -14,8 +14,6 @@ services:
     mem_limit: '512m'
     security_opt:
       - no-new-privileges:true
-    environment:
-      - DEPLOY_TYPE=docker-compose
     ports:
       # Query port
       - '0.0.0.0:16686:16686'
