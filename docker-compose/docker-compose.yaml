@@ -369,6 +369,7 @@ services:
       - no-new-privileges:true
     env_file: sourcegraph-uploads.env
     environment:
+      - DEPLOY_TYPE=docker-compose
       - 'SRC_FRONTEND_INTERNAL=sourcegraph-frontend-internal:3090'
       - 'OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317'
       - 'SRC_GIT_SERVERS=gitserver-0:3178'
