@@ -30,3 +30,5 @@ services:
     networks:
       - sourcegraph
     restart: always
+networks:
+  sourcegraph:
