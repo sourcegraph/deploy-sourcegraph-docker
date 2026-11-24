@@ -8,6 +8,7 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 - `docker-compose/db-only-migrate.docker-compose.yaml`: a copy of the `pgsql` and `codeintel-db` services for backup and restore. Make every change to those two services in both files.
 - `docker-compose/examples/`: example override files. `docker-compose/executors/` and `docker-compose/jaeger/` are optional extra compose files. `docker-compose/dev/` is an overlay for developing this repository.
 - `test/` and `.buildkite/`: the smoke test and the CI pipeline.
+- `.agents/setup` and `.amp/`: run the deployment in an [Amp orb](https://ampcode.com/docs/orbs), to test changes to it. `.amp/docker-compose.override.yaml` names base services, and `.amp/Caddyfile` copies `caddy/builtins/http.Caddyfile`; keep both in step with the base files, because CI checks neither.
 - `release.yaml`: the release steps that `sg release` runs.
 
 ## Checks

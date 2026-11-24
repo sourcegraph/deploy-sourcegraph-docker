@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Prepares an Amp orb (https://ampcode.com/docs/orbs) to run Sourcegraph with Docker Compose.
+# Amp saves the result as a snapshot for new orbs, so this only installs.
+# .amp/services.yaml starts Sourcegraph.
+set -euo pipefail
+
+step() { echo "==> $* (${SECONDS}s)"; }
+
+step 'Start Docker'
+sudo systemctl enable --now docker
+
+if ! sudo docker compose version >/dev/null 2>&1; then
+	step 'Install Docker Compose'
+	sudo apt-get update
+	sudo apt-get install -y docker-compose-plugin
+fi
+
+step 'Write guidance for agents'
+guidance_file="$HOME/.config/amp/AGENTS.md"
+guidance_heading='## Sourcegraph in this orb'
+mkdir -p "$(dirname "$guidance_file")"
+touch "$guidance_file"
+# Replace the section on every run, because Amp reruns setup on its earlier snapshot
+other_guidance=$(awk -v heading="$guidance_heading" '$0 == heading { skip = 1; next } /^## / { skip = 0 } !skip' "$guidance_file")
+{
+	if [[ -n "$other_guidance" ]]; then
+		printf '%s\n\n' "$other_guidance"
+	fi
+	cat <<EOF
+$guidance_heading
+
+This orb is for developing and testing the Docker Compose deployment in this repository. To develop
+Sourcegraph itself, use \`sg\` in the sourcegraph/sourcegraph repository instead.
+
+- \`amp orb services ensure\` starts Sourcegraph with Jaeger and an executor, from the Compose files in
+  \`docker-compose/\`, \`docker-compose/jaeger/\`, and \`docker-compose/executors/\`, plus
+  \`docker-compose/docker-compose.override.yaml\` when it exists, and prints the Executors and Jaeger
+  portal URLs. The Sourcegraph portal URL is the Executors URL without its path.
+- The first site admin's username, email, and password are in \`\$SOURCEGRAPH_ADMIN_USERNAME\`,
+  \`\$SOURCEGRAPH_ADMIN_EMAIL\`, and \`\$SOURCEGRAPH_ADMIN_PASSWORD\`, from the Amp project's environment variables.
+  When you start Sourcegraph for the user, give them the portal URL, the username, and the password.
+- \`amp orb service logs sourcegraph\` shows the logs of every container.
+  After changing a Compose file, run \`amp orb service restart sourcegraph\`.
+- Docker needs \`sudo\`, such as \`sudo docker ps\` or \`sudo docker logs executor\`.
+EOF
+} >"$guidance_file.new"
+mv "$guidance_file.new" "$guidance_file"
+
+step 'Done'
