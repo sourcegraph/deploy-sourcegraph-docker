@@ -56,6 +56,7 @@ services:
       <<: *proxy-env-vars
 
   # Uncomment if connections to code hosts outside your private network need to use the proxy
+  # Git ignores the uppercase HTTP_PROXY for http:// code host URLs, so also set lowercase http_proxy for those
   # gitserver-0:
   #   environment:
   #     <<: *proxy-env-vars

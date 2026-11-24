@@ -1,5 +1,7 @@
 # Docker Compose override snippet for customers using AWS ALBs to terminate TLS,
-# and do not need TLS between the ALB and their Sourcegraph intance
+# and do not need TLS between the ALB and their Sourcegraph instance
+# Apply with `docker compose up -d --remove-orphans`, to remove the running caddy container,
+# which otherwise holds port 80
 
 
 ## Overrides for services defined in the base docker-compose.yaml files

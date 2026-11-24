@@ -25,7 +25,12 @@
     job: precise-code-intel-worker
   targets:
     - precise-code-intel-worker:6060
-    # Add new entries here for every searcher/symbol/gitserver replica.
+- labels:
+    nodename: "sourcegraph-docker-compose-host"
+    job: syntactic-code-intel-worker
+  targets:
+    - syntactic-code-intel-worker:6060
+# Add a target to the matching job below for every gitserver, searcher, and zoekt replica.
 - labels:
     nodename: "sourcegraph-docker-compose-host"
     job: zoekt-indexserver
@@ -66,16 +71,6 @@
     job: codeinsights-db
   targets:
     - codeinsights-db-exporter:9187
-- labels:
-    nodename: "sourcegraph-docker-compose-host"
-    job: redis-cache
-  targets:
-    - redis-cache:9121
-- labels:
-    nodename: "sourcegraph-docker-compose-host"
-    job: redis-store
-  targets:
-    - redis-store:9121
 - labels:
     nodename: "sourcegraph-docker-compose-host"
     job: node-exporter

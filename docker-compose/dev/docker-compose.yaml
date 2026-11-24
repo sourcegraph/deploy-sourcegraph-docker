@@ -1,5 +1,5 @@
-# Development overlay - has reduced resource requirements, and exposes the deployment on
-# 127.0.0.1:8080
+# Development overlay - has reduced resource requirements, and also publishes the deployment
+# on port 8080 of every host interface, in addition to ports 80 and 443 from the base file
 
 services:
   zoekt-webserver-0:

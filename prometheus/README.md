@@ -14,14 +14,27 @@ To scrape Docker itself for metrics, add the following file depending on your ho
 
 #### Linux
 
-Create `prometheus/docker_targets.yml`:
+Inside the `prometheus` container, `localhost` is the container itself, so the target must name the host.
 
-```yaml
-- labels:
-    job: docker
-  targets:
-    - localhost:9323
-```
+1. Set `"metrics-addr": "0.0.0.0:9323"` in `/etc/docker/daemon.json`, and restart Docker. Containers cannot reach a daemon which listens on `127.0.0.1:9323`.
+
+2. Add the host's name to the `prometheus` service in your `docker-compose.override.yaml`:
+
+   ```yaml
+   services:
+     prometheus:
+       extra_hosts:
+         - 'host.docker.internal:host-gateway'
+   ```
+
+3. Create `prometheus/docker_targets.yml`:
+
+   ```yaml
+   - labels:
+       job: docker
+     targets:
+       - host.docker.internal:9323
+   ```
 
 #### Mac & Windows
 
