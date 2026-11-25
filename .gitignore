@@ -1,5 +1,4 @@
 .env
 .envrc
-.vagrant
 *.log
 node_modules/
