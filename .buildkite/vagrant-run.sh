@@ -27,7 +27,8 @@ if [ ! -f ${KEY_PATH} ]; then
 fi
 export GOOGLE_JSON_KEY_LOCATION="${KEY_PATH}"
 export DOCKER_USERNAME=sourcegraph
-export DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
+DOCKER_PASSWORD="$(gcloud secrets versions access latest --secret=DOCKER_PASSWORD_BUILDKITE_AGENT --quiet --project=sourcegraph-ci)"
+export DOCKER_PASSWORD
 
 echo --- ":vagrant: starting box $box"
 vagrant up "$box" --provider=google || exit_code=$?

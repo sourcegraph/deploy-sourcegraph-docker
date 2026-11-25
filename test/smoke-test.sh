@@ -11,7 +11,13 @@ configure_docker() {
   gcloud auth configure-docker us-central1-docker.pkg.dev,us-docker.pkg.dev
 }
 
-compose_files=(--file docker-compose/docker-compose.yaml)
+# Every service a customer can deploy, started and checked by the same commands
+compose_files=(
+	--file docker-compose/docker-compose.yaml
+	--file docker-compose/jaeger/docker-compose.yaml
+	--file docker-compose/executors/executor.docker-compose.yaml
+	--file test/docker-compose.override.yaml
+)
 
 deploy_sourcegraph() {
 	cd "$(dirname "${BASH_SOURCE[0]}")/.."
@@ -51,6 +57,9 @@ test_containers() {
 	echo "TEST: Checking frontend is accessible"
 	curl -f http://localhost:80
 	curl -f http://localhost:80/healthz
+
+	echo "TEST: Checking Jaeger is accessible"
+	curl --fail --silent --show-error --location --output /dev/null http://localhost:16686/-/debug/jaeger/
 
 	echo "ALL TESTS PASSED"
 }
