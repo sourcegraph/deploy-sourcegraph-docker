@@ -22,8 +22,10 @@ CI runs these on every branch. `.tool-versions` pins Node and the GitHub CLI; CI
 
 `.buildkite/vagrant-run.sh` uses Vagrant to boot a GCP VM from the image named in `IMAGE` in `.buildkite/pipeline.yaml`, runs `test/smoke-test.sh` on it, and deletes it. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run the script yourself only when a person asks.
 
-- `test/smoke-test.sh` starts the base file, and compares the number of running containers with `expect_containers`. Update that number in the same pull request that adds or removes a service.
+- `test/smoke-test.sh` starts the base file with `docker compose up --wait`, which fails if any container reports `unhealthy`. It then checks that every service has a running container, no container restarted, and the frontend responds. It counts the services itself, so a new long-running service needs no change to the test. A new service which exits when it is done, like `migrator`, must be left out of the count.
 - CI does not run `test/executor-smoke-test.sh`. Run it against a running deployment when you change `docker-compose/executors/`.
+- A service which is not ready until another service is needs a `start_period` on its health check, or `--wait` fails.
+- A test failure is not retried, and the step uploads every container's logs as artifacts. Only the image pull is retried: `test/smoke-test.sh` tries `docker compose pull` three times.
 - A branch which only changes files listed in the step's `if_changed` `exclude` skips the step. Builds on `main` always run it. When the smoke test starts reading a file on that list, remove it from the list.
 - The VM image is built from `gcp/images/e2e` in sourcegraph/infrastructure.
 
