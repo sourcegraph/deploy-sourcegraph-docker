@@ -5,19 +5,26 @@ This repository is the deployment reference for [Sourcegraph with Docker Compose
 ## Layout
 
 - `docker-compose/docker-compose.yaml`: the base file every customer runs. It mounts the service configuration in `caddy/`, `pgsql/`, `codeintel-db/`, `codeinsights-db/`, `grafana/`, `prometheus/`, and `otel-collector/`.
-- `docker-compose/db-only-migrate.docker-compose.yaml`: a copy of the `pgsql` and `codeintel-db` services for backup and restore. Make every change to those two services in both files.
-- `docker-compose/examples/`: example override files. `docker-compose/executors/` and `docker-compose/jaeger/` are optional extra compose files. `docker-compose/dev/` is an overlay for developing this repository.
-- `test/` and `.buildkite/`: the smoke test and the CI pipeline.
-- `release.yaml`: the release steps that `sg release` runs.
+- `docker-compose/db-only-migrate.docker-compose.yaml`: starts only the three databases, for backup and restore. It `extends` them from the base file, so change them there. Do not add any other service to it.
+- `docker-compose/examples/`: example override files. `docker-compose/executors/` and `docker-compose/jaeger/` are optional extra Compose files. `docker-compose/dev/` is an overlay for developing this repository.
+- `test/` and `.buildkite/`: the smoke tests and the CI pipeline.
+- `release.yaml`: the release steps that `sg release` runs. `batch-change/release.yaml` is the batch change flavour of the same steps; when you change a step in one, check the other.
 
 ## Checks
 
-- `.tool-versions` pins Node and the GitHub CLI; CI installs them with mise. `renovate.json` turns Renovate off so that these tools are upgraded together with the `sourcegraph/sourcegraph` monorepo, not on their own.
-- Validate the base file with `docker compose -f docker-compose/docker-compose.yaml config -q`. CI runs the same check in `.buildkite/validate-docker-compose.sh` with the standalone `docker-compose` binary, so the base file must stay valid for that binary. CI validates no other compose file.
-- Check formatting with `npm ci && npm run prettier-check`; `npm run prettier` rewrites the files. Prettier covers only JavaScript and JSON files. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
-- The `docker-compose-test` step in `.buildkite/pipeline.yaml` starts the base file on a GCP VM and runs `test/smoke-test.sh`. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run `.buildkite/vagrant-run.sh docker-test` yourself only when a person asks.
-- `test/smoke-test.sh` compares the number of running containers with `expect_containers`. Update that number in the same pull request that adds or removes a service.
+CI runs these on every branch. `.tool-versions` pins Node and the GitHub CLI; CI installs them with mise. `renovate.json` turns Renovate off so that these tools are upgraded together with the `sourcegraph/sourcegraph` monorepo, not on their own.
+
+- **Compose files:** `.buildkite/validate-docker-compose.sh` runs `docker-compose config` on the base file, with the standalone `docker-compose` binary, so the base file must stay valid for that binary. CI validates no other Compose file.
+- **Formatting:** `npm ci && npm run prettier-check`; `npm run prettier` rewrites the files. Prettier formats the JavaScript and JSON files; the repository has no other file type its glob matches. `.prettierignore` excludes Markdown and `.github/`, and no formatter runs on YAML, so match the surrounding YAML style by hand.
+- **Smoke test:** the `docker-compose-test` step runs `.buildkite/vagrant-run.sh docker-test`. See below.
+
+## Smoke test
+
+`.buildkite/vagrant-run.sh` uses Vagrant to boot a GCP VM from the image named in `IMAGE` in `.buildkite/pipeline.yaml`, runs `test/smoke-test.sh` on it, and deletes it. It reads CI secrets and creates a billed VM, so take its result from the pull request's Buildkite build; run the script yourself only when a person asks.
+
+- `test/smoke-test.sh` starts the base file, and compares the number of running containers with `expect_containers`. Update that number in the same pull request that adds or removes a service.
 - CI does not run `test/executor-smoke-test.sh`. Run it against a running deployment when you change `docker-compose/executors/`.
+- The VM image is built from `gcp/images/e2e` in sourcegraph/infrastructure.
 
 ## Conventions
 
